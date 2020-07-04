@@ -2,20 +2,23 @@ defmodule Dsa.Accounts do
   @moduledoc """
   The Accounts context.
   """
+  import Ecto.Query
   alias Dsa.Repo
   alias Dsa.Accounts.User
 
   def get_user(id) do
-    Repo.get(User, id)
+    Repo.get(user_query(), id)
   end
 
   def get_user!(id) do
-    Repo.get!(User, id)
+    Repo.get!(user_query(), id)
   end
 
   def get_user_by(params) do
-    Repo.get_by(User, params)
+    Repo.get_by(user_query(), params)
   end
+
+  defp user_query, do: from(u in User, preload: :characters)
 
   def authenticate_by_username_and_pass(username, given_pass) do
     user = get_user_by(username: username)

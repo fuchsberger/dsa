@@ -7,6 +7,7 @@ defmodule Dsa.Accounts.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    has_many :characters, Dsa.Game.Character
 
     timestamps()
   end
