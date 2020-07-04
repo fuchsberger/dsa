@@ -22,6 +22,12 @@ defmodule DsaWeb.Router do
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
 
+  scope "/", DsaWeb do
+    pipe_through [:browser, :authenticate_user]
+
+    resources "/characters", CharacterController
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", DsaWeb do
   #   pipe_through :api

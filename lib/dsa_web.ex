@@ -23,6 +23,7 @@ defmodule DsaWeb do
 
       import Plug.Conn
       import DsaWeb.Gettext
+      import DsaWeb.Auth, only: [authenticate_user: 2]
       alias DsaWeb.Router.Helpers, as: Routes
     end
   end
@@ -47,6 +48,7 @@ defmodule DsaWeb do
 
       import Plug.Conn
       import Phoenix.Controller
+      import DsaWeb.Auth, only: [authenticate_user: 2]
     end
   end
 
