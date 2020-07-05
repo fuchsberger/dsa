@@ -17,18 +17,7 @@ defmodule DsaWeb.CharacterView do
     end)
   end
 
-  def allowed_eigenschaften(changeset) do
-    ap = Changeset.get_field(changeset, :ap)
-    cond do
-      ap < 1000 -> 95
-      ap < 1100 -> 98
-      ap < 1200 -> 100
-      ap < 1400 -> 102
-      ap < 1700 -> 105
-      ap < 2100 -> 109
-      ap >= 2100 -> 114
-    end
-  end
+
 
   defp cost_talent(level) do
     case level do
@@ -46,6 +35,9 @@ defmodule DsaWeb.CharacterView do
       _ -> 300 + (level - 18) * 90
     end
   end
+
+  def get(changeset, field), do: Changeset.get_field(changeset, field)
+
 
   def erfahrungsstufe(changeset) do
     ap = Changeset.get_field(changeset, :ap)
@@ -79,7 +71,7 @@ defmodule DsaWeb.CharacterView do
   def tab_panel(title, active, block) do
     content_tag(:div, [
       area_labelledby: "tab-#{title}",
-      class: "tab-pane fade#{if title == active, do: "show active"}",
+      class: "row tab-pane #{if title == active, do: "show active"}",
       role: "tabpanel"
     ], block)
   end

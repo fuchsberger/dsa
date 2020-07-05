@@ -24,10 +24,9 @@ defmodule DsaWeb.CharacterController do
       {:ok, character} ->
         conn
         |> put_flash(:info, "Character created successfully.")
-        |> redirect(to: Routes.live_path(conn, DsaWeb.CharacterLive, character))
+        |> redirect(to: Routes.character_path(conn, :show, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
   end

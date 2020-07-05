@@ -70,7 +70,7 @@ defmodule DsaWeb do
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
-      import Phoenix.HTML.Form, except: [number_input: 2, number_input: 3, select: 4, text_input: 2, text_input: 3]
+      import Phoenix.HTML.Form, except: [number_input: 2, number_input: 3, select: 3, select: 4, text_input: 2, text_input: 3]
       import DsaWeb.FormHelpers
       import DsaWeb.Gettext
       alias DsaWeb.Router.Helpers, as: Routes

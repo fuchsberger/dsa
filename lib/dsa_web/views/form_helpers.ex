@@ -5,13 +5,22 @@ defmodule DsaWeb.FormHelpers do
   use Phoenix.HTML
   alias Phoenix.HTML.Form
 
+  def error_class(form, field) do
+    cond do
+      is_nil(form.source.action) -> ""
+      Keyword.has_key?(form.errors, field) -> " is-invalid"
+      true -> ""
+    end
+  end
+
+
   @doc """
   Generates tag for inlined form input errors.
   """
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: "invalid-feedback d-block",
         phx_feedback_for: input_id(form, field)
       )
     end)
@@ -52,6 +61,6 @@ defmodule DsaWeb.FormHelpers do
     do: Form.select(f, field, options, opts(f, field, opts, "form-select"))
 
   defp opts(f, field, opts, type \\ "form-control") do
-    Keyword.put(opts, :class, "#{type} #{Keyword.get(opts, :class, "")}") ++ Form.input_validations(f, field)
+    Keyword.put(opts, :class, "#{type} #{Keyword.get(opts, :class, "")}#{error_class(f, field)}") ++ Form.input_validations(f, field)
   end
 end

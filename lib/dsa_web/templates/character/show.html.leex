@@ -1,68 +1,145 @@
 <%= f = form_for @changeset, "#", [
-  class: (if @changeset.action, do: "was-validated", else: ""),
   novalidate: true,
   phx_change: :validate,
   phx_submit: :update
 ] %>
 
-<div class='d-flex justify-content-between'>
-  <h1 class='mr-auto p-3'>Heldenübersicht</h1>
-  <table class='table table-sm text-center'>
-    <thead>
-      <tr>
-        <th scope="col">MU</th>
-        <th scope="col">KL</th>
-        <th scope="col">IN</th>
-        <th scope="col">CH</th>
-        <th scope="col">FF</th>
-        <th scope="col">GE</th>
-        <th scope="col">KO</th>
-        <th scope="col">KK</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= number_input f, :mu, class: "form-control-sm text-center", default: 8 %></td>
-        <td><%= number_input f, :kl, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :in, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :ch, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :ff, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :ge, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :ko, class: "form-control-sm text-center" %></td>
-        <td><%= number_input f, :kk, class: "form-control-sm text-center" %></td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr><td class='text-right small' colspan='8'>
-        Eigenschaften: <%= sum_eigenschaften(@changeset) %>/<%= allowed_eigenschaften(@changeset) %> Punkte - Kosten: <%= cost_eigenschaften(@changeset)  %> AP</td></tr>
-    </tfoot>
-  </table>
+<div class='row mb-3'>
+  <div class='col-sm'>
+    <h2 class='p-1  pl-0 pb-0 mb-0'>Heldenübersicht</h2>
+  </div>
+  <div class='col-sm'>
+    <ul class="nav nav-tabs" role="tablist">
+      <%= tab "Übersicht", @tab %>
+      <%= tab "Talente", @tab %>
+      <%= tab "Kampf", @tab %>
+      <%= tab "Liturgien", @tab %>
+      <%= tab "Zauber", @tab %>
+    </ul>
+  </div>
 </div>
-
-<ul class="nav nav-tabs" role="tablist">
-  <%= tab "Übersicht", @tab %>
-  <%= tab "Talente", @tab %>
-  <%= tab "Kampf", @tab %>
-  <%= tab "Liturgien", @tab %>
-  <%= tab "Zauber", @tab %>
-</ul>
 
 <div class="tab-content">
   <%= tab_panel "Übersicht", @tab do %>
-    <div class="mb-3">
-      <%= label f, :name, class: "form-label" %>
-      <%= text_input f, :name %>
-      <%= error_tag f, :name %>
-    </div>
+    <div class='row'>
+      <div class="col-sm">
+        <div class="row mb-3">
+          <%= label f, :name, class: "col-sm-2 col-form-label" %>
+          <div class="col-sm-10">
+            <%= text_input f, :name %>
+            <%= error_tag f, :name %>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <%= label f, :species, class: "col-sm-2 col-form-label" %>
+          <div class="col-sm-10">
+            <%= select(f, :species, [
+                "Mensch": "Mensch",
+                "Elf": "Elf",
+                "Halbelf": "Halbelf",
+                "Zwerg": "Zwerg"
+                ]) %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="card mb-3">
+          <h5 class="card-header">AP Konto</h5>
+          <div class="card-body">
+            <h5 class="card-title">Starterfahrung</h5>
+            <%= select(f, :ap, [
+              "Unerfahren (900 AP)": "900",
+              "Durchschnittlich (1000 AP)": "1000",
+              "Erfahren (1100 AP)": "1100",
+              "Kompetent (1200 AP)": "1200",
+              "Meisterlich (1400 AP)": "1400",
+              "Brillant (1700 AP)": "1700",
+              "Legendär (2100 AP)": "2100"
+              ], selected: "1100") %>
 
-    <div class="mb-3">
-      <%= label f, :ap, class: "form-label" %>
-      <%= number_input f, :ap %>
-      <%= error_tag f, :ap %>
-    </div>
+            <div class="form-text">Wähle hier aus, auf welcher Stufe du deinen Held startet.</div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item py-1">
+              <strong>
+                AP gesamt
+                <span class='float-right'><%= get(@changeset, :ap) %></span>
+              </strong>
+            </li>
+            <li class="list-group-item py-1">
+              Spezies
+              <span class='float-right'><%= get(@changeset, :ap_species) %></span>
+            </li>
+            <li class="list-group-item py-1">
+              Eigenschaftspunkte
+              <span class='float-right'><%# ap_eigenschaften %></span>
+            </li>
+            <li class="list-group-item py-1">
+              <strong>
+                AP verbleibend
+                <span class='float-right'><%= get(@changeset, :ap_remaining) %></span>
+              </strong>
+            </li>
+          </ul>
+          <div class="card-body">
+            <%= submit "Generierung abschiessen", class: "btn btn-primary" %>
+            <%= error_tag f, :ap_remaining %>
+          </div>
+        </div>
 
-    <%= submit "Generierung abschiessen", class: "btn btn-primary" %>
+        <div class="card">
+          <h5 class="card-header">
+            Eigenschaften
+            <%
+              points = get(@changeset, :trait_points)
+              max = get(@changeset, :max_trait_points)
+            %>
+            <%= unless is_nil(max) do %>
+              <small class='float-right'><%= points %> / <%= max %></small>
+            <% end %>
+          </h5>
+          <div class="card-body">
+            <table class='table table-sm text-center'>
+              <thead>
+                <tr>
+                  <th scope="col">MU</th>
+                  <th scope="col">KL</th>
+                  <th scope="col">IN</th>
+                  <th scope="col">CH</th>
+                  <th scope="col">FF</th>
+                  <th scope="col">GE</th>
+                  <th scope="col">KO</th>
+                  <th scope="col">KK</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><%= number_input f, :mu, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :kl, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :in, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :ch, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :ff, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :ge, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :ko, class: "form-control-sm text-center" %></td>
+                  <td><%= number_input f, :kk, class: "form-control-sm text-center" %></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <%= if points < max do %>
+              <div class="form-text">
+                Es wird empfohlen alle Eigenschaftspunkte auszuschöpfen.
+              </div>
+            <% end %>
+
+            <%= error_tag f, :trait_points %>
+            <%= error_tag f, :max_trait_points %>
+          </div>
+        </div>
+      </div>
+    </div>
   <% end %>
+
   <%= tab_panel "Talente", @tab do %>2<% end %>
   <%= tab_panel "Kampf", @tab do %>3<% end %>
   <%= tab_panel "Liturgien", @tab do %>3<% end %>
