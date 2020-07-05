@@ -1,5 +1,30 @@
 <h1>New Character</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.character_path(@conn, :create)) %>
 
-<span><%= link "Back", to: Routes.character_path(@conn, :index) %></span>
+
+<%= form_for @changeset, Routes.character_path(@conn, :create), [
+  class: (if @changeset.action, do: "was-validated", else: ""),
+  novalidate: true
+], fn f -> %>
+
+  <div class="mb-3">
+    <%= label f, :name, class: "form-label" %>
+    <%= text_input f, :name %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class='mb-3'>
+    <%= label f, :ap, "Erfahrungsgrad", class: "form-label" %>
+    <%= select(f, :ap, [
+      "Unerfahren (900 AP)": "900",
+      "Durchschnittlich (1000 AP)": "1000",
+      "Erfahren (1100 AP)": "1100",
+      "Kompetent (1200 AP)": "1200",
+      "Meisterlich (1400 AP)": "1400",
+      "Brillant (1700 AP)": "1700",
+      "Legendär (2100 AP)": "2100"
+      ], selected: "1100") %>
+  </div>
+
+  <div><%= submit "Held erstellen", class: "btn btn-primary" %></div>
+<% end %>

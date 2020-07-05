@@ -1,9 +1,9 @@
-defmodule DsaWeb.ErrorHelpers do
+defmodule DsaWeb.FormHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
-
   use Phoenix.HTML
+  alias Phoenix.HTML.Form
 
   @doc """
   Generates tag for inlined form input errors.
@@ -43,5 +43,15 @@ defmodule DsaWeb.ErrorHelpers do
     else
       Gettext.dgettext(DsaWeb.Gettext, "errors", msg, opts)
     end
+  end
+
+  def number_input(f, field, opts \\ []), do: Form.number_input(f, field, opts(f, field, opts))
+  def text_input(f, field, opts \\ []), do: Form.text_input(f, field, opts(f, field, opts))
+
+  def select(f, field, options, opts \\ []),
+    do: Form.select(f, field, options, opts(f, field, opts, "form-select"))
+
+  defp opts(f, field, opts, type \\ "form-control") do
+    Keyword.put(opts, :class, "#{type} #{Keyword.get(opts, :class, "")}") ++ Form.input_validations(f, field)
   end
 end

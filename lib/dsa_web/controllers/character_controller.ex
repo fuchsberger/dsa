@@ -24,9 +24,10 @@ defmodule DsaWeb.CharacterController do
       {:ok, character} ->
         conn
         |> put_flash(:info, "Character created successfully.")
-        |> redirect(to: Routes.character_path(conn, :show, character))
+        |> redirect(to: Routes.live_path(conn, DsaWeb.CharacterLive, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
   end
@@ -34,26 +35,6 @@ defmodule DsaWeb.CharacterController do
   def show(conn, %{"id" => id}, current_user) do
     character = Game.get_user_character!(current_user, id)
     render(conn, "show.html", character: character)
-  end
-
-  def edit(conn, %{"id" => id}, current_user) do
-    character = Game.get_user_character!(current_user, id)
-    changeset = Game.change_character(character)
-    render(conn, "edit.html", character: character, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "character" => character_params}, current_user) do
-    character = Game.get_user_character!(current_user, id)
-
-    case Game.update_character(character, character_params) do
-      {:ok, character} ->
-        conn
-        |> put_flash(:info, "Character updated successfully.")
-        |> redirect(to: Routes.character_path(conn, :show, character))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", character: character, changeset: changeset)
-    end
   end
 
   def delete(conn, %{"id" => id}, current_user) do

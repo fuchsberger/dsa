@@ -6,6 +6,8 @@ defmodule Dsa.Game do
   import Ecto.Query, warn: false
   alias Dsa.Repo
 
+  import Ecto.Changeset
+
   alias Dsa.Accounts
   alias Dsa.Game.Character
 
@@ -25,7 +27,17 @@ defmodule Dsa.Game do
     |> Repo.get!(id)
   end
 
+  def get_user_character!(user_id, id) do
+    Character
+    |> user_characters_query(user_id)
+    |> Repo.get!(id)
+  end
+
   defp user_characters_query(query, %Accounts.User{id: user_id}) do
+    from(v in query, where: v.user_id == ^user_id)
+  end
+
+  defp user_characters_query(query, user_id) do
     from(v in query, where: v.user_id == ^user_id)
   end
 
@@ -33,8 +45,10 @@ defmodule Dsa.Game do
 
   def create_character(%Accounts.User{} = user, attrs \\ %{}) do
     %Character{}
-    |> Character.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Character.changeset(Map.merge(attrs, %{
+      "mu" => 8, "kl" => 8, "in" => 8, "ch" => 8,"ff" => 8,"ge" => 8, "ko" => 8, "kk" => 8
+      }))
+    |> put_assoc(:user, user)
     |> Repo.insert()
   end
 

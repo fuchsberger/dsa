@@ -26,6 +26,9 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
 
-    resources "/characters", CharacterController
+    resources "/characters", CharacterController, only: [:index, :delete]
+
+    live "/characters/new", CharacterLive, :new
+    live "/characters/:character_id", CharacterLive, :edit
   end
 end

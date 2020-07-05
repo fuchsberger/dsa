@@ -42,7 +42,7 @@
                   <%= for c <- @current_user.characters do %>
                     <li>
                       <%= link c.name,
-                        to: Routes.character_path(@conn, :show, c),
+                        to: Routes.character_path(@conn, :edit, c.id),
                         class: "dropdown-item"
                       %>
                     </li>
