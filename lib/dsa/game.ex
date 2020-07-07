@@ -62,14 +62,10 @@ defmodule Dsa.Game do
       |> Repo.insert()
     ) do
       {:ok, character} ->
-        character = Repo.preload(character, :skills)
-
-        skill_ids =
-          list_skills()
-          |> Enum.reject(& &1.category == "Speziell")
-          |> Enum.map(& &1.id)
-
-        upsert_character_skills(character, skill_ids)
+        # add all standard skills to character
+        skills = Repo.all(from(s in Skill, select: s.id, where: s.category != "Speziell"))
+        Enum.each(skills, & add_skill!(character.id, &1))
+        {:ok, sort_skills(character)}
 
       {:error, changeset} ->
         {:error, changeset}
@@ -83,7 +79,7 @@ defmodule Dsa.Game do
     |> Repo.update()
   end
 
-  def delete_character(%Character{} = character), do: Repo.delete(character)
+  def delete_character!(character), do: Repo.delete!(character)
 
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
@@ -106,28 +102,9 @@ defmodule Dsa.Game do
     |> Repo.insert!()
   end
 
-  def upsert_character_skills(character, skill_ids) when is_list(skill_ids) do
-    skills =
-      Skill
-      |> where([skill], skill.id in ^skill_ids)
-      |> Repo.all()
-
-    with {:ok, _struct} <-
-      character
-      |> Character.changeset_update_skills(skills)
-      |> Repo.update() do
-
-      {:ok, get_character!(character.id)}
-    else
-      error ->
-        error
-    end
-  end
-
-  def add_skill!(character, skill, _level \\ 0) do
-    character
-    |> change_character()
-    |> put_assoc(:skill, skill)
-    |> Repo.update!()
+  def add_skill!(character_id, skill_id) do
+    %CharacterSkill{}
+    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill_id})
+    |> Repo.insert!()
   end
 end

@@ -48,10 +48,6 @@ defmodule Dsa.Game.Character do
     has_many :character_skills, Dsa.Game.CharacterSkill
     has_many :skills, through: [:character_skills, :skill]
 
-    # many_to_many :skills, Dsa.Game.Skill,
-    #   join_through: Dsa.Game.CharacterSkill,
-    #   on_replace: :delete
-
     timestamps()
   end
 

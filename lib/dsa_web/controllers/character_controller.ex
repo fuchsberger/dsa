@@ -14,8 +14,9 @@ defmodule DsaWeb.CharacterController do
   end
 
   def delete(conn, %{"id" => id}, current_user) do
-    character = Game.get_user_character!(current_user, id)
-    {:ok, _character} = Game.delete_character(character)
+    current_user
+    |> Game.get_user_character!(id)
+    |> Game.delete_character!()
 
     conn
     |> put_flash(:info, "Character deleted successfully.")
