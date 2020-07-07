@@ -2,7 +2,6 @@ defmodule DsaWeb.CharacterController do
   use DsaWeb, :controller
 
   alias Dsa.Game
-  alias Dsa.Game.Character
 
   def action(conn, _) do
     args = [conn, conn.params, conn.assigns.current_user]
@@ -11,29 +10,7 @@ defmodule DsaWeb.CharacterController do
 
   def index(conn, _params, current_user) do
     characters = Game.list_user_characters(current_user)
-    render(conn, "index.html", characters: characters)
-  end
-
-  def new(conn, _params, _current_user) do
-    changeset = Game.change_character(%Character{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"character" => character_params}, current_user) do
-    case Game.create_character(current_user, character_params) do
-      {:ok, character} ->
-        conn
-        |> put_flash(:info, "Character created successfully.")
-        |> redirect(to: Routes.character_path(conn, :show, character))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
-
-  def show(conn, %{"id" => id}, current_user) do
-    character = Game.get_user_character!(current_user, id)
-    render(conn, "show.html", character: character)
+    render(conn, DsaWeb.GameView, "index.html", characters: characters)
   end
 
   def delete(conn, %{"id" => id}, current_user) do

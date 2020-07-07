@@ -30,5 +30,6 @@ defmodule DsaWeb.Router do
 
     live "/characters/new", CharacterLive, :new
     live "/characters/:character_id", CharacterLive, :edit
+    live "/group/:group_id", GroupLive
   end
 end

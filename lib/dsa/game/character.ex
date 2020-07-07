@@ -2,23 +2,16 @@ defmodule Dsa.Game.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @traits [:mu, :kl, :in, :ch, :ff, :ge, :ko, :kk]
+  @fields ~w(name ap species culture profession mu kl in ch ff ge ko kk at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp t_fliegen t_gaukeleien t_klettern t_kraftakt t_reiten t_schwimmen t_selbstbeherrschung t_singen t_sinnesschaerfe t_tanzen t_taschendiebstahl t_verbergen t_zechen t_bekehren t_betoeren t_einschuechtern t_ettikette t_gassenwissen t_menschenkenntnis t_ueberreden t_verkleiden t_willenskraft t_faehrtensuchen t_fesseln t_fischen t_orientierung t_pflanzenkunde t_tierkunde t_wildnisleben t_brettspiel t_geographie t_geschichtswissen t_goetter t_kriegskunst t_magiekunde t_mechanik t_rechnen t_rechtskunde t_sagen t_sphaerenkunst t_sternkunde t_alchimie t_boote t_fahrzeuge t_handel t_heilkunde_gift t_heilkunde_krankheiten t_heilkunde_seele t_heilkunde_wunden t_holzbearbeitung t_lebensmittelbearbeitung t_lederbearbeitung t_malen t_musizieren t_schloesserknacken t_steinbearbeitung t_stoffbearbeitung)a
 
   schema "characters" do
 
     # Generell
     field :name, :string
     field :ap, :integer, default: 1100
-    field :species, :string, default: "Mensch"
+    field :species, :string
     field :culture, :string
     field :profession, :string
-    field :title, :string
-    field :eyecolor, :string
-    field :height, :integer
-    field :weight, :integer
-    field :birthplace, :string
-    field :haircolor, :string
-    field :created, :boolean, default: false
 
     # Eigenschaften
     field :mu, :integer, default: 8
@@ -30,141 +23,102 @@ defmodule Dsa.Game.Character do
     field :ko, :integer, default: 8
     field :kk, :integer, default: 8
 
-    # Hilfsfelder
-    field :ap_species, :integer, default: 0, virtual: true
-    field :ap_remaining, :integer, default: 1100, virtual: true
-    field :trait_points, :integer, default: 64, virtual: true
-    field :max_trait_points, :integer, default: 100, virtual: true
+    # combat
+    field :at, :integer, default: 5
+    field :pa, :integer, default: 5
+    field :w2, :boolean, default: false
+    field :tp, :integer, default: 2
+    field :rw, :integer, default: 1
+    field :be, :integer, default: 0
+    field :rs, :integer, default: 0
+
+    # stats
+    field :le, :integer, default: 30
+    field :ae, :integer, default: 0
+    field :ke, :integer, default: 0
+    field :sk, :integer, default: 0
+    field :zk, :integer, default: 0
+    field :aw, :integer, default: 4
+    field :ini, :integer, default: 8
+    field :gw, :integer, default: 8
+    field :sp, :integer, default: 3
+
+    # koerper talente
+    field :t_fliegen, :integer
+    field :t_gaukeleien, :integer
+    field :t_klettern, :integer
+    field :t_kraftakt, :integer
+    field :t_reiten, :integer
+    field :t_schwimmen, :integer
+    field :t_selbstbeherrschung, :integer
+    field :t_singen, :integer
+    field :t_sinnesschaerfe, :integer
+    field :t_tanzen, :integer
+    field :t_taschendiebstahl, :integer
+    field :t_verbergen, :integer
+    field :t_zechen, :integer
+
+    # gesellschaftstalente
+    field :t_bekehren, :integer
+    field :t_betoeren, :integer
+    field :t_einschuechtern, :integer
+    field :t_ettikette, :integer
+    field :t_gassenwissen, :integer
+    field :t_menschenkenntnis, :integer
+    field :t_ueberreden, :integer
+    field :t_verkleiden, :integer
+    field :t_willenskraft, :integer
+
+    # naturtalente
+    field :t_faehrtensuchen, :integer
+    field :t_fesseln, :integer
+    field :t_fischen, :integer
+    field :t_orientierung, :integer
+    field :t_pflanzenkunde, :integer
+    field :t_tierkunde, :integer
+    field :t_wildnisleben, :integer
+
+    # wissenstalente
+    field :t_brettspiel, :integer
+    field :t_geographie, :integer
+    field :t_geschichtswissen, :integer
+    field :t_goetter, :integer
+    field :t_kriegskunst, :integer
+    field :t_magiekunde, :integer
+    field :t_mechanik, :integer
+    field :t_rechnen, :integer
+    field :t_rechtskunde, :integer
+    field :t_sagen, :integer
+    field :t_sphaerenkunst, :integer
+    field :t_sternkunde, :integer
+
+    # handwerkstalente
+    field :t_alchimie, :integer
+    field :t_boote, :integer
+    field :t_fahrzeuge, :integer
+    field :t_handel, :integer
+    field :t_heilkunde_gift, :integer
+    field :t_heilkunde_krankheiten, :integer
+    field :t_heilkunde_seele, :integer
+    field :t_heilkunde_wunden, :integer
+    field :t_holzbearbeitung, :integer
+    field :t_lebensmittelbearbeitung, :integer
+    field :t_lederbearbeitung, :integer
+    field :t_malen, :integer
+    field :t_musizieren, :integer
+    field :t_schloesserknacken, :integer
+    field :t_steinbearbeitung, :integer
+    field :t_stoffbearbeitung, :integer
 
     belongs_to :user, Dsa.Accounts.User
+    many_to_many :skills, Dsa.Game.Skill, join_through: Dsa.Game.CharacterSkill
 
     timestamps()
   end
 
-  @doc false
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :species, :ap] ++ @traits)
-    |> validate_required([:name, :species, :ap] ++ @traits)
-    |> validate_trait(:mu)
-    |> validate_trait(:kl)
-    |> validate_trait(:in)
-    |> validate_trait(:ch)
-    |> validate_trait(:ff)
-    |> validate_trait(:ge)
-    |> validate_trait(:ko)
-    |> validate_trait(:kk)
-    |> validate_ap(:species)
-    |> validate_ap(:remaining)
-    |> set_max_trait_points()
-    |> validate_traits()
-  end
-
-  defp validate_ap(character, :species) do
-    ap_species =
-      case get_field(character, :species) do
-        "Elf" -> 18
-        "Zwerg" -> 61
-        _ -> 0
-      end
-    put_change(character, :ap_species, ap_species)
-  end
-
-  defp validate_ap(character, :remaining) do
-    ap_remaining = get_field(character, :ap) - get_field(character, :ap_species)
-
-    if ap_remaining <= 10 do
-      put_change(character, :ap_remaining, ap_remaining)
-    else
-      character
-      |> put_change(:ap_remaining, ap_remaining)
-      |> add_error(:ap_remaining, "Die verbleibende Anzahl an AP darf 10 nicht überschreiten.")
-    end
-  end
-
-  def validate_trait(character, trait) do
-    max = max_trait(character)
-
-    case { get_field(character, :species), trait} do
-      {"Mensch", trait} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {"Halbelf", trait} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {"Elf", :in} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {"Elf", :ge} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {"Zwerg", :ko} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {"Zwerg", :kk} ->
-        validate_number character, trait,
-          greater_than_or_equal_to: 8,
-          less_than_or_equal_to: max + 1
-
-      {_species, _trait} ->
-        validate_number(character, trait, greater_than_or_equal_to: 8, less_than_or_equal_to: max)
-    end
-  end
-
-  defp max_trait(character) do
-    if get_field(character, :generated) do
-      999
-    else
-      case get_field(character, :ap) do
-        900 -> 12
-        1000 -> 13
-        1100 -> 14
-        1200 -> 15
-        1400 -> 16
-        1700 -> 17
-        2100 -> 18
-      end
-    end
-  end
-
-  defp set_max_trait_points(character) do
-    max =
-      if get_field(character, :generated) do
-        nil
-      else
-        case get_field(character, :ap) do
-          900 -> 95
-          1000 -> 98
-          1100 -> 100
-          1200 -> 102
-          1400 -> 105
-          1700 -> 109
-          2100 -> 114
-        end
-      end
-    put_change(character, :max_trait_points, max)
-  end
-
-  defp validate_traits(character) do
-    trait_points = Enum.reduce(@traits, 0, fn x, acc -> acc + get_field(character, x) end)
-    max_trait_points = get_field(character, :max_trait_points)
-
-    if not is_nil(max_trait_points) && trait_points > max_trait_points do
-      character
-      |> put_change(:trait_points, trait_points)
-      |> add_error(:trait_points, "Maximal #{max_trait_points} Punkte können auf Eigenschaften verteilt werden.")
-    else
-      put_change(character, :trait_points, trait_points)
-    end
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
   end
 end

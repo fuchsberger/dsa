@@ -59,4 +59,10 @@ defmodule Dsa.Accounts do
     |> User.registration_changeset(attrs)
     |> Repo.insert()
   end
+
+  def set_role(%User{} = user, role, value) do
+    user
+    |> User.set_role(role, value)
+    |> Repo.update()
+  end
 end

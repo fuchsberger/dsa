@@ -4,9 +4,9 @@ defmodule DsaWeb.CharacterLive do
 
   alias Dsa.Game
 
-  def render(assigns), do: DsaWeb.CharacterView.render("show.html", assigns)
+  def render(assigns), do: DsaWeb.GameView.render("character.html", assigns)
 
-  def mount(params, %{"user_id" => user_id} = session, socket) do
+  def mount(params, %{"user_id" => user_id}, socket) do
     character =
       case Map.get(params, "character_id") do
         nil ->
@@ -21,16 +21,15 @@ defmodule DsaWeb.CharacterLive do
 
     {:ok, socket
     |> assign(:changeset, Game.change_character(character))
-    |> assign(:character, character)
-    |> assign(:tab, "Übersicht")}
+    |> assign(:tab, "traits")}
   end
 
-  def handle_event("tab", %{"id" => tab}, socket) do
+  def handle_event("tab", %{"tab" => tab}, socket) do
     {:noreply, assign(socket, :tab, tab)}
   end
 
   def handle_event("validate", %{"character" => params}, socket) do
-    changeset = Game.change_character(socket.assigns.character, params)
+    changeset = Game.change_character(socket.assigns.changeset.data, params)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 

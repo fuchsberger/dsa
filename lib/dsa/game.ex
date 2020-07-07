@@ -9,11 +9,9 @@ defmodule Dsa.Game do
   import Ecto.Changeset
 
   alias Dsa.Accounts
-  alias Dsa.Game.Character
+  alias Dsa.Game.{Character, Group, Skill}
 
-  def list_characters do
-    Repo.all(Character)
-  end
+  def list_characters, do: Repo.all(Character)
 
   def list_user_characters(%Accounts.User{} = user) do
     Character
@@ -34,11 +32,11 @@ defmodule Dsa.Game do
   end
 
   defp user_characters_query(query, %Accounts.User{id: user_id}) do
-    from(v in query, where: v.user_id == ^user_id)
+    from(v in query, preload: :traits, where: v.user_id == ^user_id)
   end
 
   defp user_characters_query(query, user_id) do
-    from(v in query, where: v.user_id == ^user_id)
+    from(v in query, preload: :traits, where: v.user_id == ^user_id)
   end
 
   def get_character!(id), do: Repo.get!(Character, id)
@@ -58,11 +56,27 @@ defmodule Dsa.Game do
     |> Repo.update()
   end
 
-  def delete_character(%Character{} = character) do
-    Repo.delete(character)
+  def delete_character(%Character{} = character), do: Repo.delete(character)
+  def change_character(%Character{} = c, attrs \\ %{}), do: Character.changeset(c, attrs)
+
+  def create_group(attrs \\ %{}) do
+    %Group{}
+    |> Group.changeset(attrs)
+    |> Repo.insert()
   end
 
-  def change_character(%Character{} = character, attrs \\ %{}) do
-    Character.changeset(character, attrs)
+  # def create_skill!(attrs \\ %{}) do
+  #   %Skill{}
+  #   |> Skill.changeset(attrs)
+  #   |> Repo.insert!()
+  # end
+
+  # used for seeding
+  def create_skill!(category, probe, name, be \\ nil) do
+    [e1, e2, e3] = String.split(probe, "/")
+
+    %Skill{}
+    |> Skill.changeset(%{ name: name, category: category, e1: e1, e2: e2, e3: e3, be: be })
+    |> Repo.insert!()
   end
 end

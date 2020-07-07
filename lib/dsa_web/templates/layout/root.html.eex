@@ -10,70 +10,7 @@
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">DSA Heldengruppe</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menu">
-          <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-            <%= if @current_user do %>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                  Helden
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <%= link "Übersicht",
-                      to: Routes.character_path(@conn, :index),
-                      class: "dropdown-item"
-                    %>
-                  </li>
-                  <li>
-                    <%= link "Held erstellen",
-                      to: Routes.character_path(@conn, :new),
-                      class: "dropdown-item"
-                    %>
-                  </li>
-                  <%= if Enum.count(@current_user.characters) > 0 do %>
-                    <li><hr class="dropdown-divider"></li>
-                  <% end %>
-                  <%= for c <- @current_user.characters do %>
-                    <li>
-                      <%= link c.name,
-                        to: Routes.character_path(@conn, :edit, c.id),
-                        class: "dropdown-item"
-                      %>
-                    </li>
-                  <% end %>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
-
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <%= if @current_user do %>
-              <li class="nav-item navbar-text"><strong><%= @current_user.username %></strong></li>
-              <li class="nav-item">
-                <%= link "Log out",
-                  to: Routes.session_path(@conn, :delete, @current_user),
-                  class: "nav-link",
-                  method: "delete"
-                %>
-              </li>
-            <% else %>
-              <li class="nav-item">
-                <%= link "Register", to: Routes.user_path(@conn, :new), class: "nav-link" %>
-              </li>
-              <li class="nav-item">
-                <%= link "Log in", to: Routes.session_path(@conn, :new), class: "nav-link" %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <%= render "navbar.html", conn: @conn, current_user: @current_user %>
 
     <main role="main" class="container">
       <%= flash @conn, :info %>

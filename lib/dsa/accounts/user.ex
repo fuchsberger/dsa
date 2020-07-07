@@ -7,6 +7,8 @@ defmodule Dsa.Accounts.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :admin, :boolean, default: false
+
     has_many :characters, Dsa.Game.Character
 
     timestamps()
@@ -37,4 +39,6 @@ defmodule Dsa.Accounts.User do
     |> validate_required([:name, :username])
     |> validate_length(:username, min: 1, max: 20)
   end
+
+  def set_role(user, role, value), do: change(user, Map.put(%{}, role, value))
 end
