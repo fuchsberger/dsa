@@ -44,7 +44,13 @@ defmodule Dsa.Game.Character do
     field :sp, :integer, default: 3
 
     belongs_to :user, Dsa.Accounts.User
-    many_to_many :skills, Dsa.Game.Skill, join_through: Dsa.Game.CharacterSkill
+
+    has_many :character_skills, Dsa.Game.CharacterSkill
+    has_many :skills, through: [:character_skills, :skill]
+
+    # many_to_many :skills, Dsa.Game.Skill,
+    #   join_through: Dsa.Game.CharacterSkill,
+    #   on_replace: :delete
 
     timestamps()
   end
@@ -53,5 +59,12 @@ defmodule Dsa.Game.Character do
     character
     |> cast(attrs, @fields)
     |> validate_required(@fields)
+    |> foreign_key_constraint(:user_id)
+  end
+
+  def changeset_update_skills(character, skills) do
+    character
+    |> cast(%{}, @fields)
+    |> put_assoc(:skills, skills)
   end
 end

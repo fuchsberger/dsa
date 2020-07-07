@@ -1,7 +1,9 @@
 defmodule DsaWeb.GameView do
   use DsaWeb, :view
 
-  def field(form, field, tooltip \\ nil) do
+  def action(changeset), do: if new?(changeset.data), do: :create, else: :update
+
+  def field(form, field, _tooltip \\ nil) do
     ~E"""
     <div class='col-sm-3'>
       <div class="input-group input-group-sm mb-2">
@@ -19,6 +21,10 @@ defmodule DsaWeb.GameView do
     |> String.upcase(:ascii)
   end
 
+  def filter_skills(form, tab) do
+    Enum.filter(form.source.data.character_skills, & &1.skill.category == tab)
+  end
+
   @doc """
   Checks whether a structure was newly build or loaded from database.
   """
@@ -33,6 +39,16 @@ defmodule DsaWeb.GameView do
       2 -> "L"
       "2" -> "L"
     end
+  end
+
+  def skill_tab(name, active) do
+    lnk = link name,
+      to: "#",
+      class: "nav-link p-1#{if name == active, do: " active"}",
+      phx_click: "tab",
+      phx_value_tab: name
+
+    content_tag :li, lnk, class: "nav-item"
   end
 
   def tp(form) do

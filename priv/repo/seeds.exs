@@ -1,26 +1,9 @@
 # Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Dsa.Repo.insert!(%Dsa.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+# mix run priv/repo/seeds.exs
 
 alias Dsa.{Accounts, Game}
 
-{:ok, alex} = Accounts.register_user(%{
-  name: "Alex Fuchsberger",
-  username: "admin",
-  password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
-})
-
-Accounts.set_role(alex, :admin, true)
-
-Game.create_group(%{ name: "DSA", master: alex.id })
+# CREATE TALENTS
 
 # Talents: Body
 Game.create_skill!("Körper", "MU/IN/GE", "Fliegen", true)
@@ -90,3 +73,20 @@ Game.create_skill!("Handwerk", "CH/FF/KO", "Musizieren", true)
 Game.create_skill!("Handwerk", "IN/FF/FF", "Schlösserknacken", true)
 Game.create_skill!("Handwerk", "FF/FF/KK", "Steinbearbeitung", true)
 Game.create_skill!("Handwerk", "KL/FF/FF", "Stoffbearbeitung", true)
+
+# Create Admin User
+{:ok, alex} = Accounts.register_user(%{
+  name: "Alex Fuchsberger",
+  username: "admin",
+  password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
+})
+
+Accounts.set_role(alex, :admin, true)
+Game.create_group(%{name: "DSA", master: alex.id})
+
+Game.create_character(alex, %{
+  name: "Test",
+  species: "Mensch",
+  culture: "Mittelreich",
+  profession: "Rondrageweihter"
+})

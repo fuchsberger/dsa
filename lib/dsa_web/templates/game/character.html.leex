@@ -1,20 +1,20 @@
 <%= f = form_for @changeset, "#", [
   novalidate: true,
   phx_change: :validate,
-  phx_submit: :update
+  phx_submit: action(@changeset)
 ] %>
   <div class='d-flex my-3'>
     <h3 class="flex-grow-1">Heldenblatt</h3>
     <%= submit "Speichern", class: "btn btn-primary" %>
   </div>
 
-  <div class='row'>
-    <div class='col-sm'>
+  <div class='row g-3'>
+    <div class='col-lg'>
       <%= render "card_generel.html", f: f, changeset: @changeset %>
       <%= render "card_traits.html", f: f, changeset: @changeset %>
     </div>
-    <div class='col-sm'>
-      <%= render "card_skills.html", f: f, changeset: @changeset %>
+    <div class='col-lg'>
+      <%= render "card_skills.html", f: f, changeset: @changeset, tab: @tab %>
     </div>
   </div>
 </form>

@@ -13,5 +13,6 @@ defmodule Dsa.Game.Group do
     user
     |> cast(attrs, [:name, :master_id])
     |> validate_required([:name])
+    |> foreign_key_constraint(:master)
   end
 end

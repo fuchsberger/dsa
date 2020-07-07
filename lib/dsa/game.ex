@@ -9,7 +9,7 @@ defmodule Dsa.Game do
   import Ecto.Changeset
 
   alias Dsa.Accounts
-  alias Dsa.Game.{Character, Group, Skill}
+  alias Dsa.Game.{Character, CharacterSkill, Group, Skill}
 
   def list_characters, do: Repo.all(Character)
 
@@ -23,36 +23,63 @@ defmodule Dsa.Game do
     Character
     |> user_characters_query(user)
     |> Repo.get!(id)
+    |> sort_skills()
   end
 
   def get_user_character!(user_id, id) do
     Character
     |> user_characters_query(user_id)
     |> Repo.get!(id)
+    |> sort_skills()
+  end
+
+  def get_character!(id) do
+    case Repo.get!(from(c in Character, preload: [character_skills: :skill]), id) do
+      nil -> nil
+      character -> sort_skills(character)
+    end
   end
 
   defp user_characters_query(query, %Accounts.User{id: user_id}) do
-    from(v in query, preload: [:traits, :skills], where: v.user_id == ^user_id)
+    from(v in query, where: v.user_id == ^user_id)
   end
 
   defp user_characters_query(query, user_id) do
-    from(v in query, preload: [:traits, :skills], where: v.user_id == ^user_id)
+    from(v in query, where: v.user_id == ^user_id)
   end
 
-  def get_character!(id), do: Repo.get!(Character, id)
+  def sort_skills(%Character{} = character) do
+    character = Repo.preload(character, [character_skills: :skill])
+    sorted_skills = Enum.sort_by(character.character_skills, & &1.skill.name)
+    Map.put(character, :character_skills, sorted_skills)
+  end
 
   def create_character(%Accounts.User{} = user, attrs \\ %{}) do
-    %Character{}
-    |> Character.changeset(Map.merge(attrs, %{
-      "mu" => 8, "kl" => 8, "in" => 8, "ch" => 8,"ff" => 8,"ge" => 8, "ko" => 8, "kk" => 8
-      }))
-    |> put_assoc(:user, user)
-    |> Repo.insert()
+    case (
+      %Character{}
+      |> Character.changeset(attrs)
+      |> put_assoc(:user, user)
+      |> Repo.insert()
+    ) do
+      {:ok, character} ->
+        character = Repo.preload(character, :skills)
+
+        skill_ids =
+          list_skills()
+          |> Enum.reject(& &1.category == "Speziell")
+          |> Enum.map(& &1.id)
+
+        upsert_character_skills(character, skill_ids)
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
   end
 
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
+    |> cast_assoc(:character_skills, with: &Dsa.Game.CharacterSkill.changeset/2)
     |> Repo.update()
   end
 
@@ -68,11 +95,7 @@ defmodule Dsa.Game do
     |> Repo.insert()
   end
 
-  # def create_skill!(attrs \\ %{}) do
-  #   %Skill{}
-  #   |> Skill.changeset(attrs)
-  #   |> Repo.insert!()
-  # end
+  def list_skills, do: Repo.all(from(s in Skill, order_by: s.name))
 
   # used for seeding
   def create_skill!(category, probe, name, be \\ nil) do
@@ -81,5 +104,30 @@ defmodule Dsa.Game do
     %Skill{}
     |> Skill.changeset(%{ name: name, category: category, e1: e1, e2: e2, e3: e3, be: be })
     |> Repo.insert!()
+  end
+
+  def upsert_character_skills(character, skill_ids) when is_list(skill_ids) do
+    skills =
+      Skill
+      |> where([skill], skill.id in ^skill_ids)
+      |> Repo.all()
+
+    with {:ok, _struct} <-
+      character
+      |> Character.changeset_update_skills(skills)
+      |> Repo.update() do
+
+      {:ok, get_character!(character.id)}
+    else
+      error ->
+        error
+    end
+  end
+
+  def add_skill!(character, skill, _level \\ 0) do
+    character
+    |> change_character()
+    |> put_assoc(:skill, skill)
+    |> Repo.update!()
   end
 end

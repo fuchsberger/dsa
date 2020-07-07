@@ -70,12 +70,14 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
       add :be, :boolean
     end
 
-    create table(:character_skills) do
-      add :character_id, references(:characters, on_delete: :nilify_all), null: false
-      add :skill_id, references(:characters, on_delete: :nilify_all), null: false
+    create table(:character_skills, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :skill_id, references(:skills, on_delete: :delete_all), primary_key: true
       add :level, :integer
     end
 
-    create index(:character_skills, [:character_id, :skill_id])
+    create index :character_skills, [:character_id]
+    create index :character_skills, [:skill_id]
+    create unique_index :character_skills, [:character_id, :skill_id]
   end
 end

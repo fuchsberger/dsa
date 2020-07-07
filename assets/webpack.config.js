@@ -9,6 +9,7 @@ module.exports = (env, options) => {
   const devMode = options.mode !== 'production';
 
   return {
+    stats: 'minimal',
     optimization: {
       minimizer: [
         new TerserPlugin({ cache: true, parallel: true, sourceMap: devMode }),
