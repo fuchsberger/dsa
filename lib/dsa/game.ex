@@ -32,11 +32,11 @@ defmodule Dsa.Game do
   end
 
   defp user_characters_query(query, %Accounts.User{id: user_id}) do
-    from(v in query, preload: :traits, where: v.user_id == ^user_id)
+    from(v in query, preload: [:traits, :skills], where: v.user_id == ^user_id)
   end
 
   defp user_characters_query(query, user_id) do
-    from(v in query, preload: :traits, where: v.user_id == ^user_id)
+    from(v in query, preload: [:traits, :skills], where: v.user_id == ^user_id)
   end
 
   def get_character!(id), do: Repo.get!(Character, id)
@@ -57,7 +57,10 @@ defmodule Dsa.Game do
   end
 
   def delete_character(%Character{} = character), do: Repo.delete(character)
-  def change_character(%Character{} = c, attrs \\ %{}), do: Character.changeset(c, attrs)
+
+  def change_character(%Character{} = character, attrs \\ %{}) do
+    Character.changeset(character, attrs)
+  end
 
   def create_group(attrs \\ %{}) do
     %Group{}

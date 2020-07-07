@@ -19,6 +19,11 @@ defmodule DsaWeb.GameView do
     |> String.upcase(:ascii)
   end
 
+  @doc """
+  Checks whether a structure was newly build or loaded from database.
+  """
+  def new?(struct), do: Ecto.get_meta(struct, :state) == :built
+
   def range(form) do
     case input_value(form, :rw) do
       0 -> "K"

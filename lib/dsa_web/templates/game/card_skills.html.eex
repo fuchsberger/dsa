@@ -1,6 +1,10 @@
 <div class="card mb-3">
   <h5 class="card-header">Fähigkeiten</h5>
   <div class="card-body">
+    <%= if new?(@f.source.data) do %>
+      <p>Dieser Bereich wird zugänglich, sobald du deinen Helden gespeichert hast.</p>
+    <% else %>
 
+    <% end %>
   </div>
 </div>

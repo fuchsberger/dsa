@@ -31,7 +31,7 @@ defmodule Dsa.Game.CharacterSkill do
   use Ecto.Schema
 
   schema "character_skills" do
-    field :level, :integer, required: true
+    field :level, :integer, required: true, default: 0
 
     belongs_to :character, Dsa.Game.Character
     belongs_to :skill, Dsa.Game.Skill
