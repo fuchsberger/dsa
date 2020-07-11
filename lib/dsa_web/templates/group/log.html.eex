@@ -1,0 +1,14 @@
+
+<div class="card mb-3">
+  <h5 class="card-header">Ereignislog</h5>
+  <ul class='list-group list-group-flush'>
+    <%= for log <- @group.logs do %>
+      <li class="list-group-item">
+        <p class='mb-0'><%= log.message %></p>
+        <%= if @user_id == @group.master_id do %>
+          <small class='text-primary'><em><%= log.details %></em></small>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

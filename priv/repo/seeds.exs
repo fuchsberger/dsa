@@ -5,6 +5,31 @@ alias Dsa.{Accounts, Game}
 
 # CREATE TALENTS
 
+# Talents: Meele Combat
+Game.create_skill!("Nahkampf", "GE", "Dolche", true)
+Game.create_skill!("Nahkampf", "GE", "Fächer", true)
+Game.create_skill!("Nahkampf", "GE", "Fechtwaffen", true)
+Game.create_skill!("Nahkampf", "KK", "Hiebwaffen", true)
+Game.create_skill!("Nahkampf", "KK", "Kettenwaffen", true)
+Game.create_skill!("Nahkampf", "KK", "Lanzen", true)
+Game.create_skill!("Nahkampf", "FF", "Peitschen", true)
+Game.create_skill!("Nahkampf", "GE/KK", "Raufen", true)
+Game.create_skill!("Nahkampf", "KK", "Schilde", true)
+Game.create_skill!("Nahkampf", "GE/KK", "Schwerter", true)
+Game.create_skill!("Nahkampf", "KK", "Spießwaffen", true)
+Game.create_skill!("Nahkampf", "GE/KK", "Stangenwaffen", true)
+Game.create_skill!("Nahkampf", "KK", "Zweihandhiebwaffen", true)
+Game.create_skill!("Nahkampf", "KK", "Zweihandschwerter", true)
+
+# Talents: Ranged Combat
+Game.create_skill!("Fernkampf", "FF", "Armbrüste", true)
+Game.create_skill!("Fernkampf", "FF", "Bögen", true)
+Game.create_skill!("Fernkampf", "FF", "Blasrohre", true)
+Game.create_skill!("Fernkampf", "FF", "Diskusse", true)
+Game.create_skill!("Fernkampf", "FF", "Feuerspeien", true)
+Game.create_skill!("Fernkampf", "FF", "Schleudern", true)
+Game.create_skill!("Fernkampf", "FF", "Wurfwaffen", true)
+
 # Talents: Body
 Game.create_skill!("Körper", "MU/IN/GE", "Fliegen", true)
 Game.create_skill!("Körper", "MU/CH/FF", "Gaukeleien", true)
@@ -82,11 +107,22 @@ Game.create_skill!("Handwerk", "KL/FF/FF", "Stoffbearbeitung", true)
 })
 
 Accounts.set_role(alex, :admin, true)
-Game.create_group(%{name: "DSA", master: alex.id})
+
+
+{:ok, group} = Game.create_group( %{name: "DSA", master_id: alex.id})
 
 Game.create_character(alex, %{
-  name: "Test",
+  name: "Rolo",
   species: "Mensch",
   culture: "Mittelreich",
-  profession: "Rondrageweihter"
+  profession: "Rondrageweihter",
+  group_id: group.id
+})
+
+Game.create_character(alex, %{
+  name: "Sam",
+  species: "Elf",
+  culture: "Auelf",
+  profession: "Wildnisläufer",
+  group_id: group.id
 })

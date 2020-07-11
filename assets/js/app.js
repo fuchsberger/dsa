@@ -5,6 +5,7 @@ import "autoprefixer"
 import "popper.js"
 import Dropdown from 'bootstrap/js/dist/dropdown.js'
 import Alert from 'bootstrap/js/dist/alert.js'
+import Tab from 'bootstrap/js/dist/tab.js'
 import Tooltip from 'bootstrap/js/dist/tooltip.js'
 
 import {Socket} from "phoenix"

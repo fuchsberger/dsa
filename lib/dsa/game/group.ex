@@ -3,16 +3,17 @@ defmodule Dsa.Game.Group do
   import Ecto.Changeset
 
   schema "groups" do
-    field :name, :string, required: true
+    field :name, :string
     has_many :characters, Dsa.Game.Character
-    belongs_to :master, Dsa.Accounts
+    has_many :logs, Dsa.Game.Log
+    belongs_to :master, Dsa.Accounts.User
     timestamps()
   end
 
-  def changeset(user, attrs) do
-    user
+  def changeset(group, attrs) do
+    group
     |> cast(attrs, [:name, :master_id])
-    |> validate_required([:name])
-    |> foreign_key_constraint(:master)
+    |> validate_required([:name, :master_id])
+    |> foreign_key_constraint(:master_id)
   end
 end

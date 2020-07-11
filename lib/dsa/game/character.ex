@@ -2,8 +2,6 @@ defmodule Dsa.Game.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @fields ~w(name ap species culture profession mu kl in ch ff ge ko kk at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
-
   schema "characters" do
 
     # Generell
@@ -43,18 +41,22 @@ defmodule Dsa.Game.Character do
     field :gw, :integer, default: 8
     field :sp, :integer, default: 3
 
+    belongs_to :group, Dsa.Game.Group
     belongs_to :user, Dsa.Accounts.User
 
-    has_many :character_skills, Dsa.Game.CharacterSkill
+    has_many :character_skills, Dsa.Game.CharacterSkill, on_replace: :delete
     has_many :skills, through: [:character_skills, :skill]
 
     timestamps()
   end
 
+  @fields ~w(name ap species culture profession mu kl in ch ff ge ko kk at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
+
   def changeset(character, attrs) do
     character
-    |> cast(attrs, @fields)
+    |> cast(attrs, @fields ++ [:group_id])
     |> validate_required(@fields)
+    |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
   end
 

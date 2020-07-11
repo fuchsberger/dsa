@@ -60,6 +60,8 @@ defmodule DsaWeb.FormHelpers do
   def select(f, field, options, opts \\ []),
     do: Form.select(f, field, options, opts(f, field, opts, "form-select"))
 
+  def options(list), do: Enum.map(list, & {&1.name, &1.id})
+
   defp opts(f, field, opts, type \\ "form-control") do
     Keyword.put(opts, :class, "#{type} #{Keyword.get(opts, :class, "")}#{error_class(f, field)}") ++ Form.input_validations(f, field)
   end

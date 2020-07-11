@@ -14,7 +14,7 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
 
     create table(:groups) do
       add :name, :string
-      add :meister, references(:users, on_delete: :nilify_all)
+      add :master_id, references(:users, on_delete: :nilify_all)
       timestamps()
     end
 
@@ -79,5 +79,16 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
     create index :character_skills, [:character_id]
     create index :character_skills, [:skill_id]
     create unique_index :character_skills, [:character_id, :skill_id]
+
+    create table(:logs) do
+      add :message, :string
+      add :details, :string
+      add :character_id, references(:characters, on_delete: :nilify_all)
+      add :group_id, references(:groups, on_delete: :delete_all)
+      timestamps()
+    end
+
+    create index :logs, [:character_id]
+    create index :logs, [:group_id]
   end
 end

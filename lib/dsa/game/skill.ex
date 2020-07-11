@@ -2,15 +2,15 @@ defmodule Dsa.Game.Skill do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @categories ~w(Körper Gesellschaft Natur Wissen Handwerk Speziell)
+  @categories ~w(Nahkampf Fernkampf Körper Gesellschaft Natur Wissen Handwerk Speziell)
   @traits ~w(MU KL IN CH FF GE KO KK)
 
   schema "skills" do
     field :name, :string, required: true
     field :category, :string, required: true
     field :e1, :string, required: true
-    field :e2, :string, required: true
-    field :e3, :string, required: true
+    field :e2, :string
+    field :e3, :string
     field :be, :boolean
 
     many_to_many :characters, Dsa.Game.Character,
@@ -21,7 +21,7 @@ defmodule Dsa.Game.Skill do
   def changeset(skill, attrs) do
     skill
     |> cast(attrs, [:name, :category, :e1, :e2, :e3, :be])
-    |> validate_required([:name, :category, :e1, :e2, :e3])
+    |> validate_required([:name, :category, :e1])
     |> validate_inclusion(:category, @categories)
     |> validate_inclusion(:e1, @traits)
     |> validate_inclusion(:e2, @traits)

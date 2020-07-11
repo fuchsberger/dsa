@@ -1,0 +1,35 @@
+<div class='d-flex my-3'>
+  <h3 class="flex-grow-1">Heldenübersicht</h3>
+  <%= link "Neu erstellen", to: Routes.character_path(@conn, :new), class: "btn btn-primary" %>
+</div>
+
+<table class='table'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th>Kultur</th>
+      <th>Profession</th>
+      <th>AP</th>
+      <th>Gruppe</th>
+      <th>Aktionen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for character <- @characters do %>
+      <tr>
+        <th scope='row'><%= character.name %></th>
+        <td><%= character.culture %></td>
+        <td><%= character.profession %></td>
+        <td><%= character.ap %></td>
+        <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
+        <td>
+          <%= link "Details", to: Routes.character_path(@conn, :edit, character.id) %>
+          <%= link "Entfernen", to: Routes.character_path(@conn, :delete, character), method: :delete, data: [confirm: "Bist du sicher?"], class: "text-danger ml-2" %>
+        </td>
+      </tr>
+    <% end %>
+    <%= if Enum.count(@characters) == 0 do %>
+      <tr><td colspan='6'><em>Du hast noch keine Helden erstellt.</em></td></tr>
+    <% end %>
+  </tbody>
+</table>

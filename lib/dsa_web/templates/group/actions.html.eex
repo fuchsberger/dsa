@@ -1,0 +1,32 @@
+<div class="card mb-3">
+  <h5 class="card-header">Probe würfeln</h5>
+  <div class="card-body">
+    <%= f = form_for @changeset_talent_roll,  "#", [
+      class: "row g-2",
+      phx_change: :validate,
+      phx_submit: :event,
+      no_validate: true
+    ] %>
+
+      <div class='col-lg-7 mb-1'>
+        <%= select f, :skill_id, skill_options(@group.characters, @active_id),
+          class: "form-select-sm",
+          prompt: "Fertigkeit"
+        %>
+        <%= error_tag f, :skill_id %>
+      </div>
+
+      <div class='col-lg-2 mb-1'>
+        <%= select f, :modifier, modifier_options(-6..6),
+          class: "form-select-sm",
+          selected: 0
+        %>
+        <%= error_tag f, :modifier %>
+      </div>
+
+      <div class='col-lg-3'>
+        <%= submit "Würfeln!", class: "w-100 btn btn-primary btn-sm" %>
+      </div>
+    </form>
+  </div>
+</div>

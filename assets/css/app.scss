@@ -2,5 +2,9 @@
 @import "./bootstrap";
 
 #trait-card label { width: 40px; }
+
 #trait-card input { text-align: center; }
 
+#talente td:last-of-type,
+#talente input { width: 50px; }
+#talente input { font-weight:bold; text-align: right; padding: 0; min-height: 0; }

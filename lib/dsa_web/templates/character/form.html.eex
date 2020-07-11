@@ -1,0 +1,173 @@
+<%= form_for @changeset, path(@conn, @action), [novalidate: true], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>Fehler!</strong> Etwas ist falsch gelaufen! Bitte überprüfe alle Eingaben.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
+
+  <div class='d-flex my-3'>
+    <h3 class="flex-grow-1"><%= form_heading(@action) %></h3>
+    <%= submit "Speichern", class: "btn btn-primary" %>
+  </div>
+
+  <div class='row g-3'>
+    <div class='col-lg'>
+
+      <%# CARD GENERELL ----------------------------------------------------------------------- %>
+      <div class="card mb-3">
+        <h5 class="card-header">Generell</h5>
+        <div class="card-body">
+
+          <div class='row g-2'>
+            <%= label f, :name, "Name / AP", class: "col-sm-4 col-form-label" %>
+            <div class="col-sm-4">
+              <%= text_input f, :name, class: "form-control-sm", placeholder: "Name" %>
+              <%= error_tag f, :name %>
+            </div>
+            <div class="col-sm-4">
+              <%= number_input f, :ap, class: "form-control-sm", placeholder: "AP" %>
+              <%= error_tag f, :ap %>
+            </div>
+          </div>
+
+          <div class='row g-2'>
+            <%= label f, :species, "Rasse / Kultur", class: "col-sm-4 col-form-label" %>
+            <div class="col-sm-4">
+              <%= text_input f, :species, class: "form-control-sm", placeholder: "Rasse" %>
+              <%= error_tag f, :species %>
+            </div>
+            <div class="col-sm-4">
+              <%= text_input f, :culture, class: "form-control-sm", placeholder: "Kultur" %>
+              <%= error_tag f, :culture %>
+            </div>
+          </div>
+
+          <div class='row g-2'>
+            <%= label f, :profession, class: "col-sm-4 col-form-label" %>
+            <div class="col-sm-8">
+              <%= text_input f, :profession, class: "form-control-sm", placeholder: "Profession" %>
+              <%= error_tag f, :profession %>
+            </div>
+          </div>
+
+          <div class='row g-2'>
+            <%= label f, :gruppe_id, class: "col-sm-4 col-form-label" %>
+            <div class="col-sm-8">
+              <%= select f, :group_id, options(@groups), class: "form-select-sm", prompt: "keiner Gruppe beigetreten" %>
+              <%= error_tag f, :gruppe_id %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# CARD TRAITS ------------------------------------------------------------------------- %>
+      <div id='trait-card' class="card">
+        <h5 class="card-header">Grundwerte</h5>
+        <div class="card-body">
+          <h6>Eigenschaften</h6>
+          <div class='row g-2'>
+            <%= field f, :mu %>
+            <%= field f, :kl %>
+            <%= field f, :in %>
+            <%= field f, :ch %>
+            <%= field f, :ff %>
+            <%= field f, :ge %>
+            <%= field f, :ko %>
+            <%= field f, :kk %>
+          </div>
+
+          <h6 class='mt-2'>Basiswerte</h6>
+          <div class='row g-2'>
+            <%= field f, :le %>
+            <%= field f, :ae %>
+            <%= field f, :zk %>
+            <%= field f, :sk %>
+            <%= field f, :aw %>
+            <%= field f, :ini %>
+            <%= field f, :ge %>
+            <%= field f, :sp %>
+          </div>
+
+          <h6 class='mt-2'>Kampfwerte</h6>
+          <div class='row g-2'>
+            <%= field f, :at %>
+            <%= field f, :pa %>
+
+            <div class='col-sm-3'>
+              <div class="input-group input-group-sm mb-2">
+                <%= label f, :dmg, "TP", class: "input-group-text font-weight-bold" %>
+                <div class='form-control'><%= tp(f) %></div>
+              </div>
+            </div>
+
+            <div class='col-sm-3'>
+              <div class="input-group input-group-sm mb-2">
+                <div class="input-group-text">
+                  <%= checkbox f, :w2, class: "ml-2 form-check-input" %>
+                </div>
+                <%= number_input f, :tp %>
+              </div>
+            </div>
+
+            <%= field f, :be %>
+            <%= field f, :rs %>
+
+            <div class='col-sm-3'>
+              <div class="input-group input-group-sm mb-2">
+                <%= label f, :rw, "RW", class: "input-group-text font-weight-bold" %>
+                <div class='form-control'><%= range(f) %></div>
+              </div>
+            </div>
+
+            <div class='col-sm-3'>
+              <%= select(f, :rw, [
+                "Kurz": 0,
+                "Mittel": 1,
+                "Lang": 2
+                ], selected: 1, class: "form-select-sm") %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class='col-lg'>
+      <div id='talente' class="card mb-3">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs nav-fill" role='tablist'>
+            <%= tab "Kampf" %>
+            <%= tab "Körper" %>
+            <%= tab "Gesellschaft" %>
+            <%= tab "Natur" %>
+            <%= tab "Wissen" %>
+            <%= tab "Handwerk" %>
+          </ul>
+        </div>
+
+        <%= if @action == :create do %>
+          <div class="card-body">
+            Dieser Bereich wird zugänglich, sobald du deinen Helden gespeichert hast.
+          </div>
+        <% else %>
+          <div class="card-body tab-content p-0">
+            <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
+              <%= render "table_combat.html", form: f, talent: "Nahkampf" %>
+              <%= render "table_combat.html", form: f, talent: "Fernkampf" %>
+            </div>
+            <%= render "talent_panel.html", form: f, talent: "Körper" %>
+            <%= render "talent_panel.html", form: f, talent: "Gesellschaft" %>
+            <%= render "talent_panel.html", form: f, talent: "Natur" %>
+            <%= render "talent_panel.html", form: f, talent: "Wissen" %>
+            <%= render "talent_panel.html", form: f, talent: "Handwerk" %>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+<% end %>
+\
