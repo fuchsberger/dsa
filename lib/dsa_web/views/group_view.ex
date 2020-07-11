@@ -3,6 +3,8 @@ defmodule DsaWeb.GroupView do
 
   def modifier_options(range), do: Enum.map(range, & {&1, &1})
 
+  def owner?(group, character_id), do: Enum.any?(group.characters, & &1.id == character_id)
+
   def skill_options(characters, id) do
     characters
     |> Enum.find(& &1.id == id)

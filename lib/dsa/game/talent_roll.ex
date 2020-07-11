@@ -3,7 +3,7 @@ defmodule Dsa.Game.TalentRoll do
   import Ecto.Changeset
 
   @primary_key false
-  schema "talent_roll" do
+  schema "talent_rolls" do
     field :modifier, :integer
     belongs_to :character, Dsa.Game.Character
     belongs_to :skill, Dsa.Game.Skill

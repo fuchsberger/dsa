@@ -9,7 +9,7 @@ defmodule Dsa.Game do
   import Ecto.Changeset
 
   alias Dsa.Accounts
-  alias Dsa.Game.{Character, CharacterSkill, Group, Log, Skill, TalentRoll}
+  alias Dsa.Game.{Character, CharacterSkill, Group, Log, Skill, TalentRoll, TraitRoll}
 
   def list_characters(%Accounts.User{} = user) do
     Character
@@ -128,4 +128,5 @@ defmodule Dsa.Game do
 
   # Virtual Schemas: Events / Rolls
   def change_talent_roll(attrs \\ %{}), do: TalentRoll.changeset(%TalentRoll{}, attrs)
+  def change_trait_roll(attrs \\ %{}), do: TraitRoll.changeset(%TraitRoll{}, attrs)
 end

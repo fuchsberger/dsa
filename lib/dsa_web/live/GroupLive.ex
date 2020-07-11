@@ -11,6 +11,7 @@ defmodule DsaWeb.GroupLive do
     {:ok, socket
     |> assign(:active_id, Enum.find(group.characters, & &1.user_id == user_id).id)
     |> assign(:changeset_talent_roll, Game.change_talent_roll())
+    |> assign(:changeset_trait_roll, Game.change_trait_roll())
     |> assign(:group, group)
     |> assign(:user_id, user_id)}
   end
@@ -21,6 +22,10 @@ defmodule DsaWeb.GroupLive do
 
   def handle_event("validate", %{"talent_roll" => params}, socket) do
     {:noreply, assign(socket, :changeset_talent_roll, Game.change_talent_roll(params))}
+  end
+
+  def handle_event("validate", %{"trait_roll" => params}, socket) do
+    {:noreply, assign(socket, :changeset_trait_roll, Game.change_trait_roll(params))}
   end
 
   def handle_event("event", %{"talent_roll" => %{"skill_id" => sid, "modifier" => modifier}}, socket) do
@@ -42,7 +47,7 @@ defmodule DsaWeb.GroupLive do
         7 ->
           "#{character.name} hat bei einer Probe auf #{skill.name} (#{modifier}) einen kritischen Erfolg erzielt."
         -2 ->
-          "#{character.name} ist eine Probe auf #{skill.name} (#{modifier}) schrecklich misslungen.Unglaublich, die Chanchen standen 1:8000!"
+          "#{character.name} ist eine Probe auf #{skill.name} (#{modifier}) schrecklich misslungen. Unglaublich, die Chanchen standen 1:8000!"
         -1 ->
           "#{character.name} ist eine Probe auf #{skill.name} (#{modifier}) kritisch missglückt."
         0 ->
@@ -65,6 +70,65 @@ defmodule DsaWeb.GroupLive do
     case Game.create_log(params) do
       {:ok, %{group_id: id}} -> {:noreply, assign(socket, :group, Game.get_group!(id))}
       {:error, _changeset} -> {:noreply, socket}
+    end
+  end
+
+  def handle_event("event", %{"trait_roll" => %{"trait" => trait, "modifier" => modifier}}, socket) do
+
+    character = Enum.find(socket.assigns.group.characters, & &1.id == socket.assigns.active_id)
+    modifier = String.to_integer(modifier)
+    trait = String.to_atom(trait)
+    trait_val = Map.get(character, trait)
+
+    {message, details} =
+      case Enum.random(1..20) do
+        1 ->
+          if confirmed?(trait_val, modifier),
+            do:
+              {"#{character.name} hat bei einer Probe auf #{trait(trait)} (#{modifier}) einen kritischen Erfolg erzielt.", "#{trait(trait)}: #{trait_val}, Würfel: 1"},
+            else:
+              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, Würfel: 1"}
+
+        20 ->
+          unless confirmed?(trait_val, modifier),
+            do:
+              {"#{character.name} ist bei einer Probe auf #{trait(trait)} (#{modifier}) ein kritischer Patzer unterlaufen.", "#{trait(trait)}: #{trait_val}, Würfel: 20"},
+            else:
+              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, Würfel: 20"}
+
+        w ->
+          if trait_val + modifier >= w,
+            do:
+              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, Würfel: #{w}"},
+            else:
+              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, Würfel: #{w}"}
+      end
+
+    params = %{
+      character_id: character.id,
+      group_id: socket.assigns.group.id,
+      message: message,
+      details: details
+    }
+
+    case Game.create_log(params) do
+      {:ok, %{group_id: id}} -> {:noreply, assign(socket, :group, Game.get_group!(id))}
+      {:error, _changeset} -> {:noreply, socket}
+    end
+  end
+
+  defp confirmed?(trait, modifier), do: trait + modifier >= Enum.random(1..20)
+
+  defp trait(short) do
+    case short do
+      :mu -> "Mut"
+      :kl -> "Klugheit"
+      :in -> "Intuition"
+      :ch -> "Charisma"
+      :ff -> "Fingerfertigkeit"
+      :ge -> "Gewandheit"
+      :ko -> "Konstitution"
+      :kk -> "Körperkraft"
     end
   end
 
