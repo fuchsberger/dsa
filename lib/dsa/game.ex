@@ -79,6 +79,8 @@ defmodule Dsa.Game do
 
   def delete_character!(character), do: Repo.delete!(character)
 
+  def change_active_character(attrs \\ %{}), do: Character.active_changeset(%Character{}, attrs)
+
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
@@ -127,6 +129,7 @@ defmodule Dsa.Game do
   def change_log(%Log{} = log, attrs \\ %{}), do: Log.changeset(log, attrs)
 
   # Virtual Schemas: Events / Rolls
+
   def change_talent_roll(attrs \\ %{}), do: TalentRoll.changeset(%TalentRoll{}, attrs)
   def change_trait_roll(attrs \\ %{}), do: TraitRoll.changeset(%TraitRoll{}, attrs)
 end

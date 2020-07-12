@@ -1,9 +1,10 @@
 <div class='row g-3'>
   <div class='col-lg'>
-    <%= render "member_table.html", assigns %>
+    <%= if active_character_id(assigns), do: render "character.html", assigns %>
   </div>
   <div class='col-lg'>
-    <%= if @active_id, do: render "actions.html", assigns %>
+
+    <%= if @changeset_roll, do: render "trait_roll.html", assigns %>
     <%= render "log.html", group: @group, user_id: @user_id %>
   </div>
 </div>

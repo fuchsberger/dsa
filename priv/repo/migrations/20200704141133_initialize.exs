@@ -1,6 +1,8 @@
 defmodule Dsa.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
+  import Dsa.Game.Character, only: [talents: 0]
+
   def change do
     create table(:users) do
       add :name, :string
@@ -55,6 +57,33 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
       add :ini, :integer
       add :gw, :integer
       add :sp, :integer
+
+      add :cc_dolche, :integer
+      add :cc_faecher, :integer
+      add :cc_fechtwaffen, :integer
+      add :cc_hiebwaffen, :integer
+      add :cc_kettenwaffen, :integer
+      add :cc_lanzen, :integer
+      add :cc_peitschen, :integer
+      add :cc_raufen, :integer
+      add :cc_schilde, :integer
+      add :cc_schwerter, :integer
+      add :cc_spiesswaffen, :integer
+      add :cc_stangenwaffen, :integer
+      add :cc_zweihandhiebwaffen, :integer
+      add :cc_zweihandschwerter, :integer
+
+      # ranged combat
+      add :rc_armbrueste, :integer
+      add :rc_blasrohre, :integer
+      add :rc_boegen, :integer
+      add :rc_diskusse, :integer
+      add :rc_feuerspeien, :integer
+      add :rc_schleudern, :integer
+      add :rc_wurfwaffen, :integer
+
+      # talents
+      Enum.each(talents(), & add(&1, :integer))
 
       timestamps()
     end

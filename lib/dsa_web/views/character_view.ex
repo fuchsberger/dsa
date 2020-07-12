@@ -1,6 +1,8 @@
 defmodule DsaWeb.CharacterView do
   use DsaWeb, :view
 
+  import Dsa.Game.Character, only: [talents: 1]
+
   def field(form, field, _tooltip \\ nil) do
     ~E"""
     <div class='col-sm-3'>
@@ -60,16 +62,6 @@ defmodule DsaWeb.CharacterView do
 
   def path(conn, :create), do: Routes.character_path(conn, :create)
   def path(conn, :update), do: Routes.character_path(conn, :update, conn.assigns.changeset.data)
-
-  def parade_possible?(skill_form) do
-    case {skill_form.data.skill.category, skill_form.data.skill.name} do
-      {"Nahkampf", "Kettenwaffen"} -> false
-      {"Nahkampf", "Peitschen"} -> false
-      {"Nahkampf", "Spießwaffen"} -> false
-      {"Nahkampf", _} -> true
-      _ -> false
-    end
-  end
 
   def range(form) do
     case input_value(form, :rw) do

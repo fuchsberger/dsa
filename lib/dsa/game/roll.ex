@@ -1,3 +1,22 @@
+defmodule Dsa.Game.TraitRoll do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+  schema "trait_rolls" do
+    field :trait, :string
+    field :be, :boolean, default: false
+    field :modifier, :integer, default: 0
+  end
+
+  def changeset(roll, attrs) do
+    roll
+    |> cast(attrs, [:trait, :be, :modifier])
+    |> validate_required([:trait, :be, :modifier])
+    |> validate_inclusion(:trait, ["mu", "kl", "in", "ch", "ff", "ge", "ko", "kk"])
+  end
+end
+
 defmodule Dsa.Game.TalentRoll do
   use Ecto.Schema
   import Ecto.Changeset

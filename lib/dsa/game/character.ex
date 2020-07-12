@@ -2,6 +2,30 @@ defmodule Dsa.Game.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @fields ~w(name ap species culture profession at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
+
+  @traits ~w(mu kl in ch ff ge ko kk)a
+
+  @close_combat_talents ~w(cc_dolche cc_faecher cc_fechtwaffen cc_hiebwaffen cc_kettenwaffen cc_lanzen cc_peitschen cc_raufen cc_schilde cc_schwerter cc_spiesswaffen cc_stangenwaffen cc_zweihandhiebwaffen cc_zweihandschwerter)a
+
+  @ranged_combat_talents ~w(rc_armbrueste rc_blasrohre rc_boegen rc_diskusse rc_feuerspeien rc_schleudern rc_wurfwaffen)a
+
+  @combat_talents @close_combat_talents ++ @ranged_combat_talents
+
+  @body_talents ~w(ta_fliegen ta_gaukeleien ta_klettern ta_koerperbeherrschung ta_kraftakt ta_reiten ta_schwimmen ta_selbstbeherrschung ta_singen ta_sinnesschaerfe ta_tanzen ta_taschendiebstahl ta_verbergen ta_zechen)a
+
+  @social_talents ~w(ta_bekehren ta_betoeren ta_einschuechtern ta_etikette ta_gassenwissen ta_menschenkenntnis ta_ueberreden ta_verkleiden ta_willenskraft)a
+
+  @nature_talents ~w(ta_faehrtensuchen ta_fesseln ta_fischen ta_orientierung ta_pflanzenkunde ta_tierkunde ta_wildnisleben)a
+
+  @knowledge_talents ~w(ta_brettspiel ta_geographie ta_geschichtswissen ta_goetter ta_kriegskunst ta_magiekunde ta_mechanik ta_rechnen ta_rechtskunde ta_sagen ta_sphaerenkunde ta_sternkunde)a
+
+  @crafting_talents ~w(ta_alchimie ta_boote ta_fahrzeuge ta_handel ta_gift ta_krankheiten ta_seele ta_wunden ta_holz ta_lebensmittel ta_leder ta_malen ta_metall ta_musizieren ta_schloesser ta_stein ta_stoff)a
+
+  @talents @body_talents ++ @social_talents ++ @nature_talents ++ @knowledge_talents ++ @crafting_talents
+
+  @required_fields @fields ++ @traits ++ @combat_talents ++ @talents
+
   schema "characters" do
 
     # Generell
@@ -12,14 +36,7 @@ defmodule Dsa.Game.Character do
     field :profession, :string
 
     # Eigenschaften
-    field :mu, :integer, default: 8
-    field :kl, :integer, default: 8
-    field :in, :integer, default: 8
-    field :ch, :integer, default: 8
-    field :ff, :integer, default: 8
-    field :ge, :integer, default: 8
-    field :ko, :integer, default: 8
-    field :kk, :integer, default: 8
+    Enum.each(@traits, & field(&1, :integer, default: 8))
 
     # combat
     field :at, :integer, default: 5
@@ -41,6 +58,10 @@ defmodule Dsa.Game.Character do
     field :gw, :integer, default: 8
     field :sp, :integer, default: 3
 
+    # Talents
+    Enum.each(@combat_talents, & field(&1, :integer, default: 6))
+    Enum.each(@talents, & field(&1, :integer, default: 0))
+
     belongs_to :group, Dsa.Game.Group
     belongs_to :user, Dsa.Accounts.User
 
@@ -50,12 +71,16 @@ defmodule Dsa.Game.Character do
     timestamps()
   end
 
-  @fields ~w(name ap species culture profession mu kl in ch ff ge ko kk at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
+  def active_changeset(character, attrs) do
+    character
+    |> cast(attrs, [:id])
+    |> validate_required([:id])
+  end
 
   def changeset(character, attrs) do
     character
-    |> cast(attrs, @fields ++ [:group_id])
-    |> validate_required(@fields)
+    |> cast(attrs, @required_fields ++ [:group_id])
+    |> validate_required(@required_fields)
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
   end
@@ -64,5 +89,19 @@ defmodule Dsa.Game.Character do
     character
     |> cast(%{}, @fields)
     |> put_assoc(:skills, skills)
+  end
+
+  def talents(category \\ nil) do
+    case category do
+      "Eigenschaften" -> @traits
+      "Nahkampf" -> @close_combat_talents
+      "Fernkampf" -> @ranged_combat_talents
+      "Körper" -> @body_talents
+      "Gesellschaft" -> @social_talents
+      "Natur" -> @nature_talents
+      "Wissen" -> @knowledge_talents
+      "Handwerk" -> @crafting_talents
+      nil -> @talents
+    end
   end
 end

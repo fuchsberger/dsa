@@ -1,23 +1,31 @@
 defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
+
+  alias Ecto.Changeset
   alias Dsa.Game
 
-  def render(assigns), do: DsaWeb.GroupView.render("group_live.html", assigns)
+  def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
     group = Game.get_group!(id)
+    active_id = Enum.find(group.characters, & &1.user_id == user_id).id
 
     {:ok, socket
-    |> assign(:active_id, Enum.find(group.characters, & &1.user_id == user_id).id)
+    |> assign(:changeset_active_character, Game.change_active_character(%{id: active_id}))
     |> assign(:changeset_talent_roll, Game.change_talent_roll())
     |> assign(:changeset_trait_roll, Game.change_trait_roll())
+    |> assign(:changeset_roll, nil)
     |> assign(:group, group)
     |> assign(:user_id, user_id)}
   end
 
-  def handle_event("activate", %{"character" => id}, socket) do
-    {:noreply, assign(socket, :active_id, String.to_integer(id))}
+  # def handle_event("activate", %{"character" => id}, socket) do
+  #   {:noreply, assign(socket, :active_id, String.to_integer(id))}
+  # end
+
+  def handle_event("activate", %{"character" => params}, socket) do
+    {:noreply, assign(socket, :changeset_active_character, Game.change_active_character(params))}
   end
 
   def handle_event("validate", %{"talent_roll" => params}, socket) do
@@ -25,13 +33,17 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("validate", %{"trait_roll" => params}, socket) do
-    {:noreply, assign(socket, :changeset_trait_roll, Game.change_trait_roll(params))}
+    {:noreply, assign(socket, :changeset_roll, Game.change_trait_roll(params))}
+  end
+
+  def handle_event("prepare", %{"trait" => _trait} = params, socket) do
+    {:noreply, assign(socket, :changeset_roll, Game.change_trait_roll(params))}
   end
 
   def handle_event("event", %{"talent_roll" => %{"skill_id" => sid, "modifier" => modifier}}, socket) do
 
     [sid, modifier] = Enum.map([sid, modifier], & String.to_integer(&1))
-    character = Enum.find(socket.assigns.group.characters, & &1.id == socket.assigns.active_id)
+    character = active_character(socket)
     cskill = Enum.find(character.character_skills, & &1.skill_id == sid)
     skill = cskill.skill
 
@@ -73,11 +85,13 @@ defmodule DsaWeb.GroupLive do
     end
   end
 
-  def handle_event("event", %{"trait_roll" => %{"trait" => trait, "modifier" => modifier}}, socket) do
+  def handle_event("event", %{"trait_roll" => params}, socket) do
 
-    character = Enum.find(socket.assigns.group.characters, & &1.id == socket.assigns.active_id)
-    modifier = String.to_integer(modifier)
-    trait = String.to_atom(trait)
+    character = active_character(socket)
+    changeset = Game.change_trait_roll(params)
+
+    modifier = Changeset.get_field(changeset, :modifier)
+    trait = Changeset.get_field(changeset, :trait) |> String.to_atom()
     trait_val = Map.get(character, trait)
 
     {message, details} =
@@ -115,6 +129,11 @@ defmodule DsaWeb.GroupLive do
       {:ok, %{group_id: id}} -> {:noreply, assign(socket, :group, Game.get_group!(id))}
       {:error, _changeset} -> {:noreply, socket}
     end
+  end
+
+  defp active_character(socket) do
+    id = socket.assigns.changeset_active_character.changes.id
+    Enum.find(socket.assigns.group.characters, & &1.id == id)
   end
 
   defp confirmed?(trait, modifier), do: trait + modifier >= Enum.random(1..20)

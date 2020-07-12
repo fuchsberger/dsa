@@ -148,26 +148,18 @@
           </ul>
         </div>
 
-        <%= if @action == :create do %>
-          <div class="card-body">
-            Dieser Bereich wird zugänglich, sobald du deinen Helden gespeichert hast.
+        <div class="card-body tab-content p-0">
+          <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
+            <%= render "table_combat.html", form: f, category: "Nahkampf" %>
+            <%= render "table_combat.html", form: f, category: "Fernkampf" %>
           </div>
-        <% else %>
-          <div class="card-body tab-content p-0">
-            <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
-              <%= render "table_combat.html", form: f, talent: "Nahkampf" %>
-              <%= render "table_combat.html", form: f, talent: "Fernkampf" %>
-            </div>
-            <%= render "talent_panel.html", form: f, talent: "Körper" %>
-            <%= render "talent_panel.html", form: f, talent: "Gesellschaft" %>
-            <%= render "talent_panel.html", form: f, talent: "Natur" %>
-            <%= render "talent_panel.html", form: f, talent: "Wissen" %>
-            <%= render "talent_panel.html", form: f, talent: "Handwerk" %>
-          </div>
-        <% end %>
+          <%= render "panel_talent.html", form: f, category: "Körper" %>
+          <%= render "panel_talent.html", form: f, category: "Gesellschaft" %>
+          <%= render "panel_talent.html", form: f, category: "Natur" %>
+          <%= render "panel_talent.html", form: f, category: "Wissen" %>
+          <%= render "panel_talent.html", form: f, category: "Handwerk" %>
+        </div>
       </div>
-
     </div>
   </div>
 <% end %>
-\

@@ -1,0 +1,27 @@
+<div class="card">
+  <h5 class="card-header d-flex justify-content-between">
+    Heldenübersicht
+    <%= f = form_for @changeset_active_character, "#", [phx_change: :activate, phx_submit: :activate] %>
+      <%= select f, :id, character_options(@group, @user_id), class: "form-select-sm" %>
+    </form>
+  </h5>
+  <div class="card-body">
+    <% c = character(assigns) %>
+
+    <div class='d-flex justify-content-between'>
+      <%= for trait <- talents("Eigenschaften") do %>
+        <button class='btn btn-light btn-sm' type='button' phx-click='prepare' phx-value-trait='<%= trait %>'>
+          <strong><%= trait |> Atom.to_string() |> String.upcase() %></strong>
+          <%= Map.get(c, trait) %>
+        </button>
+      <% end %>
+    </div>
+
+    <h6>Talente</h6>
+    <small>
+      <%= for talent <- Enum.filter(c.character_skills, & &1.skill.category != "Nahkampf" && &1.skill.category != "Fernkampf" && &1.level > 0) do %>
+        <%= talent.skill.name%>: <%=  talent.level %>
+      <% end %>
+    </small>
+  </div>
+</div>

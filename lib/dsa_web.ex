@@ -32,9 +32,7 @@ defmodule DsaWeb do
 
   def view do
     quote do
-      use Phoenix.View,
-        root: "lib/dsa_web/templates",
-        namespace: DsaWeb
+      use Phoenix.View, root: "lib/dsa_web/templates", namespace: DsaWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
@@ -71,6 +69,7 @@ defmodule DsaWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
       import Phoenix.HTML.Form, except: [number_input: 2, number_input: 3, select: 3, select: 4, text_input: 2, text_input: 3]
+      import DsaWeb.DsaHelpers
       import DsaWeb.FormHelpers
       import DsaWeb.Gettext
       alias DsaWeb.Router.Helpers, as: Routes
