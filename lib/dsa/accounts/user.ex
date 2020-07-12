@@ -37,7 +37,8 @@ defmodule Dsa.Accounts.User do
     user
     |> cast(attrs, [:name, :username])
     |> validate_required([:name, :username])
-    |> validate_length(:username, min: 1, max: 20)
+    |> validate_length(:name, min: 2, max: 10)
+    |> validate_length(:username, min: 2, max: 15)
   end
 
   def set_role(user, role, value), do: change(user, Map.put(%{}, role, value))

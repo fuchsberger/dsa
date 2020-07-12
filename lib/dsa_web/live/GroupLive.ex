@@ -90,6 +90,7 @@ defmodule DsaWeb.GroupLive do
     character = active_character(socket)
     changeset = Game.change_trait_roll(params)
 
+    be = if Changeset.get_field(changeset, :be), do: character.be, else: 0
     modifier = Changeset.get_field(changeset, :modifier)
     trait = Changeset.get_field(changeset, :trait) |> String.to_atom()
     trait_val = Map.get(character, trait)
@@ -97,25 +98,25 @@ defmodule DsaWeb.GroupLive do
     {message, details} =
       case Enum.random(1..20) do
         1 ->
-          if confirmed?(trait_val, modifier),
+          if confirmed?(trait_val, modifier - be),
             do:
-              {"#{character.name} hat bei einer Probe auf #{trait(trait)} (#{modifier}) einen kritischen Erfolg erzielt.", "#{trait(trait)}: #{trait_val}, Würfel: 1"},
+              {"#{character.name} hat bei einer Probe auf #{trait(trait)} (#{modifier}) einen kritischen Erfolg erzielt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 1"},
             else:
-              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, Würfel: 1"}
+              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 1"}
 
         20 ->
-          unless confirmed?(trait_val, modifier),
+          unless confirmed?(trait_val, modifier - be),
             do:
-              {"#{character.name} ist bei einer Probe auf #{trait(trait)} (#{modifier}) ein kritischer Patzer unterlaufen.", "#{trait(trait)}: #{trait_val}, Würfel: 20"},
+              {"#{character.name} ist bei einer Probe auf #{trait(trait)} (#{modifier}) ein kritischer Patzer unterlaufen.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 20"},
             else:
-              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, Würfel: 20"}
+              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 20"}
 
         w ->
-          if trait_val + modifier >= w,
+          if trait_val + modifier - be >= w,
             do:
-              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, Würfel: #{w}"},
+              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: #{w}"},
             else:
-              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, Würfel: #{w}"}
+              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: #{w}"}
       end
 
     params = %{

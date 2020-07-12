@@ -14,6 +14,7 @@ defmodule Dsa.Game.Group do
     group
     |> cast(attrs, [:name, :master_id])
     |> validate_required([:name, :master_id])
+    |> validate_length(:name, max: 10)
     |> foreign_key_constraint(:master_id)
   end
 end

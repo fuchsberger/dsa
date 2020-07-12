@@ -81,6 +81,10 @@ defmodule Dsa.Game.Character do
     character
     |> cast(attrs, @required_fields ++ [:group_id])
     |> validate_required(@required_fields)
+    |> validate_length(:name, min: 2, max: 15)
+    |> validate_length(:species, min: 3, max: 10)
+    |> validate_length(:culture, min: 3, max: 15)
+    |> validate_length(:profession, min: 2, max: 15)
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
   end
@@ -96,12 +100,14 @@ defmodule Dsa.Game.Character do
       "Eigenschaften" -> @traits
       "Nahkampf" -> @close_combat_talents
       "Fernkampf" -> @ranged_combat_talents
+      "Kampf" -> @combat_talents
       "Körper" -> @body_talents
       "Gesellschaft" -> @social_talents
       "Natur" -> @nature_talents
       "Wissen" -> @knowledge_talents
       "Handwerk" -> @crafting_talents
-      nil -> @talents
+      "Fertigkeiten" -> @talents
+      nil -> @combat_talents ++ @talents
     end
   end
 end

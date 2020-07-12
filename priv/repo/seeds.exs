@@ -5,7 +5,7 @@ alias Dsa.{Accounts, Game}
 
 # Create Admin User
 {:ok, alex} = Accounts.register_user(%{
-  name: "Alex Fuchsberger",
+  name: "Alex",
   username: "admin",
   password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
 })
