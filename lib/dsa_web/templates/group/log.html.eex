@@ -1,11 +1,19 @@
 
 <div class="card mb-3">
-  <h5 class="card-header">Ereignislog</h5>
+  <div class='card-header d-flex justify-content-between'>
+    <h5 class='mb-0'>Ereignislog</h5>
+    <%= f = form_for :log, "#", [phx_change: :toggle, phx_submit: :toggle] %>
+      <div class="form-check mb-0">
+        <%= checkbox f, :show, class: "form-check-input", value: @show_details %>
+        <%= label f, :show, "Details anzeigen?", class: "form-check-label" %>
+      </div>
+    </form>
+  </div>
   <ul class='list-group list-group-flush'>
     <%= for log <- @group.logs do %>
       <li class="list-group-item">
         <p class='mb-0'><%= log.message %></p>
-        <%= if @user_id == @group.master_id || owner?(@group, log.character_id) do %>
+        <%= if @show_details && (@user_id == @group.master_id || owner?(@group, log.character_id)) do %>
           <small class='text-primary'><em><%= log.details %></em></small>
         <% end %>
       </li>

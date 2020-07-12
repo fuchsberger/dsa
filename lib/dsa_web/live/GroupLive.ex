@@ -17,6 +17,7 @@ defmodule DsaWeb.GroupLive do
     |> assign(:changeset_trait_roll, Game.change_trait_roll())
     |> assign(:changeset_roll, nil)
     |> assign(:group, group)
+    |> assign(:show_details, false)
     |> assign(:user_id, user_id)}
   end
 
@@ -26,6 +27,10 @@ defmodule DsaWeb.GroupLive do
 
   def handle_event("activate", %{"character" => params}, socket) do
     {:noreply, assign(socket, :changeset_active_character, Game.change_active_character(params))}
+  end
+
+  def handle_event("toggle", %{"log" => _params}, socket) do
+    {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
   end
 
   def handle_event("validate", %{"talent_roll" => params}, socket) do
