@@ -2,7 +2,6 @@ defmodule Dsa.Game.Skill do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @categories ~w(Nahkampf Fernkampf Körper Gesellschaft Natur Wissen Handwerk Speziell)
   @traits ~w(MU KL IN CH FF GE KO KK)
 
   schema "skills" do
@@ -22,7 +21,6 @@ defmodule Dsa.Game.Skill do
     skill
     |> cast(attrs, [:name, :category, :e1, :e2, :e3, :be])
     |> validate_required([:name, :category, :e1])
-    |> validate_inclusion(:category, @categories)
     |> validate_inclusion(:e1, @traits)
     |> validate_inclusion(:e2, @traits)
     |> validate_inclusion(:e3, @traits)

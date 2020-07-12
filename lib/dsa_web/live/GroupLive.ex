@@ -3,7 +3,8 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   alias Ecto.Changeset
-  alias Dsa.Game
+  alias Dsa.{Event, Game}
+  alias Dsa.Event.TraitRoll
 
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
@@ -13,17 +14,13 @@ defmodule DsaWeb.GroupLive do
 
     {:ok, socket
     |> assign(:changeset_active_character, Game.change_active_character(%{id: active_id}))
-    |> assign(:changeset_talent_roll, Game.change_talent_roll())
-    |> assign(:changeset_trait_roll, Game.change_trait_roll())
+    # |> assign(:changeset_talent_roll, Game.change_talent_roll())
+    # |> assign(:changeset_trait_roll, Event.change_trait_roll())
     |> assign(:changeset_roll, nil)
     |> assign(:group, group)
     |> assign(:show_details, false)
     |> assign(:user_id, user_id)}
   end
-
-  # def handle_event("activate", %{"character" => id}, socket) do
-  #   {:noreply, assign(socket, :active_id, String.to_integer(id))}
-  # end
 
   def handle_event("activate", %{"character" => params}, socket) do
     {:noreply, assign(socket, :changeset_active_character, Game.change_active_character(params))}
@@ -38,11 +35,11 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("validate", %{"trait_roll" => params}, socket) do
-    {:noreply, assign(socket, :changeset_roll, Game.change_trait_roll(params))}
+    {:noreply, assign(socket, :changeset_roll, Event.change_trait_roll(%TraitRoll{}, params))}
   end
 
-  def handle_event("prepare", %{"trait" => _trait} = params, socket) do
-    {:noreply, assign(socket, :changeset_roll, Game.change_trait_roll(params))}
+  def handle_event("prepare", params, socket) do
+    {:noreply, assign(socket, :changeset_roll, Event.change_trait_roll(%TraitRoll{}, params))}
   end
 
   def handle_event("event", %{"talent_roll" => %{"skill_id" => sid, "modifier" => modifier}}, socket) do
@@ -90,71 +87,41 @@ defmodule DsaWeb.GroupLive do
     end
   end
 
-  def handle_event("event", %{"trait_roll" => params}, socket) do
+  def handle_event("event", %{"trait_roll" => %{"trait" => trait} = params}, socket) do
 
     character = active_character(socket)
-    changeset = Game.change_trait_roll(params)
 
-    be = if Changeset.get_field(changeset, :be), do: character.be, else: 0
-    modifier = Changeset.get_field(changeset, :modifier)
-    trait = Changeset.get_field(changeset, :trait) |> String.to_atom()
-    trait_val = Map.get(character, trait)
+    params = Map.merge(params, %{
+      "w1" => Enum.random(1..20),
+      "w1b" => Enum.random(1..20),
+      "level" => Map.get(character, String.to_atom(trait)),
+      "max_be" => character.be,
+      "character_id" => socket.assigns.changeset_active_character.changes.id,
+      "group_id" => socket.assigns.group.id
+    })
 
-    {message, details} =
-      case Enum.random(1..20) do
-        1 ->
-          if confirmed?(trait_val, modifier - be),
-            do:
-              {"#{character.name} hat bei einer Probe auf #{trait(trait)} (#{modifier}) einen kritischen Erfolg erzielt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 1"},
-            else:
-              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 1"}
+    case Event.create_trait_roll(params) do
+      {:ok, _roll} ->
+        {:noreply, socket
+        |> assign(:changeset_roll, nil)
+        |> assign(:group, Game.get_group!(socket.assigns.group.id))}
 
-        20 ->
-          unless confirmed?(trait_val, modifier - be),
-            do:
-              {"#{character.name} ist bei einer Probe auf #{trait(trait)} (#{modifier}) ein kritischer Patzer unterlaufen.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 20"},
-            else:
-              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: 20"}
-
-        w ->
-          if trait_val + modifier - be >= w,
-            do:
-              {"#{character.name} hat eine Probe auf #{trait(trait)} (#{modifier}) bestanden.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: #{w}"},
-            else:
-              {"#{character.name} ist eine Probe auf #{trait(trait)} (#{modifier}) missglückt.", "#{trait(trait)}: #{trait_val}, BE: #{be}, Würfel: #{w}"}
-      end
-
-    params = %{
-      character_id: character.id,
-      group_id: socket.assigns.group.id,
-      message: message,
-      details: details
-    }
-
-    case Game.create_log(params) do
-      {:ok, %{group_id: id}} -> {:noreply, assign(socket, :group, Game.get_group!(id))}
-      {:error, _changeset} -> {:noreply, socket}
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset_roll, changeset)}
     end
+  end
+
+  def handle_event("delete", %{"trait_roll" => id}, socket) do
+    socket.assigns.group.trait_rolls
+    |> Enum.find(& &1.id == String.to_integer(id))
+    |> Event.delete_roll!()
+
+    {:noreply, assign(socket, :group, Game.get_group!(socket.assigns.group.id))}
   end
 
   defp active_character(socket) do
     id = socket.assigns.changeset_active_character.changes.id
     Enum.find(socket.assigns.group.characters, & &1.id == id)
-  end
-
-  defp confirmed?(trait, modifier), do: trait + modifier >= Enum.random(1..20)
-
-  defp trait(short) do
-    case short do
-      :mu -> "Mut"
-      :kl -> "Klugheit"
-      :in -> "Intuition"
-      :ch -> "Charisma"
-      :ff -> "Fingerfertigkeit"
-      :ge -> "Gewandheit"
-      :ko -> "Konstitution"
-      :kk -> "Körperkraft"
-    end
   end
 
   defp quality(w1, w2, w3, result) do

@@ -9,7 +9,7 @@ defmodule Dsa.Game do
   import Ecto.Changeset
 
   alias Dsa.Accounts
-  alias Dsa.Game.{Character, CharacterSkill, Group, Log, Skill, TalentRoll, TraitRoll}
+  alias Dsa.Game.{Character, CharacterSkill, Group, Skill}
 
   def list_characters(%Accounts.User{} = user) do
     Character
@@ -89,8 +89,8 @@ defmodule Dsa.Game do
 
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
-      characters: [:user, character_skills: [:skill]],
-      logs: ^from(l in Log, order_by: [desc: l.inserted_at])
+      trait_rolls: [:character],
+      characters: [:user, character_skills: [:skill]]
     ]), id)
   end
 
@@ -122,14 +122,4 @@ defmodule Dsa.Game do
     |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill.id, level: level})
     |> Repo.insert!()
   end
-
-  # Logs
-  def create_log(attrs), do: Log.changeset(%Log{}, attrs) |> Repo.insert()
-
-  def change_log(%Log{} = log, attrs \\ %{}), do: Log.changeset(log, attrs)
-
-  # Virtual Schemas: Events / Rolls
-
-  def change_talent_roll(attrs \\ %{}), do: TalentRoll.changeset(%TalentRoll{}, attrs)
-  def change_trait_roll(attrs \\ %{}), do: TraitRoll.changeset(%TraitRoll{}, attrs)
 end

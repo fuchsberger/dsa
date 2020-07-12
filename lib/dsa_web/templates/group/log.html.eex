@@ -10,11 +10,24 @@
     </form>
   </div>
   <ul class='list-group list-group-flush'>
-    <%= for log <- @group.logs do %>
+    <%= for r <- @group.trait_rolls do %>
+      <% {res, critical, color} = calculate_result(r) %>
       <li class="list-group-item">
-        <p class='mb-0'><%= log.message %></p>
-        <%= if @show_details && (@user_id == @group.master_id || owner?(@group, log.character_id)) do %>
-          <small class='text-primary'><em><%= log.details %></em></small>
+        <p class='mb-0'>
+          <span class="badge bg-secondary"><%= r.character.name %></span> hat eine <span class="badge bg-secondary rounded-0 rounded-left"><%= String.upcase(r.trait) %></span><span class="badge  bg-info rounded-0 rounded-right">+<%= r.modifier %></span> Probe <%= result_text(res, critical) %>
+        </p>
+        <%= if @show_details && (@user_id == @group.master_id || owner?(@group, r.character_id)) do %>
+          <small>
+            Talentwert: <span class="badge bg-dark"><%= r.level %></span>
+            <%= if r.be > 0 do %>
+              BE: <span class="badge bg-warning"><%= r.be %></span>
+            <% end %>
+            Würfel: <span class="badge bg-primary"><%= r.w1 %></span>
+            Übrige EP: <span class="badge bg-<%= color %>"><%= res %></span>
+          </small>
+          <%= if @user_id == @group.master_id do %>
+            <button class='btn btn-sm btn-light float-right' phx-click='delete' phx-value-trait_roll='<%= r.id %>'>entfernen</button>
+          <% end %>
         <% end %>
       </li>
     <% end %>

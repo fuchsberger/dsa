@@ -3,21 +3,18 @@
   phx_submit: :event,
   no_validate: true
 ] %>
-  <%
-    talent = get_talent(f, :trait)
-    character = character(assigns)
-  %>
   <div class="card mb-3">
-    <h5 class="card-header">Eigenschaftsprobe: <%= name(talent) %></h5>
+    <h5 class="card-header">Eigenschaftsprobe: <%= get_trait_name(f) %></h5>
     <div class="card-body text-center">
+      <%= hidden_input(f, :max_be) %>
       <%= hidden_input(f, :trait) %>
       <div class='row g-1'>
         <div class='col-lg-3 '>
-          <%= number_input f, :tw, class: "form-control-sm text-center", value: Map.get(character, talent), disabled: true %>
+          <%= number_input f, :level, class: "form-control-sm text-center", readonly: true %>
         </div>
 
         <div class='col-lg-3'>
-          <%= checkbox f, :be, class: "form-check-input m-1" %>
+          <%= checkbox f, :use_be, class: "form-check-input m-1" %>
         </div>
 
         <div class='col-lg-3'>

@@ -76,6 +76,19 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
     create index :character_skills, [:skill_id]
     create unique_index :character_skills, [:character_id, :skill_id]
 
+    create table(:trait_rolls) do
+      add :trait, :string, size: 2
+      add :level, :integer
+      add :w1, :integer
+      add :w1b, :integer
+      add :be, :integer
+      add :modifier, :integer
+      add :character_id, references(:characters, on_delete: :delete_all)
+      add :group_id, references(:groups, on_delete: :delete_all)
+    end
+    create index :trait_rolls, [:character_id]
+    create index :trait_rolls, [:group_id]
+
     create table(:logs) do
       add :message, :string
       add :details, :string

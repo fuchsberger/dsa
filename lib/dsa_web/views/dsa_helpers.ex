@@ -72,10 +72,11 @@ defmodule DsaWeb.DsaHelpers do
     end
   end
 
-  def get_talent(form, field) do
-    form
-    |> input_value(field)
+  def get_trait_name(trait_roll_form) do
+    trait_roll_form
+    |> input_value(:trait)
     |> String.to_atom()
+    |> name()
   end
 
   def talent_details(short) do

@@ -7,6 +7,7 @@ defmodule Dsa.Game.Group do
     has_many :characters, Dsa.Game.Character
     has_many :logs, Dsa.Game.Log
     belongs_to :master, Dsa.Accounts.User
+    has_many :trait_rolls, Dsa.Event.TraitRoll
     timestamps()
   end
 

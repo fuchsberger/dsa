@@ -10,7 +10,11 @@
 
     <div class='d-flex justify-content-between'>
       <%= for trait <- talents("Eigenschaften") do %>
-        <button class='btn btn-light btn-sm' type='button' phx-click='prepare' phx-value-trait='<%= trait %>'>
+        <button class='btn btn-light btn-sm' type='button'
+          phx-click='prepare'
+          phx-value-trait='<%= trait %>'
+          phx-value-level='<%= Map.get(c, trait) %>'
+        >
           <strong><%= trait |> Atom.to_string() |> String.upcase() %></strong>
           <%= Map.get(c, trait) %>
         </button>
