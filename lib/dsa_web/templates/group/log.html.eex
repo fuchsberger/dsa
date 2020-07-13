@@ -10,26 +10,22 @@
     </form>
   </div>
   <ul class='list-group list-group-flush'>
-    <%= for r <- @group.trait_rolls do %>
-      <% {res, critical, color} = calculate_result(r) %>
-      <li class="list-group-item">
-        <p class='mb-0'>
-          <span class="badge bg-secondary"><%= r.character.name %></span> hat eine <span class="badge bg-secondary rounded-0 rounded-left"><%= String.upcase(r.trait) %></span><span class="badge  bg-info rounded-0 rounded-right">+<%= r.modifier %></span> Probe <%= result_text(res, critical) %>
-        </p>
-        <%= if @show_details && (@user_id == @group.master_id || owner?(@group, r.character_id)) do %>
-          <small>
-            Talentwert: <span class="badge bg-dark"><%= r.level %></span>
-            <%= if r.be > 0 do %>
-              BE: <span class="badge bg-warning"><%= r.be %></span>
-            <% end %>
-            Würfel: <span class="badge bg-primary"><%= r.w1 %></span>
-            Übrige EP: <span class="badge bg-<%= color %>"><%= res %></span>
-          </small>
-          <%= if @user_id == @group.master_id do %>
-            <button class='btn btn-sm btn-light float-right' phx-click='delete' phx-value-trait_roll='<%= r.id %>'>entfernen</button>
-          <% end %>
-        <% end %>
-      </li>
-    <% end %>
+    <%= for {type, event} <- events(@group) do
+      case type do
+        :trait_roll ->
+          render "logs/trait_roll_log.html",
+            roll: event,
+            show_details?: @show_details,
+            master?: @user_id == @group.master_id,
+            owner?: owner?(@group, event.character_id)
+
+        :talent_roll ->
+          render "logs/talent_roll_log.html",
+            roll: event,
+            show_details?: @show_details,
+            master?: @user_id == @group.master_id,
+            owner?: owner?(@group, event.character_id)
+      end
+    end %>
   </ul>
 </div>

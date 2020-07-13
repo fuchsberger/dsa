@@ -1,0 +1,22 @@
+<div class='mb-3'>
+  <h6><%= "#{@talent}#{@heading}talente" %></h6>
+  <%= for talent <- talents(@talent) do %>
+    <% {name, e1, e2, e3, be } = talent_details(talent) %>
+    <button
+      class='btn btn-sm btn-light px-1 py-0'
+      phx-click='prepare'
+      phx-value-talent='<%= talent %>'
+      phx-value-level='<%= Map.get(@character, talent) %>'
+      phx-value-t1='<%= e1 %>'
+      phx-value-t2='<%= e2 %>'
+      phx-value-t3='<%= e3 %>'
+      phx-value-e1='<%= Map.get(@character, e1) %>'
+      phx-value-e2='<%= Map.get(@character, e2) %>'
+      phx-value-e3='<%= Map.get(@character, e3) %>'
+      phx-value-use_be='<%= be %>'
+    >
+      <%= name %>
+      <span class='badge bg-dark'> <%= Map.get(@character, talent) %></span>
+    </button>
+  <% end %>
+</div>

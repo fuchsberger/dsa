@@ -13,6 +13,7 @@ defmodule Dsa.Event.TraitRoll do
     field :be, :integer, default: 0
     belongs_to :character, Dsa.Game.Character
     belongs_to :group, Dsa.Game.Group
+    timestamps()
   end
 
   @required_fields ~w(trait level w1 w1b be use_be max_be modifier character_id group_id)a
@@ -32,7 +33,6 @@ defmodule Dsa.Event.TraitRoll do
   end
 
   defp put_be(changeset) do
-    IO.inspect changeset
     if get_change(changeset, :use_be),
       do: put_change(changeset, :be, get_change(changeset, :max_be)),
       else: changeset

@@ -4,7 +4,12 @@
   </div>
   <div class='col-lg'>
 
-    <%= if @changeset_roll, do: render "trait_roll.html", assigns %>
+    <%= if @changeset_roll do %>
+      <%= case @changeset_roll.data do
+        %Dsa.Event.TraitRoll{} -> render "actions/trait_roll_action.html", assigns
+        %Dsa.Event.TalentRoll{} -> render "actions/talent_roll_action.html", changeset: @changeset_roll
+      end %>
+    <% end %>
     <%= render "log.html", group: @group, show_details: @show_details, user_id: @user_id %>
   </div>
 </div>

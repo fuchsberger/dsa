@@ -1,0 +1,47 @@
+<%= f = form_for @changeset,  "#", [
+  phx_change: :validate,
+  phx_submit: :event,
+  no_validate: true
+] %>
+  <% {name, _e1, _e2, _e3, be } = get_talent_details(f) %>
+  <div class="card mb-3">
+    <h5 class="card-header">Talentprobe: <%= name %></h5>
+    <div class="card-body text-center">
+      <%= hidden_input(f, :max_be) %>
+      <%= hidden_input(f, :talent) %>
+      <div class='row g-1'>
+        <div class='col-lg-2'>
+          <%= label f, :t1, "Talent 1" %>
+          <%= select f, :t1, trait_options(), class: "form-select-sm" %>
+          <%= number_input f, :e1, class: "form-control-sm text-center", readonly: true %>
+        </div>
+
+        <div class='col-lg-2'>
+          <%= label f, :t2, "Talent 2" %>
+          <%= select f, :t2, trait_options(), class: "form-select-sm" %>
+          <%= number_input f, :e2, class: "form-control-sm text-center", readonly: true %>
+        </div>
+
+        <div class='col-lg-2'>
+          <%= label f, :t3, "Talent 3" %>
+          <%= select f, :t3, trait_options(), class: "form-select-sm" %>
+          <%= number_input f, :e3, class: "form-control-sm text-center", readonly: true %>
+        </div>
+
+        <div class='col-lg-3'>
+          <%= label f, :modifier, "Modifikator", class: "col-lg-3 w-100" %>
+          <%= select f, :modifier, modifier_options(-6..6), class: "form-select-sm" %>
+          <div class='form-check text-left'>
+            <%= checkbox f, :use_be, class: "form-check-input", disabled: not is_nil(be) %>
+            <%= label f, :be, "BE", class: "form-check-label" %>
+          </div>
+        </div>
+
+        <div class='col-lg-3'>
+          <%= submit "Würfeln!", class: "w-100 mb-3 btn btn-primary btn-sm" %>
+          <%= submit "Routine", class: "w-100 btn btn-primary btn-sm", disabled: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

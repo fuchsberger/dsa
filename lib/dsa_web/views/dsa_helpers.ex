@@ -2,6 +2,7 @@ defmodule DsaWeb.DsaHelpers do
   @moduledoc """
   Conveniences specific for the app
   """
+  use Phoenix.HTML
   import Phoenix.HTML.Form, only: [input_value: 2]
   import Dsa.Game.Character, only: [talents: 1]
 
@@ -72,8 +73,16 @@ defmodule DsaWeb.DsaHelpers do
     end
   end
 
-  def get_trait_name(trait_roll_form) do
-    trait_roll_form
+
+  def get_talent_details(form) do
+    form
+    |> input_value(:talent)
+    |> String.to_atom()
+    |> talent_details()
+  end
+
+  def get_trait_name(form) do
+    form
     |> input_value(:trait)
     |> String.to_atom()
     |> name()
@@ -153,4 +162,27 @@ defmodule DsaWeb.DsaHelpers do
       :ta_stoff -> {"Stoffbearbeitung", :kl, :ff, :ff, true}
     end
   end
+
+  def quality(result) do
+    cond do
+      result >= 16 -> 6
+      result >= 13 -> 5
+      result >= 10 -> 4
+      result >= 7 -> 3
+      result >= 4 -> 2
+      true -> 1
+    end
+  end
+
+  def trait_options do
+    Enum.map(talents("Eigenschaften"), & {String.upcase(Atom.to_string(&1)), &1})
+  end
+
+  def badge_quality(_res, true), do: content_tag :span, "X", class: "badge bg-success"
+
+  def badge_quality(res, critical) when res >= 0 and critical != false do
+    content_tag :span, quality(res), class: "badge bg-success"
+  end
+
+  def badge_quality(_res, _critical), do: ""
 end

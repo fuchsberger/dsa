@@ -1,0 +1,20 @@
+<% {res, critical, color} = calculate_result(@roll) %>
+
+<li class="list-group-item">
+  <p class='mb-0'>
+    <span class="badge bg-secondary"><%= @roll.character.name %></span> hat eine <span class="badge bg-secondary rounded-0 rounded-left"><%= name(String.to_atom(@roll.trait)) %></span><span class="badge  bg-info rounded-0 rounded-right">+<%= @roll.modifier %></span> Probe <%= result_text(res, critical) %>
+  </p>
+  <%= if @show_details? && (@master? || @owner?) do %>
+    <small>
+      Talentwert: <span class="badge bg-dark"><%= @roll.level %></span>
+      <%= if @roll.be > 0 do %>
+        BE: <span class="badge bg-warning"><%= @roll.be %></span>
+      <% end %>
+      Würfel: <span class="badge bg-primary"><%= @roll.w1 %></span>
+      Übrige EP: <span class="badge bg-<%= color %>"><%= res %></span>
+    </small>
+    <%= if @master? do %>
+      <button class='btn btn-sm btn-light float-right' phx-click='delete' phx-value-trait_roll='<%= @roll.id %>'>entfernen</button>
+    <% end %>
+  <% end %>
+</li>

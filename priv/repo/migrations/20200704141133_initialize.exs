@@ -85,9 +85,31 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
       add :modifier, :integer
       add :character_id, references(:characters, on_delete: :delete_all)
       add :group_id, references(:groups, on_delete: :delete_all)
+      timestamps()
     end
     create index :trait_rolls, [:character_id]
     create index :trait_rolls, [:group_id]
+
+    create table(:talent_rolls) do
+      add :talent, :string, size: 40
+      add :level, :integer
+      add :w1, :integer
+      add :w2, :integer
+      add :w3, :integer
+      add :e1, :integer
+      add :e2, :integer
+      add :e3, :integer
+      add :t1, :string, size: 2
+      add :t2, :string, size: 2
+      add :t3, :string, size: 2
+      add :modifier, :integer
+      add :be, :integer
+      add :character_id, references(:characters, on_delete: :delete_all)
+      add :group_id, references(:groups, on_delete: :delete_all)
+      timestamps()
+    end
+    create index :talent_rolls, [:character_id]
+    create index :talent_rolls, [:group_id]
 
     create table(:logs) do
       add :message, :string

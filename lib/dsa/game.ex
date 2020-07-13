@@ -89,6 +89,7 @@ defmodule Dsa.Game do
 
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
+      talent_rolls: [:character],
       trait_rolls: [:character],
       characters: [:user, character_skills: [:skill]]
     ]), id)

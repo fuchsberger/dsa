@@ -8,7 +8,7 @@
   <div class="card-body">
     <% c = character(assigns) %>
 
-    <div class='d-flex justify-content-between'>
+    <div class='d-flex justify-content-between mb-3'>
       <%= for trait <- talents("Eigenschaften") do %>
         <button class='btn btn-light btn-sm' type='button'
           phx-click='prepare'
@@ -21,11 +21,10 @@
       <% end %>
     </div>
 
-    <h6>Talente</h6>
-    <small>
-      <%= for talent <- Enum.filter(c.character_skills, & &1.skill.category != "Nahkampf" && &1.skill.category != "Fernkampf" && &1.level > 0) do %>
-        <%= talent.skill.name%>: <%=  talent.level %>
-      <% end %>
-    </small>
+    <%= render "talent_group.html", character: c, heading: "", talent: "Körper" %>
+    <%= render "talent_group.html", character: c, heading: "s", talent: "Gesellschaft" %>
+    <%= render "talent_group.html", character: c, heading: "", talent: "Natur" %>
+    <%= render "talent_group.html", character: c, heading: "s", talent: "Wissen" %>
+    <%= render "talent_group.html", character: c, heading: "s", talent: "Handwerk" %>
   </div>
 </div>

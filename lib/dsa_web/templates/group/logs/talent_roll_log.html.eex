@@ -1,0 +1,25 @@
+<%
+  {res, critical, color} = calculate_result(@roll)
+  {name, _e1, _e2, _e3, _be} = talent_details(String.to_atom(@roll.talent))
+%>
+
+<li class="list-group-item">
+  <p class='mb-0'>
+    <span class="badge bg-secondary"><%= @roll.character.name %></span> hat eine <span class="badge bg-secondary rounded-0 rounded-left"><%= name %></span><span class="badge  bg-info rounded-0 rounded-right"><%= @roll.modifier %></span> Probe <%= result_text(res, critical) %>
+    <%= badge_quality(res, critical) %>
+  </p>
+  <%= if @show_details? && (@master? || @owner?) do %>
+    <small>
+      FW: <span class="badge bg-dark"><%= @roll.level %></span>
+      <%= if @roll.be > 0 do %>
+        BE: <span class="badge bg-warning"><%= @roll.be %></span>
+      <% end %>
+      Probe: <span class="badge bg-light text-dark"><%= String.upcase("#{@roll.t1}|#{@roll.t2}|#{@roll.t3}") %></span>
+      Würfel: <span class="badge bg-primary"><%= "#{@roll.w1}|#{@roll.w2}|#{@roll.w3}" %></span>
+      EFF: <span class="badge bg-<%= color %>"><%= res %></span>
+    </small>
+    <%= if @master? do %>
+      <button class='btn btn-sm btn-light float-right' phx-click='delete' phx-value-talent_roll='<%= @roll.id %>'>entfernen</button>
+    <% end %>
+  <% end %>
+</li>

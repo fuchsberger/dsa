@@ -3,11 +3,22 @@ defmodule DsaWeb.GroupView do
 
   import Dsa.Game.Character, only: [talents: 1]
 
-  alias Dsa.Event.TraitRoll
+  alias Dsa.Event.{TraitRoll, TalentRoll}
 
   def active_character_id(assigns), do: assigns.changeset_active_character.changes.id
 
   def character(assigns), do: Enum.find(assigns.group.characters, & &1.id == active_character_id(assigns))
+
+  def events(group) do
+    group.trait_rolls ++ group.talent_rolls
+    |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
+    |> Enum.map(fn event ->
+      case event do
+        %TraitRoll{} -> {:trait_roll, event}
+        %TalentRoll{} -> {:talent_roll, event}
+      end
+    end)
+  end
 
   def modifier_options(range), do: Enum.map(range, & {&1, &1})
 
@@ -39,6 +50,17 @@ defmodule DsaWeb.GroupView do
       1 -> if res2 >= 0, do: {res1, true, "success"}, else: {res1, nil, "success"}
       20 -> if res2 < 0, do: {res1, false, "danger"}, else: {res1, nil, "danger"}
       _ -> {res1, nil, (if res1 < 0, do: "danger", else: "success")}
+    end
+  end
+
+  def calculate_result(%TalentRoll{} = r) do
+    m = r.modifier - r.be
+    res = r.level - max(0, r.w1 - r.e1 - m) - max(0, r.w2 - r.e2 - m) - max(0, r.w3 - r.e3 - m)
+
+    cond do
+      Enum.count([r.w1, r.w2, r.w3], & &1 == 1) > 1 -> {res, true, "success"}
+      Enum.count([r.w1, r.w2, r.w3], & &1 == 20) > 1 -> {res, false, "danger"}
+      true -> {res, nil, (if res < 0, do: "danger", else: "success")}
     end
   end
 
