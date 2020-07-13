@@ -5,8 +5,7 @@
 
 <li class="list-group-item">
   <p class='mb-0'>
-    <span class="badge bg-secondary"><%= @roll.character.name %></span> hat eine <span class="badge bg-secondary rounded-0 rounded-left"><%= name %></span><span class="badge  bg-info rounded-0 rounded-right"><%= @roll.modifier %></span> Probe <%= result_text(res, critical) %>
-    <%= badge_quality(res, critical) %>
+    <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
   </p>
   <%= if @show_details? && (@master? || @owner?) do %>
     <small>

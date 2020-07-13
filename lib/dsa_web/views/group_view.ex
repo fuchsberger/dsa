@@ -7,6 +7,24 @@ defmodule DsaWeb.GroupView do
 
   def active_character_id(assigns), do: assigns.changeset_active_character.changes.id
 
+
+  def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
+
+  def badge(:quality, _res, true), do: content_tag :span, "X", class: "badge bg-success"
+
+  def badge(:quality, res, critical) when res >= 0 and critical != false do
+    content_tag :span, quality(res), class: "badge bg-success"
+  end
+
+  def badge(:quality, _res, _critical), do: ""
+
+  def badge(:roll, name, modifier) do
+    [
+      content_tag(:span, name, class: "badge bg-secondary rounded-0 rounded-left"),
+      content_tag(:span, modifier, class: "badge bg-info rounded-0 rounded-right"),
+    ]
+  end
+
   def character(assigns), do: Enum.find(assigns.group.characters, & &1.id == active_character_id(assigns))
 
   def events(group) do

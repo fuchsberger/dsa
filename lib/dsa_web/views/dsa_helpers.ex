@@ -177,12 +177,4 @@ defmodule DsaWeb.DsaHelpers do
   def trait_options do
     Enum.map(talents("Eigenschaften"), & {String.upcase(Atom.to_string(&1)), &1})
   end
-
-  def badge_quality(_res, true), do: content_tag :span, "X", class: "badge bg-success"
-
-  def badge_quality(res, critical) when res >= 0 and critical != false do
-    content_tag :span, quality(res), class: "badge bg-success"
-  end
-
-  def badge_quality(_res, _critical), do: ""
 end
