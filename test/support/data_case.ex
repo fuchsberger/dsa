@@ -24,6 +24,7 @@ defmodule Dsa.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Dsa.DataCase
+      import Dsa.TestHelpers
     end
   end
 

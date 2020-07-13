@@ -5,21 +5,15 @@ defmodule Dsa.Accounts do
   import Ecto.Query
   alias Dsa.Repo
   alias Dsa.Accounts.User
+  alias Dsa.Game.Character
 
-  def get_user(id, preload \\ true) do
-    Repo.get(user_query(preload), id)
+  def get_user(id), do:  Repo.get(user_query(), id)
+
+  def get_user_by(params), do: Repo.get_by(user_query(), params)
+
+  defp user_query() do
+    from(u in User, preload: [characters: ^from(c in Character, select: {c.id, c.name})])
   end
-
-  def get_user!(id, preload \\ true) do
-    Repo.get!(user_query(preload), id)
-  end
-
-  def get_user_by(params, preload \\ true) do
-    Repo.get_by(user_query(preload), params)
-  end
-
-  defp user_query(true), do: from(u in User, preload: :characters)
-  defp user_query(false), do: from(u in User)
 
   def authenticate_by_username_and_pass(username, given_pass) do
     user = get_user_by(username: username)

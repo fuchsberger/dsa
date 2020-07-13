@@ -1,6 +1,12 @@
 defmodule DsaWeb.SessionController do
   use DsaWeb, :controller
 
+  def index(conn, _) do
+    if is_nil(conn.assigns.current_user),
+      do: redirect(conn, to: Routes.session_path(conn, :new)),
+      else: redirect(conn, to: Routes.live_path(conn, DsaWeb.GroupLive, 1))
+  end
+
   def new(conn, _) do
     render(conn, "new.html")
   end
@@ -11,7 +17,7 @@ defmodule DsaWeb.SessionController do
         conn
         |> DsaWeb.Auth.login(user)
         |> put_flash(:info, "Welcome back!")
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> redirect(to: Routes.live_path(conn, DsaWeb.GroupLive, 1))
 
       {:error, _reason} ->
         conn
@@ -23,6 +29,6 @@ defmodule DsaWeb.SessionController do
   def delete(conn, _) do
     conn
     |> DsaWeb.Auth.logout()
-    |> redirect(to: Routes.page_path(conn, :index))
+    |> redirect(to: Routes.session_path(conn, :new))
   end
 end

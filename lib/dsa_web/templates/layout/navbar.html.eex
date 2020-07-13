@@ -27,10 +27,10 @@
               <%= if Enum.count(@current_user.characters) > 0 do %>
                 <li><hr class="dropdown-divider"></li>
               <% end %>
-              <%= for c <- @current_user.characters do %>
+              <%= for {id, name} <- @current_user.characters do %>
                 <li>
-                  <%= link c.name,
-                    to: Routes.character_path(@conn, :edit, c.id),
+                  <%= link name,
+                    to: Routes.character_path(@conn, :edit, id),
                     class: "dropdown-item"
                   %>
                 </li>

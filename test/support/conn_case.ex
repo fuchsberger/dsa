@@ -23,6 +23,7 @@ defmodule DsaWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import DsaWeb.ConnCase
+      import Dsa.TestHelpers
 
       alias DsaWeb.Router.Helpers, as: Routes
 

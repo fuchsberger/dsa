@@ -4,8 +4,8 @@ defmodule DsaWeb.Auth do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    user_id = get_session(conn, :user_id)
-    user = user_id && Dsa.Accounts.get_user(user_id)
+    id = get_session(conn, :user_id)
+    user = id && Dsa.Accounts.get_user(id)
     assign(conn, :current_user, user)
   end
 
@@ -29,7 +29,7 @@ defmodule DsaWeb.Auth do
     else
       conn
       |> put_flash(:error, "You must be logged in to access that page")
-      |> redirect(to: Routes.page_path(conn, :index))
+      |> redirect(to: Routes.session_path(conn, :new))
       |> halt()
     end
   end
