@@ -1,12 +1,12 @@
-defmodule Dsa.Game.Log do
+defmodule Dsa.Event.Log do
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "logs" do
     field :message, :string
     field :details, :string
-    belongs_to :character, Dsa.Game.Character
-    belongs_to :group, Dsa.Game.Group
+    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end
 

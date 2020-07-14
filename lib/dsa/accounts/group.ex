@@ -1,11 +1,11 @@
-defmodule Dsa.Game.Group do
+defmodule Dsa.Accounts.Group do
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "groups" do
     field :name, :string
-    has_many :characters, Dsa.Game.Character
-    has_many :logs, Dsa.Game.Log
+    has_many :characters, Dsa.Accounts.Character
+    has_many :logs, Dsa.Event.Log
     belongs_to :master, Dsa.Accounts.User
     has_many :trait_rolls, Dsa.Event.TraitRoll
     has_many :talent_rolls, Dsa.Event.TalentRoll

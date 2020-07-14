@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody class='small'>
-    <%= for talent <- Dsa.Game.Character.talents(@category) do %>
+    <%= for talent <- Dsa.Accounts.Character.talents(@category) do %>
       <% {name, e1, e2, e3, be} = talent_details(talent) %>
       <tr>
         <td><%= label @form, talent, name, class: "col-sm-10" %></td>

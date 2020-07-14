@@ -1,7 +1,7 @@
 # Script for populating the database. You can run it as:
 # mix run priv/repo/seeds.exs
 
-alias Dsa.{Accounts, Game}
+alias Dsa.{Accounts, Game, Repo}
 
 # Create Admin User
 {:ok, alex} = Accounts.register_user(%{
@@ -12,9 +12,12 @@ alias Dsa.{Accounts, Game}
 
 Accounts.set_role(alex, :admin, true)
 
-{:ok, group} = Game.create_group( %{name: "DSA", master_id: alex.id})
+{:ok, group} =
+  %Accounts.Group{}
+  |> Accounts.Group.changeset(%{ name: "DSA", master_id: alex.id })
+  |> Repo.insert()
 
-Game.create_character(alex, %{
+Accounts.create_character(alex, %{
   name: "Rolo",
   species: "Mensch",
   culture: "Mittelreich",
@@ -22,7 +25,7 @@ Game.create_character(alex, %{
   group_id: group.id
 })
 
-Game.create_character(alex, %{
+Accounts.create_character(alex, %{
   name: "Sam",
   species: "Elf",
   culture: "Auelf",

@@ -4,7 +4,7 @@ defmodule DsaWeb.DsaHelpers do
   """
   use Phoenix.HTML
   import Phoenix.HTML.Form, only: [input_value: 2]
-  import Dsa.Game.Character, only: [talents: 1]
+  import Dsa.Accounts.Character, only: [talents: 1]
 
 
   @doc """

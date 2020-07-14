@@ -1,4 +1,4 @@
-defmodule Dsa.Game.Character do
+defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -62,10 +62,10 @@ defmodule Dsa.Game.Character do
     Enum.each(@combat_talents, & field(&1, :integer, default: 6))
     Enum.each(@talents, & field(&1, :integer, default: 0))
 
-    belongs_to :group, Dsa.Game.Group
+    belongs_to :group, Dsa.Accounts.Group
     belongs_to :user, Dsa.Accounts.User
 
-    has_many :character_skills, Dsa.Game.CharacterSkill, on_replace: :delete
+    has_many :character_skills, Dsa.Accounts.CharacterSkill, on_replace: :delete
     has_many :skills, through: [:character_skills, :skill]
 
     timestamps()

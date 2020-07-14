@@ -2,17 +2,17 @@ defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
 
-  alias Dsa.{Event, Game}
+  alias Dsa.{Event, Accounts}
   alias Dsa.Event.{TalentRoll, TraitRoll}
 
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
-    group = Game.get_group!(id)
+    group = Accounts.get_group!(id)
     active_id = Enum.find(group.characters, & &1.user_id == user_id).id
 
     {:ok, socket
-    |> assign(:changeset_active_character, Game.change_active_character(%{id: active_id}))
+    |> assign(:changeset_active_character, Accounts.change_active_character(%{id: active_id}))
     |> assign(:changeset_roll, nil)
     |> assign(:group, group)
     |> assign(:show_details, false)
@@ -20,7 +20,7 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("activate", %{"character" => params}, socket) do
-    {:noreply, assign(socket, :changeset_active_character, Game.change_active_character(params))}
+    {:noreply, assign(socket, :changeset_active_character, Accounts.change_active_character(params))}
   end
 
   def handle_event("prepare", %{"trait" => _} = params, socket) do
@@ -72,7 +72,7 @@ defmodule DsaWeb.GroupLive do
       {:ok, _roll} ->
         {:noreply, socket
         |> assign(:changeset_roll, nil)
-        |> assign(:group, Game.get_group!(socket.assigns.group.id))}
+        |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset_roll, changeset)}
@@ -96,7 +96,7 @@ defmodule DsaWeb.GroupLive do
       {:ok, _roll} ->
         {:noreply, socket
         |> assign(:changeset_roll, nil)
-        |> assign(:group, Game.get_group!(socket.assigns.group.id))}
+        |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset_roll, changeset)}
@@ -108,7 +108,7 @@ defmodule DsaWeb.GroupLive do
     |> Enum.find(& &1.id == String.to_integer(id))
     |> Event.delete_roll!()
 
-    {:noreply, assign(socket, :group, Game.get_group!(socket.assigns.group.id))}
+    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
   end
 
   defp active_character(socket) do

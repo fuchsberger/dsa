@@ -1,14 +1,14 @@
 defmodule DsaWeb.CharacterControllerTest do
   use DsaWeb.ConnCase
 
-  alias Dsa.Game
+  alias Dsa.Accounts
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
   def fixture(:character) do
-    {:ok, character} = Game.create_character(@create_attrs)
+    {:ok, character} = Accounts.create_character(@create_attrs)
     character
   end
 

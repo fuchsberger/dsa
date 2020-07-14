@@ -1,7 +1,7 @@
 defmodule DsaWeb.CharacterView do
   use DsaWeb, :view
 
-  import Dsa.Game.Character, only: [talents: 1]
+  import Dsa.Accounts.Character, only: [talents: 1]
 
   def field(form, field, _tooltip \\ nil) do
     ~E"""
@@ -30,7 +30,7 @@ defmodule DsaWeb.CharacterView do
     end
   end
 
-  defp leiteigenschaft(form, %Dsa.Game.Skill{e1: e1, e2: e2}) do
+  defp leiteigenschaft(form, %Dsa.Lore.Skill{e1: e1, e2: e2}) do
     a = e1 |> String.downcase() |> String.to_atom()
     b = e2 && e2 |> String.downcase() |> String.to_atom()
 

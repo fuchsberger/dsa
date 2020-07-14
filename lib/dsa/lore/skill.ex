@@ -1,4 +1,4 @@
-defmodule Dsa.Game.Skill do
+defmodule Dsa.Lore.Skill do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -12,8 +12,8 @@ defmodule Dsa.Game.Skill do
     field :e3, :string
     field :be, :boolean
 
-    many_to_many :characters, Dsa.Game.Character,
-      join_through: Dsa.Game.CharacterSkill,
+    many_to_many :characters, Dsa.Accounts.Character,
+      join_through: Dsa.Accounts.CharacterSkill,
       on_replace: :delete
   end
 

@@ -11,8 +11,8 @@ defmodule Dsa.Event.TraitRoll do
     field :use_be, :boolean, default: false, virtual: true
     field :max_be, :integer, virtual: true
     field :be, :integer, default: 0
-    belongs_to :character, Dsa.Game.Character
-    belongs_to :group, Dsa.Game.Group
+    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end
 

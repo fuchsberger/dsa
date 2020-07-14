@@ -1,4 +1,4 @@
-defmodule Dsa.Game.CharacterSkill do
+defmodule Dsa.Accounts.CharacterSkill do
   @moduledoc """
   CharacterSkill module
   """
@@ -10,8 +10,8 @@ defmodule Dsa.Game.CharacterSkill do
   schema "character_skills" do
     field :level, :integer, required: true, default: 0
 
-    belongs_to :character, Dsa.Game.Character, primary_key: true
-    belongs_to :skill, Dsa.Game.Skill, primary_key: true
+    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+    belongs_to :skill, Dsa.Lore.Skill, primary_key: true
   end
 
   @required_fields ~w(character_id skill_id)a

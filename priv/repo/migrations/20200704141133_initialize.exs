@@ -1,7 +1,7 @@
-defmodule Dsa.Repo.Migrations.CreateUsers do
+defmodule Dsa.Repo.Migrations.Initialize do
   use Ecto.Migration
 
-  import Dsa.Game.Character, only: [talents: 0, talents: 1]
+  import Dsa.Accounts.Character, only: [talents: 0, talents: 1]
 
   def change do
     create table(:users) do

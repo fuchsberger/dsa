@@ -6,49 +6,79 @@ defmodule DsaWeb.ManageLive do
 
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
-  def mount(_params, %{"user_id" => user_id}, socket) do
-
-    users = Accounts.list_users()
-
+  def mount(_params, _session, socket) do
     {:ok, socket
-    |> assign(:admin?, Enum.find(users, & &1.id == user_id).admin)
     |> assign(:changeset, nil)
-    |> assign(:users, users)}
+    |> assign(:entries, get_entries(socket))}
+  end
+
+  def handle_params(_params, _session, socket) do
+    {:noreply, socket
+    |> assign(:changeset, nil)
+    |> assign(:entries, get_entries(socket))}
+  end
+
+  @doc """
+  New changeset.
+  """
+  defp get_changeset(socket) do
+    case socket.assigns.live_action do
+      :groups -> Accounts.change_group()
+      :skills -> nil
+      :users -> Accounts.change_registration()
+    end
+  end
+
+  defp get_changeset(socket, struct, params \\ %{}) do
+    case socket.assigns.live_action do
+      :groups -> Accounts.change_group(struct, params)
+      :skills -> nil
+      :users -> Accounts.change_registration(struct, params)
+    end
+  end
+
+  defp get_entries(socket) do
+    case socket.assigns.live_action do
+      :groups -> Accounts.list_groups()
+      :skills -> []
+      :users -> Accounts.list_users()
+    end
   end
 
   def handle_event("add", _params, socket) do
-    changeset = Accounts.change_registration(%Accounts.User{}, %{})
+    {:noreply, assign(socket, :changeset, get_changeset(socket))}
+  end
+
+  def handle_event("edit", %{"id" => id}, socket) do
+    entry = Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
+    {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
+  end
+
+  def handle_event("validate", %{"entry" => params}, socket) do
+    changeset = get_changeset(socket, socket.assigns.changeset.data, params)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("edit", %{"user" => id}, socket) do
-    user = Enum.find(socket.assigns.users, & &1.id == String.to_integer(id))
-    changeset = Accounts.change_registration(user, %{})
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
-
-  def handle_event("validate", %{"user" => params}, socket) do
-    changeset = Accounts.change_registration(socket.assigns.changeset.data, params)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
-
-  def handle_event("save", %{"user" => params}, socket) do
-    changeset = Accounts.change_registration(socket.assigns.changeset.data, params)
+  def handle_event("save", %{"entry" => params}, socket) do
+    changeset = get_changeset(socket, socket.assigns.changeset.data, params)
 
     case Repo.insert_or_update(changeset) do
       {:ok, _user} ->
         {:noreply, socket
         |> assign(:changeset, nil)
-        |> assign(:users, Accounts.list_users())}
+        |> assign(:entries, get_entries(socket))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
-  def handle_event("delete", %{"user" => id}, socket) do
-    socket.assigns.users |> Enum.find(& &1.id == String.to_integer(id)) |> Accounts.delete_user!()
-    {:noreply, assign(socket, :users, Accounts.list_users())}
+  def handle_event("delete", %{"id" => id}, socket) do
+    socket.assigns.entries
+    |> Enum.find(& &1.id == String.to_integer(id))
+    |> Repo.delete!()
+
+    {:noreply, assign(socket, :entries, get_entries(socket))}
   end
 
   def handle_event("cancel", _params, socket) do

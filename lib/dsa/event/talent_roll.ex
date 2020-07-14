@@ -18,8 +18,8 @@ defmodule Dsa.Event.TalentRoll do
     field :be, :integer, default: 0
     field :use_be, :boolean, default: false, virtual: true
     field :max_be, :integer, virtual: true
-    belongs_to :character, Dsa.Game.Character
-    belongs_to :group, Dsa.Game.Group
+    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end
 

@@ -1,7 +1,7 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
-  import Dsa.Game.Character, only: [talents: 1]
+  import Dsa.Accounts.Character, only: [talents: 1]
 
   alias Dsa.Event.{TraitRoll, TalentRoll}
 

@@ -29,6 +29,7 @@ defmodule DsaWeb.Router do
     resources "/characters", CharacterController, except: [:show]
     live "/group/:id", GroupLive
     live "/manage/skills", ManageLive, :skills
+    live "/manage/groups", ManageLive, :groups
     live "/manage/users", ManageLive, :users
   end
 end

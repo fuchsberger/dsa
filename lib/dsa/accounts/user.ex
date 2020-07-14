@@ -9,7 +9,7 @@ defmodule Dsa.Accounts.User do
     field :password_hash, :string
     field :admin, :boolean, default: false
 
-    has_many :characters, Dsa.Game.Character
+    has_many :characters, Dsa.Accounts.Character
 
     timestamps()
   end
