@@ -39,27 +39,23 @@ module.exports = (env, options) => {
           use: [
             'style-loader',
             MiniCssExtractPlugin.loader,
-
             'css-loader',
             {
               loader: 'postcss-loader', // Run postcss actions
-              options: {
-                plugins: function () { // postcss plugins, can be exported to postcss.config.js
-                  return [
-                    require('autoprefixer')
-                  ];
-                }
-              }
+              options: { plugins: function () { return [ require('autoprefixer') ]; } }
             },
             {
               loader: 'sass-loader',
-              options: {
-                sassOptions: {
-                  includePaths: ['node_modules/bootstrap/scss']
-                }
-              }
+              options: { sassOptions: { includePaths: ['node_modules/bootstrap/scss'] } }
             }
-          ],
+          ]
+        },
+        {
+          test: /\.(eot|png|svg|ttf|woff|woff2)$/i,
+          use: {
+            loader: 'url-loader',
+            options: { limit: 8192 }
+          }
         }
       ]
     },

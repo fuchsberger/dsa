@@ -1,11 +1,30 @@
 defmodule DsaWeb.SessionControllerTest do
-  use DsaWeb.ConnCase, async: true
+  use DsaWeb.ConnCase
+  alias DsaWeb.Auth
 
-  test "GET /", %{conn: conn} do
-    conn = conn |> assign(:current_user, %{id: 23}) |> get("/")
+  setup %{conn: conn} do
+    conn =
+      conn
+      |> bypass_through(DsaWeb.Router, :browser)
+      |> get("/")
 
-    # IO.inspect {conn.assigns, redirected_to(conn, 302)}
+    {:ok, %{conn: conn}}
+  end
+
+  test "GET / anonymous visitors should be redirected to login", %{conn: conn} do
+    conn = get(conn, "/")
     assert redirected_to(conn, 302) =~ "/login"
-    # assert html_response(conn, 200) =~ "Welcome to Phoenix!"
+  end
+
+  test "GET / authenticated visitors should be redirected to first group", %{conn: conn} do
+    user = user_fixture()
+
+    conn =
+      conn
+      |> Auth.login(user)
+      |> send_resp(:ok, "")
+      |> get("/")
+
+    assert redirected_to(conn, 302) =~ Routes.live_path(conn, DsaWeb.GroupLive, 1)
   end
 end

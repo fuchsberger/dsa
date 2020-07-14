@@ -22,13 +22,13 @@ defmodule DsaWeb.Router do
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     delete "/:id", SessionController, :delete
-
-    resources "/users", UserController, only: [:index, :show, :new, :create]
   end
 
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
     resources "/characters", CharacterController, except: [:show]
     live "/group/:id", GroupLive
+    live "/manage/skills", ManageLive, :skills
+    live "/manage/users", ManageLive, :users
   end
 end

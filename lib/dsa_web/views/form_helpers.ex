@@ -5,6 +5,11 @@ defmodule DsaWeb.FormHelpers do
   use Phoenix.HTML
   alias Phoenix.HTML.Form
 
+  def icon(name, opts \\ [] ) do
+    class = "icon-#{name} #{Keyword.get(opts, :class, "")}"
+    content_tag :i, "", [{:class, class} | Keyword.delete(opts, :class)]
+  end
+
   def error_class(form, field) do
     cond do
       Map.has_key?(form, :source) && Map.has_key?(form.source, :action) && is_nil(form.source.action) -> ""
@@ -56,6 +61,7 @@ defmodule DsaWeb.FormHelpers do
 
   def number_input(f, field, opts \\ []), do: Form.number_input(f, field, opts(f, field, opts))
   def text_input(f, field, opts \\ []), do: Form.text_input(f, field, opts(f, field, opts))
+  def password_input(f, field, opts \\ []), do: Form.password_input(f, field, opts(f, field, opts))
 
   def select(f, field, options, opts \\ []),
     do: Form.select(f, field, options, opts(f, field, opts, "form-select"))

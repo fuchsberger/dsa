@@ -31,19 +31,7 @@ defmodule Dsa.Accounts do
     end
   end
 
-  def list_users do
-    Repo.all(User)
-  end
-
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
-  end
-
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
+  def list_users, do: Repo.all(User)
 
   def change_registration(%User{} = user, params) do
     User.registration_changeset(user, params)
@@ -60,4 +48,6 @@ defmodule Dsa.Accounts do
     |> User.set_role(role, value)
     |> Repo.update()
   end
+
+  def delete_user!(user), do: Repo.delete!(user)
 end

@@ -1,0 +1,3 @@
+<%= case @live_action do
+  :users -> render("users.html", changeset: @changeset, users: @users)
+end %>
