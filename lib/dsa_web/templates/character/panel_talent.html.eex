@@ -19,7 +19,7 @@
           <em><%= short_trait(e2) %></em> /
           <em><%= short_trait(e3) %></em>
         </td>
-        <td class='text-center'><%= be_text(be) %></td>
+        <td class='text-center'><%= be(be) %></td>
         <td class='text-center'>-</td>
         <td><%= number_input @form, talent, class: "border-0 col-sm-2 form-control-sm" %></td>
       </tr>

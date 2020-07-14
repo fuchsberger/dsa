@@ -2,7 +2,7 @@ defmodule DsaWeb.ManageLive do
 
   use Phoenix.LiveView
 
-  alias Dsa.{Accounts, Repo}
+  alias Dsa.{Accounts, Lore, Repo}
 
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
@@ -18,13 +18,10 @@ defmodule DsaWeb.ManageLive do
     |> assign(:entries, get_entries(socket))}
   end
 
-  @doc """
-  New changeset.
-  """
   defp get_changeset(socket) do
     case socket.assigns.live_action do
       :groups -> Accounts.change_group()
-      :skills -> nil
+      :skills -> Lore.change_skill()
       :users -> Accounts.change_registration()
     end
   end
@@ -32,7 +29,7 @@ defmodule DsaWeb.ManageLive do
   defp get_changeset(socket, struct, params \\ %{}) do
     case socket.assigns.live_action do
       :groups -> Accounts.change_group(struct, params)
-      :skills -> nil
+      :skills -> Lore.change_skill(struct, params)
       :users -> Accounts.change_registration(struct, params)
     end
   end
@@ -40,7 +37,7 @@ defmodule DsaWeb.ManageLive do
   defp get_entries(socket) do
     case socket.assigns.live_action do
       :groups -> Accounts.list_groups()
-      :skills -> []
+      :skills -> Lore.list_skills()
       :users -> Accounts.list_users()
     end
   end

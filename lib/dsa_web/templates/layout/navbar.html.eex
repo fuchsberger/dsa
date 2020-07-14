@@ -42,6 +42,7 @@
           </li>
           <%= nav_dropdown "Verwalten" do %>
             <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
+            <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
             <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>
           <% end %>
         <% end %>

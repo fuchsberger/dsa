@@ -1,6 +1,8 @@
 defmodule DsaWeb.ManageView do
   use DsaWeb, :view
 
+  alias Dsa.Lore.Skill
+
   def new?(changeset), do: changeset && changeset.data.__meta__.state == :built
   def edit?(changeset), do: changeset && changeset.data.__meta__.state == :loaded
 
@@ -14,9 +16,11 @@ defmodule DsaWeb.ManageView do
 
   def header(:skills) do
     ~E"""
+    <th scope='col'>Talentgruppe</th>
     <th scope='col'>Name</th>
-    <th scope='col'>Benutzername</th>
-    <th scope='col'>Passwort</th>
+    <th scope='col' class='text-center'>Probe</th>
+    <th scope='col' class='text-center'>SF</th>
+    <th scope='col' class='text-center'>BE</th>
     <th scope='col' class='text-center'>Aktionen</th>
     """
   end
@@ -37,6 +41,17 @@ defmodule DsaWeb.ManageView do
     <th scope='row'><%= group.name %></th>
     <td><%= group.master.name %></td>
     <%= submit_cell(group.id) %>
+    """
+  end
+
+  def row(:skills, skill) do
+    ~E"""
+    <td><%= skill.category %></td>
+    <th scope='row'><%= skill.name %></th>
+    <td class='text-center'><small><%= skill.e1 %>/<%= skill.e3 %>/<%= skill.e3 %></small></td>
+    <td class='text-center'><%= skill.sf %></td>
+    <td class='text-center'><%= be(skill.be) %></td>
+    <%= submit_cell(skill.id) %>
     """
   end
 
@@ -65,6 +80,31 @@ defmodule DsaWeb.ManageView do
     """
   end
 
+  def form(:skills, f) do
+    ~E"""
+    <td>
+      <%= select f, :category, Skill.category_options(), class: "form-select-sm", prompt: "Gruppe" %>
+      <%= error_tag f, :category %>
+    </td>
+    <td>
+      <%= text_input f, :name, class: "form-control-sm", placeholder: "Name" %>
+      <%= error_tag f, :name %>
+    </td>
+    <td>
+      <div class='row g-0'>
+        <div class='col'><%= select f, :e1, Skill.base_options(), class: "form-select-sm" %></div>
+        <div class='col'><%= select f, :e2, Skill.base_options(), class: "form-select-sm" %></div>
+        <div class='col'><%= select f, :e3, Skill.base_options(), class: "form-select-sm" %></div>
+      </div>
+    </td>
+    <td><%= select f, :sf, Skill.sf_options(), class: "form-select-sm" %></td>
+    <td>
+    <%= select f, :be, [{"Ja", true}, {"Nein", false}], class: "form-select-sm", prompt: "Event." %>
+    </td>
+    <%= action_cell() %>
+    """
+  end
+
   def form(:users, form) do
     ~E"""
     <td></td>
@@ -87,9 +127,9 @@ defmodule DsaWeb.ManageView do
 
   defp action_cell do
     ~E"""
-    <td class='py-10 text-center'>
-      <%= submit icon("ok", class: "text-primary"), class: "btn btn-sm btn-light" %>
-      <button class='btn btn-sm btn-light' type='button' phx-click='cancel'>
+    <td class='text-center'>
+      <%= submit icon("ok", class: "text-primary"), class: "btn btn-sm btn-link" %>
+      <button class='btn btn-sm btn-link' type='button' phx-click='cancel'>
         <i class='icon-cancel text-secondary'></i>
       </button>
     </td>
@@ -98,9 +138,9 @@ defmodule DsaWeb.ManageView do
 
   defp submit_cell(id) do
     ~E"""
-    <td class='py-10 text-center'>
-      <button type='button' class='btn btn-sm btn-light' phx-click='edit' phx-value-id='<%= id %>'><i class='icon-edit text-primary'></i></button>
-      <button type='button' class='btn btn-sm btn-light' phx-click='delete' phx-value-id='<%= id %>' data-confirm='Are you absolutely sure?'><i class='icon-delete text-danger'></i></button>
+    <td class='text-center'>
+      <button type='button' class='btn btn-sm py-0 btn-link' phx-click='edit' phx-value-id='<%= id %>'><i class='icon-edit text-primary'></i></button>
+      <button type='button' class='btn btn-sm py-0 btn-link' phx-click='delete' phx-value-id='<%= id %>' data-confirm='Are you absolutely sure?'><i class='icon-delete text-danger'></i></button>
     </td>
     """
   end

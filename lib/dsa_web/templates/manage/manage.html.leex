@@ -18,7 +18,7 @@
   novalidate: true
 ] %>
 
-<table class='table'>
+<table class='table table-sm'>
   <thead><tr><%= header @live_action %></tr></thead>
   <tbody>
     <%= if new?(@changeset), do: form @live_action, f %>

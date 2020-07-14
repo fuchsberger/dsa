@@ -28,8 +28,8 @@ defmodule DsaWeb.DsaHelpers do
     if is_nil(bon), do: nil, else: round(st/2) + floor((bon - 8) / 3)
   end
 
-  def be_text(be) do
-    case be do
+  def be(be?) do
+    case be? do
       true -> "Ja"
       false -> "Nein"
       nil -> "Event."

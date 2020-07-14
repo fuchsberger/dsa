@@ -58,12 +58,13 @@ defmodule Dsa.Repo.Migrations.Initialize do
     create index(:characters, [:group_id, :user_id])
 
     create table(:skills) do
-      add :name, :string
-      add :category, :string
-      add :e1, :string
-      add :e2, :string
-      add :e3, :string
+      add :name, :string, size: 40
+      add :category, :string, size: 15
+      add :e1, :string, size: 2
+      add :e2, :string, size: 2
+      add :e3, :string, size: 2
       add :be, :boolean
+      add :sf, :string, size: 1
     end
 
     create table(:character_skills, primary_key: false) do
