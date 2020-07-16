@@ -5,15 +5,15 @@ defmodule Dsa.Accounts do
   import Ecto.{Changeset, Query}
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterSkill, Group, User}
-  alias Dsa.Lore.Skill
+  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, Group, User}
+  alias Dsa.Lore.{CombatSkill, Skill}
 
   def get_user(id), do:  Repo.get(user_query(), id)
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)
 
   defp user_query() do
-    from(u in User, preload: [characters: ^from(c in Character, select: {c.id, c.name})])
+    from(u in User, preload: [characters: :group])
   end
 
   def authenticate_by_username_and_pass(username, given_pass) do
@@ -72,15 +72,12 @@ defmodule Dsa.Accounts do
     |> sort_skills()
   end
 
-  def get_character!(id) do
-    case Repo.get!(from(c in Character, preload: [character_skills: :skill]), id) do
-      nil -> nil
-      character -> sort_skills(character)
-    end
-  end
-
   defp user_characters_query(query, %User{id: user_id}) do
-    from(v in query, preload: :group, where: v.user_id == ^user_id)
+    from(v in query, preload: [
+      :group,
+      character_skills: :skill,
+      character_combat_skills: :combat_skill
+    ], where: v.user_id == ^user_id)
   end
 
   defp user_characters_query(query, user_id) do
@@ -102,8 +99,14 @@ defmodule Dsa.Accounts do
     ) do
       {:ok, character} ->
         # add all standard skills to character
-        skills = Repo.all(Skill)
-        Enum.each(skills, & add_skill!(character.id, &1))
+        CombatSkill
+        |> Repo.all()
+        |> Enum.each(& add_combat_skill!(character.id, &1))
+
+        Skill
+        |> Repo.all()
+        |> Enum.each(& add_skill!(character.id, &1))
+
         {:ok, sort_skills(character)}
 
       {:error, changeset} ->
@@ -114,6 +117,7 @@ defmodule Dsa.Accounts do
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
+    |> cast_assoc(:character_combat_skills, with: &CharacterCombatSkill.changeset/2)
     |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
     |> Repo.update()
   end
@@ -132,16 +136,21 @@ defmodule Dsa.Accounts do
 
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
-      talent_rolls: [:character],
+      talent_rolls: [:character, :skill],
       trait_rolls: [:character],
       characters: [:user, character_skills: [:skill]]
     ]), id)
   end
 
+  def add_combat_skill!(character_id, skill) do
+    %CharacterCombatSkill{}
+    |> CharacterCombatSkill.changeset(%{character_id: character_id, combat_skill_id: skill.id})
+    |> Repo.insert!()
+  end
+
   def add_skill!(character_id, skill) do
-    level = if skill.category == "Nahkampf" || skill.category == "Fernkampf", do: 6, else: 0
     %CharacterSkill{}
-    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill.id, level: level})
+    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill.id})
     |> Repo.insert!()
   end
 end

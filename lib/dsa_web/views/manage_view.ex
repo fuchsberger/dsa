@@ -1,7 +1,7 @@
 defmodule DsaWeb.ManageView do
   use DsaWeb, :view
 
-  alias Dsa.Lore.Skill
+  import Dsa.Lists
 
   def new?(changeset), do: changeset && changeset.data.__meta__.state == :built
   def edit?(changeset), do: changeset && changeset.data.__meta__.state == :loaded
@@ -83,7 +83,7 @@ defmodule DsaWeb.ManageView do
   def form(:skills, f) do
     ~E"""
     <td>
-      <%= select f, :category, Skill.category_options(), class: "form-select-sm", prompt: "Gruppe" %>
+      <%= select f, :category, talent_categories(), class: "form-select-sm", prompt: "Gruppe" %>
       <%= error_tag f, :category %>
     </td>
     <td>
@@ -92,12 +92,12 @@ defmodule DsaWeb.ManageView do
     </td>
     <td>
       <div class='row g-0'>
-        <div class='col'><%= select f, :e1, Skill.base_options(), class: "form-select-sm" %></div>
-        <div class='col'><%= select f, :e2, Skill.base_options(), class: "form-select-sm" %></div>
-        <div class='col'><%= select f, :e3, Skill.base_options(), class: "form-select-sm" %></div>
+        <div class='col'><%= select f, :e1, base_value_options(), class: "form-select-sm" %></div>
+        <div class='col'><%= select f, :e2, base_value_options(), class: "form-select-sm" %></div>
+        <div class='col'><%= select f, :e3, base_value_options(), class: "form-select-sm" %></div>
       </div>
     </td>
-    <td><%= select f, :sf, Skill.sf_options(), class: "form-select-sm" %></td>
+    <td><%= select f, :sf, sf_values(), class: "form-select-sm" %></td>
     <td>
     <%= select f, :be, [{"Ja", true}, {"Nein", false}], class: "form-select-sm", prompt: "Event." %>
     </td>

@@ -2,7 +2,20 @@
 # mix run priv/repo/seeds.exs
 
 defmodule Dsa.Seed do
-  alias Dsa.Lore.Skill
+  alias Dsa.Lore.{CombatSkill, Skill}
+
+  def combat_skill({sf, ranged, parade, e1, name, e2}) do
+    %CombatSkill{}
+    |> CombatSkill.changeset(%{
+        name: name,
+        ranged: ranged,
+        parade: parade,
+        e1: e1,
+        e2: e2,
+        sf: sf
+      })
+    |> Dsa.Repo.insert!()
+  end
 
   def skill({sf, category, probe, name, be}) do
     [e1, e2, e3] =
@@ -98,6 +111,33 @@ end
 ]
 |> Enum.each(& Dsa.Seed.skill(&1))
 
+[
+  # Close combat
+  { "B", false, true, "GE", "Dolche", nil },
+  { "C", false, true, "GE", "Fächer", nil },
+  { "C", false, true, "GE", "Fechtwaffen", nil },
+  { "C", false, true, "KK", "Hiebwaffen", nil },
+  { "C", false, false, "KK", "Kettenwaffen", nil },
+  { "B", false, true, "KK", "Lanzen", nil },
+  { "B", false, false, "FF", "Peitschen", nil },
+  { "B", false, true, "GE", "Raufen", "KK" },
+  { "C", false, true, "KK", "Schilde", nil },
+  { "C", false, true, "GE", "Schwerter", "KK" },
+  { "C", false, false, "KK", "Spießwaffen", nil },
+  { "C", false, true, "GE", "Stangenwaffen", "KK" },
+  { "C", false, true, "KK", "Zweihandhiebwaffen", nil },
+  { "C", false, true, "KK", "Zweihandschwerter", nil },
+
+  # Ranged combat
+  { "B", true, false, "FF", "Armbrüste", nil },
+  { "B", true, false, "FF", "Blasrohre", nil },
+  { "C", true, false, "FF", "Bögen", nil },
+  { "C", true, false, "FF", "Diskusse", nil },
+  { "B", true, false, "FF", "Feuerspeien", nil },
+  { "B", true, false, "FF", "Schleudern", nil },
+  { "B", true, false, "FF", "Wurfwaffen", nil }
+]
+|> Enum.each(& Dsa.Seed.combat_skill(&1))
 
 alias Dsa.{Accounts, Repo}
 

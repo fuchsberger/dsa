@@ -1,4 +1,4 @@
-defmodule Dsa.Accounts.CharacterSkill do
+defmodule Dsa.Accounts.CharacterCombatSkill do
   @moduledoc """
   CharacterSkill module
   """
@@ -7,17 +7,17 @@ defmodule Dsa.Accounts.CharacterSkill do
   import Ecto.Changeset
 
   @primary_key false
-  schema "character_skills" do
-    field :level, :integer, default: 0
+  schema "character_combat_skills" do
+    field :level, :integer, default: 6
     belongs_to :character, Dsa.Accounts.Character, primary_key: true
-    belongs_to :skill, Dsa.Lore.Skill, primary_key: true
+    belongs_to :combat_skill, Dsa.Lore.CombatSkill, primary_key: true
   end
 
   def changeset(character_skill, params \\ %{}) do
     character_skill
-    |> cast(params, [:character_id, :skill_id, :level])
-    |> validate_required([:character_id, :skill_id])
-    |> validate_number(:level, greater_than_or_equal_to: 0)
+    |> cast(params, [:character_id, :combat_skill_id, :level])
+    |> validate_required([:character_id, :combat_skill_id])
+    |> validate_number(:level, greater_than_or_equal_to: 6)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:skill_id)
     |> unique_constraint([:character, :skill])

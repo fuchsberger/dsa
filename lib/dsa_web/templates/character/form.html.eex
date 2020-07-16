@@ -67,17 +67,9 @@
       <div id='trait-card' class="card">
         <h5 class="card-header">Grundwerte</h5>
         <div class="card-body">
+
           <h6>Eigenschaften</h6>
-          <div class='row g-2'>
-            <%= field f, :mu %>
-            <%= field f, :kl %>
-            <%= field f, :in %>
-            <%= field f, :ch %>
-            <%= field f, :ff %>
-            <%= field f, :ge %>
-            <%= field f, :ko %>
-            <%= field f, :kk %>
-          </div>
+          <div class='row g-2'><%= Enum.map(base_values(), & field(f, &1)) %></div>
 
           <h6 class='mt-2'>Basiswerte</h6>
           <div class='row g-2'>
@@ -132,7 +124,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <div class='col-lg'>
@@ -149,10 +140,7 @@
         </div>
 
         <div class="card-body tab-content p-0">
-          <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
-            <%= render "table_combat.html", form: f, category: "Nahkampf" %>
-            <%= render "table_combat.html", form: f, category: "Fernkampf" %>
-          </div>
+          <%= render "panel_combat.html", form: f %>
           <%= render "panel_talent.html", form: f, category: "Körper" %>
           <%= render "panel_talent.html", form: f, category: "Gesellschaft" %>
           <%= render "panel_talent.html", form: f, category: "Natur" %>

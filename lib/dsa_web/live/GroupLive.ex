@@ -23,11 +23,27 @@ defmodule DsaWeb.GroupLive do
     {:noreply, assign(socket, :changeset_active_character, Accounts.change_active_character(params))}
   end
 
-  def handle_event("prepare", %{"trait" => _} = params, socket) do
+  def handle_event("prepare", %{"trait" => trait}, socket) do
+    c = active_character(socket)
+    params = %{trait: trait, level: Map.get(c, String.to_atom(trait))}
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TraitRoll{}, params))}
   end
 
-  def handle_event("prepare", %{"talent" => _} = params, socket) do
+  def handle_event("prepare", %{"talent" => id}, socket) do
+    c = active_character(socket)
+    cskill = Enum.find(c.character_skills, & &1.skill_id == String.to_integer(id))
+
+    params = %{
+      skill_id: cskill.skill_id,
+      e1: cskill.skill.e1,
+      e2: cskill.skill.e2,
+      e3: cskill.skill.e3,
+      t1: Map.get(c, String.to_atom(cskill.skill.e1)),
+      t2: Map.get(c, String.to_atom(cskill.skill.e2)),
+      t3: Map.get(c, String.to_atom(cskill.skill.e3)),
+      use_be: cskill.skill.be
+    }
+
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
   end
 
@@ -36,36 +52,37 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("validate", %{"trait_roll" => params}, socket) do
+    c = active_character(socket)
+    params = Map.merge(params, %{"level" => Map.get(c, String.to_atom(params["trait"]))})
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TraitRoll{}, params))}
   end
 
   def handle_event("validate", %{"talent_roll" => params}, socket) do
-    character = active_character(socket)
+    c = active_character(socket)
 
     params = Map.merge(params, %{
-      "e1" => Map.get(character, String.to_atom(params["t1"])),
-      "e2" => Map.get(character, String.to_atom(params["t2"])),
-      "e3" => Map.get(character, String.to_atom(params["t3"]))
+      "t1" => Map.get(c, String.to_atom(params["e1"])),
+      "t2" => Map.get(c, String.to_atom(params["e2"])),
+      "t3" => Map.get(c, String.to_atom(params["e3"])),
     })
-
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
   end
 
   def handle_event("event", %{"talent_roll" => params}, socket) do
-
-    character = active_character(socket)
+    c = active_character(socket)
+    cskill = Enum.find(c.character_skills, & &1.skill_id == String.to_integer(params["skill_id"]))
 
     params = Map.merge(params, %{
       "w1" => Enum.random(1..20),
       "w2" => Enum.random(1..20),
       "w3" => Enum.random(1..20),
-      "level" => Map.get(character, String.to_atom(params["talent"])),
-      "e1" => Map.get(character, String.to_atom(params["t1"])),
-      "e2" => Map.get(character, String.to_atom(params["t2"])),
-      "e3" => Map.get(character, String.to_atom(params["t3"])),
-      "max_be" => character.be,
-      "character_id" => character.id,
-      "group_id" => character.group_id
+      "level" => cskill.level,
+      "e1" => cskill.skill.e1,
+      "e2" => cskill.skill.e2,
+      "e3" => cskill.skill.e3,
+      "be" => (if params["use_be"] == "true", do: c.be, else: 0),
+      "character_id" => c.id,
+      "group_id" => c.group_id
     })
 
     case Event.create_talent_roll(params) do
@@ -79,17 +96,15 @@ defmodule DsaWeb.GroupLive do
     end
   end
 
-  def handle_event("event", %{"trait_roll" => %{"trait" => trait} = params}, socket) do
-
-    character = active_character(socket)
+  def handle_event("event", %{"trait_roll" => %{"trait" => _} = params}, socket) do
+    c = active_character(socket)
 
     params = Map.merge(params, %{
       "w1" => Enum.random(1..20),
       "w1b" => Enum.random(1..20),
-      "level" => Map.get(character, String.to_atom(trait)),
-      "max_be" => character.be,
-      "character_id" => character.id,
-      "group_id" => character.group_id
+      "be" => (if params["use_be"] == "true", do: c.be, else: 0),
+      "character_id" => c.id,
+      "group_id" => c.group_id
     })
 
     case Event.create_trait_roll(params) do
@@ -105,6 +120,14 @@ defmodule DsaWeb.GroupLive do
 
   def handle_event("delete", %{"trait_roll" => id}, socket) do
     socket.assigns.group.trait_rolls
+    |> Enum.find(& &1.id == String.to_integer(id))
+    |> Event.delete_roll!()
+
+    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
+  end
+
+  def handle_event("delete", %{"talent_roll" => id}, socket) do
+    socket.assigns.group.talent_rolls
     |> Enum.find(& &1.id == String.to_integer(id))
     |> Event.delete_roll!()
 

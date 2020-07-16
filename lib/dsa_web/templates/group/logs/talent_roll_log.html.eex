@@ -1,11 +1,8 @@
-<%
-  {res, critical, color} = calculate_result(@roll)
-  {name, _e1, _e2, _e3, _be} = talent_details(String.to_atom(@roll.talent))
-%>
+<% {res, critical, color} = calculate_result(@roll) %>
 
 <li class="list-group-item">
   <p class='mb-0'>
-    <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
+    <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, @roll.skill.name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
   </p>
   <%= if @show_details? && (@master? || @owner?) do %>
     <small>

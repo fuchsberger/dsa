@@ -1,10 +1,8 @@
 defmodule Dsa.Lore.Skill do
   use Ecto.Schema
-  import Ecto.Changeset
 
-  @sf ~w(A B C D E)
-  @base_values ~w(MU KL IN CH FF GE KO KK)
-  @categories ~w(Körper Gesellschaft Natur Wissen Handwerk Zauber Liturgie)
+  import Ecto.Changeset
+  import Dsa.Lists
 
   schema "skills" do
     field :name, :string
@@ -24,15 +22,11 @@ defmodule Dsa.Lore.Skill do
     skill
     |> cast(attrs, [:name, :category, :e1, :e2, :e3, :be, :sf])
     |> validate_required([:name, :category, :e1, :e2, :e3, :sf])
-    |> validate_length(:name, max: 40)
-    |> validate_inclusion(:category, @categories)
-    |> validate_inclusion(:e1, @base_values)
-    |> validate_inclusion(:e2, @base_values)
-    |> validate_inclusion(:e3, @base_values)
-    |> validate_inclusion(:sf, @sf)
+    |> validate_length(:name, max: 30)
+    |> validate_inclusion(:category, talent_categories())
+    |> validate_inclusion(:e1, base_value_options())
+    |> validate_inclusion(:e2, base_value_options())
+    |> validate_inclusion(:e3, base_value_options())
+    |> validate_inclusion(:sf, sf_values())
   end
-
-  def base_options, do: Enum.map(@base_values, & {&1, &1})
-  def category_options, do: Enum.map(@categories, & {&1, &1})
-  def sf_options, do: Enum.map(@sf, & {&1, &1})
 end

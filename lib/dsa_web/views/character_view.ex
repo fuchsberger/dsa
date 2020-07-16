@@ -1,8 +1,6 @@
 defmodule DsaWeb.CharacterView do
   use DsaWeb, :view
 
-  import Dsa.Accounts.Character, only: [talents: 1]
-
   def field(form, field, _tooltip \\ nil) do
     ~E"""
     <div class='col-sm-3'>

@@ -1,8 +1,6 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
-  import Dsa.Accounts.Character, only: [talents: 1]
-
   alias Dsa.Event.{TraitRoll, TalentRoll}
 
   def active_character_id(assigns), do: assigns.changeset_active_character.changes.id
@@ -73,7 +71,7 @@ defmodule DsaWeb.GroupView do
 
   def calculate_result(%TalentRoll{} = r) do
     m = r.modifier - r.be
-    res = r.level - max(0, r.w1 - r.e1 - m) - max(0, r.w2 - r.e2 - m) - max(0, r.w3 - r.e3 - m)
+    res = r.level - max(0, r.w1 - r.t1 - m) - max(0, r.w2 - r.t2 - m) - max(0, r.w3 - r.t3 - m)
 
     cond do
       Enum.count([r.w1, r.w2, r.w3], & &1 == 1) > 1 -> {res, true, "success"}
@@ -89,5 +87,9 @@ defmodule DsaWeb.GroupView do
       res < 0 -> "nicht bestanden."
       res >= 0 -> "bestanden."
     end
+  end
+
+  def talent_group(character, category) do
+    Enum.filter(character.character_skills, & &1.skill.category == category)
   end
 end

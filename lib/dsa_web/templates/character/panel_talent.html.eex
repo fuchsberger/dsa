@@ -5,23 +5,27 @@
         <th scope='col'>Talent</th>
         <th scope='col' class='text-center'>Probe</th>
         <th scope='col' class='text-center'>BE</th>
-        <th scope='col' class='text-center'>R</th>
         <th scope='col' class='text-center'>ST</th>
       </tr>
     </thead>
-    <tbody class='small'>
-    <%= for talent <- Dsa.Accounts.Character.talents(@category) do %>
-      <% {name, e1, e2, e3, be} = talent_details(talent) %>
+    <tbody>
+    <%= for fs <- form_group(@form, @category) do %>
       <tr>
-        <td><%= label @form, talent, name, class: "col-sm-10" %></td>
-        <td class='text-center'>
-          <em><%= short_trait(e1) %></em> /
-          <em><%= short_trait(e2) %></em> /
-          <em><%= short_trait(e3) %></em>
+        <td>
+          <%= hidden_inputs_for(fs) %>
+          <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
         </td>
-        <td class='text-center'><%= be(be) %></td>
-        <td class='text-center'>-</td>
-        <td><%= number_input @form, talent, class: "border-0 col-sm-2 form-control-sm" %></td>
+        <td class='text-center'>
+          <small>
+            <em><%= fs.data.skill.e1 %></em> /
+            <em><%= fs.data.skill.e2 %></em> /
+            <em><%= fs.data.skill.e3 %></em>
+          </small>
+        </td>
+        <td class='text-center'><%= be(fs.data.skill.be) %></td>
+        <td>
+          <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+        </td>
       </tr>
     <% end %>
     </tbody>

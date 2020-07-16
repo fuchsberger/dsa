@@ -4,32 +4,27 @@
   no_validate: true
 ] %>
   <div class="card mb-3">
-    <h5 class="card-header">Eigenschaftsprobe: <%= get_trait_name(f) %></h5>
+    <h5 class="card-header">Eigenschaftsprobe</h5>
     <div class="card-body text-center">
-      <%= hidden_input(f, :max_be) %>
-      <%= hidden_input(f, :trait) %>
-      <div class='row g-1'>
-        <div class='col-lg-3 '>
+      <div class='row g-4'>
+        <div class='col-lg-4'>
+          <%= label f, :trait, "Eigenschaft" %>
+          <%= select f, :trait, base_value_options(), class: "form-select-sm" %>
           <%= number_input f, :level, class: "form-control-sm text-center", readonly: true %>
         </div>
 
-        <div class='col-lg-3'>
-          <%= checkbox f, :use_be, class: "form-check-input m-1" %>
-        </div>
-
-        <div class='col-lg-3'>
+        <div class='col-lg-4'>
+          <%= label f, :modifier, "Modifikator", class: "col-lg-3 w-100" %>
           <%= select f, :modifier, modifier_options(-6..6), class: "form-select-sm" %>
+          <div class='form-check text-left'>
+            <%= checkbox f, :use_be, class: "form-check-input", disabled: not is_nil(input_value(f, :use_be)) %>
+            <%= label f, :use_be, "BE", class: "form-check-label" %>
+          </div>
         </div>
 
-        <div class='col-lg-3'>
+        <div class='col-lg-4'>
           <%= submit "Würfeln!", class: "w-100 btn btn-primary btn-sm" %>
         </div>
-      </div>
-      <div class='row g-1'>
-        <%= label f, :tw, "Talentwert", class: "col-lg-3" %>
-        <%= label f, :be, "Behinderung", class: "col-lg-3 form-check-label" %>
-        <%= label f, :modifier, "Modifikator", class: "col-lg-3" %>
-        <div class='col-lg-3'></div>
       </div>
     </div>
   </div>

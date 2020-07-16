@@ -3,9 +3,7 @@ defmodule DsaWeb.CharacterController do
 
   alias Dsa.Accounts
 
-  def index(conn, _params, user) do
-    render conn, "index.html", characters: Accounts.list_characters(user)
-  end
+  def index(conn, _params, _user), do: render conn, "index.html"
 
   def new(conn, _params, _user) do
     render conn, "new.html",

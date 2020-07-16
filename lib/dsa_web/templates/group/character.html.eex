@@ -9,22 +9,23 @@
     <% c = character(assigns) %>
 
     <div class='d-flex justify-content-between mb-3'>
-      <%= for trait <- talents("Eigenschaften") do %>
-        <button class='btn btn-light btn-sm' type='button'
+      <%= for stat <- base_values() do %>
+        <button
+          class='btn btn-light btn-sm'
+          type='button'
           phx-click='prepare'
-          phx-value-trait='<%= trait %>'
-          phx-value-level='<%= Map.get(c, trait) %>'
+          phx-value-trait='<%= stat %>'
         >
-          <strong><%= trait |> Atom.to_string() |> String.upcase() %></strong>
-          <%= Map.get(c, trait) %>
+          <strong><%= stat |> Atom.to_string() |> String.upcase() %></strong>
+          <%= Map.get(c, stat) %>
         </button>
       <% end %>
     </div>
 
-    <%= render "talent_group.html", character: c, heading: "", talent: "Körper" %>
-    <%= render "talent_group.html", character: c, heading: "s", talent: "Gesellschaft" %>
-    <%= render "talent_group.html", character: c, heading: "", talent: "Natur" %>
-    <%= render "talent_group.html", character: c, heading: "s", talent: "Wissen" %>
-    <%= render "talent_group.html", character: c, heading: "s", talent: "Handwerk" %>
+    <%= render "talent_group.html", talents: talent_group(c, "Körper"), heading: "" %>
+    <%= render "talent_group.html", talents: talent_group(c, "Gesellschaft"), heading: "s" %>
+    <%= render "talent_group.html", talents: talent_group(c, "Natur"), heading: "" %>
+    <%= render "talent_group.html", talents: talent_group(c, "Wissen"), heading: "s" %>
+    <%= render "talent_group.html", talents: talent_group(c, "Handwerk"), heading: "s" %>
   </div>
 </div>
