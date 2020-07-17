@@ -42,7 +42,7 @@ module.exports = (env, options) => {
             'css-loader',
             {
               loader: 'postcss-loader', // Run postcss actions
-              options: { plugins: function () { return [ require('autoprefixer') ]; } }
+              options: { plugins: () => ([require('autoprefixer')]) }
             },
             {
               loader: 'sass-loader',
