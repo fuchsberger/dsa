@@ -16,9 +16,7 @@ module.exports = (env, options) => {
         new OptimizeCSSAssetsPlugin({})
       ]
     },
-    entry: {
-      'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
-    },
+    entry: { 'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js']) },
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, '../priv/static/js'),
