@@ -1,7 +1,6 @@
 import "../css/app.scss"
 import "phoenix_html"
 
-import "autoprefixer"
 import "popper.js"
 import Dropdown from 'bootstrap/js/dist/dropdown.js'
 import Alert from 'bootstrap/js/dist/alert.js'
