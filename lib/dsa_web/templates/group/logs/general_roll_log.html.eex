@@ -1,0 +1,13 @@
+<li class="list-group-item">
+  <p class='mb-0'>
+    <span class="badge bg-secondary"><%= @roll.character.name %></span> hat
+    <span class="badge bg-secondary rounded-0 rounded-left"><%= @roll.count %></span><span class="badge bg-info rounded-0">W<%= @roll.max %></span><span class="badge bg-success rounded-0 rounded-right"><%= if @roll.bonus >= 0, do: "+" %><%= @roll.bonus %></span>
+     gewürfelt.
+    <%= if not @roll.hidden || @owner? ||@master? do %>
+      Ergebnis:  <span class="badge bg-dark"><%= @roll.result %></span>
+    <% end %>
+    <%= if @master? do %>
+      <button class='btn float-right p-0' type='button' phx-click='delete' phx-value-general_roll='<%= @roll.id %>'><i class='icon-cancel'></i></button>
+    <% end %>
+  </p>
+</li>

@@ -1,7 +1,7 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
-  alias Dsa.Event.{TraitRoll, TalentRoll}
+  alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll}
 
   def active_character_id(assigns), do: assigns.changeset_active_character.changes.id
 
@@ -26,10 +26,11 @@ defmodule DsaWeb.GroupView do
   def character(assigns), do: Enum.find(assigns.group.characters, & &1.id == active_character_id(assigns))
 
   def events(group) do
-    group.trait_rolls ++ group.talent_rolls
+    group.trait_rolls ++ group.talent_rolls ++ group.general_rolls
     |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
     |> Enum.map(fn event ->
       case event do
+        %GeneralRoll{} -> {:general_roll, event}
         %TraitRoll{} -> {:trait_roll, event}
         %TalentRoll{} -> {:talent_roll, event}
       end

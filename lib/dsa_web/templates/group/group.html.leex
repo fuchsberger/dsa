@@ -6,6 +6,9 @@
 
     <%= if @changeset_roll do %>
       <%= case @changeset_roll.data do
+        %Dsa.Event.GeneralRoll{} ->
+          render "actions/general_roll_action.html", assigns
+
         %Dsa.Event.TraitRoll{} ->
           render "actions/trait_roll_action.html", assigns
 

@@ -136,6 +136,7 @@ defmodule Dsa.Accounts do
 
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
+      general_rolls: [:character],
       talent_rolls: [:character, :skill],
       trait_rolls: [:character],
       characters: [:user, character_skills: [:skill]]

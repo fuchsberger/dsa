@@ -12,6 +12,13 @@
   <ul class='list-group list-group-flush'>
     <%= for {type, event} <- events(@group) do
       case type do
+        :general_roll ->
+          render "logs/general_roll_log.html",
+            roll: event,
+            show_details?: @show_details,
+            master?: @user_id == @group.master_id,
+            owner?: owner?(@group, event.character_id)
+
         :trait_roll ->
           render "logs/trait_roll_log.html",
             roll: event,

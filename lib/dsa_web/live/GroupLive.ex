@@ -3,7 +3,7 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   alias Dsa.{Event, Accounts}
-  alias Dsa.Event.{TalentRoll, TraitRoll}
+  alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
 
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
@@ -13,7 +13,7 @@ defmodule DsaWeb.GroupLive do
 
     {:ok, socket
     |> assign(:changeset_active_character, Accounts.change_active_character(%{id: active_id}))
-    |> assign(:changeset_roll, nil)
+    |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
     |> assign(:show_details, false)
     |> assign(:user_id, user_id)}
@@ -51,6 +51,10 @@ defmodule DsaWeb.GroupLive do
     {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
   end
 
+  def handle_event("validate", %{"general_roll" => params}, socket) do
+    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%GeneralRoll{}, params))}
+  end
+
   def handle_event("validate", %{"trait_roll" => params}, socket) do
     c = active_character(socket)
     params = Map.merge(params, %{"level" => Map.get(c, String.to_atom(params["trait"]))})
@@ -66,6 +70,29 @@ defmodule DsaWeb.GroupLive do
       "t3" => Map.get(c, String.to_atom(params["e3"])),
     })
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
+  end
+
+  def handle_event("event", %{"general_roll" => %{"count" => count, "max" => max, "bonus" => bonus} =  params}, socket) do
+    c = active_character(socket)
+    count = String.to_integer(count)
+    max = String.to_integer(max)
+    bonus = String.to_integer(bonus)
+
+    params = Map.merge(params, %{
+      "result" => bonus + Enum.reduce(1..count, fn _x, acc -> acc + Enum.random(1..max) end),
+      "character_id" => c.id,
+      "group_id" => c.group_id
+    })
+
+    case Event.create_general_roll(params) do
+      {:ok, _roll} ->
+        {:noreply, socket
+        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
+        |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset_roll, changeset)}
+    end
   end
 
   def handle_event("event", %{"talent_roll" => params}, socket) do
@@ -88,7 +115,7 @@ defmodule DsaWeb.GroupLive do
     case Event.create_talent_roll(params) do
       {:ok, _roll} ->
         {:noreply, socket
-        |> assign(:changeset_roll, nil)
+        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
         |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
@@ -110,12 +137,20 @@ defmodule DsaWeb.GroupLive do
     case Event.create_trait_roll(params) do
       {:ok, _roll} ->
         {:noreply, socket
-        |> assign(:changeset_roll, nil)
+        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
         |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset_roll, changeset)}
     end
+  end
+
+  def handle_event("delete", %{"general_roll" => id}, socket) do
+    socket.assigns.group.general_rolls
+    |> Enum.find(& &1.id == String.to_integer(id))
+    |> Event.delete_roll!()
+
+    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
   end
 
   def handle_event("delete", %{"trait_roll" => id}, socket) do
@@ -132,6 +167,10 @@ defmodule DsaWeb.GroupLive do
     |> Event.delete_roll!()
 
     {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
+  end
+
+  def handle_event("cancel", _params, socket) do
+    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))}
   end
 
   defp active_character(socket) do
