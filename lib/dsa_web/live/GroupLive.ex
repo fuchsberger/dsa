@@ -79,7 +79,7 @@ defmodule DsaWeb.GroupLive do
     bonus = String.to_integer(bonus)
 
     params = Map.merge(params, %{
-      "result" => bonus + Enum.reduce(1..count, fn _x, acc -> acc + Enum.random(1..max) end),
+      "result" => bonus + Enum.reduce(1..count, 0, fn _x, acc -> acc + Enum.random(1..max) end),
       "character_id" => c.id,
       "group_id" => c.group_id
     })
