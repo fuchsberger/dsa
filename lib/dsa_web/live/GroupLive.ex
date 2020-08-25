@@ -9,18 +9,25 @@ defmodule DsaWeb.GroupLive do
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
     group = Accounts.get_group!(id)
-    active_id = Enum.find(group.characters, & &1.user_id == user_id).id
 
     {:ok, socket
-    |> assign(:changeset_active_character, Accounts.change_active_character(%{id: active_id}))
     |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
     |> assign(:show_details, false)
+    |> assign(:character_id, Enum.find(group.characters, & &1.user_id == user_id).id)
     |> assign(:user_id, user_id)}
   end
 
-  def handle_event("activate", %{"character" => params}, socket) do
-    {:noreply, assign(socket, :changeset_active_character, Accounts.change_active_character(params))}
+  def handle_event("activate", %{"id" => id}, socket) do
+    case Enum.find(socket.assigns.group.characters, & &1.id == String.to_integer(id)) do
+      nil ->
+        {:noreply, socket}
+
+      %{id: id, user_id: user_id} ->
+        if user_id == socket.assigns.user_id || user_id == socket.assigns.group.master_id,
+          do: {:noreply, assign(socket, :character_id, id)},
+          else: {:noreply, socket}
+    end
   end
 
   def handle_event("prepare", %{"trait" => trait}, socket) do
@@ -174,7 +181,6 @@ defmodule DsaWeb.GroupLive do
   end
 
   defp active_character(socket) do
-    id = socket.assigns.changeset_active_character.changes.id
-    Enum.find(socket.assigns.group.characters, & &1.id == id)
+    Enum.find(socket.assigns.group.characters, & &1.id == socket.assigns.character_id)
   end
 end

@@ -1,0 +1,30 @@
+<div class="card mb-3">
+  <div class='card-header d-flex justify-content-between'>
+    <h5 class='mb-0'>Übersicht</h5>
+  </div>
+  <div class='card-body p-0'>
+    <table class="table table-sm m-0 table-hover">
+      <thead>
+        <tr>
+          <th scope='col'>Name</th>
+          <th scope='col'>Profession</th>
+          <th scope='col'>Player</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for character <- @group.characters do %>
+          <%= if character.user_id == @user_id || character.user_id == @group.master_id do %>
+            <tr
+              class='<%= if character.id == @character_id, do: "font-weight-bold" %>'
+              phx-click='activate' phx-value-id='<%= character.id %>'
+            >
+              <td><%= character.name %></td>
+              <td><%= character.profession %></td>
+              <td><%= character.user.name %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

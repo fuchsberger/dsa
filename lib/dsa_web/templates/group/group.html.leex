@@ -1,8 +1,13 @@
 <div class='row g-3'>
   <div class='col-lg'>
-    <%= if active_character_id(assigns), do: render "character.html", assigns %>
+    <%= if @character_id, do: render "character.html", assigns %>
   </div>
   <div class='col-lg'>
+    <%= render "overview.html",
+      group: @group,
+      character_id: @character_id,
+      user_id: @user_id
+    %>
 
     <%= if @changeset_roll do %>
       <%= case @changeset_roll.data do

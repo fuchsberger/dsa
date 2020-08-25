@@ -1,10 +1,5 @@
 <div class="card">
-  <h5 class="card-header d-flex justify-content-between">
-    Heldenübersicht
-    <%= f = form_for @changeset_active_character, "#", [phx_change: :activate, phx_submit: :activate] %>
-      <%= select f, :id, character_options(@group, @user_id), class: "form-select-sm" %>
-    </form>
-  </h5>
+  <h5 class="card-header d-flex justify-content-between">Heldenübersicht</h5>
   <div class="card-body">
     <% c = character(assigns) %>
 

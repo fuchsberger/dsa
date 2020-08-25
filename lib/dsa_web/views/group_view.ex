@@ -3,9 +3,6 @@ defmodule DsaWeb.GroupView do
 
   alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll}
 
-  def active_character_id(assigns), do: assigns.changeset_active_character.changes.id
-
-
   def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
 
   def badge(:quality, _res, true), do: content_tag :span, "X", class: "badge bg-success"
@@ -23,7 +20,9 @@ defmodule DsaWeb.GroupView do
     ]
   end
 
-  def character(assigns), do: Enum.find(assigns.group.characters, & &1.id == active_character_id(assigns))
+  def character(assigns) do
+    Enum.find(assigns.group.characters, & &1.id == assigns.character_id)
+  end
 
   def events(group) do
     group.trait_rolls ++ group.talent_rolls ++ group.general_rolls
