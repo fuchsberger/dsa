@@ -1,6 +1,8 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
+  import Ecto.Changeset, only: [get_field: 2]
+
   alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll}
 
   def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
@@ -21,7 +23,7 @@ defmodule DsaWeb.GroupView do
   end
 
   def character(assigns) do
-    Enum.find(assigns.group.characters, & &1.id == assigns.character_id)
+    Enum.find(assigns.group.characters, & &1.id == get_field(assigns.settings, :character_id))
   end
 
   def events(group) do

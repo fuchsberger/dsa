@@ -5,7 +5,7 @@ defmodule Dsa.Event do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
-  alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
+  alias Dsa.Event.{GeneralRoll, Setting, TalentRoll, TraitRoll}
 
   # Traits & Talent Rolls
 
@@ -33,4 +33,7 @@ defmodule Dsa.Event do
   def change_roll(%TalentRoll{} = roll, attrs), do: TalentRoll.changeset(roll, attrs)
 
   def delete_roll!(roll), do: Repo.delete!(roll)
+
+  # Settings (Group View, does not persist in database)
+  def change_settings(attrs \\ %{}), do: Setting.changeset(%Setting{}, attrs)
 end

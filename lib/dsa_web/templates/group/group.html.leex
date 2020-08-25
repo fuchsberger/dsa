@@ -1,16 +1,66 @@
+<%= f = form_for @settings,  "#", [
+  phx_change: :validate,
+  phx_submit: :validate,
+  no_validate: true
+] %>
+
 <div class='row g-3'>
   <div class='col-lg'>
-    <%= if @character_id, do: render "character.html", assigns %>
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h5 class='my-1'>Aktion</h5>
+        <ul class="nav nav-tabs card-header-tabs">
+          <%= for action <- ["Kampf", "Probe", "Status"] do %>
+            <% active = action == get_field(@settings, :action) %>
+            <li class="nav-item">
+              <%= label do %>
+                <%= radio_button(f, :action, action, checked: active, class: "d-none") %>
+                <%= content_tag :span, action, class: "nav-link #{if active, do: "active"}" %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <%= if get_field(@settings, :character_id), do: render "character.html", assigns %>
+    </div>
   </div>
+
   <div class='col-lg'>
-    <%= render "overview.html",
-      group: @group,
-      character_id: @character_id,
-      user_id: @user_id
-    %>
+
+    <%# Overview %>
+    <div class="card mb-3">
+      <div class='card-header d-flex justify-content-between'>
+        <h5 class='mb-0'>Übersicht</h5>
+      </div>
+      <div class='card-body p-0'>
+        <table class="table table-sm m-0 table-hover">
+          <thead>
+            <tr>
+              <th scope='col'></th>
+              <th scope='col'>Name</th>
+              <th scope='col'>Profession</th>
+              <th scope='col'>Player</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for character <- @group.characters do %>
+              <%= if character.user_id == @user_id || character.user_id == @group.master_id do %>
+                <tr class='<%= if character.id == get_field(@settings, :character_id), do: "font-weight-bold" %>'
+                >
+                  <td><%= radio_button(f, :character_id, character.id, disabled: character.user_id != @user_id && character.user_id != @group.master_id ) %></td>
+                  <td><%= character.name %></td>
+                  <td><%= character.profession %></td>
+                  <td><%= character.user.name %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <%= if @changeset_roll do %>
-      <%= case @changeset_roll.data do
+      <%# case @changeset_roll.data do
         %Dsa.Event.GeneralRoll{} ->
           render "actions/general_roll_action.html", assigns
 
@@ -23,6 +73,7 @@
             character: character(assigns)
       end %>
     <% end %>
-    <%= render "log.html", group: @group, show_details: @show_details, user_id: @user_id %>
+    <%# render "log.html", group: @group, show_details: @show_details, user_id: @user_id %>
   </div>
 </div>
+</form>

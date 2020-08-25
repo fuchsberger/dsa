@@ -45,12 +45,6 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  def active_changeset(character, attrs) do
-    character
-    |> cast(attrs, [:id])
-    |> validate_required([:id])
-  end
-
   @fields ~w(name species culture profession at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
   def changeset(character, attrs) do
     required_fields = @fields ++ Dsa.Lists.base_values()

@@ -1,26 +1,30 @@
-<div class="card">
-  <h5 class="card-header d-flex justify-content-between">Heldenübersicht</h5>
-  <div class="card-body">
-    <% c = character(assigns) %>
+<div class="card-body">
 
-    <div class='d-flex justify-content-between mb-3'>
-      <%= for stat <- base_values() do %>
-        <button
-          class='btn btn-light btn-sm'
-          type='button'
-          phx-click='prepare'
-          phx-value-trait='<%= stat %>'
-        >
-          <strong><%= stat |> Atom.to_string() |> String.upcase() %></strong>
-          <%= Map.get(c, stat) %>
-        </button>
-      <% end %>
+  <%= if @action == "Probe" do %>
+    <div class='row'>
+
     </div>
+  <% end %>
 
-    <%= render "talent_group.html", talents: talent_group(c, "Körper"), heading: "" %>
-    <%= render "talent_group.html", talents: talent_group(c, "Gesellschaft"), heading: "s" %>
-    <%= render "talent_group.html", talents: talent_group(c, "Natur"), heading: "" %>
-    <%= render "talent_group.html", talents: talent_group(c, "Wissen"), heading: "s" %>
-    <%= render "talent_group.html", talents: talent_group(c, "Handwerk"), heading: "s" %>
+  <% c = character(assigns) %>
+
+  <div class='d-flex justify-content-between mb-3'>
+    <%= for stat <- base_values() do %>
+      <button
+        class='btn btn-light btn-sm'
+        type='button'
+        phx-click='prepare'
+        phx-value-trait='<%= stat %>'
+      >
+        <strong><%= stat |> Atom.to_string() |> String.upcase() %></strong>
+        <%= Map.get(c, stat) %>
+      </button>
+    <% end %>
   </div>
+
+  <%= render "talent_group.html", talents: talent_group(c, "Körper"), heading: "" %>
+  <%= render "talent_group.html", talents: talent_group(c, "Gesellschaft"), heading: "s" %>
+  <%= render "talent_group.html", talents: talent_group(c, "Natur"), heading: "" %>
+  <%= render "talent_group.html", talents: talent_group(c, "Wissen"), heading: "s" %>
+  <%= render "talent_group.html", talents: talent_group(c, "Handwerk"), heading: "s" %>
 </div>

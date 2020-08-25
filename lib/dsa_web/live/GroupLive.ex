@@ -2,6 +2,8 @@ defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
 
+  require Logger
+
   alias Dsa.{Event, Accounts}
   alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
 
@@ -9,25 +11,16 @@ defmodule DsaWeb.GroupLive do
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
     group = Accounts.get_group!(id)
+    character_id = Enum.find(group.characters, & &1.user_id == user_id).id
 
     {:ok, socket
+    |> assign(:action, "Probe")
+    |> assign(:roll_type, "Eigenschaften")
     |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
     |> assign(:show_details, false)
-    |> assign(:character_id, Enum.find(group.characters, & &1.user_id == user_id).id)
+    |> assign(:settings, Event.change_settings(%{character_id: character_id}))
     |> assign(:user_id, user_id)}
-  end
-
-  def handle_event("activate", %{"id" => id}, socket) do
-    case Enum.find(socket.assigns.group.characters, & &1.id == String.to_integer(id)) do
-      nil ->
-        {:noreply, socket}
-
-      %{id: id, user_id: user_id} ->
-        if user_id == socket.assigns.user_id || user_id == socket.assigns.group.master_id,
-          do: {:noreply, assign(socket, :character_id, id)},
-          else: {:noreply, socket}
-    end
   end
 
   def handle_event("prepare", %{"trait" => trait}, socket) do
@@ -54,12 +47,25 @@ defmodule DsaWeb.GroupLive do
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
   end
 
+  def handle_event("select", %{"action" => action}, socket) do
+    {:noreply, assign(socket, :action, action)}
+  end
+
+  def handle_event("select", %{"roll_type" => %{"type" => type}}, socket) do
+    {:noreply, assign(socket, :roll_type, type)}
+  end
+
   def handle_event("toggle", %{"log" => _params}, socket) do
     {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
   end
 
   def handle_event("validate", %{"general_roll" => params}, socket) do
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%GeneralRoll{}, params))}
+  end
+
+  def handle_event("validate", %{"setting" => setting}, socket) do
+    Logger.debug("Changing Settings: #{inspect(setting)}")
+    {:noreply, assign(socket, :settings, Event.change_settings(setting))}
   end
 
   def handle_event("validate", %{"trait_roll" => params}, socket) do
