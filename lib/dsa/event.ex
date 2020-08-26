@@ -9,9 +9,9 @@ defmodule Dsa.Event do
 
   # Traits & Talent Rolls
 
-  def create_general_roll(attrs \\ %{}) do
+  def create_general_roll(attrs) do
     %GeneralRoll{}
-    |> GeneralRoll.changeset(attrs, :create)
+    |> GeneralRoll.changeset(attrs)
     |> Repo.insert()
   end
 

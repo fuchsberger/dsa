@@ -2,6 +2,8 @@ defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
 
+  import Ecto.Changeset, only: [get_field: 2]
+
   require Logger
 
   alias Dsa.{Event, Accounts}
@@ -85,26 +87,31 @@ defmodule DsaWeb.GroupLive do
     {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
   end
 
-  def handle_event("event", %{"general_roll" => %{"count" => count, "max" => max, "bonus" => bonus} =  params}, socket) do
-    c = active_character(socket)
-    count = String.to_integer(count)
-    max = String.to_integer(max)
-    bonus = String.to_integer(bonus)
+  def handle_event("quick-roll", _params, socket) do
 
-    params = Map.merge(params, %{
-      "result" => bonus + Enum.reduce(1..count, 0, fn _x, acc -> acc + Enum.random(1..max) end),
-      "character_id" => c.id,
-      "group_id" => c.group_id
-    })
+    c = active_character(socket)
+    count = get_field(socket.assigns.settings, :dice_count)
+    max = get_field(socket.assigns.settings, :dice_type)
+
+    params = %{
+      character_id: c.id,
+      group_id: c.group_id,
+      d1: Enum.random(1..max),
+      d2: (if count >= 2, do: Enum.random(1..max), else: nil),
+      d3: (if count >= 3, do: Enum.random(1..max), else: nil),
+      d4: (if count >= 4, do: Enum.random(1..max), else: nil),
+      d5: (if count >= 5, do: Enum.random(1..max), else: nil),
+      max: max
+    }
 
     case Event.create_general_roll(params) do
-      {:ok, _roll} ->
-        {:noreply, socket
-        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
-        |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
+      {:ok, roll} ->
+        Logger.debug("Quickroll created, roll: #{inspect(roll)}")
+        {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset_roll, changeset)}
+        Logger.error("Error occured while creating quick-roll: #{inspect(changeset)}")
+        {:noreply, socket}
     end
   end
 
@@ -187,6 +194,6 @@ defmodule DsaWeb.GroupLive do
   end
 
   defp active_character(socket) do
-    Enum.find(socket.assigns.group.characters, & &1.id == socket.assigns.character_id)
+    Enum.find(socket.assigns.group.characters, & &1.id == get_field(socket.assigns.settings, :character_id))
   end
 end
