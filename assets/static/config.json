@@ -65,6 +65,12 @@
       "css": "star",
       "code": 59395,
       "src": "fontawesome"
+    },
+    {
+      "uid": "aa4ded7a2d22e21c3cfe775efe267120",
+      "css": "roll",
+      "code": 61966,
+      "src": "fontawesome"
     }
   ]
 }

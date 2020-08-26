@@ -13,7 +13,7 @@ defmodule DsaWeb.GroupLive do
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
     group = Accounts.get_group!(id)
-    character_id = Enum.find(group.characters, & &1.user_id == user_id).id
+    character = Enum.find(group.characters, & &1.user_id == user_id)
 
     {:ok, socket
     |> assign(:action, "Probe")
@@ -21,7 +21,7 @@ defmodule DsaWeb.GroupLive do
     |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
     |> assign(:show_details, false)
-    |> assign(:settings, Event.change_settings(%{character_id: character_id}))
+    |> assign(:settings, Event.change_settings(%{character_id: character && character.id}))
     |> assign(:user_id, user_id)}
   end
 
@@ -101,7 +101,8 @@ defmodule DsaWeb.GroupLive do
       d3: (if count >= 3, do: Enum.random(1..max), else: nil),
       d4: (if count >= 4, do: Enum.random(1..max), else: nil),
       d5: (if count >= 5, do: Enum.random(1..max), else: nil),
-      max: max
+      max: max,
+      hidden: get_field(socket.assigns.settings, :hidden)
     }
 
     case Event.create_general_roll(params) do
@@ -111,6 +112,32 @@ defmodule DsaWeb.GroupLive do
 
       {:error, changeset} ->
         Logger.error("Error occured while creating quick-roll: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("trait-roll", %{"trait" => trait}, socket) do
+    c = active_character(socket)
+
+    IO.inspect String.to_atom(trait)
+
+    params = %{
+      trait: trait,
+      level: Map.get(c, String.to_atom(trait)),
+      modifier: get_field(socket.assigns.settings, :modifier),
+      w1: Enum.random(1..20),
+      w1b: Enum.random(1..20),
+      character_id: c.id,
+      group_id: c.group_id
+    }
+
+    case Event.create_trait_roll(params) do
+      {:ok, roll} ->
+        Logger.debug("Trait roll created, roll: #{inspect(roll)}")
+        {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while creating trait-roll: #{inspect(changeset)}")
         {:noreply, socket}
     end
   end
@@ -133,28 +160,6 @@ defmodule DsaWeb.GroupLive do
     })
 
     case Event.create_talent_roll(params) do
-      {:ok, _roll} ->
-        {:noreply, socket
-        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
-        |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset_roll, changeset)}
-    end
-  end
-
-  def handle_event("event", %{"trait_roll" => %{"trait" => _} = params}, socket) do
-    c = active_character(socket)
-
-    params = Map.merge(params, %{
-      "w1" => Enum.random(1..20),
-      "w1b" => Enum.random(1..20),
-      "be" => (if params["use_be"] == "true", do: c.be, else: 0),
-      "character_id" => c.id,
-      "group_id" => c.group_id
-    })
-
-    case Event.create_trait_roll(params) do
       {:ok, _roll} ->
         {:noreply, socket
         |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))

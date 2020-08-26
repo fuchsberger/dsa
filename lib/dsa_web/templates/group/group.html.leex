@@ -4,6 +4,9 @@
   no_validate: true
 ] %>
 
+<% character = Enum.find(@group.characters, & &1.id == get_field(@settings, :character_id)) %>
+<% master? = @user_id == @group.master_id %>
+
 <div class='row g-3'>
   <div class='col-lg'>
     <div class="card">
@@ -23,18 +26,29 @@
       </div>
       <%= if get_field(@settings, :action) == "Probe" do %>
         <div class='card-body'>
-          <div class='row g-2'>
-            <%# Quick Roll %>
-            <%# <div class='col-lg-2'>
-              <%= select f, :dice_count, [1, 2, 3, 4, 5], class: "form-select-sm" % >
+
+          <%# Quick Roll %>
+          <div class='row g-2 mb-2'>
+
+            <div class='col-lg-5 pb-1'>
+              <%= checkbox f, :hidden, class: "form-check-input mr-1" %>
+              <%= label f, :hidden, "versteckt würfeln" %>
+            </div>
+
+            <div class='col-lg-2'>
+              <%= select f, :dice_count, [1, 2, 3, 4, 5], class: "form-select-sm" %>
             </div>
 
             <div class='col-lg-5'>
               <div class="input-group">
-                <%= select f, :dice_type, [{"W3", 3}, {"W6", 6}, {"W12", 12}, {"W20", 20}], class: "form-select-sm" % >
+                <%= select f, :dice_type, [{"W3", 3}, {"W6", 6}, {"W12", 12}, {"W20", 20}], class: "form-select-sm" %>
                 <button class='btn btn-primary btn-sm' phx-click='quick-roll'>Schnellwurf</button>
               </div>
-            </div> %>
+            </div>
+          </div>
+
+          <div class='row g-2'>
+
 
             <div class='col-lg-3'>
               <%= label f, :modifier, [
@@ -53,27 +67,26 @@
             </div>
           </div>
 
-          <%= if get_field(@settings, :type) == "Würfel" do %>
+          <%= if get_field(@settings, :type) == "Eigenschaft" do %>
             <table class="table table-sm m-0 table-hover">
               <thead>
                 <tr>
-                  <th scope='col'>Anzahl</th>
-                  <th scope='col'>Würfel</th>
-                  <th scope='col'>Profession</th>
-                  <th scope='col'>Player</th>
+                  <th scope='col'>Eigenschaft</th>
+                  <th scope='col'></th>
+                  <th scope='col' class='text-center'>EW</th>
+                  <th scope='col' class='text-center'>Probe</th>
                 </tr>
               </thead>
               <tbody>
-                <%= for character <- @group.characters do %>
-                  <%= if character.user_id == @user_id || character.user_id == @group.master_id do %>
-                    <tr class='<%= if character.id == get_field(@settings, :character_id), do: "font-weight-bold" %>'
-                    >
-                      <td><%= radio_button(f, :character_id, character.id, disabled: character.user_id != @user_id && character.user_id != @group.master_id ) %></td>
-                      <td><%= character.name %></td>
-                      <td><%= character.profession %></td>
-                      <td><%= character.user.name %></td>
-                    </tr>
-                  <% end %>
+                <%= for {short, name} <- [{:MU, "Mut"}, {:KL, "Klugheit"}, {:IN, "Intuition"}, {:CH, "Charisma"}, {:FF, "Fingerfertigkeit"}, {:GE, "Gewandheit"}, {:KO, "Konstitution"}, {:KK, "Körperkraft"}] do %>
+                  <tr>
+                    <th scope='row'><%= name %></th>
+                    <td class='text-center'><%= short %></td>
+                    <td class='text-center'><%= Map.get(character, short) %></td>
+                    <td class='text-center'>
+                      <button class='btn btn-primary btn-sm icon-roll py-0' phx-click='trait-roll' phx-value-trait='<%= short %>'></button>
+                    </td>
+                  </tr>
                 <% end %>
               </tbody>
             </table>
@@ -83,7 +96,7 @@
 
 
 
-      <%= render "character.html", assigns %>
+      <%# if get_field(@settings, :character_id), do: render "character.html", assigns %>
     </div>
   </div>
 
@@ -106,10 +119,13 @@
           </thead>
           <tbody>
             <%= for character <- @group.characters do %>
-              <%= if character.user_id == @user_id || character.user_id == @group.master_id do %>
+              <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
                 <tr class='<%= if character.id == get_field(@settings, :character_id), do: "font-weight-bold" %>'
                 >
-                  <td><%= radio_button(f, :character_id, character.id, disabled: character.user_id != @user_id && character.user_id != @group.master_id ) %></td>
+                  <td><%= radio_button(f, :character_id, character.id,
+                    disabled:
+                      # not master and character belongs to someone else
+                      @user_id != @group.master_id && character.user_id != @user_id) %></td>
                   <td><%= character.name %></td>
                   <td><%= character.profession %></td>
                   <td><%= character.user.name %></td>
@@ -135,7 +151,43 @@
             character: character(assigns)
       end %>
     <% end %>
-    <%= render "log.html", group: @group, show_details: @show_details, user_id: @user_id %>
+
+    <%# Log %>
+    <div class="card mb-3">
+      <div class='card-header d-flex justify-content-between'>
+        <h5 class='mb-0'>Ereignislog</h5>
+        <div class="form-check mb-0">
+          <%= checkbox f, :show_details, class: "form-check-input" %>
+          <%= label f, :show_details, "Details anzeigen?", class: "form-check-label" %>
+        </div>
+      </div>
+      <ul class='list-group list-group-flush'>
+        <%= for {type, event} <- events(@group) do
+          owner? = owner?(@group, event.character_id)
+
+          case type do
+            :general_roll ->
+              render "logs/general_roll_log.html",
+                roll: event,
+                show_details?: get_field(@settings, :show_details) && (master? || owner?),
+                master?: @user_id == @group.master_id
+
+            :trait_roll ->
+              render "logs/trait_roll_log.html",
+                roll: event,
+                show_details?: get_field(@settings, :show_details) && (master? || owner?),
+                master?: @user_id == @group.master_id
+
+            :talent_roll ->
+              render "logs/talent_roll_log.html",
+                roll: event,
+                show_details?: get_field(@settings, :show_details),
+                master?: @user_id == @group.master_id,
+                owner?: owner?(@group, event.character_id)
+          end
+        end %>
+      </ul>
+    </div>
   </div>
 </div>
 </form>

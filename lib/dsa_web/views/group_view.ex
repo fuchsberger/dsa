@@ -72,8 +72,8 @@ defmodule DsaWeb.GroupView do
   end
 
   def calculate_result(%TraitRoll{} = r) do
-    res1 = r.level - r.be + r.modifier - r.w1
-    res2 = r.level - r.be + r.modifier - r.w1b
+    res1 = r.level + r.modifier - r.w1
+    res2 = r.level + r.modifier - r.w1b
 
     case r.w1 do
       1 -> if res2 >= 0, do: {res1, true, "success"}, else: {res1, nil, "success"}

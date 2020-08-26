@@ -15,9 +15,9 @@ defmodule Dsa.Event do
     |> Repo.insert()
   end
 
-  def create_trait_roll(attrs \\ %{}) do
+  def create_trait_roll(attrs) do
     %TraitRoll{}
-    |> TraitRoll.changeset(attrs, :create)
+    |> TraitRoll.changeset(attrs)
     |> Repo.insert()
   end
 

@@ -9,12 +9,13 @@ defmodule Dsa.Event.GeneralRoll do
     field :d4, :integer
     field :d5, :integer
     field :max, :integer
+    field :hidden, :boolean
     belongs_to :character, Dsa.Accounts.Character
     belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end
 
-  @fields ~w(d1 d2 d3 d4 d5 max character_id group_id)a
+  @fields ~w(d1 d2 d3 d4 d5 hidden max character_id group_id)a
 
   def changeset(roll, attrs) do
     roll
