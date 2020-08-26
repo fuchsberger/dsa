@@ -22,6 +22,17 @@ defmodule DsaWeb.GroupView do
     ]
   end
 
+  def modifier_badge(modifier) do
+    {color, symbol} =
+      cond do
+        modifier == 0 -> {"secondary", "+"}
+        modifier < 0 -> {"danger", ""}
+        modifier > 0 -> {"success", "+"}
+      end
+
+    content_tag(:span, "#{symbol}#{modifier}", class: "badge bg-#{color}")
+  end
+
   def character(assigns) do
     Enum.find(assigns.group.characters, & &1.id == get_field(assigns.settings, :character_id))
   end

@@ -62,6 +62,7 @@ defmodule DsaWeb.FormHelpers do
   def number_input(f, field, opts \\ []), do: Form.number_input(f, field, opts(f, field, opts))
   def text_input(f, field, opts \\ []), do: Form.text_input(f, field, opts(f, field, opts))
   def password_input(f, field, opts \\ []), do: Form.password_input(f, field, opts(f, field, opts))
+  def range_input(f, field, opts \\ []), do: Form.range_input(f, field, opts(f, field, opts, "form-range"))
 
   def select(f, field, options, opts \\ []),
     do: Form.select(f, field, options, opts(f, field, opts, "form-select"))

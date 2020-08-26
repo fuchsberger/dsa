@@ -24,16 +24,29 @@
       <%= if get_field(@settings, :action) == "Probe" do %>
         <div class='card-body'>
           <div class='row g-2'>
-            <div class='col-lg-2'>
-              <%= select f, :dice_count, [1, 2, 3, 4, 5], class: "form-select-sm" %>
+            <%# Quick Roll %>
+            <%# <div class='col-lg-2'>
+              <%= select f, :dice_count, [1, 2, 3, 4, 5], class: "form-select-sm" % >
             </div>
 
             <div class='col-lg-5'>
               <div class="input-group">
-                <%= select f, :dice_type, [{"W3", 3}, {"W6", 6}, {"W12", 12}, {"W20", 20}], class: "form-select-sm" %>
+                <%= select f, :dice_type, [{"W3", 3}, {"W6", 6}, {"W12", 12}, {"W20", 20}], class: "form-select-sm" % >
                 <button class='btn btn-primary btn-sm' phx-click='quick-roll'>Schnellwurf</button>
               </div>
+            </div> %>
+
+            <div class='col-lg-3'>
+              <%= label f, :modifier, [
+                content_tag(:span, "Modifier", class: "pr-1"),
+                modifier_badge(get_field(@settings, :modifier))
+              ], class: "form-label" %>
             </div>
+
+            <div class='col-lg-4 pt-1'>
+              <%= range_input f, :modifier, class: "form-range" %>
+            </div>
+
 
             <div class='col-lg-5'>
               <%= select(f, :type, ["Eigenschaft", "Körper", "Natur", "Gesellschaft", "Wissen", "Handwerk"], class: "form-select-sm") %>
