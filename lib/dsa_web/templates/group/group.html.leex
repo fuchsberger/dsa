@@ -42,7 +42,7 @@
             <div class='col-lg-5'>
               <div class="input-group">
                 <%= select f, :dice_type, [{"W3", 3}, {"W6", 6}, {"W12", 12}, {"W20", 20}], class: "form-select-sm" %>
-                <button class='btn btn-primary btn-sm' phx-click='quick-roll'>Schnellwurf</button>
+                <button class='btn btn-primary btn-sm' phx-click='quick-roll' type='button'>Schnellwurf</button>
               </div>
             </div>
           </div>
@@ -84,7 +84,7 @@
                     <td class='text-center'><%= short %></td>
                     <td class='text-center'><%= Map.get(character, short) %></td>
                     <td class='text-center'>
-                      <button class='btn btn-primary btn-sm icon-roll py-0' phx-click='trait-roll' phx-value-trait='<%= short %>'></button>
+                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' phx-value-trait='<%= short %>'></button>
                     </td>
                   </tr>
                 <% end %>
@@ -93,8 +93,6 @@
           <% end %>
         </div>
       <% end %>
-
-
 
       <%# if get_field(@settings, :character_id), do: render "character.html", assigns %>
     </div>

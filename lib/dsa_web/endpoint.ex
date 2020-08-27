@@ -10,9 +10,7 @@ defmodule DsaWeb.Endpoint do
     signing_salt: "cN2ZszZW"
   ]
 
-  socket "/socket", DsaWeb.UserSocket,
-    websocket: true,
-    longpoll: false
+  socket "/socket", DsaWeb.UserSocket, websocket: true, longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 

@@ -9,11 +9,25 @@ defmodule DsaWeb.GroupLive do
   alias Dsa.{Event, Accounts}
   alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
 
+  defp topic(group_id), do: "group:#{group_id}"
+
+  defp broadcast(socket, state) do
+    DsaWeb.Endpoint.broadcast(topic(socket.assigns.group.id), "update", state)
+  end
+
+  def handle_info(%{event: "update", payload: state}, socket) do
+    IO.inspect state
+    {:noreply, assign(socket, state)}
+  end
+
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
   def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
+
     group = Accounts.get_group!(id)
     character = Enum.find(group.characters, & &1.user_id == user_id)
+
+    DsaWeb.Endpoint.subscribe(topic(group.id))
 
     {:ok, socket
     |> assign(:action, "Probe")
@@ -61,19 +75,9 @@ defmodule DsaWeb.GroupLive do
     {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
   end
 
-  def handle_event("validate", %{"general_roll" => params}, socket) do
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%GeneralRoll{}, params))}
-  end
-
   def handle_event("validate", %{"setting" => setting}, socket) do
     Logger.debug("Changing Settings: #{inspect(setting)}")
     {:noreply, assign(socket, :settings, Event.change_settings(setting))}
-  end
-
-  def handle_event("validate", %{"trait_roll" => params}, socket) do
-    c = active_character(socket)
-    params = Map.merge(params, %{"level" => Map.get(c, String.to_atom(params["trait"]))})
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TraitRoll{}, params))}
   end
 
   def handle_event("validate", %{"talent_roll" => params}, socket) do
@@ -106,9 +110,10 @@ defmodule DsaWeb.GroupLive do
     }
 
     case Event.create_general_roll(params) do
-      {:ok, roll} ->
-        Logger.debug("Quickroll created, roll: #{inspect(roll)}")
-        {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
+      {:ok, _roll} ->
+        Logger.debug("Quickroll created.")
+        broadcast(socket, %{group: Accounts.get_group!(socket.assigns.group.id)})
+        {:noreply, socket}
 
       {:error, changeset} ->
         Logger.error("Error occured while creating quick-roll: #{inspect(changeset)}")
@@ -118,8 +123,6 @@ defmodule DsaWeb.GroupLive do
 
   def handle_event("trait-roll", %{"trait" => trait}, socket) do
     c = active_character(socket)
-
-    IO.inspect String.to_atom(trait)
 
     params = %{
       trait: trait,
