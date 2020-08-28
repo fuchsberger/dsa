@@ -2,7 +2,7 @@ defmodule DsaWeb.ManageLive do
 
   use Phoenix.LiveView
 
-  alias Dsa.{Accounts, Lore, Repo}
+  alias Dsa.{Accounts, Lore, Event, Repo}
 
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
@@ -54,6 +54,11 @@ defmodule DsaWeb.ManageLive do
   def handle_event("validate", %{"entry" => params}, socket) do
     changeset = get_changeset(socket, socket.assigns.changeset.data, params)
     {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def handle_event("remove-logs", %{"group" => id}, socket) do
+    Event.delete_logs(id)
+    {:noreply, socket}
   end
 
   def handle_event("save", %{"entry" => params}, socket) do

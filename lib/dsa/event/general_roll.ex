@@ -20,7 +20,7 @@ defmodule Dsa.Event.GeneralRoll do
   def changeset(roll, attrs) do
     roll
     |> cast(attrs, @fields)
-    |> validate_required(~w(d1 max character_id group_id)a)
+    |> validate_required(~w(d1 max hidden character_id group_id)a)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:group_id)
   end

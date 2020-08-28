@@ -2,6 +2,8 @@
 @import "./bootstrap";
 @import "./icons";
 
+#log { max-height: 500px; overflow: auto; }
+
 #trait-card label { width: 40px; }
 
 #trait-card input { text-align: center; }

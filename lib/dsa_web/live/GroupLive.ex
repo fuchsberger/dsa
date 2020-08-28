@@ -6,25 +6,21 @@ defmodule DsaWeb.GroupLive do
 
   require Logger
 
-  alias Dsa.{Event, Accounts}
+  alias Dsa.{Event, Accounts, Repo}
   alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
 
   defp topic(group_id), do: "group:#{group_id}"
 
-  defp broadcast(socket, state) do
-    DsaWeb.Endpoint.broadcast(topic(socket.assigns.group.id), "update", state)
-  end
-
-  def handle_info(%{event: "update", payload: state}, socket) do
-    IO.inspect state
-    {:noreply, assign(socket, state)}
+  def handle_info(%{event: "add-event", payload: event}, socket) do
+    {:noreply, assign(socket, :logs, [event | socket.assigns.logs])}
   end
 
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
 
-  def mount(%{"id" => id}, %{"user_id" => user_id}, socket) do
+  def mount(%{"id" => group_id}, %{"user_id" => user_id}, socket) do
 
-    group = Accounts.get_group!(id)
+    {logs, group} = get_initial_data(group_id)
+
     character = Enum.find(group.characters, & &1.user_id == user_id)
 
     DsaWeb.Endpoint.subscribe(topic(group.id))
@@ -34,9 +30,22 @@ defmodule DsaWeb.GroupLive do
     |> assign(:roll_type, "Eigenschaften")
     |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
+    |> assign(:logs, logs)
     |> assign(:show_details, false)
     |> assign(:settings, Event.change_settings(%{character_id: character && character.id}))
     |> assign(:user_id, user_id)}
+  end
+
+  def get_initial_data(group_id) do
+    group = Accounts.get_group!(group_id)
+
+    logs =
+      group.trait_rolls ++ group.talent_rolls ++ group.general_rolls
+      |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
+
+    group = Map.drop(group, [:general_rolls, :trait_rolls, :talent_rolls])
+
+    {logs, group}
   end
 
   def handle_event("prepare", %{"trait" => trait}, socket) do
@@ -110,9 +119,10 @@ defmodule DsaWeb.GroupLive do
     }
 
     case Event.create_general_roll(params) do
-      {:ok, _roll} ->
+      {:ok, roll} ->
+        roll = Repo.preload(roll, :character)
         Logger.debug("Quickroll created.")
-        broadcast(socket, %{group: Accounts.get_group!(socket.assigns.group.id)})
+        DsaWeb.Endpoint.broadcast(topic(roll.group_id), "add-event", roll)
         {:noreply, socket}
 
       {:error, changeset} ->
@@ -136,8 +146,10 @@ defmodule DsaWeb.GroupLive do
 
     case Event.create_trait_roll(params) do
       {:ok, roll} ->
-        Logger.debug("Trait roll created, roll: #{inspect(roll)}")
-        {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
+        roll = Repo.preload(roll, :character)
+        Logger.debug("Trait roll created.")
+        DsaWeb.Endpoint.broadcast(topic(roll.group_id), "add-event", roll)
+        {:noreply, socket}
 
       {:error, changeset} ->
         Logger.error("Error occured while creating trait-roll: #{inspect(changeset)}")
@@ -171,30 +183,6 @@ defmodule DsaWeb.GroupLive do
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset_roll, changeset)}
     end
-  end
-
-  def handle_event("delete", %{"general_roll" => id}, socket) do
-    socket.assigns.group.general_rolls
-    |> Enum.find(& &1.id == String.to_integer(id))
-    |> Event.delete_roll!()
-
-    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
-  end
-
-  def handle_event("delete", %{"trait_roll" => id}, socket) do
-    socket.assigns.group.trait_rolls
-    |> Enum.find(& &1.id == String.to_integer(id))
-    |> Event.delete_roll!()
-
-    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
-  end
-
-  def handle_event("delete", %{"talent_roll" => id}, socket) do
-    socket.assigns.group.talent_rolls
-    |> Enum.find(& &1.id == String.to_integer(id))
-    |> Event.delete_roll!()
-
-    {:noreply, assign(socket, :group, Accounts.get_group!(socket.assigns.group.id))}
   end
 
   def handle_event("cancel", _params, socket) do

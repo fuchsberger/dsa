@@ -1,6 +1,6 @@
 <% {res, critical, color} = calculate_result(@roll) %>
 
-<li class="list-group-item">
+<li id='log-trait-roll-<%= @roll.id %>' class="list-group-item">
   <p class='mb-0'>
     <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, @roll.skill.name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
   </p>
@@ -14,8 +14,5 @@
       Würfel: <span class="badge bg-primary"><%= "#{@roll.w1}|#{@roll.w2}|#{@roll.w3}" %></span>
       EFF: <span class="badge bg-<%= color %>"><%= res %></span>
     </small>
-    <%= if @master? do %>
-      <button class='btn btn-sm btn-light float-right' phx-click='delete' phx-value-talent_roll='<%= @roll.id %>'>entfernen</button>
-    <% end %>
   <% end %>
 </li>

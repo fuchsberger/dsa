@@ -37,21 +37,14 @@ defmodule DsaWeb.GroupView do
     Enum.find(assigns.group.characters, & &1.id == get_field(assigns.settings, :character_id))
   end
 
-  def events(group) do
-    group.trait_rolls ++ group.talent_rolls ++ group.general_rolls
-    |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
-    |> Enum.map(fn event ->
-      case event do
-        %GeneralRoll{} -> {:general_roll, event}
-        %TraitRoll{} -> {:trait_roll, event}
-        %TalentRoll{} -> {:talent_roll, event}
-      end
-    end)
-  end
-
   def modifier_options(range), do: Enum.map(range, & {&1, &1})
 
-  def owner?(group, character_id), do: Enum.any?(group.characters, & &1.id == character_id)
+  def owner?(group, user_id, character_id) do
+    group.characters
+    |> Enum.filter(& &1.user_id == user_id)
+    |> Enum.map(& &1.id)
+    |> Enum.member?(character_id)
+  end
 
   def character_options(group, user_id) do
     master? = group.master_id == user_id

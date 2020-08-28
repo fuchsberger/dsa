@@ -10,6 +10,7 @@ defmodule DsaWeb.ManageView do
     ~E"""
     <th scope='col'>Name</th>
     <th scope='col'>Meister</th>
+    <th scope='col'></th>
     <th scope='col' class='text-center'>Aktionen</th>
     """
   end
@@ -40,6 +41,14 @@ defmodule DsaWeb.ManageView do
     ~E"""
     <th scope='row'><%= group.name %></th>
     <td><%= group.master.name %></td>
+    <td>
+      <button
+        type='button'
+        class='btn btn-sm py-0 btn-light text-primary'
+        phx-click='remove-logs'
+        phx-value-group='<%= group.id %>'
+      >remove logs</button>
+    </td>
     <%= submit_cell(group.id) %>
     """
   end
@@ -75,6 +84,9 @@ defmodule DsaWeb.ManageView do
     <td>
       <%= number_input form, :master_id, class: "form-control-sm" %>
       <%= error_tag form, :master_id %>
+    </td>
+    <td>
+      Hi
     </td>
     <%= action_cell() %>
     """
