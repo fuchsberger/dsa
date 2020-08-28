@@ -4,7 +4,7 @@ defmodule Dsa.MixProject do
   def project do
     [
       app: :dsa,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
