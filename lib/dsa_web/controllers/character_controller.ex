@@ -1,13 +1,15 @@
 defmodule DsaWeb.CharacterController do
   use DsaWeb, :controller
 
-  alias Dsa.Accounts
+  alias Dsa.{Accounts, Lore}
+  alias Dsa.Accounts.CharacterSkill
 
   def index(conn, _params, _user), do: render conn, "index.html"
 
   def new(conn, _params, _user) do
     render conn, "new.html",
       changeset: Accounts.change_character(%Accounts.Character{}),
+      cast_changeset: nil,
       groups: Accounts.list_groups()
   end
 
@@ -24,9 +26,38 @@ defmodule DsaWeb.CharacterController do
     end
   end
 
+  def add_skill(conn, %{"character_skill" => params}, user) do
+    # TODO: check if character_id belongs to current user
+    case Accounts.add_skill(params) do
+      {:ok, cskill} ->
+        conn
+        |> put_flash(:info, "Zauber / Liturgie hinzugefügt!")
+        |> redirect(to: Routes.character_path(conn, :edit, cskill.character_id))
+
+      {:error, changeset} ->
+        character = Accounts.get_user_character!(user, Ecto.Changeset.get_field(changeset, :character_id))
+
+        render conn, "edit.html",
+          changeset: Accounts.change_character(character),
+          cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
+          cast_options: cast_options(character),
+          groups: Accounts.list_groups()
+    end
+  end
+
   def edit(conn, %{"id" => id}, user) do
-    changeset = user |> Accounts.get_user_character!(id) |> Accounts.change_character()
-    render conn, "edit.html", changeset: changeset, groups: Accounts.list_groups()
+    character = Accounts.get_user_character!(user, id)
+
+    render conn, "edit.html",
+      changeset: Accounts.change_character(character),
+      cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
+      cast_options: cast_options(character),
+      groups: Accounts.list_groups()
+  end
+
+  defp cast_options(character) do
+    character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)
+    Enum.reject(Lore.cast_options(), fn {_, id} -> Enum.member?(character_skill_ids, id) end)
   end
 
   def update(conn, %{"id" => id, "character" => params}, user) do
@@ -35,13 +66,16 @@ defmodule DsaWeb.CharacterController do
 
     case Accounts.update_character(character, params) do
       {:ok, character} ->
-        changeset =
-          character
-          |> Dsa.Repo.preload([:group, character_skills: :skill])
-          |> Accounts.change_character()
+        character = Dsa.Repo.preload(character, [:group, character_skills: :skill])
+
         conn
         |> put_flash(:info, "Character updated successfully.")
-        |> render("edit.html", changeset: changeset, groups: groups)
+        |> render("edit.html",
+          changeset: Accounts.change_character(character),
+          cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
+          cast_options: cast_options(character),
+          groups: groups
+        )
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset, groups: groups)
     end
@@ -56,6 +90,14 @@ defmodule DsaWeb.CharacterController do
     conn
     |> put_flash(:info, "Character deleted successfully.")
     |> redirect(to: Routes.character_path(conn, :index))
+  end
+
+  def remove_skill(conn, %{"character_id" => id, "skill_id" => skill_id}, _current_user) do
+    Accounts.delete_character_skill!(id, skill_id)
+
+    conn
+    |> put_flash(:info, "Zauber / Liturgie entfernt.")
+    |> redirect(to: Routes.character_path(conn, :edit, id))
   end
 
   def action(conn, _) do

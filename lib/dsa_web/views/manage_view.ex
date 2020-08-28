@@ -57,7 +57,7 @@ defmodule DsaWeb.ManageView do
     ~E"""
     <td><%= skill.category %></td>
     <th scope='row'><%= skill.name %></th>
-    <td class='text-center'><small><%= skill.e1 %>/<%= skill.e3 %>/<%= skill.e3 %></small></td>
+    <td class='text-center'><small><%= skill.e1 %>/<%= skill.e2 %>/<%= skill.e3 %></small></td>
     <td class='text-center'><%= skill.sf %></td>
     <td class='text-center'><%= be(skill.be) %></td>
     <%= submit_cell(skill.id) %>

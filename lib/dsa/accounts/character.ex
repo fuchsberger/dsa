@@ -59,10 +59,4 @@ defmodule Dsa.Accounts.Character do
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
   end
-
-  def changeset_update_skills(character, skills) do
-    character
-    |> cast(%{}, @fields)
-    |> put_assoc(:skills, skills)
-  end
 end

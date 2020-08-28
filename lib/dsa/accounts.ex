@@ -103,7 +103,7 @@ defmodule Dsa.Accounts do
         |> Repo.all()
         |> Enum.each(& add_combat_skill!(character.id, &1))
 
-        Skill
+        from(s in Skill, where: s.category != "Zauber" and s.category != "Liturgie")
         |> Repo.all()
         |> Enum.each(& add_skill!(character.id, &1))
 
@@ -122,9 +122,14 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def delete_character!(character), do: Repo.delete!(character)
+  # def add_character_skill(%Character{} = character, params) do
+  #   character
+  #   |> Ecto.Changeset.change()
+  #   |> Ecto.Changeset.put_assoc(:character_skills, [%Comment{body: "so-so example!"} | post.comments])
+  #   |> Repo.update!()
+  # end
 
-  def change_active_character(attrs \\ %{}), do: Character.active_changeset(%Character{}, attrs)
+  def delete_character!(character), do: Repo.delete!(character)
 
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
@@ -150,9 +155,21 @@ defmodule Dsa.Accounts do
     |> Repo.insert!()
   end
 
+  def add_skill(params) do
+    %CharacterSkill{}
+    |> CharacterSkill.changeset(params)
+    |> Repo.insert()
+  end
+
   def add_skill!(character_id, skill) do
     %CharacterSkill{}
     |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill.id})
     |> Repo.insert!()
+  end
+
+  def delete_character_skill!(character_id, skill_id) do
+    from(s in CharacterSkill, where: s.character_id == ^character_id and s.skill_id == ^skill_id)
+    |> Repo.one!()
+    |> Repo.delete!()
   end
 end

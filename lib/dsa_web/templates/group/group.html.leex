@@ -61,7 +61,7 @@
 
 
             <div class='col-lg-5'>
-              <%= select(f, :type, ["Eigenschaft", "Körper", "Natur", "Gesellschaft", "Wissen", "Handwerk"], class: "form-select-sm") %>
+              <%= select(f, :type, ["Eigenschaft" | Enum.map(character.character_skills, & &1.skill.category) |> Enum.uniq()], class: "form-select-sm") %>
             </div>
           </div>
 

@@ -148,6 +148,113 @@
           <%= render "panel_talent.html", form: f, category: "Handwerk" %>
         </div>
       </div>
+      <% zauber_forms = form_group(f, "Zauber") %>
+      <%= if Enum.count(zauber_forms) > 0 do %>
+        <div class="card mb-3">
+          <h5 class='card-header'>Zauber</h5>
+          <div class="card-body tab-content p-0">
+            <table class='table table-sm mb-0'>
+              <thead>
+                <tr>
+                  <th scope='col'>Name</th>
+                  <th scope='col' class='text-center'>Probe</th>
+                  <th scope='col' class='text-center'></th>
+                  <th scope='col' class='text-center'>ST</th>
+                </tr>
+              </thead>
+              <tbody>
+              <%= for fs <- zauber_forms do %>
+                <tr>
+                  <td>
+                    <%= hidden_inputs_for(fs) %>
+                    <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                  </td>
+                  <td class='text-center'>
+                    <small>
+                      <em><%= fs.data.skill.e1 %></em> /
+                      <em><%= fs.data.skill.e2 %></em> /
+                      <em><%= fs.data.skill.e3 %></em>
+                    </small>
+                  </td>
+                  <td class='text-center'>
+                    <%= button icon("remove", class: "text-danger"),
+                      to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                      class: "btn btn-sm py-0 btn-light",
+                      method: :delete,
+                      data_confirm: "Are you sure?"
+                    %>
+                  </td>
+                  <td>
+                    <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+
+      <% forms = form_group(f, "Liturgie") %>
+      <%= if Enum.count(forms) > 0 do %>
+        <div class="card mb-3">
+          <h5 class='card-header'>Liturgien</h5>
+          <div class="card-body tab-content p-0">
+            <table class='table table-sm mb-0'>
+              <thead>
+                <tr>
+                  <th scope='col'>Name</th>
+                  <th scope='col' class='text-center'>Probe</th>
+                  <th scope='col' class='text-center'></th>
+                  <th scope='col' class='text-center'>ST</th>
+                </tr>
+              </thead>
+              <tbody>
+              <%= for fs <- forms do %>
+                <tr>
+                  <td>
+                    <%= hidden_inputs_for(fs) %>
+                    <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                  </td>
+                  <td class='text-center'>
+                    <small>
+                      <em><%= fs.data.skill.e1 %></em> /
+                      <em><%= fs.data.skill.e2 %></em> /
+                      <em><%= fs.data.skill.e3 %></em>
+                    </small>
+                  </td>
+                  <td class='text-center'>
+                    <%= button icon("remove", class: "text-danger"),
+                      to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                      class: "btn btn-sm py-0 btn-light",
+                      method: :delete,
+                      data_confirm: "Are you sure?"
+                    %>
+                  </td>
+                  <td>
+                    <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%= form_for @cast_changeset, Routes.character_path(@conn, :add_skill), [novalidate: true], fn f -> %>
+  <%= hidden_input f, :character_id, value: Ecto.Changeset.get_field(@changeset, :id) %>
+  <div class='row g-2'>
+    <div class='col-lg-6'>
+    </div>
+    <div class='col-lg-4'>
+      <%= select f, :skill_id, @cast_options, class: "form-select", prompt: "Zauber / Liturgie hinzufügen" %>
+    </div>
+    <div class='col-lg-2'>
+      <%= submit "hinzufügen", class: "btn btn-primary w-100" %>
     </div>
   </div>
 <% end %>
