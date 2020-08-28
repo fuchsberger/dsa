@@ -88,6 +88,47 @@
                 <% end %>
               </tbody>
             </table>
+          <% else %>
+            <table class="table table-sm m-0 table-hover">
+              <thead>
+                <tr>
+                  <th scope='col'>Talent</th>
+                  <th scope='col' class='text-center'>Probe</th>
+                  <th scope='col' class='text-center'>FW</th>
+                  <th scope='col' class='text-center'>R</th>
+                  <th scope='col' class='text-center'><s>BE</s></th>
+                  <th scope='col' class='text-center'>BE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for cskill <- Enum.filter(character.character_skills, & &1.skill.category == get_field(@settings, :type)) |> Enum.sort_by(& &1.skill.name) do %>
+                  <tr>
+                    <th scope='row'><%= cskill.skill.name %></th>
+                    <td class='text-center'>
+                      <small>
+                      <%= cskill.skill.e1 %>/<%= cskill.skill.e2 %>/<%= cskill.skill.e3 %>
+                      </small>
+                    </td>
+                    <td class='text-center'><%= cskill.level %></td>
+
+                    <td class='text-center'>
+                      <% {allowed?, val} = routine_possible?(character, cskill, get_field(@settings, :modifier)) %>
+                      <%= if allowed? do %>
+                        <button class='btn btn-light text-success btn-sm py-0' phx-click='routine' phx-value-talent='<%= cskill.skill.id %>'><strong> <%= "Q#{val}" %></strong></button>
+                      <% else %>
+                        <%= val %>
+                      <% end %>
+                    </td>
+                    <td class='text-center'>
+                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='talent-roll' phx-value-talent='<%= cskill.skill.id %>'></button>
+                    </td>
+                    <td class='text-center'>
+                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='talent-roll' phx-value-talent='<%= cskill.skill.id %>'></button>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           <% end %>
         </div>
       <% end %>
@@ -132,21 +173,6 @@
         </table>
       </div>
     </div>
-
-    <%= if @changeset_roll do %>
-      <%# case @changeset_roll.data do
-        %Dsa.Event.GeneralRoll{} ->
-          render "actions/general_roll_action.html", assigns
-
-        %Dsa.Event.TraitRoll{} ->
-          render "actions/trait_roll_action.html", assigns
-
-        %Dsa.Event.TalentRoll{} ->
-          render "actions/talent_roll_action.html",
-            changeset: @changeset_roll,
-            character: character(assigns)
-      end %>
-    <% end %>
 
     <%# Log %>
     <div class="card mb-3">

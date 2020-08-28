@@ -4,7 +4,7 @@
     hat <%= Enum.count([@roll.d1, @roll.d2, @roll.d3, @roll.d4, @roll.d5], & not is_nil(&1)) %>
      <span class="badge bg-secondary">W<%= @roll.max %></span> gewürfelt.
 
-    <%= if @show_details? do %>
+    <%= if not @roll.hidden || @show_details? do %>
       <span class="badge bg-secondary"><%= @roll.d1 %></span>
       <%= unless is_nil(@roll.d2), do: content_tag :span, @roll.d2, class: "badge bg-secondary" %>
       <%= unless is_nil(@roll.d3), do: content_tag :span, @roll.d3, class: "ml-1 badge bg-secondary" %>

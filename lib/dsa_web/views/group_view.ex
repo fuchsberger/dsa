@@ -95,6 +95,35 @@ defmodule DsaWeb.GroupView do
     end
   end
 
+  def routine_possible?(character, cskill, modifier) do
+    t1 = Map.get(character, String.to_atom(cskill.skill.e1))
+    t2 = Map.get(character, String.to_atom(cskill.skill.e1))
+    t3 = Map.get(character, String.to_atom(cskill.skill.e1))
+    fw = cskill.level
+
+    cond do
+      Enum.min([t1, t2, t3]) < 13 -> {false, nil}
+      modifier >= 3 && fw >= 1 -> {true, quality(fw/2)}
+      modifier >= 2 && fw >= 4 -> {true, quality(fw/2)}
+      modifier >= 1 && fw >= 7 -> {true, quality(fw/2)}
+      modifier >= 0 && fw >= 10 -> {true, quality(fw/2)}
+      modifier >= -1 && fw >= 13 -> {true, quality(fw/2)}
+      modifier >= -2 && fw >= 16 -> {true, quality(fw/2)}
+      modifier >= -3 && fw >= 19 -> {true, quality(fw/2)}
+      true ->
+        cond do
+          fw >= 19 -> {false, -3}
+          fw >= 16 -> {false, -2}
+          fw >= 13 -> {false, -1}
+          fw >= 10 -> {false, 0}
+          fw >= 7 -> {false, 1}
+          fw >= 4 -> {false, 2}
+          fw >= 1 -> {false, 3}
+          true -> {false, nil}
+        end
+    end
+  end
+
   def talent_group(character, category) do
     Enum.filter(character.character_skills, & &1.skill.category == category)
   end
