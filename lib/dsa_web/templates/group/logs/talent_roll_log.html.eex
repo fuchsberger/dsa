@@ -4,7 +4,7 @@
   <p class='mb-0'>
     <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, @roll.skill.name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
   </p>
-  <%= if @show_details? && (@master? || @owner?) do %>
+  <%= if @show_details? do %>
     <small>
       FW: <span class="badge bg-dark"><%= @roll.level %></span>
       <%= if @roll.be > 0 do %>

@@ -27,7 +27,7 @@ defmodule Dsa.Event do
 
   def create_talent_roll(attrs \\ %{}) do
     %TalentRoll{}
-    |> TalentRoll.changeset(attrs, :create)
+    |> TalentRoll.changeset(attrs)
     |> Repo.insert()
   end
 
