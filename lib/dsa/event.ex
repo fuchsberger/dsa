@@ -5,13 +5,17 @@ defmodule Dsa.Event do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
-  alias Dsa.Event.{GeneralRoll, Setting, TalentRoll, TraitRoll}
-
-  # Traits & Talent Rolls
+  alias Dsa.Event.{GeneralRoll, Routine, Setting, TalentRoll, TraitRoll}
 
   def create_general_roll(attrs) do
     %GeneralRoll{}
     |> GeneralRoll.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_routine(attrs) do
+    %Routine{}
+    |> Routine.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -27,13 +31,9 @@ defmodule Dsa.Event do
     |> Repo.insert()
   end
 
-  def change_roll(roll, attrs \\ %{})
-  def change_roll(%GeneralRoll{} = roll, attrs), do: GeneralRoll.changeset(roll, attrs)
-  def change_roll(%TraitRoll{} = roll, attrs), do: TraitRoll.changeset(roll, attrs)
-  def change_roll(%TalentRoll{} = roll, attrs), do: TalentRoll.changeset(roll, attrs)
-
   def delete_logs(group_id) do
     from(r in GeneralRoll, where: r.group_id == ^group_id) |> Repo.delete_all
+    from(r in Routine, where: r.group_id == ^group_id) |> Repo.delete_all
     from(r in TraitRoll, where: r.group_id == ^group_id) |> Repo.delete_all
     from(r in TalentRoll, where: r.group_id == ^group_id) |> Repo.delete_all
   end

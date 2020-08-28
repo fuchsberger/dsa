@@ -28,7 +28,6 @@ defmodule DsaWeb.GroupLive do
     {:ok, socket
     |> assign(:action, "Probe")
     |> assign(:roll_type, "Eigenschaften")
-    |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
     |> assign(:group, group)
     |> assign(:logs, logs)
     |> assign(:show_details, false)
@@ -40,18 +39,12 @@ defmodule DsaWeb.GroupLive do
     group = Accounts.get_group!(group_id)
 
     logs =
-      group.trait_rolls ++ group.talent_rolls ++ group.general_rolls
+      group.trait_rolls ++ group.talent_rolls ++ group.general_rolls ++ group.routine
       |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
 
-    group = Map.drop(group, [:general_rolls, :trait_rolls, :talent_rolls])
+    group = Map.drop(group, [:general_rolls, :trait_rolls, :talent_rolls, :routine])
 
     {logs, group}
-  end
-
-  def handle_event("prepare", %{"trait" => trait}, socket) do
-    c = active_character(socket)
-    params = %{trait: trait, level: Map.get(c, String.to_atom(trait))}
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TraitRoll{}, params))}
   end
 
   def handle_event("prepare", %{"talent" => id}, socket) do
@@ -69,7 +62,7 @@ defmodule DsaWeb.GroupLive do
       use_be: cskill.skill.be
     }
 
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
+    {:noreply, socket}
   end
 
   def handle_event("select", %{"action" => action}, socket) do
@@ -97,7 +90,7 @@ defmodule DsaWeb.GroupLive do
       "t2" => Map.get(c, String.to_atom(params["e2"])),
       "t3" => Map.get(c, String.to_atom(params["e3"])),
     })
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%TalentRoll{}, params))}
+    {:noreply, socket}
   end
 
   def handle_event("quick-roll", _params, socket) do
@@ -127,6 +120,30 @@ defmodule DsaWeb.GroupLive do
 
       {:error, changeset} ->
         Logger.error("Error occured while creating quick-roll: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("routine", %{"talent" => skill_id}, socket) do
+    c = active_character(socket)
+    cskill = Enum.find(c.character_skills, & &1.skill.id == String.to_integer(skill_id))
+
+    params = %{
+      fw: Kernel.trunc(cskill.level / 2),
+      skill_id: cskill.skill.id,
+      character_id: c.id,
+      group_id: c.group_id
+    }
+
+    case Event.create_routine(params) do
+      {:ok, routine} ->
+        routine = Repo.preload(routine, :character)
+        Logger.debug("Routine created.")
+        DsaWeb.Endpoint.broadcast(topic(routine.group_id), "add-event", routine)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while creating routine: #{inspect(changeset)}")
         {:noreply, socket}
     end
   end
@@ -177,16 +194,11 @@ defmodule DsaWeb.GroupLive do
     case Event.create_talent_roll(params) do
       {:ok, _roll} ->
         {:noreply, socket
-        |> assign(:changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))
         |> assign(:group, Accounts.get_group!(socket.assigns.group.id))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset_roll, changeset)}
     end
-  end
-
-  def handle_event("cancel", _params, socket) do
-    {:noreply, assign(socket, :changeset_roll, Event.change_roll(%GeneralRoll{}, %{}))}
   end
 
   defp active_character(socket) do

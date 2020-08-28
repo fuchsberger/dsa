@@ -3,7 +3,7 @@ defmodule DsaWeb.GroupView do
 
   import Ecto.Changeset, only: [get_field: 2]
 
-  alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll}
+  alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll, Routine}
 
   def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
 

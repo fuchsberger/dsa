@@ -139,6 +139,7 @@ defmodule Dsa.Accounts do
       general_rolls: [:character],
       talent_rolls: [:character, :skill],
       trait_rolls: [:character],
+      routine: [:character, :skill],
       characters: [:user, character_skills: [:skill]]
     ]), id)
   end

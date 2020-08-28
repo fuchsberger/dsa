@@ -1,0 +1,6 @@
+<li id='log-routine-<%= @routine.id %>' class="list-group-item">
+  <p class='mb-0'>
+    <span class="badge bg-secondary"><%= @routine.character.name %></span>
+    hat eine Routineprobe auf <span class="badge bg-info"><%= @routine.skill.name %></span> abgelegt. <span class="badge bg-success"><%= quality(@routine.fw) %></span>
+  </p>
+</li>

@@ -188,6 +188,9 @@
           owner? = owner?(@group, @user_id, event.character_id)
 
           case event do
+            %Routine{} ->
+              render "logs/routine_log.html", routine: event
+
             %GeneralRoll{} ->
               render "logs/general_roll_log.html",
                 show_details?: owner? || master?,
