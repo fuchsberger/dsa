@@ -72,7 +72,7 @@ defmodule DsaWeb.GroupLive do
 
     case Accounts.update_character(socket.assigns.character.data, params, :combat) do
       {:ok, character} ->
-        character = Repo.preload(character, [:user, :armor, character_skills: [:skill]])
+        character = Repo.preload(character, [:armor], force: true)
         Logger.debug("Character updated.")
         DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
         {:noreply, socket}

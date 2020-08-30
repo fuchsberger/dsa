@@ -21,7 +21,7 @@
 ] %>
 
 <table class='table table-sm'>
-  <thead><tr><%= header @live_action %></tr></thead>
+  <thead><tr><%= header @live_action, @admin %></tr></thead>
   <tbody>
     <%= if new?(@changeset), do: form @live_action, f %>
     <%= for entry <- entries(@live_action, @armors, @skills, @groups, @users) do %>
@@ -33,7 +33,7 @@
             end
           %>
         <% else %>
-          <%= row(@live_action, entry) %>
+          <%= row @live_action, entry, @admin %>
         <% end %>
       </tr>
     <% end %>

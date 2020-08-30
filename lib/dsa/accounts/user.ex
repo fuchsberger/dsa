@@ -33,10 +33,11 @@ defmodule Dsa.Accounts.User do
     end
   end
 
+  @fields ~w(admin name username)a
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :username])
-    |> validate_required([:name, :username])
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
     |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:username, min: 2, max: 15)
   end

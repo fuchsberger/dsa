@@ -2,6 +2,11 @@
 @import "./bootstrap";
 @import "./icons";
 
+
+.table-xs > :not(caption) > * > * {
+  padding: 0rem 0rem;
+}
+
 #log { max-height: 500px; overflow: auto; }
 
 #trait-card label { width: 40px; }

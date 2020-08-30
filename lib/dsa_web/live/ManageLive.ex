@@ -61,16 +61,18 @@ defmodule DsaWeb.ManageLive do
 
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
-  def mount(_params, _session, socket) do
+  def mount(_params, %{"user_id" => user_id}, socket) do
 
     DsaWeb.Endpoint.subscribe(@topic)
+    users = Accounts.list_users()
 
     {:ok, socket
     |> assign(:changeset, nil)
     |> assign(:armors, Lore.list_armors())
     |> assign(:skills, Lore.list_skills())
     |> assign(:groups, Accounts.list_groups())
-    |> assign(:users, Accounts.list_users())}
+    |> assign(:users, users)
+    |> assign(:admin, Enum.find(users, & &1.id == user_id).admin)}
   end
 
   def handle_params(_params, _session, socket) do
@@ -134,6 +136,7 @@ defmodule DsaWeb.ManageLive do
 
     entry =
       case socket.assigns.live_action do
+        :armors -> socket.assigns.armors
         :groups -> socket.assigns.groups
         :skills -> socket.assigns.skills
         :users -> socket.assigns.users

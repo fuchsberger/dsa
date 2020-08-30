@@ -4,7 +4,7 @@ defmodule DsaWeb.SessionController do
   def index(conn, _) do
     if is_nil(conn.assigns.current_user),
       do: redirect(conn, to: Routes.session_path(conn, :new)),
-      else: redirect(conn, to: Routes.live_path(conn, DsaWeb.GroupLive, 1))
+      else: redirect(conn, to: Routes.group_path(conn, :roll, 1))
   end
 
   def new(conn, _) do
@@ -17,7 +17,7 @@ defmodule DsaWeb.SessionController do
         conn
         |> DsaWeb.Auth.login(user)
         |> put_flash(:info, "Welcome back!")
-        |> redirect(to: Routes.live_path(conn, DsaWeb.GroupLive, 1))
+        |> redirect(to: Routes.group_path(conn, :roll, 1))
 
       {:error, _reason} ->
         conn

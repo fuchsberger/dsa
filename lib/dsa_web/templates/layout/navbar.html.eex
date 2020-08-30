@@ -40,23 +40,34 @@
               <% end %>
             </ul>
           </li>
-          <%= nav_dropdown "Verwalten" do %>
-            <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
-            <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
-            <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>
-          <% end %>
+          <li class='nav-item dropdown'>
+            <a href='#' id='manage_dropdown' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'>Verwalten</a>
+            <ul class="dropdown-menu" aria-labelledby="manage_dropdown">
+              <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
+              <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
+              <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>
+              <%= link "Rüstungen", to: Routes.manage_path(@conn, :armors), class: "dropdown-item" %>
+            </ul>
+          </li>
         <% end %>
       </ul>
 
       <ul class="navbar-nav mb-2 mb-lg-0">
         <%= if @current_user do %>
-          <li class="nav-item navbar-text"><strong><%= @current_user.username %></strong></li>
-          <li class="nav-item">
-            <%= link "Log out",
-              to: Routes.session_path(@conn, :delete, @current_user),
-              class: "nav-link",
-              method: "delete"
-            %>
+          <li class='nav-item dropdown'>
+            <a href='#' id='user_dropdown' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'><strong><%= @current_user.username %></strong></a>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
+              <%= link "Passwort ändern",
+                to: Routes.session_path(@conn, :delete, @current_user),
+                class: "dropdown-item",
+                method: "delete"
+              %>
+              <%= link "Ausloggen",
+                to: Routes.session_path(@conn, :delete, @current_user),
+                class: "dropdown-item",
+                method: "delete"
+              %>
+            </ul>
           </li>
         <% else %>
           <li class="nav-item">

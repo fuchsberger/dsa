@@ -1,7 +1,44 @@
 
 <% master? = @user_id == @group.master_id %>
 
-<div class='row g-3'>
+<%= f = form_for :character, "#", phx_change: "select_character", phx_submit: nil %>
+<div class="table-responsive">
+  <table class="table table-xs table-hover">
+    <thead>
+      <tr>
+        <%= unless is_nil(@character), do: content_tag :th, "", scope: "col" %>
+        <th scope='col'>Charakter</th>
+        <th scope='col'>Profession</th>
+        <th scope='col'>Player</th>
+        <th scope='col'>Rüstung</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for character <- @group.characters do %>
+        <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
+          <tr>
+            <%= unless is_nil(@character) do %>
+              <td>
+                <%= radio_button(f, :id, character.id,
+                  # not master and character belongs to someone else
+                  disabled: @user_id != @group.master_id && character.user_id != @user_id,
+                  checked: character.id == get_field(@character, :id))
+                %>
+              </td>
+            <% end %>
+            <td><%= character.name %></td>
+            <td><%= character.profession %></td>
+            <td><%= character.user.name %></td>
+            <td><%= character.armor && character.armor.name %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+</form>
+
+<div class='row g-2'>
   <%= unless is_nil(@character) do %>
   <div class='col-lg'>
     <div class="card">
@@ -13,42 +50,6 @@
           <%= tab "Probe", Routes.group_path(@socket, :roll, @group.id), @live_action == :roll %>
         </ul>
       </div>
-
-      <%# Live Action: Overview %>
-      <%= if @live_action == :index do %>
-        <div class='card-body'>
-          <%= f = form_for :character, "#", phx_change: "select_character", phx_submit: nil %>
-            <table class="table table-sm m-0 table-hover">
-              <thead>
-                <tr>
-                  <th scope='col'></th>
-                  <th scope='col'>Name</th>
-                  <th scope='col'>Profession</th>
-                  <th scope='col'>Player</th>
-                </tr>
-              </thead>
-              <tbody>
-                <%= for character <- @group.characters do %>
-                  <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
-                    <tr class='<%= if character.id == get_field(@character, :id), do: "font-weight-bold" %>'>
-                      <td>
-                        <%= radio_button(f, :id, character.id,
-                          # not master and character belongs to someone else
-                          disabled: @user_id != @group.master_id && character.user_id != @user_id,
-                          checked: character.id == get_field(@character, :id))
-                        %>
-                      </td>
-                      <td><%= character.name %></td>
-                      <td><%= character.profession %></td>
-                      <td><%= character.user.name %></td>
-                    </tr>
-                  <% end %>
-                <% end %>
-              </tbody>
-            </table>
-          </form>
-        </div>
-      <% end %>
 
       <%# Action: Kampf %>
       <%= if @live_action == :combat do %>

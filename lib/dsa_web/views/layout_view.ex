@@ -17,21 +17,4 @@ defmodule DsaWeb.LayoutView do
         """
     end
   end
-
-  def nav_dropdown(title, do: block) do
-    id= "drop_#{slugify(title)}"
-
-    ~E"""
-      <li class='nav-item dropdown'>
-        <a href='#' id='<%= id %>' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'><%= title %></a>
-        <ul class="dropdown-menu" aria-labelledby="<%= id %>"><%= block %></ul>
-      </li>
-    """
-  end
-
-  defp slugify(str) do
-    str
-    |> String.downcase()
-    |> String.replace(~r/[^\w-]+/u, "-")
-  end
 end
