@@ -50,6 +50,28 @@
         </div>
       <% end %>
 
+      <%# Action: Kampf %>
+      <%= if @live_action == :combat do %>
+        <div class='card-body'>
+          <%= f = form_for @character,  "#", [
+            phx_change: :change,
+            phx_submit: nil,
+            no_validate: true
+          ] %>
+
+
+            <div class="row g-2">
+              <div class="col-4">
+                <%= label f, :armor_id, "Rüstung" %>
+              </div>
+              <div class="col-8">
+                <%= select f, :armor_id, @armor_options, class: "form-select-sm", prompt: "bitte auswählen..." %>
+              </div>
+            </div>
+          </form>
+        </div>
+      <% end %>
+
       <%# Live Action: Probe %>
       <%= if @live_action == :roll do %>
         <div class='card-body'>
@@ -186,13 +208,6 @@
             </table>
           <% end %>
           </form>
-        </div>
-      <% end %>
-
-      <%# Action: Kampf %>
-      <%= if @live_action == :combat do %>
-        <div class='card-body'>
-        Kampf
         </div>
       <% end %>
     </div>

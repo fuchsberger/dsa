@@ -9,6 +9,8 @@ defmodule Dsa.Lore do
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
+  def armor_options, do: Repo.all(from(a in Armor, select: {a.name, a.id}, order_by: a.name))
+
   def change_armor(%Armor{} = skill \\ %Armor{}, attrs \\ %{}), do: Armor.changeset(skill, attrs)
 
   def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))

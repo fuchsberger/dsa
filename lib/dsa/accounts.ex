@@ -122,6 +122,12 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
+  def update_character(%Character{} = character, attrs, :combat) do
+    character
+    |> Character.combat_changeset(attrs)
+    |> Repo.update()
+  end
+
   # def add_character_skill(%Character{} = character, params) do
   #   character
   #   |> Ecto.Changeset.change()
@@ -149,7 +155,7 @@ defmodule Dsa.Accounts do
       talent_rolls: [:character, :skill],
       trait_rolls: [:character],
       routine: [:character, :skill],
-      characters: [:user, character_skills: [:skill]]
+      characters: [:user, :armor, character_skills: [:skill]]
     ]), id)
   end
 

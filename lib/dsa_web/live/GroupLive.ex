@@ -6,12 +6,25 @@ defmodule DsaWeb.GroupLive do
 
   require Logger
 
-  alias Dsa.{Event, Accounts, Repo}
+  alias Dsa.{Event, Lore, Accounts, Repo}
 
   defp topic(group_id), do: "group:#{group_id}"
 
   def handle_info(%{event: "add-event", payload: event}, socket) do
     {:noreply, assign(socket, :logs, [event | socket.assigns.logs])}
+  end
+
+  def handle_info(%{event: "update-character", payload: character}, socket) do
+    idx = Enum.find_index(socket.assigns.group.characters, & &1.id == character.id)
+    characters = List.replace_at(socket.assigns.group.characters, idx, character)
+
+    if socket.assigns.character.data.id == character.id do
+      {:noreply, socket
+      |> assign(:character, Accounts.change_character(character, %{}, :combat))
+      |> assign(:group, Map.put(socket.assigns.group, :characters, characters))}
+    else
+      {:noreply, assign(socket, :group, Map.put(socket.assigns.group, :characters, characters))}
+    end
   end
 
   def render(assigns), do: DsaWeb.GroupView.render("group.html", assigns)
@@ -30,6 +43,7 @@ defmodule DsaWeb.GroupLive do
       end
 
     {:ok, socket
+    |> assign(:armor_options, Lore.armor_options())
     |> assign(:group, group)
     |> assign(:logs, logs)
     |> assign(:character, character)
@@ -52,6 +66,21 @@ defmodule DsaWeb.GroupLive do
     group = Map.drop(group, [:general_rolls, :trait_rolls, :talent_rolls, :routine])
 
     {logs, group}
+  end
+
+  def handle_event("change", %{"character" => params}, socket) do
+
+    case Accounts.update_character(socket.assigns.character.data, params, :combat) do
+      {:ok, character} ->
+        character = Repo.preload(character, [:user, :armor, character_skills: [:skill]])
+        Logger.debug("Character updated.")
+        DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while changing character: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
   end
 
   def handle_event("select_character", %{"character" => %{"id" => id}}, socket) do
