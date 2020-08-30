@@ -7,7 +7,6 @@ defmodule DsaWeb.GroupLive do
   require Logger
 
   alias Dsa.{Event, Accounts, Repo}
-  alias Dsa.Event.{GeneralRoll, TalentRoll, TraitRoll}
 
   defp topic(group_id), do: "group:#{group_id}"
 
@@ -21,18 +20,26 @@ defmodule DsaWeb.GroupLive do
 
     {logs, group} = get_initial_data(group_id)
 
-    character = Enum.find(group.characters, & &1.user_id == user_id)
-
     DsaWeb.Endpoint.subscribe(topic(group.id))
 
+    # character changeset
+    character =
+      case Enum.find(group.characters, & &1.user_id == user_id) do
+        nil -> nil
+        character -> Accounts.change_character(character, %{}, :combat)
+      end
+
     {:ok, socket
-    |> assign(:action, "Probe")
-    |> assign(:roll_type, "Eigenschaften")
     |> assign(:group, group)
     |> assign(:logs, logs)
+    |> assign(:character, character)
+    |> assign(:settings, Event.change_settings())
     |> assign(:show_details, false)
-    |> assign(:settings, Event.change_settings(%{character_id: character && character.id}))
     |> assign(:user_id, user_id)}
+  end
+
+  def handle_params(_params, _session, socket) do
+    {:noreply, socket}
   end
 
   def get_initial_data(group_id) do
@@ -47,22 +54,17 @@ defmodule DsaWeb.GroupLive do
     {logs, group}
   end
 
-  def handle_event("prepare", %{"talent" => id}, socket) do
-    c = active_character(socket)
-    cskill = Enum.find(c.character_skills, & &1.skill_id == String.to_integer(id))
+  def handle_event("select_character", %{"character" => %{"id" => id}}, socket) do
+    character =
+      socket.assigns.group.characters
+      |> Enum.find(& &1.id == String.to_integer(id))
+      |> Accounts.change_character(%{}, :combat)
 
-    params = %{
-      skill_id: cskill.skill_id,
-      e1: cskill.skill.e1,
-      e2: cskill.skill.e2,
-      e3: cskill.skill.e3,
-      t1: Map.get(c, String.to_atom(cskill.skill.e1)),
-      t2: Map.get(c, String.to_atom(cskill.skill.e2)),
-      t3: Map.get(c, String.to_atom(cskill.skill.e3)),
-      use_be: cskill.skill.be
-    }
+    {:noreply, assign(socket, :character, character)}
+  end
 
-    {:noreply, socket}
+  def handle_event("toggle-details", _params, socket) do
+    {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
   end
 
   def handle_event("validate", %{"setting" => setting}, socket) do
@@ -190,6 +192,6 @@ defmodule DsaWeb.GroupLive do
   end
 
   defp active_character(socket) do
-    Enum.find(socket.assigns.group.characters, & &1.id == get_field(socket.assigns.settings, :character_id))
+    Enum.find(socket.assigns.group.characters, & &1.id == get_field(socket.assigns.character, :id))
   end
 end

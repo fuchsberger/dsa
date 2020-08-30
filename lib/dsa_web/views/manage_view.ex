@@ -3,8 +3,27 @@ defmodule DsaWeb.ManageView do
 
   import Dsa.Lists
 
+  def entries(action, armors, skills, groups, users) do
+    case action do
+      :armors -> armors
+      :skills -> skills
+      :groups -> groups
+      :users -> users
+    end
+  end
+
   def new?(changeset), do: changeset && changeset.data.__meta__.state == :built
   def edit?(changeset), do: changeset && changeset.data.__meta__.state == :loaded
+
+  def header(:armors) do
+    ~E"""
+    <th scope='col'>Name</th>
+    <th scope='col' class='text-center'>RS</th>
+    <th scope='col' class='text-center'>BE</th>
+    <th scope='col' class='text-center'>Abzüge</th>
+    <th scope='col' class='text-center'>Aktionen</th>
+    """
+  end
 
   def header(:groups) do
     ~E"""
@@ -34,6 +53,16 @@ defmodule DsaWeb.ManageView do
     <th scope='col'>Benutzername</th>
     <th scope='col'>Passwort</th>
     <th scope='col' class='text-center'>Aktionen</th>
+    """
+  end
+
+  def row(:armors, armor) do
+    ~E"""
+    <th scope='row'><%= armor.name %></th>
+    <td class='text-center'><%= armor.rs %></td>
+    <td class='text-center'><%= armor.be %></td>
+    <td class='text-center'><%= if armor.penalties, do: "-1 GS, -1 INI", else: "-" %></td>
+    <%= submit_cell(armor.id) %>
     """
   end
 
@@ -75,18 +104,23 @@ defmodule DsaWeb.ManageView do
     """
   end
 
-  def form(:groups, form) do
+  def form(:armors, form) do
     ~E"""
     <td>
-      <%= text_input form, :name, class: "form-control-sm" %>
+      <%= text_input form, :name, placeholder: "Name" %>
       <%= error_tag form, :name %>
     </td>
     <td>
-      <%= number_input form, :master_id, class: "form-control-sm" %>
-      <%= error_tag form, :master_id %>
+      <%= number_input form, :rs, placeholder: "RS" %>
+      <%= error_tag form, :rs %>
     </td>
     <td>
-      Hi
+      <%= number_input form, :be, placeholder: "BE" %>
+      <%= error_tag form, :be %>
+    </td>
+    <td>
+      <%= checkbox form, :penalties %>
+      <%= label form, :penalties, class: "form-check-label" %>
     </td>
     <%= action_cell() %>
     """
@@ -137,6 +171,26 @@ defmodule DsaWeb.ManageView do
     """
   end
 
+  def form(:groups, form, users) do
+    user_options = Enum.map(users, & {&1.name, &1.id})
+    ~E"""
+    <td>
+      <%= text_input form, :name, class: "form-control-sm" %>
+      <%= error_tag form, :name %>
+    </td>
+    <td>
+      <%= select form, :master_id, user_options,
+        class: "form-control-sm",
+        prompt: "bitte wählen..."
+      %>
+      <%= error_tag form, :master_id %>
+    </td>
+    <td>
+    </td>
+    <%= action_cell() %>
+    """
+  end
+
   defp action_cell do
     ~E"""
     <td class='text-center'>
@@ -155,11 +209,5 @@ defmodule DsaWeb.ManageView do
       <button type='button' class='btn btn-sm py-0 btn-link' phx-click='delete' phx-value-id='<%= id %>' data-confirm='Are you absolutely sure?'><i class='icon-delete text-danger'></i></button>
     </td>
     """
-  end
-
-  def tab(socket, action, title, active_action) do
-    live_patch title,
-      to: Routes.manage_path(socket, action),
-      class: "nav-link#{if active_action == action, do: " active"}"
   end
 end

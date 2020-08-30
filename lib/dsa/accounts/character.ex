@@ -20,8 +20,6 @@ defmodule Dsa.Accounts.Character do
     field :w2, :boolean, default: false
     field :tp, :integer, default: 2
     field :rw, :integer, default: 1
-    field :be, :integer, default: 0
-    field :rs, :integer, default: 0
 
     # stats
     field :le, :integer, default: 30
@@ -36,6 +34,7 @@ defmodule Dsa.Accounts.Character do
 
     belongs_to :group, Dsa.Accounts.Group
     belongs_to :user, Dsa.Accounts.User
+    belongs_to :armor, Dsa.Lore.Armor
 
     has_many :character_combat_skills, Dsa.Accounts.CharacterCombatSkill, on_replace: :delete
     has_many :character_skills, Dsa.Accounts.CharacterSkill, on_replace: :delete
@@ -45,18 +44,24 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @fields ~w(name species culture profession at pa w2 tp rw be rs le ae ke sk zk aw ini gw sp)a
+  @required_fields ~w(name species culture profession at pa w2 tp rw le ae ke sk zk aw ini gw sp)a ++ Dsa.Lists.base_values()
   def changeset(character, attrs) do
-    required_fields = @fields ++ Dsa.Lists.base_values()
-
     character
-    |> cast(attrs, required_fields ++ [:group_id])
-    |> validate_required(required_fields)
+    |> cast(attrs, @required_fields ++ [:group_id])
+    |> validate_required(@required_fields)
     |> validate_length(:name, min: 2, max: 15)
     |> validate_length(:species, min: 3, max: 10)
     |> validate_length(:culture, min: 3, max: 15)
     |> validate_length(:profession, min: 2, max: 15)
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
+  end
+
+  @cfields ~w(armor_id)a
+  def combat_changeset(character, attrs) do
+    character
+    |> cast(attrs, @cfields)
+    |> validate_required(@cfields)
+    |> foreign_key_constraint(:armor_id)
   end
 end

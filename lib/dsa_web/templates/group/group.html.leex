@@ -1,31 +1,64 @@
-<%= f = form_for @settings,  "#", [
-  phx_change: :validate,
-  phx_submit: :validate,
-  no_validate: true
-] %>
 
-<% character = Enum.find(@group.characters, & &1.id == get_field(@settings, :character_id)) %>
 <% master? = @user_id == @group.master_id %>
 
 <div class='row g-3'>
+  <%= unless is_nil(@character) do %>
   <div class='col-lg'>
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <h5 class='my-1'>Aktion</h5>
         <ul class="nav nav-tabs card-header-tabs">
-          <%= for action <- ["Kampf", "Probe"] do %>
-            <% active = action == get_field(@settings, :action) %>
-            <li class="nav-item">
-              <%= label do %>
-                <%= radio_button(f, :action, action, checked: active, class: "d-none") %>
-                <%= content_tag :span, action, class: "nav-link #{if active, do: "active"}" %>
-              <% end %>
-            </li>
-          <% end %>
+          <%= tab "Übersicht", Routes.group_path(@socket, :index, @group.id), @live_action == :index %>
+          <%= tab "Kampf", Routes.group_path(@socket, :combat, @group.id), @live_action == :combat %>
+          <%= tab "Probe", Routes.group_path(@socket, :roll, @group.id), @live_action == :roll %>
         </ul>
       </div>
-      <%= if get_field(@settings, :action) == "Probe" do %>
+
+      <%# Live Action: Overview %>
+      <%= if @live_action == :index do %>
         <div class='card-body'>
+          <%= f = form_for :character, "#", phx_change: "select_character", phx_submit: nil %>
+            <table class="table table-sm m-0 table-hover">
+              <thead>
+                <tr>
+                  <th scope='col'></th>
+                  <th scope='col'>Name</th>
+                  <th scope='col'>Profession</th>
+                  <th scope='col'>Player</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for character <- @group.characters do %>
+                  <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
+                    <tr class='<%= if character.id == get_field(@character, :id), do: "font-weight-bold" %>'>
+                      <td>
+                        <%= radio_button(f, :id, character.id,
+                          # not master and character belongs to someone else
+                          disabled: @user_id != @group.master_id && character.user_id != @user_id,
+                          checked: character.id == get_field(@character, :id))
+                        %>
+                      </td>
+                      <td><%= character.name %></td>
+                      <td><%= character.profession %></td>
+                      <td><%= character.user.name %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      <% end %>
+
+      <%# Live Action: Probe %>
+      <%= if @live_action == :roll do %>
+        <div class='card-body'>
+
+        <%= f = form_for @settings,  "#", [
+          phx_change: :validate,
+          phx_submit: nil,
+          no_validate: true
+        ] %>
 
           <%# Quick Roll %>
           <div class='row g-2 mb-2'>
@@ -61,7 +94,10 @@
 
 
             <div class='col-lg-5'>
-              <%= select(f, :type, ["Eigenschaft" | Enum.map(character.character_skills, & &1.skill.category) |> Enum.uniq()], class: "form-select-sm") %>
+              <%= select f, :type, [
+                  "Eigenschaft"
+                  | Enum.map(@character.data.character_skills, & &1.skill.category) |> Enum.uniq()
+                ], class: "form-select-sm" %>
             </div>
           </div>
 
@@ -80,7 +116,7 @@
                   <tr>
                     <th scope='row'><%= name %></th>
                     <td class='text-center'><%= short %></td>
-                    <td class='text-center'><%= Map.get(character, short) %></td>
+                    <td class='text-center'><%= Map.get(@character.data, short) %></td>
                     <td class='text-center'>
                       <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' phx-value-trait='<%= short %>'></button>
                     </td>
@@ -101,7 +137,7 @@
                 </tr>
               </thead>
               <tbody>
-                <%= for cskill <- Enum.filter(character.character_skills, & &1.skill.category == get_field(@settings, :type)) |> Enum.sort_by(& &1.skill.name) do %>
+                <%= for cskill <- Enum.filter(@character.data.character_skills, & &1.skill.category == get_field(@settings, :type)) |> Enum.sort_by(& &1.skill.name) do %>
                   <tr>
                     <th scope='row'><%= cskill.skill.name %></th>
                     <td class='text-center'>
@@ -113,7 +149,7 @@
 
                     <%# Routine %>
                     <td class='text-center'>
-                      <% {allowed?, val} = routine_possible?(character, cskill, get_field(@settings, :modifier)) %>
+                      <% {allowed?, val} = routine_possible?(@character.data, cskill, get_field(@settings, :modifier)) %>
                       <%= if allowed? do %>
                         <button class='btn btn-light text-success btn-sm py-0' phx-click='routine' phx-value-talent='<%= cskill.skill.id %>'><strong> <%= "Q#{val}" %></strong></button>
                       <% else %>
@@ -149,58 +185,33 @@
               </tbody>
             </table>
           <% end %>
+          </form>
         </div>
       <% end %>
 
-      <%# if get_field(@settings, :character_id), do: render "character.html", assigns %>
+      <%# Action: Kampf %>
+      <%= if @live_action == :combat do %>
+        <div class='card-body'>
+        Kampf
+        </div>
+      <% end %>
     </div>
   </div>
+  <% end %>
 
   <div class='col-lg'>
-
-    <%# Overview %>
-    <div class="card mb-3">
-      <div class='card-header d-flex justify-content-between'>
-        <h5 class='mb-0'>Übersicht</h5>
-      </div>
-      <div class='card-body'>
-        <table class="table table-sm m-0 table-hover">
-          <thead>
-            <tr>
-              <th scope='col'></th>
-              <th scope='col'>Name</th>
-              <th scope='col'>Profession</th>
-              <th scope='col'>Player</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= for character <- @group.characters do %>
-              <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
-                <tr class='<%= if character.id == get_field(@settings, :character_id), do: "font-weight-bold" %>'
-                >
-                  <td><%= radio_button(f, :character_id, character.id,
-                    disabled:
-                      # not master and character belongs to someone else
-                      @user_id != @group.master_id && character.user_id != @user_id) %></td>
-                  <td><%= character.name %></td>
-                  <td><%= character.profession %></td>
-                  <td><%= character.user.name %></td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
     <%# Log %>
     <div class="card mb-3">
       <div class='card-header d-flex justify-content-between'>
         <h5 class='mb-0'>Ereignislog</h5>
-        <div class="form-check mb-0">
-          <%= checkbox f, :show_details, class: "form-check-input" %>
-          <%= label f, :show_details, "Details anzeigen?", class: "form-check-label" %>
-        </div>
+        <%= unless is_nil(@character) do %>
+          <% f = form_for :show_details, "#", phx_change: "toggle-details", phx_submit: nil %>
+            <div class="form-check">
+              <%= checkbox f, :show_details, class: "form-check-input", value: @show_details %>
+              <%= label f, :show_details, "Details anzeigen?", class: "form-check-label" %>
+            </div>
+          </form>
+        <% end %>
       </div>
       <ul id='log' class='list-group list-group-flush' phx-update='prepend'>
         <%= for event <- @logs do
@@ -226,8 +237,10 @@
                 show_details?: get_field(@settings, :show_details) && (master? || owner?)
           end
         end %>
+        <%= if Enum.count(@logs) == 0 do %>
+          <li id='empty-log' class='list-group-item'>Bei Phex! Noch sind keine Würfel gerollt!</li>
+        <% end %>
       </ul>
     </div>
   </div>
 </div>
-</form>

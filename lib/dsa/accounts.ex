@@ -131,8 +131,12 @@ defmodule Dsa.Accounts do
 
   def delete_character!(character), do: Repo.delete!(character)
 
-  def change_character(%Character{} = character, attrs \\ %{}) do
+  def change_character(%Character{} = character, attrs) do
     Character.changeset(character, attrs)
+  end
+
+  def change_character(%Character{} = character, attrs, :combat) do
+    Character.combat_changeset(character, attrs)
   end
 
   def list_groups, do: Repo.all(from(g in Group, preload: :master))

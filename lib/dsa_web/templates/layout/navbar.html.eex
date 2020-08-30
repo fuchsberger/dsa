@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="menu">
       <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <%= link "Gruppe", to: Routes.live_path(@conn, DsaWeb.GroupLive, 1), class: "nav-link" %>
+          <%= link "Gruppe", to: Routes.group_path(@conn, :index, 1), class: "nav-link" %>
         </li>
         <%= if @current_user do %>
           <li class="nav-item dropdown">

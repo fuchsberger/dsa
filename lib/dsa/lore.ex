@@ -5,7 +5,11 @@ defmodule Dsa.Lore do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
-  alias Dsa.Lore.Skill
+  alias Dsa.Lore.{Armor, Skill}
+
+  def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
+
+  def change_armor(%Armor{} = skill \\ %Armor{}, attrs \\ %{}), do: Armor.changeset(skill, attrs)
 
   def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
 
@@ -18,5 +22,4 @@ defmodule Dsa.Lore do
       where: s.category == "Zauber" or s.category == "Liturgie"
     ) |> Repo.all()
   end
-
 end

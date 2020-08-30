@@ -28,8 +28,13 @@ defmodule DsaWeb.Router do
     pipe_through [:browser, :authenticate_user]
     resources "/characters", CharacterController, except: [:show]
     post "/characters/add_skill", CharacterController, :add_skill
-    delete "characters/remove_skill/:character_id/:skill_id", CharacterController, :remove_skill
-    live "/group/:id", GroupLive
+    delete "/characters/remove_skill/:character_id/:skill_id", CharacterController, :remove_skill
+
+    live "/group/:id", GroupLive, :index
+    live "/group/:id/combat", GroupLive, :combat
+    live "/group/:id/roll", GroupLive, :roll
+
+    live "/manage/armors", ManageLive, :armors
     live "/manage/skills", ManageLive, :skills
     live "/manage/groups", ManageLive, :groups
     live "/manage/users", ManageLive, :users

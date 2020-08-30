@@ -1,9 +1,11 @@
 <div class='d-flex'>
-  <nav class='nav nav-tabs flex-grow-1 mr-2'>
-    <%= tab @socket, :skills, "Talente", @live_action %>
-    <%= tab @socket, :groups, "Gruppen", @live_action %>
-    <%= tab @socket, :users, "Benützer", @live_action %>
-  </nav>
+  <ul class='nav nav-tabs flex-grow-1 mr-2' role='tablist'>
+    <%= tab "Talente", Routes.manage_path(@socket, :skills), @live_action == :skills %>
+    <%= tab "Gruppen", Routes.manage_path(@socket, :groups), @live_action == :groups %>
+    <%= tab "Benützer", Routes.manage_path(@socket, :users), @live_action == :users %>
+    <%= tab "Rüstungen", Routes.manage_path(@socket, :armors), @live_action == :armors %>
+  </ul>
+
   <button class='btn btn-light' type='button' phx-click='add'>
     <i class='icon-add text-primary'></i> Hinzufügen
   </button>
@@ -22,12 +24,17 @@
   <thead><tr><%= header @live_action %></tr></thead>
   <tbody>
     <%= if new?(@changeset), do: form @live_action, f %>
-    <%= for entry <- @entries do %>
+    <%= for entry <- entries(@live_action, @armors, @skills, @groups, @users) do %>
       <tr>
-        <%= if edit?(@changeset) && @changeset.data.id == entry.id,
-          do: form(@live_action, f),
-          else: row(@live_action, entry)
-        %>
+        <%= if edit?(@changeset) && @changeset.data.id == entry.id do %>
+          <%= case @live_action do
+            :groups -> form(@live_action, f, @users)
+            _ -> form(@live_action, f)
+            end
+          %>
+        <% else %>
+          <%= row(@live_action, entry) %>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

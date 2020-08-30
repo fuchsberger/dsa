@@ -2,7 +2,7 @@
 # mix run priv/repo/seeds.exs
 
 defmodule Dsa.Seed do
-  alias Dsa.Lore.{CombatSkill, Skill}
+  alias Dsa.Lore.{CombatSkill, Skill, Armor}
 
   def combat_skill({sf, ranged, parade, e1, name, e2}) do
     %CombatSkill{}
@@ -35,6 +35,12 @@ defmodule Dsa.Seed do
         be: be,
         sf: sf
       })
+    |> Dsa.Repo.insert!()
+  end
+
+  def armor({name, rs, be, penalties}) do
+    %Armor{}
+    |> Armor.changeset(%{name: name, rs: rs, be: be, penalties: penalties})
     |> Dsa.Repo.insert!()
   end
 end
@@ -138,6 +144,24 @@ end
   { "B", true, false, "FF", "Wurfwaffen", nil }
 ]
 |> Enum.each(& Dsa.Seed.combat_skill(&1))
+
+# Add Standard Armors
+[
+  { "Nakt", 0, 0, false },
+  { "Felle", 0, 0, false },
+  { "Normale Kleidung", 0, 0, false },
+  { "Schwere Kleidung", 1, 0, true },
+  { "Winterkleidung", 1, 0, true },
+  { "Iryanrüstung", 3, 1, true },
+  { "Kettenhemd", 4, 2, false },
+  { "Krötenhaut", 3, 1, true },
+  { "Lederharnisch", 3, 1, true },
+  { "Leichte Platte", 6, 3, false },
+  { "Schuppenpanzer", 5, 2, true },
+  { "Spiegelpanzer", 4, 2, false },
+  { "Tuchrüstung", 2, 1, false }
+]
+|> Enum.each(& Dsa.Seed.armor(&1))
 
 alias Dsa.{Accounts, Repo}
 

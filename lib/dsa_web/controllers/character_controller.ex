@@ -8,7 +8,7 @@ defmodule DsaWeb.CharacterController do
 
   def new(conn, _params, _user) do
     render conn, "new.html",
-      changeset: Accounts.change_character(%Accounts.Character{}),
+      changeset: Accounts.change_character(%Accounts.Character{}, %{}),
       cast_changeset: nil,
       groups: Accounts.list_groups()
   end
@@ -38,7 +38,7 @@ defmodule DsaWeb.CharacterController do
         character = Accounts.get_user_character!(user, Ecto.Changeset.get_field(changeset, :character_id))
 
         render conn, "edit.html",
-          changeset: Accounts.change_character(character),
+          changeset: Accounts.change_character(character, %{}),
           cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
           cast_options: cast_options(character),
           groups: Accounts.list_groups()
@@ -49,7 +49,7 @@ defmodule DsaWeb.CharacterController do
     character = Accounts.get_user_character!(user, id)
 
     render conn, "edit.html",
-      changeset: Accounts.change_character(character),
+      changeset: Accounts.change_character(character, %{}),
       cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
       cast_options: cast_options(character),
       groups: Accounts.list_groups()
@@ -71,7 +71,7 @@ defmodule DsaWeb.CharacterController do
         conn
         |> put_flash(:info, "Character updated successfully.")
         |> render("edit.html",
-          changeset: Accounts.change_character(character),
+          changeset: Accounts.change_character(character, %{}),
           cast_changeset: CharacterSkill.changeset(%CharacterSkill{}),
           cast_options: cast_options(character),
           groups: groups

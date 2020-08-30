@@ -3,6 +3,8 @@ defmodule DsaWeb.FormHelpers do
   Conveniences for translating and building error messages.
   """
   use Phoenix.HTML
+  import Phoenix.LiveView.Helpers
+
   alias Phoenix.HTML.Form
 
   def icon(name, opts \\ [] ) do
@@ -65,11 +67,17 @@ defmodule DsaWeb.FormHelpers do
   def range_input(f, field, opts \\ []), do: Form.range_input(f, field, opts(f, field, opts, "form-range"))
 
   def select(f, field, options, opts \\ []),
-    do: Form.select(f, field, options, opts(f, field, opts, "form-select"))
+    do: Form.select(f, field, options, opts(f, field, opts, "form-select form-select-sm"))
 
   def options(list), do: Enum.map(list, & {&1.name, &1.id})
 
   defp opts(f, field, opts, type \\ "form-control") do
     Keyword.put(opts, :class, "#{type} #{Keyword.get(opts, :class, "")}#{error_class(f, field)}") ++ Form.input_validations(f, field)
+  end
+
+  # Tab for Live Actions
+  def tab(title, link, active) do
+    link_elm = live_patch title, to: link, class: "nav-link#{if active, do: " active"}"
+    content_tag :li, link_elm, class: "nav-item", role: "presentation"
   end
 end
