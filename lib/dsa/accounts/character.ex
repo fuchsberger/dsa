@@ -34,6 +34,8 @@ defmodule Dsa.Accounts.Character do
 
     belongs_to :group, Dsa.Accounts.Group
     belongs_to :user, Dsa.Accounts.User
+    belongs_to :weapon, Dsa.Lore.Weapon
+    belongs_to :weapon2, Dsa.Lore.Weapon
     belongs_to :armor, Dsa.Lore.Armor
 
     has_many :character_combat_skills, Dsa.Accounts.CharacterCombatSkill, on_replace: :delete
@@ -57,11 +59,13 @@ defmodule Dsa.Accounts.Character do
     |> foreign_key_constraint(:user_id)
   end
 
-  @cfields ~w(armor_id)a
+  @cfields ~w(weapon1_id weapon2_id armor_id)a
   def combat_changeset(character, attrs) do
     character
     |> cast(attrs, @cfields)
     |> validate_required(@cfields)
     |> foreign_key_constraint(:armor_id)
+    |> foreign_key_constraint(:weapon1_id)
+    |> foreign_key_constraint(:weapon2_id)
   end
 end

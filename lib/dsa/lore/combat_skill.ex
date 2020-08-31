@@ -12,6 +12,8 @@ defmodule Dsa.Lore.CombatSkill do
     field :e2, :string
     field :sf, :string
 
+    has_many :weapons, Dsa.Lore.Weapon
+
     many_to_many :characters, Dsa.Accounts.Character,
       join_through: Dsa.Accounts.CharacterCombatSkill,
       on_replace: :delete

@@ -1,45 +1,20 @@
 <div class='d-flex'>
   <ul class='nav nav-tabs flex-grow-1 mr-2' role='tablist'>
+    <%= tab "Kampftechniken", Routes.manage_path(@socket, :combat_skills), @live_action == :combat_skills %>
     <%= tab "Talente", Routes.manage_path(@socket, :skills), @live_action == :skills %>
     <%= tab "Gruppen", Routes.manage_path(@socket, :groups), @live_action == :groups %>
     <%= tab "Benützer", Routes.manage_path(@socket, :users), @live_action == :users %>
+    <%= tab "Waffen", Routes.manage_path(@socket, :weapons), @live_action == :weapons %>
     <%= tab "Rüstungen", Routes.manage_path(@socket, :armors), @live_action == :armors %>
   </ul>
 
-  <button class='btn btn-light' type='button' phx-click='add'>
-    <i class='icon-add text-primary'></i> Hinzufügen
-  </button>
+  <%= if is_nil(@changeset) do %>
+    <button class='btn btn-light' type='button' phx-click='add'>
+      <i class='icon-add text-primary'></i> Hinzufügen
+    </button>
+  <% end %>
 </div>
 
-<%= f = if is_nil(@changeset), do: nil, else: form_for @changeset,  "#", [
-  id: "form",
-  as: :entry,
-  class: "#{unless is_nil(@changeset.action), do: "was-validated"}",
-  phx_change: :validate,
-  phx_submit: :save,
-  novalidate: true
-] %>
-
-<table class='table table-sm'>
-  <thead><tr><%= header @live_action, @admin %></tr></thead>
-  <tbody>
-    <%= if new?(@changeset), do: form @live_action, f %>
-    <%= for entry <- entries(@live_action, @armors, @skills, @groups, @users) do %>
-      <tr>
-        <%= if edit?(@changeset) && @changeset.data.id == entry.id do %>
-          <%= case @live_action do
-            :groups -> form(@live_action, f, @users)
-            _ -> form(@live_action, f)
-            end
-          %>
-        <% else %>
-          <%= row @live_action, entry, @admin %>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= unless is_nil(@changeset) do %>
-  </form>
-<% end %>
+<div class='table-recursive'>
+  <%= render "tables/#{@live_action}_table.html", assigns %>
+</div>

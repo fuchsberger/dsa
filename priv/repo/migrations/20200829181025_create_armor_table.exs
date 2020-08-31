@@ -1,4 +1,4 @@
-defmodule :"Elixir.Dsa.Repo.Migrations.Create armor table" do
+defmodule Elixir.Dsa.Repo.Migrations.CreateArmorTable do
   use Ecto.Migration
 
   def change do
