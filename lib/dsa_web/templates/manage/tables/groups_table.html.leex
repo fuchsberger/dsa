@@ -1,0 +1,53 @@
+<%= unless is_nil(@changeset) do %>
+  <%= f = form(@changeset) %>
+    <div class='row g-2'>
+
+      <div class='col-5'>
+        <%= label f, :name %>
+        <%= text_input f, :name, placeholder: "Name", class: "form-control-sm" %>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class='col-5'>
+        <%= label f, :master_id, "Meister" %>
+        <%= select f, :master_id, Enum.map(@users, & {&1.name, &1.id}),
+          class: "form-control-sm",
+          prompt: "bitte wählen..."
+        %>
+        <%= error_tag f, :master_id %>
+      </div>
+
+      <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
+    </div>
+  </form>
+<% end %>
+
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col' class='text-center'>ID</th>
+      <th scope='col'>Name</th>
+      <th scope='col'>Meister</th>
+      <th scope='col'>Manage</th>
+      <%= if @admin, do: header_cell(@live_action) %>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for group <- @groups do %>
+      <tr>
+        <td class='text-center'><%= group.id %></td>
+        <th scope='row'><%= group.name %></th>
+        <td><%= Enum.find(@users, & &1.id == group.master_id).name %></td>
+        <td>
+          <button
+            type='button'
+            class='btn btn-sm py-0 btn-light text-primary'
+            phx-click='remove-logs'
+            phx-value-group='<%= group.id %>'
+          >remove logs</button>
+        </td>
+        <%= if @admin, do: action_cell(group.id) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

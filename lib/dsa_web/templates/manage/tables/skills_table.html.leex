@@ -1,0 +1,67 @@
+<%= unless is_nil(@changeset) do %>
+  <%= f = form(@changeset) %>
+    <div class='row g-2'>
+
+      <div class='col-2'>
+        <%= label f, :category, "Talentgruppe" %>
+        <%= select f, :category, talent_categories(@admin), class: "form-select-sm" %>
+        <%= error_tag f, :category %>
+      </div>
+
+      <div class='col-3'>
+        <%= label f, :name %>
+        <%= text_input f, :name, placeholder: "Name", class: "form-control-sm" %>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class='col-3'>
+        <%= label f, :e1, "Probe" %>
+        <div class='row g-1'>
+          <div class='col'>
+            <%= select f, :e1, base_value_options(), class: "form-select-sm" %>
+          </div>
+          <div class='col'>
+            <%= select f, :e2, base_value_options(), class: "form-select-sm" %>
+          </div>
+          <div class='col'>
+            <%= select f, :e3, base_value_options(), class: "form-select-sm" %>
+          </div>
+        </div>
+      </div>
+
+      <div class='col-2'>
+        <%= label f, :be, "BE" %>
+        <%= select f, :be, [{"Ja", true}, {"Nein", false}], class: "form-select-sm", prompt: "Event." %>
+      </div>
+
+      <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
+    </div>
+  </form>
+<% end %>
+
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col'>Talentgruppe</th>
+      <%= id_cell(@admin) %>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>Probe</th>
+      <th scope='col' class='text-center'>SF</th>
+      <th scope='col' class='text-center'>BE</th>
+      <%= header_cell(@live_action) %>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for skill <- @entries do %>
+      <tr>
+        <td><%= skill.category %></td>
+        <td class='text-center'><%= skill.id %></td>
+        <th scope='row'><%= skill.name %></th>
+        <td class='text-center'><small><%= skill.e1 %>/<%= skill.e2 %>/<%= skill.e3 %></small></td>
+        <td class='text-center'><%= skill.sf %></td>
+        <td class='text-center'><%= be(skill.be) %></td>
+        <%= if Enum.member?(["Zauber", "Liturgie"], skill.category), do: action_cell(skill.id), else: content_tag(:td, "") %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

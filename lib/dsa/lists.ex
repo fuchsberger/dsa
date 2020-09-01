@@ -11,5 +11,10 @@ defmodule Dsa.Lists do
   def base_value_options, do: Enum.map(@base_values, & Atom.to_string(&1))
 
   def sf_values, do: @sf_values
+
   def talent_categories, do: @talent_categories
+
+  def talent_categories(admin)
+  def talent_categories(true), do: @talent_categories
+  def talent_categories(false), do: ["Zauber", "Liturgie"]
 end

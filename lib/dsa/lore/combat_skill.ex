@@ -19,11 +19,12 @@ defmodule Dsa.Lore.CombatSkill do
       on_replace: :delete
   end
 
+  @fields ~w(id name ranged parade e1 e2 sf)a
+  @reqired ~w(id name ranged parade e1 sf)a
   def changeset(skill, attrs) do
     skill
-    |> cast(attrs, [:name, :ranged, :parade, :e1, :e2, :sf])
-    |> validate_required([:name, :ranged, :parade, :e1, :sf])
-    |> validate_length(:name, max: 20)
+    |> cast(attrs, @fields)
+    |> validate_required(@reqired)
     |> validate_inclusion(:e1, base_value_options())
     |> validate_inclusion(:e2, base_value_options())
     |> validate_inclusion(:sf, sf_values())

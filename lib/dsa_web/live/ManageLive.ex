@@ -9,22 +9,6 @@ defmodule DsaWeb.ManageLive do
 
   def handle_info(%{event: "save-entry", payload: %{id: id} = entry}, socket) do
     case entry do
-      %Lore.Armor{} ->
-        groups =
-          socket.assigns.armors
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& &1.name)
-        {:noreply, assign(socket, :armors, groups)}
-
-      %Lore.CombatSkill{} ->
-        skills =
-          socket.assigns.combat_skills
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& {&1.ranged, &1.name})
-        {:noreply, assign(socket, :combat_skills, skills)}
-
       %Lore.Skill{} ->
         skills =
           socket.assigns.skills
@@ -48,26 +32,11 @@ defmodule DsaWeb.ManageLive do
           |> Enum.concat([entry])
           |> Enum.sort_by(& &1.name)
         {:noreply, assign(socket, :users, users)}
-
-      %Lore.Weapon{} ->
-        entry = Repo.preload(entry, :combat_skill, force: true)
-        weapons =
-          socket.assigns.weapons
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& {&1.combat_skill_id, &1.name})
-        {:noreply, assign(socket, :weapons, weapons)}
     end
   end
 
   def handle_info(%{event: "remove-entry", payload: %{id: id} = entry}, socket) do
     case entry do
-      %Lore.Armor{} ->
-        {:noreply, assign(socket, :armors, Enum.reject(socket.assigns.armors, & &1.id == id))}
-
-      %Lore.CombatSkill{} ->
-        {:noreply, assign(socket, :combat_skills, Enum.reject(socket.assigns.combat_skills, & &1.id == id))}
-
       %Lore.Skill{} ->
         {:noreply, assign(socket, :skills, Enum.reject(socket.assigns.skills, & &1.id == id))}
 
@@ -88,8 +57,6 @@ defmodule DsaWeb.ManageLive do
 
     {:ok, socket
     |> assign(:changeset, nil)
-    |> assign(:armors, Lore.list_armors())
-    |> assign(:combat_skills, Lore.list_combat_skills())
     |> assign(:skills, Lore.list_skills())
     |> assign(:groups, Accounts.list_groups())
     |> assign(:users, users)
@@ -98,28 +65,28 @@ defmodule DsaWeb.ManageLive do
   end
 
   def handle_params(_params, _session, socket) do
-    {:noreply, assign(socket, :changeset, nil)}
+    case socket.assigns.live_action do
+      :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
+      :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
+      :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
+      :weapons -> {:noreply, assign(socket, :entries, Lore.list_weapons())}
+      _ -> {:noreply, assign(socket, :changeset, nil)}
+    end
   end
 
   defp get_changeset(socket) do
     case socket.assigns.live_action do
-      :armors -> Lore.change_armor(%Lore.Armor{})
       :groups -> Accounts.change_group()
-      :combat_skills -> Lore.change_combat_skill(%Lore.CombatSkill{})
       :skills -> Lore.change_skill(%Lore.Skill{})
       :users -> Accounts.change_registration()
-      :weapons -> Lore.change_weapon(%Lore.Weapon{})
     end
   end
 
   defp get_changeset(socket, struct, params \\ %{}) do
     case socket.assigns.live_action do
-      :armors -> Lore.change_armor(struct, params)
-      :combat_skills -> Lore.change_combat_skill(struct, params)
       :groups -> Accounts.change_group(struct, params)
       :skills -> Lore.change_skill(struct, params)
       :users -> Accounts.change_registration(struct, params)
-      :weapons -> Lore.change_weapon(struct, params)
     end
   end
 
@@ -136,8 +103,24 @@ defmodule DsaWeb.ManageLive do
     {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
   end
 
-  def handle_event("validate", %{"combat_skill" => params}, socket) do
-    changeset = Lore.change_combat_skill(socket.assigns.changeset.data, params)
+  def handle_event("refresh", _params, socket) do
+    Lore.seed(socket.assigns.live_action)
+    Logger.info("#{Atom.to_string(socket.assigns.live_action)} updated.")
+    handle_params(nil, nil, socket)
+  end
+
+  def handle_event("validate", %{"skill" => params}, socket) do
+    changeset = Lore.change_skill(socket.assigns.changeset.data, params)
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def handle_event("validate", %{"group" => params}, socket) do
+    changeset = Accounts.change_group(socket.assigns.changeset.data, params)
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def handle_event("validate", %{"user" => params}, socket) do
+    changeset = Accounts.change_registration(socket.assigns.changeset.data, params)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 

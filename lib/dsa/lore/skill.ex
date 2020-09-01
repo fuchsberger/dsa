@@ -6,7 +6,7 @@ defmodule Dsa.Lore.Skill do
 
   schema "skills" do
     field :name, :string
-    field :category, :string
+    field :category, :string, default: "Zauber"
     field :e1, :string
     field :e2, :string
     field :e3, :string

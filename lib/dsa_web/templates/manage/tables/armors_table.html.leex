@@ -1,0 +1,22 @@
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <%= id_cell(@admin) %>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>RS</th>
+      <th scope='col' class='text-center'>BE</th>
+      <th scope='col' class='text-center'>Abzüge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for armor <- @entries do %>
+      <tr>
+        <td class='text-center'><%= armor.id %></td>
+        <th scope='row'><%= armor.name %></th>
+        <td class='text-center'><%= armor.rs %></td>
+        <td class='text-center'><%= armor.be %></td>
+        <td class='text-center'><%= if armor.penalties, do: "-1 GS, -1 INI", else: "-" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

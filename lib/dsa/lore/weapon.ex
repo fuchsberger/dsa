@@ -21,8 +21,8 @@ defmodule Dsa.Lore.Weapon do
     belongs_to :combat_skill, Dsa.Lore.CombatSkill
   end
 
-  @fields ~w(name tp_dice tp_bonus l1 l2 ls at_mod pa_mod rw rw2 rw3 lz combat_skill_id)a
-  @required ~w(name tp_dice tp_bonus rw combat_skill_id)a
+  @fields ~w(id name tp_dice tp_bonus l1 l2 ls at_mod pa_mod rw rw2 rw3 lz combat_skill_id)a
+  @required ~w(id name tp_dice tp_bonus rw combat_skill_id)a
 
   def changeset(weapon, attrs) do
     weapon
@@ -52,7 +52,7 @@ defmodule Dsa.Lore.Weapon do
         validate_required(weapon, @required_meele)
 
       id ->
-        combat_skill = Dsa.Lore.get_combat_skill(id)
+        combat_skill = Dsa.Repo.get(Dsa.Lore.CombatSkill, id)
 
         case combat_skill && combat_skill.ranged do
           true -> validate_required(weapon, @required_distance)

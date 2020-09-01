@@ -10,10 +10,10 @@ defmodule Dsa.Lore.Armor do
     field :penalties, :boolean, default: false
   end
 
-  @fields ~w(name rs be penalties)a
+  @fields ~w(id name rs be penalties)a
   def changeset(skill, attrs) do
     skill
-    |> cast(attrs, @fields)
+    |> cast(attrs, [:id | @fields])
     |> validate_required(@fields)
     |> validate_length(:name, max: 25)
     |> validate_number(:rs, greater_than_or_equal_to: 0, less_than: 12)

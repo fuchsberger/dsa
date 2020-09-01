@@ -1,0 +1,58 @@
+<%= unless is_nil(@changeset) do %>
+  <%= f = form(@changeset) %>
+    <div class='row g-2'>
+
+      <div class='col-3'>
+        <%= label f, :name %>
+        <%= text_input f, :name, placeholder: "Name", class: "form-control-sm" %>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class='col-3'>
+        <%= label f, :username %>
+        <%= text_input f, :username, placeholder: "Username", class: "form-control-sm" %>
+        <%= error_tag f, :username %>
+      </div>
+
+      <div class='col-3'>
+        <%= label f, :password %>
+        <%= password_input f, :password, placeholder: "Passwort", class: "form-control-sm" %>
+        <%= error_tag f, :password %>
+      </div>
+
+      <div class='col-1 pt-3'>
+        <div class='form-check'>
+          <%= checkbox f, :admin, class: "form-check-input" %>
+          <%= label f, :admin, "Admin", class: "form-check-label" %>
+        </div>
+      </div>
+
+      <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
+    </div>
+  </form>
+<% end %>
+
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col' class='text-center'>ID</th>
+      <th scope='col'><i class='icon-star'></i></th>
+      <th scope='col'>Name</th>
+      <th scope='col'>Benutzername</th>
+      <th scope='col'>Passwort</th>
+      <%= if @admin, do: header_cell(@live_action) %>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for user <- @users do %>
+      <tr>
+        <td class='text-center'><%= user.id %></td>
+        <td><%= if user.admin, do: icon("star") %></td>
+        <th scope='row'><%= user.name %></th>
+        <td><%= user.username %></td>
+        <td>***********</td>
+        <%= if @admin, do: action_cell(user.id) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

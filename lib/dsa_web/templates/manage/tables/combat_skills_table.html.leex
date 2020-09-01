@@ -1,72 +1,23 @@
-<%= unless is_nil(@changeset) do %>
-  <%= f = form_for @changeset,  "#", [
-    class: "#{unless is_nil(@changeset.action), do: "was-validated"}",
-    phx_change: :validate,
-    phx_submit: :save,
-    novalidate: true
-  ] %>
-    <div class='row g-2'>
-      <div class='col'>
-        <%= label f, :name %>
-        <%= text_input f, :name, placeholder: "Name", class: "form-control-sm" %>
-        <%= error_tag f, :name %>
-      </div>
-
-      <div class='col pt-2'>
-        <div class='form-check'>
-          <%= checkbox f, :ranged, class: "form-check-input" %>
-          <%= label f, :ranged, "Fernkampf", class: "form-check-label" %>
-        </div>
-        <div class='form-check'>
-          <%= checkbox f, :parade, class: "form-check-input" %>
-          <%= label f, :parade, "Parade", class: "form-check-label" %>
-        </div>
-      </div>
-
-      <div class='col'>
-        <%= label f, :sf, "Steigerungsfaktor", class: "form-check-label" %>
-        <%= select f, :sf, sf_values(), class: "form-select-sm", prompt: "Steigerungsfaktor" %>
-      </div>
-
-      <div class='col'>
-        <div class="mb-1">
-          <%= label f, :e1, "Leiteigenschaft(en)", class: "form-check-label" %>
-          <div class='row g-1'>
-            <div class='col'>
-              <%= select f, :e1, base_value_options(), class: "form-select-sm" %>
-            </div>
-            <div class='col'>
-              <%= select f, :e2, base_value_options(), class: "form-select-sm", prompt: "-" %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class='col p-3 text-center'><%= form_buttons() %></div>
-    </div>
-  </form>
-<% end %>
-
 <table class='table table-sm'>
   <thead>
     <tr>
-      <th scope='col'>Kampftechnik</th>
-      <th scope='col'>FK?</th>
-      <th scope='col' class='text-center'>PA?</th>
-      <th scope='col' class='text-center' colspan="2">LE</th>
+      <%= id_cell(@admin) %>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>FK</th>
+      <th scope='col' class='text-center'>PA</th>
+      <th scope='col' class='text-center'>LE</th>
       <th scope='col' class='text-center'>SF</th>
-      <%= if @admin, do: content_tag :th, "Aktionen", scope: "col", class: "text-center" %>
     </tr>
   </thead>
   <tbody>
-    <%= for skill <- @combat_skills do %>
+    <%= for skill <- @entries do %>
       <tr>
+        <td class='text-center'><%= skill.id %></td>
         <th scope='row'><%= skill.name %></th>
-        <td class='text-center'><%= if skill.ranged, do: icon("star") %></td>
-        <td class='text-center'><%= if skill.parade, do: icon("star") %></td>
-        <td class='text-center' colspan="2"><%= skill.e1 %><%= if skill.e2, do: "/#{skill.e2}" %></td>
+        <%= check_cell :skill, :ranged, skill.ranged %>
+        <%= check_cell :skill, :parade, skill.parade %>
+        <td class='text-center'><%= skill.e1 %><%= if skill.e2, do: "/#{skill.e2}" %></td>
         <td class='text-center'><%= skill.sf %></td>
-        <%= if @admin, do: action_cell(@live_action, skill.id) %>
       </tr>
     <% end %>
   </tbody>
