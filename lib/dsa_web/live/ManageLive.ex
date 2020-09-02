@@ -57,16 +57,15 @@ defmodule DsaWeb.ManageLive do
 
     {:ok, socket
     |> assign(:changeset, nil)
-    |> assign(:skills, Lore.list_skills())
     |> assign(:groups, Accounts.list_groups())
     |> assign(:users, users)
-    |> assign(:weapons, Lore.list_weapons())
     |> assign(:admin, Enum.find(users, & &1.id == user_id).admin)}
   end
 
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
+      :special_skills -> {:noreply, assign(socket, :entries, Lore.list_special_skills())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
       :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
       :weapons -> {:noreply, assign(socket, :entries, Lore.list_weapons())}

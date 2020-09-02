@@ -14,6 +14,10 @@ defmodule Dsa.Lore.CombatSkill do
 
     has_many :weapons, Dsa.Lore.Weapon
 
+    many_to_many :special_skills, Dsa.Lore.SpecialSkill,
+      join_through: "combat_special_skills",
+      on_replace: :delete
+
     many_to_many :characters, Dsa.Accounts.Character,
       join_through: Dsa.Accounts.CharacterCombatSkill,
       on_replace: :delete

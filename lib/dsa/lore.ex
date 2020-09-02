@@ -6,7 +6,7 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, Skill, Weapon}
+  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Weapon}
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
@@ -17,6 +17,8 @@ defmodule Dsa.Lore do
   def change_skill(skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
 
   def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
+
+  def list_special_skills, do: Repo.all(from(s in SpecialSkill, preload: :combat_skills, order_by: s.name))
 
   def list_weapons do
     Repo.all(from(w in Weapon, preload: :combat_skill, order_by: [w.combat_skill_id, w.name]))
@@ -210,6 +212,24 @@ defmodule Dsa.Lore do
       |> Repo.insert_or_update!()
 
       Logger.debug("Weapon: #{name} updated...")
+    end)
+  end
+
+  def seed(:special_skills) do
+    SpecialSkill.entries()
+    |> Enum.each(fn {%{id: id, name: name} = params, combat_skills} ->
+
+      combat_skills = Repo.all(from(s in CombatSkill, where: s.id in ^combat_skills))
+
+      case Repo.get(SpecialSkill, id) do
+        nil  -> %SpecialSkill{id: id}
+        entry -> Repo.preload(entry, :combat_skills)
+      end
+      |> SpecialSkill.changeset(params)
+      |> Ecto.Changeset.put_assoc(:combat_skills, combat_skills)
+      |> Repo.insert_or_update!()
+
+      Logger.debug("Special Skill: #{name} updated...")
     end)
   end
 end

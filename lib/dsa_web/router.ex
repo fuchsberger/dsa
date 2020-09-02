@@ -36,6 +36,7 @@ defmodule DsaWeb.Router do
 
     live "/manage/armors", ManageLive, :armors
     live "/manage/combat_skills", ManageLive, :combat_skills
+    live "/manage/special_skills", ManageLive, :special_skills
     live "/manage/skills", ManageLive, :skills
     live "/manage/groups", ManageLive, :groups
     live "/manage/users", ManageLive, :users

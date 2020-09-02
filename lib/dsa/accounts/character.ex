@@ -43,6 +43,8 @@ defmodule Dsa.Accounts.Character do
     has_many :combat_skills, through: [:character_combat_skills, :skill]
     has_many :skills, through: [:character_skills, :skill]
 
+    many_to_many :special_skills, Dsa.Lore.SpecialSkill, join_through: "character_special_skills"
+
     timestamps()
   end
 

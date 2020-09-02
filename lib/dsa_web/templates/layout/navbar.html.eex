@@ -44,6 +44,7 @@
             <a href='#' id='manage_dropdown' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'>Verwalten</a>
             <ul class="dropdown-menu" aria-labelledby="manage_dropdown">
               <%= link "Kampftechniken", to: Routes.manage_path(@conn, :combat_skills), class: "dropdown-item" %>
+              <%= link "Sonderfertigkeiten", to: Routes.manage_path(@conn, :special_skills), class: "dropdown-item" %>
               <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
               <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
               <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>

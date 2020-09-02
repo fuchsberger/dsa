@@ -19,6 +19,7 @@ defmodule Dsa.Lore.Weapon do
     field :lz, :integer
 
     belongs_to :combat_skill, Dsa.Lore.CombatSkill
+    many_to_many :special_skills, Dsa.Lore.SpecialSkill, join_through: "combat_special_skills"
   end
 
   @fields ~w(id name tp_dice tp_bonus l1 l2 ls at_mod pa_mod rw rw2 rw3 lz combat_skill_id)a
