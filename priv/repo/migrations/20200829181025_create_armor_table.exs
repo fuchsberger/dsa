@@ -19,8 +19,8 @@ defmodule Elixir.Dsa.Repo.Migrations.CreateArmorTable do
       add :name, :string
       add :tp_dice, :integer
       add :tp_bonus, :integer
-      add :l1, :string, size: 2
-      add :l2, :string, size: 2
+      add :ge, :boolean
+      add :kk, :boolean
       add :ls, :integer
       add :at_mod, :integer
       add :pa_mod, :integer

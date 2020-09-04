@@ -22,6 +22,8 @@ defmodule Dsa.Accounts.Character do
     field :rw, :integer, default: 1
 
     # stats
+    field :be, :integer, default: 0
+    field :rs, :integer, default: 0
     field :le, :integer, default: 30
     field :ae, :integer, default: 0
     field :ke, :integer, default: 0
@@ -49,10 +51,10 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @required_fields ~w(name species culture profession at pa w2 tp rw le ae ke sk zk aw ini gw sp)a ++ Dsa.Lists.base_values()
+  @required_fields ~w(name species culture profession at pa w2 tp rw le ae ke sk zk aw gw sp)a ++ Dsa.Lists.base_values()
   def changeset(character, attrs) do
     character
-    |> cast(attrs, @required_fields ++ [:group_id])
+    |> cast(attrs, [:group_id | @required_fields])
     |> validate_required(@required_fields)
     |> validate_length(:name, min: 2, max: 15)
     |> validate_length(:species, min: 3, max: 10)
@@ -62,10 +64,11 @@ defmodule Dsa.Accounts.Character do
     |> foreign_key_constraint(:user_id)
   end
 
-  @cfields ~w(weapon_id weapon2_id armor_id)a
+  @cfields ~w()a
   def combat_changeset(character, attrs) do
     character
-    |> cast(attrs, @cfields)
+    |> cast(attrs, [:ini | @cfields])
     |> validate_required(@cfields)
+    |> validate_number(:ini, greater_than: 0)
   end
 end

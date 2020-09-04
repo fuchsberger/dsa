@@ -1,6 +1,8 @@
 defmodule DsaWeb.CharacterView do
   use DsaWeb, :view
 
+  import DsaWeb.CharacterHelpers
+
   def field(form, field, _tooltip \\ nil) do
     ~E"""
     <div class='col-sm-3'>
@@ -93,4 +95,6 @@ defmodule DsaWeb.CharacterView do
       {true, tp} -> "2W+#{tp}"
     end
   end
+
+
 end

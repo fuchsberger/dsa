@@ -26,7 +26,17 @@
             end
           %>
         </td>
-        <td class='text-center'><%= "#{weapon.l1}#{if weapon.l2, do: "/#{weapon.l2}"} #{weapon.ls}" %></td>
+        <td class='text-center'>
+          <%=
+            case {weapon.ge, weapon.kk} do
+              {true, true} -> "GE/KK "
+              {false, true} -> "KK "
+              {true, false} -> "GE "
+              {false, false} -> "FF "
+            end
+          %>
+          <%= weapon.ls %>
+        </td>
         <td class='text-center'><%= "#{weapon.at_mod}/#{weapon.pa_mod}" %></td>
       </tr>
     <% end %>

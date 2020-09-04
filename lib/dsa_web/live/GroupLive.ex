@@ -8,6 +8,14 @@ defmodule DsaWeb.GroupLive do
 
   alias Dsa.{Event, Lore, Accounts, Repo}
 
+  @character_preloads [
+    :user,
+    :character_armors,
+    :character_mweapons,
+    :character_fweapons,
+    character_skills: [:skill]
+  ]
+
   defp topic(group_id), do: "group:#{group_id}"
 
   def handle_info(%{event: "add-event", payload: event}, socket) do
@@ -16,7 +24,10 @@ defmodule DsaWeb.GroupLive do
 
   def handle_info(%{event: "update-character", payload: character}, socket) do
     idx = Enum.find_index(socket.assigns.group.characters, & &1.id == character.id)
-    characters = List.replace_at(socket.assigns.group.characters, idx, character)
+    characters =
+      socket.assigns.group.characters
+      |> List.replace_at(idx, character)
+      |> Enum.sort_by(& {&1.ini && &1.ini * -1, &1.name})
 
     if socket.assigns.character.data.id == character.id do
       {:noreply, socket
@@ -72,7 +83,7 @@ defmodule DsaWeb.GroupLive do
 
     case Accounts.update_character(socket.assigns.character.data, params, :combat) do
       {:ok, character} ->
-        character = Repo.preload(character, [:armor], force: true)
+        character = Repo.preload(character, @character_preloads, force: true)
         Logger.debug("Character updated.")
         DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
         {:noreply, socket}
@@ -216,6 +227,35 @@ defmodule DsaWeb.GroupLive do
 
       {:error, changeset} ->
         Logger.error("Error occured while creating talent-roll: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("roll-ini", %{"ini" => ini}, socket) do
+    ini = String.to_integer(ini) + Enum.random(1..6)
+    case Accounts.update_character(socket.assigns.character.data, %{ini: ini}, :combat) do
+      {:ok, character} ->
+        character = Repo.preload(character, @character_preloads)
+        Logger.debug("#{character.name} rolled initiative #{character.ini}")
+        DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while changing character: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("reset-ini", _params, socket) do
+    case Accounts.update_character(socket.assigns.character.data, %{ini: nil}, :combat) do
+      {:ok, character} ->
+        character = Repo.preload(character, @character_preloads)
+        Logger.debug("#{character.name} left combat.")
+        DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while changing character: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end

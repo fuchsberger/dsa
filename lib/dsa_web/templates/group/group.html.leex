@@ -7,10 +7,10 @@
     <thead>
       <tr>
         <%= unless is_nil(@character), do: content_tag :th, "", scope: "col" %>
+        <th scope='col'>INI</th>
         <th scope='col'>Charakter</th>
         <th scope='col'>Profession</th>
         <th scope='col'>Player</th>
-        <th scope='col'>Rüstung</th>
       </tr>
     </thead>
     <tbody>
@@ -26,10 +26,10 @@
                 %>
               </td>
             <% end %>
+            <td><%= if character.ini == 0, do: "-", else: character.ini %></td>
             <td><%= character.name %></td>
             <td><%= character.profession %></td>
             <td><%= character.user.name %></td>
-            <td><%= character.armor && character.armor.name %></td>
           </tr>
         <% end %>
       <% end %>
@@ -61,12 +61,39 @@
           ] %>
 
 
-            <div class="row g-2">
-              <div class="col-4">
-                <%= label f, :armor_id, "Rüstung" %>
+            <div class="row g-1">
+              <% ini = ini(@character) %>
+              <div class="col-1">
+                <strong><%= label f, :ini, "INI" %></strong>
               </div>
-              <div class="col-8">
-                <%= select f, :armor_id, @armor_options, class: "form-select-sm", prompt: "bitte auswählen..." %>
+              <div class="col-1" phx-update='ignore'>
+                <span
+                  id='ini'
+                  class="badge bg-secondary"
+                  data-html='true'
+                  phx-hook='tooltip'
+                  title='Basis <span class="badge bg-info"><%= ini.basis %></span>'
+                ><%= ini.total %></span>
+              </div>
+              <div class="col-2">
+                <%= number_input f, :ini, class: "form-control-sm" %>
+              </div>
+              <div class="col-2">
+                <div class='btn-group btn-group-sm' role='group'>
+                  <button
+                    type='button'
+                    id='roll-ini'
+                    class='btn btn-light'
+                    phx-click='roll-ini'
+                    phx-value-ini='<%= ini.total %>'
+                  ><i class='icon-roll'></i></button>
+                  <button
+                    type='button'
+                    id='reset-ini'
+                    class='btn btn-light'
+                    phx-click='reset-ini'
+                  ><i class='icon-cancel'></i></button>
+                </div>
               </div>
             </div>
           </form>

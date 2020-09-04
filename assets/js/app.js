@@ -13,8 +13,8 @@ import LiveSocket from "phoenix_live_view"
 const hooks = {}
 
 hooks.tooltip = {
-  mounted(){
-    this.tooltip = new Tooltip(this.el)
+  mounted() {
+    this.el.tooltip = new Tooltip(this.el)
   }
 }
 
