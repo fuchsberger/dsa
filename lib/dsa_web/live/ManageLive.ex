@@ -68,7 +68,8 @@ defmodule DsaWeb.ManageLive do
       :special_skills -> {:noreply, assign(socket, :entries, Lore.list_special_skills())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
       :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
-      :weapons -> {:noreply, assign(socket, :entries, Lore.list_weapons())}
+      :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
+      :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end
   end

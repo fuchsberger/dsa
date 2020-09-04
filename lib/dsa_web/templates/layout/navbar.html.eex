@@ -48,6 +48,8 @@
               <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
               <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
               <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>
+              <%= link "Nahkampfwaffen", to: Routes.manage_path(@conn, :mweapons), class: "dropdown-item" %>
+              <%= link "Fernkampfwaffen", to: Routes.manage_path(@conn, :fweapons), class: "dropdown-item" %>
               <%= link "Rüstungen", to: Routes.manage_path(@conn, :armors), class: "dropdown-item" %>
             </ul>
           </li>

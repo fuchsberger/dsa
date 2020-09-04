@@ -4,20 +4,24 @@ defmodule Dsa.Accounts.Group do
 
   schema "groups" do
     field :name, :string
+
+    belongs_to :master, Dsa.Accounts.User
+
     has_many :characters, Dsa.Accounts.Character
     has_many :logs, Dsa.Event.Log
-    belongs_to :master, Dsa.Accounts.User
     has_many :routine, Dsa.Event.Routine
     has_many :general_rolls, Dsa.Event.GeneralRoll
     has_many :trait_rolls, Dsa.Event.TraitRoll
     has_many :talent_rolls, Dsa.Event.TalentRoll
+
     timestamps()
   end
 
+  @fields [:name, :master_id]
   def changeset(group, attrs) do
     group
-    |> cast(attrs, [:name, :master_id])
-    |> validate_required([:name, :master_id])
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
     |> validate_length(:name, max: 10)
     |> foreign_key_constraint(:master_id)
   end

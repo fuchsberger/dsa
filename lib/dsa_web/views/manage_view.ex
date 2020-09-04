@@ -1,7 +1,6 @@
 defmodule DsaWeb.ManageView do
   use DsaWeb, :view
 
-  import Ecto.Changeset, only: [get_field: 2]
   import Dsa.Lists
 
   def entries(action, armors, combat_skills, skills, groups, users, weapons) do
@@ -17,63 +16,6 @@ defmodule DsaWeb.ManageView do
 
   def new?(changeset), do: changeset && changeset.data.__meta__.state == :built
   def edit?(changeset), do: changeset && changeset.data.__meta__.state == :loaded
-
-  defp meele_skill_ids(combat_skills) do
-    combat_skills
-    |> Enum.reject(& &1.ranged)
-    |> Enum.map(& &1.id)
-  end
-
-  defp ranged_skill_ids(combat_skills) do
-    combat_skills
-    |> Enum.filter(& &1.ranged)
-    |> Enum.map(& &1.id)
-  end
-
-  def header(:weapons, admin?) do
-    ~E"""
-    <th scope='col'>Name</th>
-    <th scope='col'>Kampftechnik</th>
-    <th scope='col' class='text-center'>TP</th>
-    <th scope='col' class='text-center'>RW</th>
-    <th scope='col' class='text-center'>L+S / LZ</th>
-    <th scope='col' class='text-center'>AT/PA</th>
-    <%= if admin?, do: content_tag :th, "Aktionen", scope: "col", class: "text-center" %>
-    """
-  end
-
-  def row(:weapons, weapon, admin?) do
-    ~E"""
-    <th scope='row'><%= weapon.name %></th>
-    <td><%= weapon.combat_skill.name %></td>
-    <td class='text-center'><%= "#{weapon.tp_dice}W+#{weapon.tp_bonus}" %></td>
-    <td class='text-center'>
-      <%=
-        if weapon.combat_skill.ranged do
-          "#{weapon.rw}/#{weapon.rw2}/#{weapon.rw3}"
-        else
-          case weapon.rw do
-            1 -> "Kurz"
-            2 -> "Mittel"
-            3 -> "Lang"
-          end
-        end
-      %>
-    </td>
-    <td class='text-center'>
-      <%=
-        if weapon.combat_skill.ranged do
-          weapon.lz
-        else
-          "#{weapon.l1}#{if weapon.l2, do: "/#{weapon.l2}"} #{weapon.ls}"
-        end
-      %>
-    </td>
-    <td class='text-center'>
-      <%= unless weapon.combat_skill.ranged, do: "#{weapon.at_mod}/#{weapon.pa_mod}" %>
-    </td>
-    """
-  end
 
   def form(:weapons, f, combat_skills) do
 

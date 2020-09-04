@@ -5,6 +5,7 @@
       <th scope='col'>Name</th>
       <th scope='col' class='text-center'>RS</th>
       <th scope='col' class='text-center'>BE</th>
+      <th scope='col' class='text-center'>SW</th>
       <th scope='col' class='text-center'>Abzüge</th>
     </tr>
   </thead>
@@ -15,6 +16,7 @@
         <th scope='row'><%= armor.name %></th>
         <td class='text-center'><%= armor.rs %></td>
         <td class='text-center'><%= armor.be %></td>
+        <td class='text-center'><%= armor.sw %></td>
         <td class='text-center'><%= if armor.penalties, do: "-1 GS, -1 INI", else: "-" %></td>
       </tr>
     <% end %>

@@ -1,0 +1,24 @@
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <%= id_cell(@admin) %>
+      <th scope='col'>Name</th>
+      <th scope='col'>Fernkampftechnik</th>
+      <th scope='col' class='text-center'>TP</th>
+      <th scope='col' class='text-center'>RW</th>
+      <th scope='col' class='text-center'>LZ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for weapon <- Enum.filter(@entries, & &1.combat_skill.ranged) do %>
+      <tr>
+        <td class='text-center'><%= weapon.id %></td>
+        <th scope='row'><%= weapon.name %></th>
+        <td><%= weapon.combat_skill.name %></td>
+        <td class='text-center'><%= "#{weapon.tp_dice}W+#{weapon.tp_bonus}" %></td>
+        <td class='text-center'><%= "#{weapon.rw1}/#{weapon.rw2}/#{weapon.rw3}" %></td>
+        <td class='text-center'><%= weapon.lz %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -6,6 +6,7 @@
       <th scope='col' class='text-center'>FK</th>
       <th scope='col' class='text-center'>PA</th>
       <th scope='col' class='text-center'>LE</th>
+      <th scope='col' class='text-center'>BF</th>
       <th scope='col' class='text-center'>SF</th>
     </tr>
   </thead>
@@ -17,6 +18,7 @@
         <%= check_cell :skill, :ranged, skill.ranged %>
         <%= check_cell :skill, :parade, skill.parade %>
         <td class='text-center'><%= skill.e1 %><%= if skill.e2, do: "/#{skill.e2}" %></td>
+        <td class='text-center'><%= skill.bf %></td>
         <td class='text-center'><%= skill.sf %></td>
       </tr>
     <% end %>

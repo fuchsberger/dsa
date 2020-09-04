@@ -34,9 +34,10 @@ defmodule Dsa.Accounts.Character do
 
     belongs_to :group, Dsa.Accounts.Group
     belongs_to :user, Dsa.Accounts.User
-    belongs_to :weapon, Dsa.Lore.Weapon
-    belongs_to :weapon2, Dsa.Lore.Weapon
-    belongs_to :armor, Dsa.Lore.Armor
+
+    has_many :character_mweapons, Dsa.Accounts.CharacterMWeapon, on_replace: :delete
+    has_many :character_fweapons, Dsa.Accounts.CharacterFWeapon, on_replace: :delete
+    has_many :character_armors, Dsa.Accounts.CharacterArmor, on_replace: :delete
 
     has_many :character_combat_skills, Dsa.Accounts.CharacterCombatSkill, on_replace: :delete
     has_many :character_skills, Dsa.Accounts.CharacterSkill, on_replace: :delete
@@ -66,8 +67,5 @@ defmodule Dsa.Accounts.Character do
     character
     |> cast(attrs, @cfields)
     |> validate_required(@cfields)
-    |> foreign_key_constraint(:armor_id)
-    |> foreign_key_constraint(:weapon_id)
-    |> foreign_key_constraint(:weapon2_id)
   end
 end

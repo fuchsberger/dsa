@@ -6,7 +6,7 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Weapon}
+  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, MWeapon, FWeapon}
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
@@ -20,8 +20,13 @@ defmodule Dsa.Lore do
 
   def list_special_skills, do: Repo.all(from(s in SpecialSkill, preload: :combat_skills, order_by: s.name))
 
-  def list_weapons do
-    Repo.all(from(w in Weapon, preload: :combat_skill, order_by: [w.combat_skill_id, w.name]))
+  def list_mweapons do
+    Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
+  end
+
+
+  def list_fweapons do
+    Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
   end
 
   def cast_options do
@@ -33,24 +38,13 @@ defmodule Dsa.Lore do
   end
 
   def seed(:armors) do
-    [
-      { 1, "Schwere Kleidung", 1, 0, true },
-      { 2, "Winterkleidung", 1, 0, true },
-      { 3, "Iryanrüstung", 3, 1, true },
-      { 4, "Kettenhemd", 4, 2, false },
-      { 5, "Krötenhaut", 3, 1, true },
-      { 6, "Lederharnisch", 3, 1, true },
-      { 7, "Leichte Platte", 6, 3, false },
-      { 8, "Schuppenpanzer", 5, 2, true },
-      { 9, "Spiegelpanzer", 4, 2, false },
-      { 10, "Tuchrüstung", 2, 1, false }
-    ]
-    |> Enum.each(fn {id, name, rs, be, penalties} ->
+    Armor.entries()
+    |> Enum.each(fn %{id: id, name: name} = params ->
       case Repo.get(Armor, id) do
         nil  -> %Armor{id: id}
         entry -> entry
       end
-      |> Armor.changeset(%{id: id, name: name, rs: rs, be: be, penalties: penalties})
+      |> Armor.changeset(params)
       |> Repo.insert_or_update!()
 
       Logger.debug("Armor: #{name} updated...")
@@ -58,49 +52,17 @@ defmodule Dsa.Lore do
   end
 
   def seed(:combat_skills) do
-    [
-      # Close combat
-      { 1, "B", false, true, "GE", "Dolche", nil },
-      { 2, "C", false, true, "GE", "Fächer", nil },
-      { 3, "C", false, true, "GE", "Fechtwaffen", nil },
-      { 4, "C", false, true, "KK", "Hiebwaffen", nil },
-      { 5, "C", false, false, "KK", "Kettenwaffen", nil },
-      { 6, "B", false, true, "KK", "Lanzen", nil },
-      { 7, "B", false, false, "FF", "Peitschen", nil },
-      { 8, "B", false, true, "GE", "Raufen", "KK" },
-      { 9, "C", false, true, "KK", "Schilde", nil },
-      { 10, "C", false, true, "GE", "Schwerter", "KK" },
-      { 11, "C", false, false, "KK", "Spießwaffen", nil },
-      { 12, "C", false, true, "GE", "Stangenwaffen", "KK" },
-      { 13, "C", false, true, "KK", "Zweihandhiebwaffen", nil },
-      { 14, "C", false, true, "KK", "Zweihandschwerter", nil },
-      # Ranged combat
-      { 15, "B", true, false, "FF", "Armbrüste", nil },
-      { 16, "B", true, false, "FF", "Blasrohre", nil },
-      { 17, "C", true, false, "FF", "Bögen", nil },
-      { 18, "C", true, false, "FF", "Diskusse", nil },
-      { 19, "B", true, false, "FF", "Feuerspeien", nil },
-      { 20, "B", true, false, "FF", "Schleudern", nil },
-      { 21, "B", true, false, "FF", "Wurfwaffen", nil }
-    ]
-    |> Enum.each(fn {id, sf, ranged, parade, e1, name, e2} ->
-      case Repo.get(CombatSkill, id) do
-        nil  -> %CombatSkill{id: id}
-        entry -> entry
-      end
-      |> CombatSkill.changeset(%{
-        id: id,
-        name: name,
-        ranged: ranged,
-        parade: parade,
-        e1: e1,
-        e2: e2,
-        sf: sf
-      })
-      |> Repo.insert_or_update!()
+    CombatSkill.entries()
+    |> Enum.each(fn %{id: id, name: name} = params ->
+        case Repo.get(CombatSkill, id) do
+          nil  -> %CombatSkill{id: id}
+          entry -> entry
+        end
+        |> CombatSkill.changeset(params)
+        |> Repo.insert_or_update!()
 
-      Logger.debug("Combat Skill: #{name} updated...")
-    end)
+        Logger.debug("Combat Skill: #{name} updated...")
+      end)
   end
 
   def seed(:skills) do
@@ -200,15 +162,28 @@ defmodule Dsa.Lore do
     end)
   end
 
-  def seed(:weapons) do
-    [
-    ]
-    |> Enum.each(fn {id, name} ->
-      case Repo.get(Weapon, id) do
-        nil  -> %Weapon{id: id}
+  def seed(:mweapons) do
+    MWeapon.entries()
+    |> Enum.each(fn %{id: id, name: name} = params ->
+      case Repo.get(MWeapon, id) do
+        nil  -> %MWeapon{id: id}
         entry -> entry
       end
-      |> Weapon.changeset(%{id: id, name: name})
+      |> MWeapon.changeset(params)
+      |> Repo.insert_or_update!()
+
+      Logger.debug("Weapon: #{name} updated...")
+    end)
+  end
+
+  def seed(:fweapons) do
+    FWeapon.entries()
+    |> Enum.each(fn %{id: id, name: name} = params ->
+      case Repo.get(FWeapon, id) do
+        nil  -> %FWeapon{id: id}
+        entry -> entry
+      end
+      |> FWeapon.changeset(params)
       |> Repo.insert_or_update!()
 
       Logger.debug("Weapon: #{name} updated...")
