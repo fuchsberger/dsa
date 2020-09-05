@@ -2,7 +2,15 @@
 # mix run priv/repo/seeds.exs (regenerates armors and weapons)
 
 
-alias Dsa.{Accounts, Repo}
+alias Dsa.{Accounts, Lore, Repo}
+
+# Add DSA data
+Lore.seed(:combat_skills)
+Lore.seed(:skills)
+Lore.seed(:special_skills)
+Lore.seed(:mweapons)
+Lore.seed(:fweapons)
+Lore.seed(:armors)
 
 # Create Admin User
 {:ok, alex} = Accounts.register_user(%{

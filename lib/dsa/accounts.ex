@@ -8,6 +8,21 @@ defmodule Dsa.Accounts do
   alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, Group, User}
   alias Dsa.Lore.{CombatSkill, Skill}
 
+  @sorted_combat_skills from(s in CombatSkill, order_by: s.name)
+  @sorted_skills from(s in Skill, order_by: [s.category, s.name])
+
+  @character_preloads [
+    :group,
+    :user,
+    :character_armors,
+    :character_mweapons,
+    :character_fweapons,
+    :character_skills,
+    :character_combat_skills,
+    combat_skills: @sorted_combat_skills,
+    skills: @sorted_skills
+  ]
+
   def get_user(id), do:  Repo.get(user_query(), id)
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)
@@ -34,7 +49,12 @@ defmodule Dsa.Accounts do
 
   def list_users, do: Repo.all(User)
 
-  def change_registration(%User{} = user \\ %User{}, params \\ %{}) do
+  def list_user_characters(user_id) do
+    from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
+    |> Repo.all()
+  end
+
+  def change_registration(%User{} = user, params \\ %{}) do
     User.registration_changeset(user, params)
   end
 
@@ -60,10 +80,15 @@ defmodule Dsa.Accounts do
   end
 
   def get_user_character!(user_id, id) do
-    Character
-    |> user_characters_query(user_id)
+    from(c in Character,
+      preload: ^@character_preloads,
+      where: c.user_id == ^user_id and c.id == ^id
+    )
     |> Repo.get!(id)
-    |> sort_skills()
+  end
+
+  def preload(%Character{} = character) do
+    Repo.preload(character, @character_preloads, force: true)
   end
 
   defp user_characters_query(query, %User{id: user_id}) do
@@ -97,7 +122,7 @@ defmodule Dsa.Accounts do
         |> Repo.all()
         |> Enum.each(& add_combat_skill!(character.id, &1))
 
-        from(s in Skill, where: s.category != "Zauber" and s.category != "Liturgie")
+        from(s in Skill, where: s.category != 6 and s.category != 7)
         |> Repo.all()
         |> Enum.each(& add_skill!(character.id, &1))
 
@@ -131,7 +156,7 @@ defmodule Dsa.Accounts do
 
   def delete_character!(character), do: Repo.delete!(character)
 
-  def change_character(%Character{} = character, attrs) do
+  def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
 
@@ -141,7 +166,9 @@ defmodule Dsa.Accounts do
 
   def list_groups, do: Repo.all(from(g in Group, preload: :master))
 
-  def change_group(%Group{} = group \\ %Group{}, attrs \\ %{}), do: Group.changeset(group, attrs)
+  def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))
+
+  def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
@@ -149,13 +176,7 @@ defmodule Dsa.Accounts do
       talent_rolls: [:character, :skill],
       trait_rolls: [:character],
       routine: [:character, :skill],
-      characters: [
-        :user,
-        :character_armors,
-        :character_mweapons,
-        :character_fweapons,
-        character_skills: [:skill]
-      ]
+      characters: ^@character_preloads
     ]), id)
   end
 

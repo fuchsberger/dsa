@@ -57,7 +57,7 @@ defmodule DsaWeb.CharacterController do
 
   defp cast_options(character) do
     character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)
-    Enum.reject(Lore.cast_options(), fn {_, id} -> Enum.member?(character_skill_ids, id) end)
+    Enum.reject(Lore.list_cast_options(), fn {_, id} -> Enum.member?(character_skill_ids, id) end)
   end
 
   def update(conn, %{"id" => id, "character" => params}, user) do

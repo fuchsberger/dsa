@@ -1,0 +1,355 @@
+<%= if @live_action == :index do %>
+  <div class='d-flex my-3'>
+    <h3 class="flex-grow-1">Heldenübersicht</h3>
+    <%= live_patch "Neu erstellen", to: Routes.character_path(@socket, :new), class: "btn btn-primary" %>
+  </div>
+
+  <table class='table'>
+    <thead>
+      <tr>
+        <th scope='col'>Name</th>
+        <th scope='col'>Kultur</th>
+        <th scope='col'>Profession</th>
+        <th scope='col'>Gruppe</th>
+        <th scope='col' class='text-center'>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for character <- @characters do %>
+        <tr>
+          <th scope='row'><%= character.name %></th>
+          <td><%= character.culture %></td>
+          <td><%= character.profession %></td>
+          <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
+          <td class='text-center'>
+            <%= live_patch icon("edit"), to: Routes.character_path(@socket, :edit, character.id) %>
+            <%= link icon("delete", class: "text-danger"), to: Routes.character_path(@socket, :delete, character), method: :delete, data: [confirm: "Bist du sicher?"], class: "ml-2" %>
+          </td>
+        </tr>
+      <% end %>
+      <%= if Enum.count(@characters) == 0 do %>
+        <tr><td colspan='5'><em>Du hast noch keine Helden erstellt.</em></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+
+  <%= f = form_for @changeset, "#", [
+      phx_change: :change,
+      phx_submit: nil,
+      novalidate: true
+    ]
+  %>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Fehler!</strong> Etwas ist falsch gelaufen! Bitte überprüfe alle Eingaben.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% end %>
+
+    <h3>Heldenbogen</h3>
+
+    <div class='row g-3'>
+      <div class='col-lg'>
+
+        <%# CARD GENERELL ----------------------------------------------------------------------- %>
+        <div class="card mb-3">
+          <h5 class="card-header">Generell</h5>
+          <div class="card-body">
+
+            <div class='row g-2'>
+              <%= label f, :name, "Name / AP", class: "col-sm-4 col-form-label" %>
+              <div class="col-sm-4">
+                <%= text_input f, :name, class: "form-control-sm", placeholder: "Name" %>
+                <%= error_tag f, :name %>
+              </div>
+              <div class="col-sm-4">
+                <%= number_input f, :ap, class: "form-control-sm", placeholder: "AP" %>
+                <%= error_tag f, :ap %>
+              </div>
+            </div>
+
+            <div class='row g-2'>
+              <%= label f, :species, "Rasse / Kultur", class: "col-sm-4 col-form-label" %>
+              <div class="col-sm-4">
+                <%= text_input f, :species, class: "form-control-sm", placeholder: "Rasse" %>
+                <%= error_tag f, :species %>
+              </div>
+              <div class="col-sm-4">
+                <%= text_input f, :culture, class: "form-control-sm", placeholder: "Kultur" %>
+                <%= error_tag f, :culture %>
+              </div>
+            </div>
+
+            <div class='row g-2'>
+              <%= label f, :profession, class: "col-sm-4 col-form-label" %>
+              <div class="col-sm-8">
+                <%= text_input f, :profession, class: "form-control-sm", placeholder: "Profession" %>
+                <%= error_tag f, :profession %>
+              </div>
+            </div>
+
+            <div class='row g-2'>
+              <%= label f, :gruppe_id, class: "col-sm-4 col-form-label" %>
+              <div class="col-sm-8">
+                <%= select f, :group_id, @group_options, class: "form-select-sm", prompt: "keiner Gruppe beigetreten" %>
+                <%= error_tag f, :gruppe_id %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# CARD TRAITS ------------------------------------------------------------------------- %>
+        <div id='trait-card' class="card">
+          <h5 class="card-header">Grundwerte</h5>
+          <div class="card-body">
+
+            <h6>Eigenschaften</h6>
+            <div class='row g-2'><%= Enum.map(base_values(), & field(f, &1)) %></div>
+
+            <h6 class='mt-2'>Basiswerte</h6>
+            <div class='row g-2'>
+              <%= field f, :le %>
+              <%= field f, :ae %>
+              <%= field f, :zk %>
+              <%= field f, :sk %>
+              <%= field f, :aw %>
+              <%= field f, :gw %>
+              <%= field f, :sp %>
+            </div>
+
+            <h6 class='mt-2'>Kampfwerte</h6>
+            <div class='row g-2'>
+              <%= field f, :at %>
+              <%= field f, :pa %>
+
+              <div class='col-sm-3'>
+                <div class="input-group input-group-sm mb-2">
+                  <%= label f, :dmg, "TP", class: "input-group-text font-weight-bold" %>
+                  <div class='form-control'><%= tp(f) %></div>
+                </div>
+              </div>
+
+              <div class='col-sm-3'>
+                <div class="input-group input-group-sm mb-2">
+                  <div class="input-group-text">
+                    <%= checkbox f, :w2, class: "ml-2 form-check-input" %>
+                  </div>
+                  <%= number_input f, :tp %>
+                </div>
+              </div>
+
+              <div class='col-sm-3'>
+                <div class="input-group input-group-sm mb-2">
+                  <%= label f, :rw, "RW", class: "input-group-text font-weight-bold" %>
+                  <div class='form-control'><%= range(f) %></div>
+                </div>
+              </div>
+
+              <div class='col-sm-3'>
+                <%= select(f, :rw, [
+                  "Kurz": 0,
+                  "Mittel": 1,
+                  "Lang": 2
+                  ], selected: 1, class: "form-select-sm") %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class='col-lg'>
+        <div id='talente' class="card mb-3">
+          <div class="card-header pb-0 d-flex justify-content-between">
+            <h5 class='mb-0'><%= talent_group(@category) %></h5>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                ...wähle
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <%= dropdown_item "Kampftechniken", "0" %>
+                <%= dropdown_item "Körpertalente", "1" %>
+                <%= dropdown_item "Gesellschaftstalente", "2" %>
+                <%= dropdown_item "Naturtalente", "3" %>
+                <%= dropdown_item "Wissenstalente", "4" %>
+                <%= dropdown_item "Handwerkstalente", "5" %>
+                <%= dropdown_item "Zauber", "6" %>
+                <%= dropdown_item "Liturgien", "7" %>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            <%= if is_nil(@category) do %>
+              <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
+                <table class='table table-sm mb-0'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Name</th>
+                      <th scope='col' class='text-center'></th>
+                      <th scope='col' class='text-center'>AT</th>
+                      <th scope='col' class='text-center'>PA</th>
+                      <th scope='col' class='text-center'>ST</th>
+                    </tr>
+                  </thead>
+                  <tbody class='small'>
+                  <%= for fs <- inputs_for f, :character_combat_skills do %>
+                    <%# character = @form.source.data %>
+                    <tr>
+                      <td>
+                        <%= hidden_inputs_for fs %>
+                        <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
+                      </td>
+                      <td class='text-center'></td>
+                      <td class='text-center'><small><em><%# at(character, talent) %></em></small></td>
+                      <td class='text-center'><%# pa(character, talent) || "-" %></td>
+                      <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div area-area_labeledby='#<%= @category %>' id='<%= @category %>' class='tab-pane' role='tabpanel'>
+                <table class='table table-sm mb-0'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Talent</th>
+                      <th scope='col' class='text-center'>Probe</th>
+                      <th scope='col' class='text-center'>BE</th>
+                      <th scope='col' class='text-center'>ST</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <%= for fs <- form_group(f, @category) do %>
+                    <tr>
+                      <td>
+                        <%= hidden_inputs_for(fs) %>
+                        <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                      </td>
+                      <td class='text-center'>
+                        <small>
+                          <em><%= fs.data.skill.e1 %></em> /
+                          <em><%= fs.data.skill.e2 %></em> /
+                          <em><%= fs.data.skill.e3 %></em>
+                        </small>
+                      </td>
+                      <td class='text-center'><%= be(fs.data.skill.be) %></td>
+                      <td>
+                        <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <%= if @category == 6 || @category == 7 do %>
+                    <tr>
+                      <td colspan='4'>
+                        <%= select f, :skill_id, @cast_options, class: "border-0 form-select-sm", prompt: "Zauber / Liturgie hinzufügen" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <% zauber_forms = form_group(f, "Zauber") %>
+        <%= if Enum.count(zauber_forms) > 0 do %>
+          <div class="card mb-3">
+            <h5 class='card-header'>Zauber</h5>
+            <div class="card-body tab-content p-0">
+              <table class='table table-sm mb-0'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Name</th>
+                    <th scope='col' class='text-center'>Probe</th>
+                    <th scope='col' class='text-center'></th>
+                    <th scope='col' class='text-center'>ST</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <%= for fs <- zauber_forms do %>
+                  <tr>
+                    <td>
+                      <%= hidden_inputs_for(fs) %>
+                      <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                    </td>
+                    <td class='text-center'>
+                      <small>
+                        <em><%= fs.data.skill.e1 %></em> /
+                        <em><%= fs.data.skill.e2 %></em> /
+                        <em><%= fs.data.skill.e3 %></em>
+                      </small>
+                    </td>
+                    <td class='text-center'>
+                      <%= button icon("remove", class: "text-danger"),
+                        to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                        class: "btn btn-sm py-0 btn-light",
+                        method: :delete,
+                        data_confirm: "Are you sure?"
+                      %>
+                    </td>
+                    <td>
+                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% end %>
+
+        <% forms = form_group(f, "Liturgie") %>
+        <%= if Enum.count(forms) > 0 do %>
+          <div class="card mb-3">
+            <h5 class='card-header'>Liturgien</h5>
+            <div class="card-body tab-content p-0">
+              <table class='table table-sm mb-0'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Name</th>
+                    <th scope='col' class='text-center'>Probe</th>
+                    <th scope='col' class='text-center'></th>
+                    <th scope='col' class='text-center'>ST</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <%= for fs <- forms do %>
+                  <tr>
+                    <td>
+                      <%= hidden_inputs_for(fs) %>
+                      <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                    </td>
+                    <td class='text-center'>
+                      <small>
+                        <em><%= fs.data.skill.e1 %></em> /
+                        <em><%= fs.data.skill.e2 %></em> /
+                        <em><%= fs.data.skill.e3 %></em>
+                      </small>
+                    </td>
+                    <td class='text-center'>
+                      <%= button icon("remove", class: "text-danger"),
+                        to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                        class: "btn btn-sm py-0 btn-light",
+                        method: :delete,
+                        data_confirm: "Are you sure?"
+                      %>
+                    </td>
+                    <td>
+                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </form>
+<% end %>

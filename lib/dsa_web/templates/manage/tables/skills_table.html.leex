@@ -4,7 +4,7 @@
 
       <div class='col-2'>
         <%= label f, :category, "Talentgruppe" %>
-        <%= select f, :category, talent_categories(@admin), class: "form-select-sm" %>
+        <%= select f, :category, [{"Zauber", 6}, {"Liturgie", 7}], class: "form-select-sm" %>
         <%= error_tag f, :category %>
       </div>
 
@@ -29,9 +29,14 @@
         </div>
       </div>
 
-      <div class='col-2'>
+      <div class='col-1'>
         <%= label f, :be, "BE" %>
         <%= select f, :be, [{"Ja", true}, {"Nein", false}], class: "form-select-sm", prompt: "Event." %>
+      </div>
+
+      <div class='col-1'>
+        <%= label f, :sf, "SF" %>
+        <%= select f, :sf, sf_values(), class: "form-select-sm" %>
       </div>
 
       <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
@@ -54,13 +59,13 @@
   <tbody>
     <%= for skill <- @entries do %>
       <tr>
-        <td><%= skill.category %></td>
+        <td><%= category_name(skill.category) %></td>
         <td class='text-center'><%= skill.id %></td>
         <th scope='row'><%= skill.name %></th>
         <td class='text-center'><small><%= skill.e1 %>/<%= skill.e2 %>/<%= skill.e3 %></small></td>
         <td class='text-center'><%= skill.sf %></td>
         <td class='text-center'><%= be(skill.be) %></td>
-        <%= if Enum.member?(["Zauber", "Liturgie"], skill.category), do: action_cell(skill.id), else: content_tag(:td, "") %>
+        <%= if Enum.member?([6, 7], skill.category), do: action_cell(skill.id), else: content_tag(:td, "") %>
       </tr>
     <% end %>
   </tbody>

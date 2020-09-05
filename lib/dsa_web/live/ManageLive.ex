@@ -7,47 +7,6 @@ defmodule DsaWeb.ManageLive do
 
   @topic "manage"
 
-  def handle_info(%{event: "save-entry", payload: %{id: id} = entry}, socket) do
-    case entry do
-      %Lore.Skill{} ->
-        skills =
-          socket.assigns.skills
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& {&1.category, &1.name})
-        {:noreply, assign(socket, :skills, skills)}
-
-      %Accounts.Group{} ->
-        groups =
-          socket.assigns.groups
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& &1.name)
-        {:noreply, assign(socket, :groups, groups)}
-
-      %Accounts.User{} ->
-        users =
-          socket.assigns.users
-          |> Enum.reject(& &1.id == id)
-          |> Enum.concat([entry])
-          |> Enum.sort_by(& &1.name)
-        {:noreply, assign(socket, :users, users)}
-    end
-  end
-
-  def handle_info(%{event: "remove-entry", payload: %{id: id} = entry}, socket) do
-    case entry do
-      %Lore.Skill{} ->
-        {:noreply, assign(socket, :skills, Enum.reject(socket.assigns.skills, & &1.id == id))}
-
-      %Accounts.Group{} ->
-        {:noreply, assign(socket, :groups, Enum.reject(socket.assigns.groups, & &1.id == id))}
-
-      %Accounts.User{} ->
-        {:noreply, assign(socket, :users, Enum.reject(socket.assigns.users, & &1.id == id))}
-    end
-  end
-
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
   def mount(_params, %{"user_id" => user_id}, socket) do
@@ -62,6 +21,8 @@ defmodule DsaWeb.ManageLive do
     |> assign(:admin, Enum.find(users, & &1.id == user_id).admin)}
   end
 
+  def handle_info(%{event: "update"}, socket), do: handle_params(nil, nil, socket)
+
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
@@ -74,14 +35,6 @@ defmodule DsaWeb.ManageLive do
     end
   end
 
-  defp get_changeset(socket) do
-    case socket.assigns.live_action do
-      :groups -> Accounts.change_group()
-      :skills -> Lore.change_skill(%Lore.Skill{})
-      :users -> Accounts.change_registration()
-    end
-  end
-
   defp get_changeset(socket, struct, params \\ %{}) do
     case socket.assigns.live_action do
       :groups -> Accounts.change_group(struct, params)
@@ -91,15 +44,17 @@ defmodule DsaWeb.ManageLive do
   end
 
   def handle_event("add", _params, socket) do
-    {:noreply, assign(socket, :changeset, get_changeset(socket))}
+    changeset =
+      case socket.assigns.live_action do
+        :groups -> Accounts.change_group(%Accounts.Group{})
+        :skills -> Lore.change_skill(%Lore.Skill{})
+        :users -> Accounts.change_registration(%Accounts.User{})
+      end
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("edit", %{"id" => id}, socket) do
-    entry =
-      socket.assigns
-      |> Map.get(socket.assigns.live_action)
-      |> Enum.find(& &1.id == String.to_integer(id))
-
+    entry = Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
     {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
   end
 
@@ -132,7 +87,7 @@ defmodule DsaWeb.ManageLive do
   def handle_event("save", _params, socket) do
     case Repo.insert_or_update(socket.assigns.changeset) do
       {:ok, entry} ->
-        DsaWeb.Endpoint.broadcast(@topic, "save-entry", entry)
+        DsaWeb.Endpoint.broadcast(@topic, "update", entry)
         {:noreply, assign(socket, :changeset, nil)}
 
       {:error, changeset} ->
@@ -143,12 +98,11 @@ defmodule DsaWeb.ManageLive do
 
   def handle_event("delete", %{"id" => id}, socket) do
     entry =
-      socket.assigns
-      |> Map.get(socket.assigns.live_action)
+      socket.assigns.entries
       |> Enum.find(& &1.id == String.to_integer(id))
       |> Repo.delete!()
 
-    DsaWeb.Endpoint.broadcast(@topic, "remove-entry", entry)
+    DsaWeb.Endpoint.broadcast(@topic, "update", entry)
     {:noreply, socket}
   end
 

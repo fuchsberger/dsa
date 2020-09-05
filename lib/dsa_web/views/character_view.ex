@@ -3,6 +3,14 @@ defmodule DsaWeb.CharacterView do
 
   import DsaWeb.CharacterHelpers
 
+  def dropdown_item(name, category) do
+    content_tag :li, link(name, class: "dropdown-item",
+      to: "#",
+      phx_click: "select",
+      phx_value_category: category
+    )
+  end
+
   def field(form, field, _tooltip \\ nil) do
     ~E"""
     <div class='col-sm-3'>

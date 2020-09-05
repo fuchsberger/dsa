@@ -1,6 +1,4 @@
 
-<% master? = @user_id == @group.master_id %>
-
 <%= f = form_for :character, "#", phx_change: "select_character", phx_submit: nil %>
 <div class="table-responsive">
   <table class="table table-xs table-hover">
@@ -15,13 +13,13 @@
     </thead>
     <tbody>
       <%= for character <- @group.characters do %>
-        <%= if character.user_id != @group.master_id || @user_id == @group.master_id do %>
+        <%= if character.user_id != @group.master_id || @master? do %>
           <tr>
             <%= unless is_nil(@character) do %>
               <td>
                 <%= radio_button(f, :id, character.id,
                   # not master and character belongs to someone else
-                  disabled: @user_id != @group.master_id && character.user_id != @user_id,
+                  disabled: not @master? && character.user_id != @user_id,
                   checked: character.id == get_field(@character, :id))
                 %>
               </td>
@@ -168,7 +166,7 @@
                     <td class='text-center'><%= short %></td>
                     <td class='text-center'><%= Map.get(@character.data, short) %></td>
                     <td class='text-center'>
-                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' phx-value-trait='<%= short %>'></button>
+                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' type='button' phx-value-trait='<%= short %>'></button>
                     </td>
                   </tr>
                 <% end %>
@@ -201,7 +199,7 @@
                     <td class='text-center'>
                       <% {allowed?, val} = routine_possible?(@character.data, cskill, get_field(@settings, :modifier)) %>
                       <%= if allowed? do %>
-                        <button class='btn btn-light text-success btn-sm py-0' phx-click='routine' phx-value-talent='<%= cskill.skill.id %>'><strong> <%= "Q#{val}" %></strong></button>
+                        <button class='btn btn-light text-success btn-sm py-0' type='button' phx-click='routine' phx-value-talent='<%= cskill.skill.id %>'><strong> <%= "Q#{val}" %></strong></button>
                       <% else %>
                         <%= val %>
                       <% end %>
@@ -213,6 +211,7 @@
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
                           phx-click='talent-roll'
+                          type='button'
                           phx-value-be='false'
                           phx-value-talent='<%= cskill.skill.id %>'
                         ></button>
@@ -248,7 +247,7 @@
       <div class='card-header d-flex justify-content-between'>
         <h5 class='mb-0'>Ereignislog</h5>
         <%= unless is_nil(@character) do %>
-          <% f = form_for :show_details, "#", phx_change: "toggle-details", phx_submit: nil %>
+          <%= f = form_for :show_details, "#", phx_change: "toggle-details", phx_submit: nil %>
             <div class="form-check">
               <%= checkbox f, :show_details, class: "form-check-input", value: @show_details %>
               <%= label f, :show_details, "Details anzeigen?", class: "form-check-label" %>
@@ -258,7 +257,7 @@
       </div>
       <ul id='log' class='list-group list-group-flush' phx-update='prepend'>
         <%= for event <- @logs do
-          owner? = owner?(@group, @user_id, event.character_id)
+          owner? = Enum.member?(@user_character_ids, event.character_id)
 
           case event do
             %Routine{} ->
@@ -266,18 +265,18 @@
 
             %GeneralRoll{} ->
               render "logs/general_roll_log.html",
-                show_details?: owner? || master?,
+                show_details?: owner? || @master?,
                 roll: event
 
             %TraitRoll{} ->
               render "logs/trait_roll_log.html",
                 roll: event,
-                show_details?: get_field(@settings, :show_details) && (master? || owner?)
+                show_details?: @show_details && (@master? || owner?)
 
             %TalentRoll{} ->
               render "logs/talent_roll_log.html",
                 roll: event,
-                show_details?: get_field(@settings, :show_details) && (master? || owner?)
+                show_details?: @show_details && (@master? || owner?)
           end
         end %>
         <%= if Enum.count(@logs) == 0 do %>

@@ -82,4 +82,29 @@ defmodule DsaWeb.DsaHelpers do
       true -> 1
     end
   end
+
+  def category_name(category) do
+    case category do
+      1 -> "Körper"
+      2 -> "Gesellschaft"
+      3 -> "Natur"
+      4 -> "Wissen"
+      5 -> "Handwerk"
+      6 -> "Zauber"
+      7 -> "Liturgie"
+    end
+  end
+
+  def talent_group(category) do
+    case category do
+      nil -> "Kampftechniken"
+      1 -> "Körpertalente"
+      2 -> "Gesellschaftstalente"
+      3 -> "Naturtalente"
+      4 -> "Wissenstalente"
+      5 -> "Handwerkstalente"
+      6 -> "Zauber"
+      7 -> "Liturgien"
+    end
+  end
 end

@@ -8,14 +8,6 @@ defmodule DsaWeb.GroupLive do
 
   alias Dsa.{Event, Lore, Accounts, Repo}
 
-  @character_preloads [
-    :user,
-    :character_armors,
-    :character_mweapons,
-    :character_fweapons,
-    character_skills: [:skill]
-  ]
-
   defp topic(group_id), do: "group:#{group_id}"
 
   def handle_info(%{event: "add-event", payload: event}, socket) do
@@ -53,6 +45,11 @@ defmodule DsaWeb.GroupLive do
         character -> Accounts.change_character(character, %{}, :combat)
       end
 
+    user_character_ids =
+      group.characters
+      |> Enum.filter(& &1.user_id == user_id)
+      |> Enum.map(& &1.id)
+
     {:ok, socket
     |> assign(:armor_options, Lore.armor_options())
     |> assign(:group, group)
@@ -60,7 +57,9 @@ defmodule DsaWeb.GroupLive do
     |> assign(:character, character)
     |> assign(:settings, Event.change_settings())
     |> assign(:show_details, false)
-    |> assign(:user_id, user_id)}
+    |> assign(:master?, group.master_id == user_id)
+    |> assign(:user_id, user_id)
+    |> assign(:user_character_ids, user_character_ids)}
   end
 
   def handle_params(_params, _session, socket) do
@@ -83,7 +82,7 @@ defmodule DsaWeb.GroupLive do
 
     case Accounts.update_character(socket.assigns.character.data, params, :combat) do
       {:ok, character} ->
-        character = Repo.preload(character, @character_preloads, force: true)
+        character = Accounts.preload(character)
         Logger.debug("Character updated.")
         DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
         {:noreply, socket}
@@ -104,7 +103,9 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("toggle-details", _params, socket) do
-    {:noreply, assign(socket, :show_details, !socket.assigns.show_details)}
+    details = !socket.assigns.show_details
+    Logger.debug("Show details: #{inspect(details)}")
+    {:noreply, assign(socket, :show_details, details)}
   end
 
   def handle_event("validate", %{"setting" => setting}, socket) do
@@ -235,7 +236,7 @@ defmodule DsaWeb.GroupLive do
     ini = String.to_integer(ini) + Enum.random(1..6)
     case Accounts.update_character(socket.assigns.character.data, %{ini: ini}, :combat) do
       {:ok, character} ->
-        character = Repo.preload(character, @character_preloads)
+        character = Accounts.preload(character)
         Logger.debug("#{character.name} rolled initiative #{character.ini}")
         DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
         {:noreply, socket}
@@ -249,7 +250,7 @@ defmodule DsaWeb.GroupLive do
   def handle_event("reset-ini", _params, socket) do
     case Accounts.update_character(socket.assigns.character.data, %{ini: nil}, :combat) do
       {:ok, character} ->
-        character = Repo.preload(character, @character_preloads)
+        character = Accounts.preload(character)
         Logger.debug("#{character.name} left combat.")
         DsaWeb.Endpoint.broadcast(topic(character.group_id), "update-character", character)
         {:noreply, socket}

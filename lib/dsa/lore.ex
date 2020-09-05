@@ -14,7 +14,21 @@ defmodule Dsa.Lore do
 
   def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
 
-  def change_skill(skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
+  def list_cast_options do
+    from(s in Skill,
+      select: {s.name, s.id},
+      order_by: s.name,
+      where: s.category == 6 or s.category == 7
+    ) |> Repo.all()
+  end
+
+  def create_skill(params) do
+    %Skill{}
+    |> change_skill(params)
+    |> Repo.insert()
+  end
+
+  def change_skill(%Skill{} = skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
 
   def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
 
@@ -24,24 +38,15 @@ defmodule Dsa.Lore do
     Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
   end
 
-
   def list_fweapons do
     Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
   end
 
-  def cast_options do
-    from(s in Skill,
-      select: {s.name, s.id},
-      order_by: s.name,
-      where: s.category == "Zauber" or s.category == "Liturgie"
-    ) |> Repo.all()
-  end
-
   def seed(:armors) do
     Armor.entries()
-    |> Enum.each(fn %{id: id, name: name} = params ->
-      case Repo.get(Armor, id) do
-        nil  -> %Armor{id: id}
+    |> Enum.each(fn %{name: name} = params ->
+      case Repo.get_by(Armor, name: name) do
+        nil  -> %Armor{}
         entry -> entry
       end
       |> Armor.changeset(params)
@@ -53,9 +58,9 @@ defmodule Dsa.Lore do
 
   def seed(:combat_skills) do
     CombatSkill.entries()
-    |> Enum.each(fn %{id: id, name: name} = params ->
-        case Repo.get(CombatSkill, id) do
-          nil  -> %CombatSkill{id: id}
+    |> Enum.each(fn %{name: name} = params ->
+        case Repo.get_by(CombatSkill, name: name) do
+          nil  -> %CombatSkill{}
           entry -> entry
         end
         |> CombatSkill.changeset(params)
@@ -67,10 +72,10 @@ defmodule Dsa.Lore do
 
   def seed(:skills) do
     Skill.entries()
-    |> Enum.each(fn %{id: id, name: name} = params ->
+    |> Enum.each(fn %{name: name} = params ->
 
-      case Repo.get(Skill, id) do
-        nil  -> %Skill{id: id}
+      case Repo.get_by(Skill, name: name) do
+        nil  -> %Skill{}
         entry -> entry
       end
       |> Skill.changeset(params)
@@ -82,9 +87,9 @@ defmodule Dsa.Lore do
 
   def seed(:mweapons) do
     MWeapon.entries()
-    |> Enum.each(fn %{id: id, name: name} = params ->
-      case Repo.get(MWeapon, id) do
-        nil  -> %MWeapon{id: id}
+    |> Enum.each(fn %{name: name} = params ->
+      case Repo.get_by(MWeapon, name: name) do
+        nil  -> %MWeapon{}
         entry -> entry
       end
       |> MWeapon.changeset(params)
@@ -96,9 +101,9 @@ defmodule Dsa.Lore do
 
   def seed(:fweapons) do
     FWeapon.entries()
-    |> Enum.each(fn %{id: id, name: name} = params ->
-      case Repo.get(FWeapon, id) do
-        nil  -> %FWeapon{id: id}
+    |> Enum.each(fn %{name: name} = params ->
+      case Repo.get_by(FWeapon, name: name) do
+        nil  -> %FWeapon{}
         entry -> entry
       end
       |> FWeapon.changeset(params)
@@ -110,12 +115,12 @@ defmodule Dsa.Lore do
 
   def seed(:special_skills) do
     SpecialSkill.entries()
-    |> Enum.each(fn {%{id: id, name: name} = params, combat_skills} ->
+    |> Enum.each(fn {%{name: name} = params, combat_skills} ->
 
       combat_skills = Repo.all(from(s in CombatSkill, where: s.id in ^combat_skills))
 
-      case Repo.get(SpecialSkill, id) do
-        nil  -> %SpecialSkill{id: id}
+      case Repo.get_by(SpecialSkill, name: name) do
+        nil  -> %SpecialSkill{}
         entry -> Repo.preload(entry, :combat_skills)
       end
       |> SpecialSkill.changeset(params)

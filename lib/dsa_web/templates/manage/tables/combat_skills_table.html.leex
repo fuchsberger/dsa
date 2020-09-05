@@ -17,7 +17,16 @@
         <th scope='row'><%= skill.name %></th>
         <%= check_cell :skill, :ranged, skill.ranged %>
         <%= check_cell :skill, :parade, skill.parade %>
-        <td class='text-center'><%= skill.e1 %><%= if skill.e2, do: "/#{skill.e2}" %></td>
+        <td class='text-center'>
+          <%=
+            case {skill.ge, skill.kk} do
+              {true, true} -> "GE/KK"
+              {true, false} -> "GE"
+              {false, true} -> "KK"
+              {false, false} -> "FF"
+            end
+          %>
+        </td>
         <td class='text-center'><%= skill.bf %></td>
         <td class='text-center'><%= skill.sf %></td>
       </tr>

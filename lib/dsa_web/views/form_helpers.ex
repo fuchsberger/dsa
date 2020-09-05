@@ -14,6 +14,7 @@ defmodule DsaWeb.FormHelpers do
 
   def error_class(form, field) do
     cond do
+      is_atom(form.source) -> ""
       Map.has_key?(form, :source) && Map.has_key?(form.source, :action) && is_nil(form.source.action) -> ""
       Keyword.has_key?(form.errors, field) -> " is-invalid"
       true -> ""
