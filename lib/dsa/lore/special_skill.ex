@@ -6,7 +6,7 @@ defmodule Dsa.Lore.SpecialSkill do
   schema "special_skills" do
     field :name, :string
     field :ap, :integer
-    field :type, :integer # 0 passiv, 1 basic, 2 special
+    field :type, :integer # 0 passiv, 1 basic, 2 special, 3 generell
     field :modifier, :integer
 
     many_to_many :combat_skills, Dsa.Lore.CombatSkill, join_through: "combat_special_skills"

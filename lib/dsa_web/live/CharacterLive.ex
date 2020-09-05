@@ -11,7 +11,8 @@ defmodule DsaWeb.CharacterLive do
     {:ok, socket
     |> assign(:category, 6)
     |> assign(:group_options, Accounts.list_group_options())
-    |> assign(:cast_options, Lore.list_cast_options())
+    |> assign(:spell_options, Lore.list_spell_options())
+    |> assign(:wonder_options, Lore.list_wonder_options())
     |> assign(:user_id, user_id)}
   end
 
@@ -23,6 +24,8 @@ defmodule DsaWeb.CharacterLive do
         {:noreply, assign(socket, :characters, Accounts.list_user_characters(user_id))}
 
       :new ->
+
+
         {:noreply, assign(socket, :changeset, Accounts.change_character(%Accounts.Character{}))}
 
       :edit ->
@@ -42,8 +45,48 @@ defmodule DsaWeb.CharacterLive do
   end
 
   def handle_event("change", %{"character" => params}, socket) do
+    character = socket.assigns.changeset.data
+    # IO.inspect Map.get(params, "skill-id")
+    cond do
+      not is_nil(Map.get(params, "skill_id")) ->
+        skill_id = params |> Map.get("skill_id") |> String.to_integer()
+        case Accounts.add_character_skill(character.id, skill_id) do
+          {:ok, _character_skill} ->
+            Logger.debug("Added Skill...")
+            changeset =
+              character
+              |> Accounts.preload()
+              |> Accounts.change_character(Map.delete(params, "skill_id"))
+            {:noreply, assign(socket, :changeset, changeset)}
 
+          {:error, changeset} ->
+            Logger.error(inspect(changeset.errors))
+            {:noreply, socket}
+        end
 
-    {:noreply, socket}
+      true ->
+        changeset = Accounts.change_character(character, params)
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
   end
+
+  def handle_event("delete", %{"skill" => skill_id}, socket) do
+    character = socket.assigns.changeset.data
+
+    case Accounts.remove_character_skill(character.id, String.to_integer(skill_id)) do
+      {:ok, _character_skill} ->
+        Logger.debug("Held hat Zauber / Liturgie vergessen.")
+        changeset =
+          character
+          |> Accounts.preload()
+          |> Accounts.change_character(socket.assigns.changeset.changes)
+        {:noreply, assign(socket, :changeset, changeset)}
+
+      {:error, reason} ->
+        Logger.error(inspect(reason))
+        {:noreply, socket}
+    end
+  end
+
+
 end

@@ -104,5 +104,8 @@ defmodule DsaWeb.CharacterView do
     end
   end
 
-
+  def list_options(character, options) do
+    filter_ids = Enum.map(character.character_skills, & &1.skill_id)
+    Enum.reject(options, fn {_name, id} -> Enum.member?(filter_ids, id) end)
+  end
 end

@@ -14,12 +14,14 @@ defmodule Dsa.Lore do
 
   def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
 
-  def list_cast_options do
-    from(s in Skill,
-      select: {s.name, s.id},
-      order_by: s.name,
-      where: s.category == 6 or s.category == 7
-    ) |> Repo.all()
+  def list_spell_options do
+    from(s in Skill, select: {s.name, s.id}, order_by: s.name, where: s.category == 6)
+    |> Repo.all()
+  end
+
+  def list_wonder_options do
+    from(s in Skill, select: {s.name, s.id}, order_by: s.name, where: s.category == 7)
+    |> Repo.all()
   end
 
   def create_skill(params) do

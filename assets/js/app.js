@@ -15,6 +15,16 @@ const hooks = {}
 hooks.tooltip = {
   mounted() {
     this.el.tooltip = new Tooltip(this.el)
+  },
+
+  beforeUpdate() {
+    console.log(this.el, this.el.tooltip)
+    this.el.tooltip.dispose()
+    this.el.tooltip = new Tooltip(this.el)
+  },
+
+  beforeDestroy() {
+    if(this.el.tooltip) this.el.tooltip.dispose()
   }
 }
 

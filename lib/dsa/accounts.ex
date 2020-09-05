@@ -147,12 +147,17 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  # def add_character_skill(%Character{} = character, params) do
-  #   character
-  #   |> Ecto.Changeset.change()
-  #   |> Ecto.Changeset.put_assoc(:character_skills, [%Comment{body: "so-so example!"} | post.comments])
-  #   |> Repo.update!()
-  # end
+  def add_character_skill(character_id, skill_id) do
+    %CharacterSkill{}
+    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill_id})
+    |> Repo.insert()
+  end
+
+  def remove_character_skill(character_id, skill_id) do
+    from(c in CharacterSkill, where: c.character_id == ^character_id and c.skill_id == ^skill_id)
+    |> Repo.one!()
+    |> Repo.delete()
+  end
 
   def delete_character!(character), do: Repo.delete!(character)
 
@@ -184,12 +189,6 @@ defmodule Dsa.Accounts do
     %CharacterCombatSkill{}
     |> CharacterCombatSkill.changeset(%{character_id: character_id, combat_skill_id: skill.id})
     |> Repo.insert!()
-  end
-
-  def add_skill(params) do
-    %CharacterSkill{}
-    |> CharacterSkill.changeset(params)
-    |> Repo.insert()
   end
 
   def add_skill!(character_id, skill) do

@@ -37,7 +37,7 @@
 
   <%= f = form_for @changeset, "#", [
       phx_change: :change,
-      phx_submit: nil,
+      phx_submit: :save,
       novalidate: true
     ]
   %>
@@ -50,7 +50,11 @@
       </div>
     <% end %>
 
-    <h3>Heldenbogen</h3>
+    <div class='d-flex justify-content-between mb-2'>
+      <h3>Heldenbogen</h3>
+      <%= submit "Speichern", class: "btn btn-primary" %>
+    </div>
+
 
     <div class='row g-3'>
       <div class='col-lg'>
@@ -61,14 +65,14 @@
           <div class="card-body">
 
             <div class='row g-2'>
-              <%= label f, :name, "Name / AP", class: "col-sm-4 col-form-label" %>
+              <%= label f, :name, "Name / Profession", class: "col-sm-4 col-form-label" %>
               <div class="col-sm-4">
                 <%= text_input f, :name, class: "form-control-sm", placeholder: "Name" %>
                 <%= error_tag f, :name %>
               </div>
               <div class="col-sm-4">
-                <%= number_input f, :ap, class: "form-control-sm", placeholder: "AP" %>
-                <%= error_tag f, :ap %>
+                <%= text_input f, :profession, class: "form-control-sm", placeholder: "Profession" %>
+                <%= error_tag f, :profession %>
               </div>
             </div>
 
@@ -81,14 +85,6 @@
               <div class="col-sm-4">
                 <%= text_input f, :culture, class: "form-control-sm", placeholder: "Kultur" %>
                 <%= error_tag f, :culture %>
-              </div>
-            </div>
-
-            <div class='row g-2'>
-              <%= label f, :profession, class: "col-sm-4 col-form-label" %>
-              <div class="col-sm-8">
-                <%= text_input f, :profession, class: "form-control-sm", placeholder: "Profession" %>
-                <%= error_tag f, :profession %>
               </div>
             </div>
 
@@ -217,9 +213,11 @@
                 <table class='table table-sm mb-0'>
                   <thead>
                     <tr>
-                      <th scope='col'>Talent</th>
+                      <th scope='col'>Name</th>
                       <th scope='col' class='text-center'>Probe</th>
-                      <th scope='col' class='text-center'>BE</th>
+                      <th scope='col' class='text-center'>
+                        <%= if @category == 6 || @category == 7, do: icon("cancel"), else: "BE" %>
+                      </th>
                       <th scope='col' class='text-center'>ST</th>
                     </tr>
                   </thead>
@@ -228,7 +226,7 @@
                     <tr>
                       <td>
                         <%= hidden_inputs_for(fs) %>
-                        <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                        <%= fs.data.skill.name %>
                       </td>
                       <td class='text-center'>
                         <small>
@@ -237,16 +235,44 @@
                           <em><%= fs.data.skill.e3 %></em>
                         </small>
                       </td>
-                      <td class='text-center'><%= be(fs.data.skill.be) %></td>
+                      <td class='text-center'>
+                        <%= if @category == 6 || @category == 7 do %>
+                          <button
+                            class='btn badge bg-light btn-sm p-0'
+                            phx-click='delete'
+                            phx-value-skill='<%= fs.data.skill.id %>'
+                            type='button'
+                          >
+                            <i class='icon-cancel text-danger'></i>
+                          </button>
+                        <% else %>
+                          <%= be(fs.data.skill.be) %>
+                        <% end %>
+                      </td>
                       <td>
                         <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
                       </td>
                     </tr>
                   <% end %>
-                  <%= if @category == 6 || @category == 7 do %>
+                  <%= if @category == 6 do %>
                     <tr>
                       <td colspan='4'>
-                        <%= select f, :skill_id, @cast_options, class: "border-0 form-select-sm", prompt: "Zauber / Liturgie hinzufügen" %>
+                        <%= if @changeset.data.__meta__.state == :loaded do %>
+                          <%= select f, :skill_id, list_options(@changeset.data, @spell_options), class: "border-0 form-select-sm", prompt: "Zauber hinzufügen" %>
+                        <% else %>
+                          <i>Du musst deinen Helden erst speichern bevor Zauber hinzugefügt werden können.</i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <%= if @category == 7 do %>
+                    <tr>
+                      <td colspan='4'>
+                        <%= if @changeset.data.__meta__.state == :loaded do %>
+                          <%= select f, :skill_id, list_options(@changeset.data, @wonder_options), class: "border-0 form-select-sm", prompt: "Liturgie hinzufügen" %>
+                        <% else %>
+                          <i>Du musst deinen Helden erst speichern bevor Liturgien hinzugefügt werden können.</i>
+                        <% end %>
                       </td>
                     </tr>
                   <% end %>
