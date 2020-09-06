@@ -5,6 +5,7 @@
 alias Dsa.{Accounts, Lore, Repo}
 
 # Add DSA data
+Lore.seed(:species)
 Lore.seed(:combat_skills)
 Lore.seed(:skills)
 Lore.seed(:special_skills)
@@ -34,7 +35,7 @@ Lore.seed(:armors)
 
 Accounts.create_character(alex, %{
   name: "Rolo",
-  species: "Mensch",
+  species_id: 1,
   culture: "Mittelreich",
   profession: "Raubritter",
   group_id: group.id
@@ -42,7 +43,7 @@ Accounts.create_character(alex, %{
 
 Accounts.create_character(testuser, %{
   name: "Test1",
-  species: "Mensch",
+  species_id: 1,
   culture: "Mittelreich",
   profession: "Testcharacter",
   group_id: group.id

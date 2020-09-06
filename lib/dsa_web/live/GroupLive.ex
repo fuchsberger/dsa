@@ -51,7 +51,7 @@ defmodule DsaWeb.GroupLive do
       |> Enum.map(& &1.id)
 
     {:ok, socket
-    |> assign(:armor_options, Lore.armor_options())
+    |> assign(:armor_options, Lore.options(:armors))
     |> assign(:group, group)
     |> assign(:logs, logs)
     |> assign(:character, character)

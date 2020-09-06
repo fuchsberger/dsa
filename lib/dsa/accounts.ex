@@ -12,6 +12,7 @@ defmodule Dsa.Accounts do
   @sorted_skills from(s in Skill, order_by: [s.category, s.name])
 
   @character_preloads [
+    :species,
     :group,
     :user,
     :character_armors,

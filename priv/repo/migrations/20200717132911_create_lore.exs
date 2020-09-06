@@ -2,6 +2,21 @@ defmodule Dsa.Repo.Migrations.CreateLore do
   use Ecto.Migration
 
   def change do
+    # species
+    create table(:species) do
+      add :name, :string
+      add :le, :integer
+      add :sk, :integer
+      add :zk, :integer
+      add :gs, :integer
+      add :ap, :integer
+    end
+    create unique_index :species, :name
+
+    alter table(:characters) do
+      add :species_id, references(:species, on_delete: :delete_all)
+    end
+
     # combat skills
     create table(:combat_skills) do
       add :name, :string

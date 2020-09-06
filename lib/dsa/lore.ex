@@ -6,23 +6,22 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, MWeapon, FWeapon}
+  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Species, MWeapon, FWeapon}
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
-  def armor_options, do: Repo.all(from(a in Armor, select: {a.name, a.id}, order_by: a.name))
+  def options(type) do
+    case type do
+      :armors -> from(a in Armor, select: {a.name, a.id})
+      :species -> from(a in Species, select: {a.name, a.id})
+      :spells -> from(s in Skill, select: {s.name, s.id}, where: s.category == 6)
+      :wonders -> from(s in Skill, select: {s.name, s.id}, where: s.category == 7)
+    end
+    |> order_by(:name)
+    |> Repo.all()
+  end
 
   def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
-
-  def list_spell_options do
-    from(s in Skill, select: {s.name, s.id}, order_by: s.name, where: s.category == 6)
-    |> Repo.all()
-  end
-
-  def list_wonder_options do
-    from(s in Skill, select: {s.name, s.id}, order_by: s.name, where: s.category == 7)
-    |> Repo.all()
-  end
 
   def create_skill(params) do
     %Skill{}
@@ -85,6 +84,20 @@ defmodule Dsa.Lore do
 
       Logger.debug("Skill: #{name} updated...")
     end)
+  end
+
+  def seed(:species) do
+    Species.entries()
+    |> Enum.each(fn %{name: name} = params ->
+        case Repo.get_by(Species, name: name) do
+          nil  -> %Species{}
+          entry -> entry
+        end
+        |> Species.changeset(params)
+        |> Repo.insert_or_update!()
+
+        Logger.debug("Species: #{name} updated...")
+      end)
   end
 
   def seed(:mweapons) do

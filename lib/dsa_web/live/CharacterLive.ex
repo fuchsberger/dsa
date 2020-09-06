@@ -2,17 +2,18 @@ defmodule DsaWeb.CharacterLive do
   use Phoenix.LiveView
   require Logger
 
-  alias Dsa.{Accounts, Lore}
+  alias Dsa.{Accounts, Lore, Repo}
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
 
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
-    |> assign(:category, 6)
+    |> assign(:category, 1)
+    |> assign(:species_options, Lore.options(:species))
     |> assign(:group_options, Accounts.list_group_options())
-    |> assign(:spell_options, Lore.list_spell_options())
-    |> assign(:wonder_options, Lore.list_wonder_options())
+    |> assign(:spell_options, Lore.options(:spells))
+    |> assign(:wonder_options, Lore.options(:wonders))
     |> assign(:user_id, user_id)}
   end
 
@@ -24,8 +25,6 @@ defmodule DsaWeb.CharacterLive do
         {:noreply, assign(socket, :characters, Accounts.list_user_characters(user_id))}
 
       :new ->
-
-
         {:noreply, assign(socket, :changeset, Accounts.change_character(%Accounts.Character{}))}
 
       :edit ->
@@ -70,6 +69,35 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def handle_event("save", %{"character" => params}, socket) do
+    params = Map.put(params, "user_id", socket.assigns.user_id)
+    changeset = Accounts.change_character(socket.assigns.changeset.data, params)
+
+    case Repo.insert_or_update(changeset) do
+      {:ok, %{id: id}} ->
+        {:noreply, push_patch(socket, to: Routes.character_path(socket, :edit, id))}
+
+      {:error, changeset} ->
+        Logger.error(inspect(changeset.errors))
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  def handle_event("delete", %{"id" => character_id}, socket) do
+    character = Accounts.get_user_character!(socket.assigns.user_id, String.to_integer(character_id))
+
+    case Repo.delete(character) do
+      {:ok, character} ->
+        Logger.debug("Held gelöscht.")
+        characters = Enum.reject(socket.assigns.characters, & &1.id == character.id)
+        {:noreply, assign(socket, :characters, characters)}
+
+      {:error, reason} ->
+        Logger.error(inspect(reason))
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("delete", %{"skill" => skill_id}, socket) do
     character = socket.assigns.changeset.data
 
@@ -87,6 +115,4 @@ defmodule DsaWeb.CharacterLive do
         {:noreply, socket}
     end
   end
-
-
 end

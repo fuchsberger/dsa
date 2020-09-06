@@ -23,7 +23,13 @@
           <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
           <td class='text-center'>
             <%= live_patch icon("edit"), to: Routes.character_path(@socket, :edit, character.id) %>
-            <%= link icon("delete", class: "text-danger"), to: Routes.character_path(@socket, :delete, character), method: :delete, data: [confirm: "Bist du sicher?"], class: "ml-2" %>
+
+            <%= link icon("cancel text-danger", class: "text-danger"),
+              to: "#",
+              phx_click: "delete",
+              phx_value_id: character.id,
+              data_confirm: "Bist du sicher?"
+            %>
           </td>
         </tr>
       <% end %>
@@ -77,10 +83,10 @@
             </div>
 
             <div class='row g-2'>
-              <%= label f, :species, "Rasse / Kultur", class: "col-sm-4 col-form-label" %>
+              <%= label f, :species_id, "Species / Kultur", class: "col-sm-4 col-form-label" %>
               <div class="col-sm-4">
-                <%= text_input f, :species, class: "form-control-sm", placeholder: "Rasse" %>
-                <%= error_tag f, :species %>
+                <%= select f, :species_id, @species_options, class: "form-select-sm", prompt: "Spezies wählen..." %>
+                <%= error_tag f, :species_id %>
               </div>
               <div class="col-sm-4">
                 <%= text_input f, :culture, class: "form-control-sm", placeholder: "Kultur" %>
