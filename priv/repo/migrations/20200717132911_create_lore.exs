@@ -59,6 +59,16 @@ defmodule Dsa.Repo.Migrations.CreateLore do
     end
     create unique_index :traits, :name
 
+    # character traits
+    create table(:character_traits) do
+      add :details, :string
+      add :ap, :integer
+      add :level, :integer
+      add :character_id, references(:characters, on_delete: :delete_all)
+      add :trait_id, references(:traits, on_delete: :delete_all)
+    end
+    create index :character_traits, [:character_id, :trait_id]
+
     # character skills
     create table(:character_skills, primary_key: false) do
       add :character_id, references(:characters, on_delete: :delete_all), primary_key: true

@@ -43,6 +43,8 @@ defmodule Dsa.Lore do
     Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
   end
 
+  def list_traits, do: Repo.all(from(t in Trait, order_by: t.name))
+
   def seed do
     Enum.each([Armor, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon], fn schema ->
       Enum.each(schema.entries(), fn %{name: name} = params ->

@@ -45,15 +45,6 @@
       novalidate: true
     ]
   %>
-    <%= if @changeset.action do %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Fehler!</strong> Etwas ist falsch gelaufen! Bitte überprüfe alle Eingaben.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    <% end %>
-
     <div id='base-values' class='row g-1'>
       <div class='col-3'>
         <h3><%= get_field @changeset, :name, "Heldenübersicht" %></h3>
@@ -70,7 +61,7 @@
       <div class='col-lg'>
 
         <%# CARD GENERELL ----------------------------------------------------------------------- %>
-        <div class="card mb-3">
+        <div class="card mb-2">
 
 
           <h5 class="card-header">Generell</h5>
@@ -103,7 +94,7 @@
         </div>
 
         <%# CARD TRAITS ------------------------------------------------------------------------- %>
-        <div id='trait-card' class="card">
+        <div id='trait-card' class="card mb-2">
           <h5 class="card-header">Grundwerte</h5>
           <div class="card-body">
 
@@ -158,8 +149,76 @@
         </div>
 
         <div class="card">
-          <div class="card-header pb-0 d-flex justify-content-between">
-            <h5 class='mb-0'>Vorteile</h5>
+          <div class="card-header py-0 d-flex justify-content-between">
+            <h5 class='my-2'>Charakteristiken</h5>
+            <button class='btn btn-light btn-sm' phx-click='toggle-trait-form' type='button'>
+              <%= unless @show_trait_form?, do: [icon("add"), "hinzufügen"], else: [icon("cancel"), "abbrechen"] %>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class='row mb-1 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
+              <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset, @traits) %>
+              <div class='col-6 '>
+                <%= label f, :trait_id, "Vorteil / Nachteil / Allg. SF", class: "" %>
+                <%= select(f, :trait_id, trait_options(@traits), prompt: "hinzufügen...", class: "form-select-sm")
+                %>
+              </div>
+              <div class='col-3'>
+                <%= label f, :trait_level, "Typ / Level", class: "" %>
+                <%= select f, :trait_level, level_options, class: "form-control-sm", prompt: "Level", disabled: dis_level %>
+              </div>
+              <div class='col-3'>
+                <%= label f, :trait_ap, "AP", class: "" %>
+                <%= number_input f, :trait_ap, class: "form-control-sm", placeholder: "AP", disabled: dis_ap %>
+              </div>
+            </div>
+            <div class='row mb-2 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
+              <div class='col-9'>
+                <%= text_input f, :trait_details, class: "form-control-sm", placeholder: "Details...", disabled: dis_details %>
+              </div>
+              <div class='col-3 '>
+                <button
+                  class='btn btn-sm btn-secondary w-100'
+                  type='button'
+                  phx-click='add-trait'
+                >
+                  hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <%# Advadntages %>
+            <% advantages = character_advantages(@changeset) %>
+            <div class='d-flex justify-content-between'>
+              <h6 class='mb-0'>Vorteile</h6>
+              <i><%= ap(advantages) %> AP</i>
+            </div>
+            <hr class='my-1'>
+            <p><%=
+              Enum.map(advantages, & character_trait_badge(&1))
+            %></p>
+
+            <%# Disadvantages %>
+            <% disadvantages = character_disadvantages(@changeset) %>
+            <div class='d-flex justify-content-between'>
+              <h6 class='mb-0'>Nachteile</h6>
+              <i><%= ap(disadvantages) %> AP</i>
+            </div>
+            <hr class='my-1'>
+            <p><%=
+              Enum.map(disadvantages, & character_trait_badge(&1))
+            %></p>
+
+            <%# General Skills %>
+            <% general_skills = character_general_skills(@changeset) %>
+            <div class='d-flex justify-content-between'>
+              <h6 class='mb-0'>Allgemeine Sonderfertigkeiten</h6>
+              <i><%= ap(general_skills) %> AP</i>
+            </div>
+            <hr class='my-1'>
+            <p><%=
+              Enum.map(general_skills, & character_trait_badge(&1))
+            %></p>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ defmodule DsaWeb.CharacterLive do
   use Phoenix.LiveView
   require Logger
 
+  import Ecto.Changeset, only: [get_change: 2, get_field: 2]
   alias Dsa.{Accounts, Lore, Repo}
   alias DsaWeb.Router.Helpers, as: Routes
 
@@ -9,7 +10,9 @@ defmodule DsaWeb.CharacterLive do
 
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
+    |> assign(:show_trait_form?, false)
     |> assign(:category, 1)
+    |> assign(:traits, Lore.list_traits())
     |> assign(:species_options, Lore.options(:species))
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:spell_options, Lore.options(:spells))
@@ -40,9 +43,27 @@ defmodule DsaWeb.CharacterLive do
     {:noreply, assign(socket, :category, category)}
   end
 
+  def handle_event("toggle-trait-form", _params, socket) do
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_change(:trait_id, nil)
+      |> Ecto.Changeset.put_change(:trait_details, nil)
+      |> Ecto.Changeset.put_change(:trait_level, nil)
+      |> Ecto.Changeset.put_change(:trait_ap, nil)
+
+    {:noreply, socket
+    |> assign(:show_trait_form?, !socket.assigns.show_trait_form?)
+    |> assign(:changeset, changeset)}
+  end
+
   def handle_event("change", %{"character" => params}, socket) do
     character = socket.assigns.changeset.data
-    # IO.inspect Map.get(params, "skill-id")
+
+    trait_id =
+      if Map.get(params, "trait_id") == "",
+        do: nil,
+        else: String.to_integer(Map.get(params, "trait_id"))
+
     cond do
       not is_nil(Map.get(params, "skill_id")) ->
         skill_id = params |> Map.get("skill_id") |> String.to_integer()
@@ -60,6 +81,28 @@ defmodule DsaWeb.CharacterLive do
             {:noreply, socket}
         end
 
+      # a new trait is being selected_for adding
+      not is_nil(trait_id) ->
+        trait = Enum.find(socket.assigns.traits, & &1.id == trait_id)
+
+        trait_details = if trait.details, do: params |> Map.get("trait_details"), else: ""
+
+        trait_level =
+          params
+          |> Map.get("trait_level", Integer.to_string(min(1, trait.level)))
+          |> String.to_integer()
+        trait_ap = if trait_level > 1, do: trait.ap * trait_level, else: trait.ap
+
+        changeset =
+          socket.assigns.changeset
+          |> Ecto.Changeset.put_change(:trait_id, trait_id)
+          |> Ecto.Changeset.put_change(:trait_details, trait_details)
+          |> Ecto.Changeset.put_change(:trait_level, trait_level)
+          |> Ecto.Changeset.put_change(:trait_ap, trait_ap)
+
+        {:noreply, assign(socket, :changeset, changeset)}
+
+      # normal character change
       true ->
         case Accounts.update_character(character, params) do
           {:ok, character} ->
@@ -70,6 +113,28 @@ defmodule DsaWeb.CharacterLive do
             Logger.error(inspect(changeset.errors))
             {:noreply, assign(socket, :changeset, changeset)}
         end
+    end
+  end
+
+  def handle_event("add-trait", _params, socket) do
+    params = %{
+      character_id: get_field(socket.assigns.changeset, :id),
+      trait_id: get_change(socket.assigns.changeset, :trait_id),
+      level: get_change(socket.assigns.changeset, :trait_level),
+      ap: get_change(socket.assigns.changeset, :trait_ap),
+      details: get_change(socket.assigns.changeset, :trait_details),
+    }
+
+    case Accounts.add_character_trait(params) do
+      {:ok, _character_trait} ->
+        Logger.debug("Character trait added.")
+        character = Accounts.preload(socket.assigns.changeset.data)
+        {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
+
+      {:error, changeset} ->
+        Logger.warn(inspect(params))
+        Logger.error("Error adding character trait: #{inspect(changeset.errors)}")
+        {:noreply, socket}
     end
   end
 
@@ -84,6 +149,22 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, reason} ->
         Logger.error(inspect(reason))
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("delete", %{"trait" => id}, socket) do
+    character = socket.assigns.changeset.data
+    character_trait = Enum.find(character.character_traits, & &1.id == String.to_integer(id))
+
+    case Accounts.remove_character_trait(character_trait) do
+      {:ok, _character_skill} ->
+        character = Accounts.preload(character)
+        Logger.debug("Removed trait from #{character.name}.")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
+
+      {:error, reason} ->
+        Logger.error("Error removing trait: #{inspect(reason)}")
         {:noreply, socket}
     end
   end

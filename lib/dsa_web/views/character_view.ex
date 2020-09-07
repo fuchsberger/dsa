@@ -15,6 +15,86 @@ defmodule DsaWeb.CharacterView do
     """
   end
 
+  def ap(ctraits) do
+    ctraits
+    |> Enum.map(& &1.ap)
+    |> Enum.sum()
+  end
+
+  def character_advantages(changeset) do
+    Enum.filter(changeset.data.character_traits, & &1.trait.level > 0 && &1.ap > 0)
+  end
+
+  def character_disadvantages(changeset) do
+    Enum.filter(changeset.data.character_traits, & &1.trait.level > 0 && &1.ap < 0)
+  end
+
+  def character_general_skills(changeset) do
+    Enum.filter(changeset.data.character_traits, & &1.trait.level == 0)
+  end
+
+  def character_trait_badge(ctrait) do
+    text =
+      cond do
+        ctrait.trait.level > 1 && not is_nil(ctrait.details) ->
+          "#{ctrait.trait.name} #{roman(ctrait.level)}: #{ctrait.details}"
+
+        ctrait.trait.level > 1 ->
+          "#{ctrait.trait.name} #{roman(ctrait.level)}"
+
+        not is_nil(ctrait.details) ->
+          "#{ctrait.trait.name}: #{ctrait.details}"
+
+        true ->
+          ctrait.trait.name
+      end
+
+    ~E"""
+    <button class='btn btn-light btn-sm py-0' type='button' phx-click='delete' phx-value-trait='<%= ctrait.id %>'><%= text %> (<%= ctrait.ap %>)</button>
+    """
+  end
+
+  def disables(changeset, traits) do
+    case get_field(changeset, :trait_id) do
+      nil ->
+        {true, true, true, []}
+
+      id ->
+        trait = Enum.find(traits, & &1.id == id)
+        dis_details = not trait.details
+        dis_level = trait.level < 2
+        dis_ap = trait.fixed_ap
+
+        level_options =
+          cond do
+            trait.level == 0 -> [{"Allg. SF", 0}]
+            trait.level == 1 && trait.ap > 0 -> [{"Vorteil", 1}]
+            trait.level == 1 && trait.ap < 0 -> [{"Nachteil", 1}]
+            trait.level > 1 ->
+              1..trait.level
+              |> Enum.to_list()
+              |> Enum.map(& {roman(&1), &1})
+          end
+
+        {dis_details, dis_ap, dis_level, level_options}
+    end
+  end
+
+  defp roman(number) do
+    case number do
+      1 -> "I"
+      2 -> "II"
+      3 -> "III"
+      4 -> "IV"
+      5 -> "V"
+      6 -> "VI"
+      7 -> "VII"
+      8 -> "VIII"
+      9 -> "IX"
+      10 -> "X"
+    end
+  end
+
   def dropdown_item(name, category) do
     content_tag :li, link(name, class: "dropdown-item",
       to: "#",
@@ -120,4 +200,6 @@ defmodule DsaWeb.CharacterView do
     filter_ids = Enum.map(character.character_skills, & &1.skill_id)
     Enum.reject(options, fn {_name, id} -> Enum.member?(filter_ids, id) end)
   end
+
+  def trait_options(traits), do: Enum.map(traits, & {&1.name, &1.id})
 end

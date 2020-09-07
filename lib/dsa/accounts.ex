@@ -5,11 +5,13 @@ defmodule Dsa.Accounts do
   import Ecto.{Changeset, Query}
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, Group, User}
-  alias Dsa.Lore.{CombatSkill, Skill}
+  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
+  alias Dsa.Lore.{CombatSkill, Skill, Trait}
+
 
   @sorted_combat_skills from(s in CombatSkill, order_by: s.name)
   @sorted_skills from(s in Skill, order_by: [s.category, s.name])
+  @sorted_traits from(t in Trait, order_by: t.name)
 
   @character_preloads [
     :species,
@@ -20,8 +22,10 @@ defmodule Dsa.Accounts do
     :character_fweapons,
     :character_skills,
     :character_combat_skills,
+    :character_traits,
     combat_skills: @sorted_combat_skills,
-    skills: @sorted_skills
+    skills: @sorted_skills,
+    traits: @sorted_traits
   ]
 
   def get_user(id), do:  Repo.get(user_query(), id)
@@ -191,6 +195,14 @@ defmodule Dsa.Accounts do
       characters: ^@character_preloads
     ]), id)
   end
+
+  def add_character_trait(params) do
+    %CharacterTrait{}
+    |> CharacterTrait.changeset(params)
+    |> Repo.insert()
+  end
+
+  def remove_character_trait(character_trait), do: Repo.delete(character_trait)
 
   def add_combat_skill!(character_id, skill) do
     %CharacterCombatSkill{}
