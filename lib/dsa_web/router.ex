@@ -26,14 +26,13 @@ defmodule DsaWeb.Router do
 
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
-    # resources "/characters", CharacterController, except: [:index, :show]
-    # post "/characters/add_skill", CharacterController, :add_skill
-    # delete "/characters/remove_skill/:character_id/:skill_id", CharacterController, :remove_skill
 
+    get "/manage", PageController, :seed
+
+    get "/characters/new", PageController, :create_character
 
     live "/characters", CharacterLive, :index
-    live "/characters/new", CharacterLive, :new
-    live "/characters/edit/:character_id", CharacterLive, :edit
+    live "/characters/:character_id", CharacterLive, :edit
 
     live "/group/:id", GroupLive, :index
     live "/group/:id/combat", GroupLive, :combat

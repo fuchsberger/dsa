@@ -1,14 +1,13 @@
 <%= if @live_action == :index do %>
   <div class='d-flex my-3'>
     <h3 class="flex-grow-1">Heldenübersicht</h3>
-    <%= live_patch "Neu erstellen", to: Routes.character_path(@socket, :new), class: "btn btn-primary" %>
+    <%= live_patch "Neu erstellen", to: Routes.page_path(@socket, :create_character), class: "btn btn-primary" %>
   </div>
 
   <table class='table'>
     <thead>
       <tr>
         <th scope='col'>Name</th>
-        <th scope='col'>Kultur</th>
         <th scope='col'>Profession</th>
         <th scope='col'>Gruppe</th>
         <th scope='col' class='text-center'>Aktionen</th>
@@ -18,7 +17,6 @@
       <%= for character <- @characters do %>
         <tr>
           <th scope='row'><%= character.name %></th>
-          <td><%= character.culture %></td>
           <td><%= character.profession %></td>
           <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
           <td class='text-center'>
@@ -43,7 +41,7 @@
 
   <%= f = form_for @changeset, "#", [
       phx_change: :change,
-      phx_submit: :save,
+      phx_submit: nil,
       novalidate: true
     ]
   %>
@@ -56,9 +54,15 @@
       </div>
     <% end %>
 
-    <div class='d-flex justify-content-between mb-2'>
-      <h3>Heldenbogen</h3>
-      <%= submit "Speichern", class: "btn btn-primary" %>
+    <div id='base-values' class='row g-1'>
+      <div class='col-3'>
+        <h3><%= get_field @changeset, :name, "Heldenübersicht" %></h3>
+      </div>
+      <div class='col-9'>
+        <div class='row g-2'>
+          <%= Enum.map(base_values(), & base_value_field(f, &1)) %>
+        </div>
+      </div>
     </div>
 
 
@@ -67,6 +71,8 @@
 
         <%# CARD GENERELL ----------------------------------------------------------------------- %>
         <div class="card mb-3">
+
+
           <h5 class="card-header">Generell</h5>
           <div class="card-body">
 
@@ -83,21 +89,13 @@
             </div>
 
             <div class='row g-2'>
-              <%= label f, :species_id, "Species / Kultur", class: "col-sm-4 col-form-label" %>
+              <%= label f, :species_id, "Spezies / Gruppe", class: "col-sm-4 col-form-label" %>
               <div class="col-sm-4">
                 <%= select f, :species_id, @species_options, class: "form-select-sm", prompt: "Spezies wählen..." %>
                 <%= error_tag f, :species_id %>
               </div>
               <div class="col-sm-4">
-                <%= text_input f, :culture, class: "form-control-sm", placeholder: "Kultur" %>
-                <%= error_tag f, :culture %>
-              </div>
-            </div>
-
-            <div class='row g-2'>
-              <%= label f, :gruppe_id, class: "col-sm-4 col-form-label" %>
-              <div class="col-sm-8">
-                <%= select f, :group_id, @group_options, class: "form-select-sm", prompt: "keiner Gruppe beigetreten" %>
+                <%= select f, :group_id, @group_options, class: "form-select-sm", prompt: "keine Gruppe" %>
                 <%= error_tag f, :gruppe_id %>
               </div>
             </div>
@@ -108,9 +106,6 @@
         <div id='trait-card' class="card">
           <h5 class="card-header">Grundwerte</h5>
           <div class="card-body">
-
-            <h6>Eigenschaften</h6>
-            <div class='row g-2'><%= Enum.map(base_values(), & field(f, &1)) %></div>
 
             <h6 class='mt-2'>Basiswerte</h6>
             <div class='row g-2'>
@@ -159,6 +154,12 @@
                   ], selected: 1, class: "form-select-sm") %>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header pb-0 d-flex justify-content-between">
+            <h5 class='mb-0'>Vorteile</h5>
           </div>
         </div>
       </div>

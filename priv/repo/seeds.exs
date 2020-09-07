@@ -1,39 +1,29 @@
 # Scripts for populating the database. You can them as:
 # mix run priv/repo/seeds.exs (regenerates armors and weapons)
 
-
-alias Dsa.{Accounts, Lore, Repo}
+alias Dsa.{Accounts, Lore}
 
 # Add DSA data
-Lore.seed(:species)
-Lore.seed(:combat_skills)
-Lore.seed(:skills)
-Lore.seed(:special_skills)
-Lore.seed(:mweapons)
-Lore.seed(:fweapons)
-Lore.seed(:armors)
+Lore.seed()
 
 # Create Admin User
-{:ok, alex} = Accounts.register_user(%{
+{:ok, admin} = Accounts.register_user(%{
   admin: true,
   name: "Alex",
   username: "admin",
   password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
 })
 
-# Create Admin User
-{:ok, testuser} = Accounts.register_user(%{
+# Create Test User
+{:ok, user} = Accounts.register_user(%{
   name: "Test",
   username: "test",
   password: "testtest"
 })
 
-{:ok, group} =
-  %Accounts.Group{}
-  |> Accounts.Group.changeset(%{ name: "DSA", master_id: alex.id })
-  |> Repo.insert()
+{:ok, group} = Accounts.create_group(%{ name: "DSA", master_id: admin.id })
 
-Accounts.create_character(alex, %{
+Accounts.create_character(admin, %{
   name: "Rolo",
   species_id: 1,
   culture: "Mittelreich",
@@ -41,7 +31,7 @@ Accounts.create_character(alex, %{
   group_id: group.id
 })
 
-Accounts.create_character(testuser, %{
+Accounts.create_character(user, %{
   name: "Test1",
   species_id: 1,
   culture: "Mittelreich",

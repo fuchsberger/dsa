@@ -174,6 +174,12 @@ defmodule Dsa.Accounts do
 
   def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))
 
+  def create_group(attrs) do
+    %Group{}
+    |> Group.changeset(attrs)
+    |> Repo.insert()
+  end
+
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
   def get_group!(id) do

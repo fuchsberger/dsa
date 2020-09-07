@@ -6,7 +6,7 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Species, MWeapon, FWeapon}
+  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Species, Trait, MWeapon, FWeapon}
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
@@ -43,92 +43,21 @@ defmodule Dsa.Lore do
     Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
   end
 
-  def seed(:armors) do
-    Armor.entries()
-    |> Enum.each(fn %{name: name} = params ->
-      case Repo.get_by(Armor, name: name) do
-        nil  -> %Armor{}
-        entry -> entry
-      end
-      |> Armor.changeset(params)
-      |> Repo.insert_or_update!()
-
-      Logger.debug("Armor: #{name} updated...")
-    end)
-  end
-
-  def seed(:combat_skills) do
-    CombatSkill.entries()
-    |> Enum.each(fn %{name: name} = params ->
-        case Repo.get_by(CombatSkill, name: name) do
-          nil  -> %CombatSkill{}
+  def seed do
+    Enum.each([Armor, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon], fn schema ->
+      Enum.each(schema.entries(), fn %{name: name} = params ->
+        case Repo.get_by(schema, name: name) do
+          nil  -> struct(schema)
           entry -> entry
         end
-        |> CombatSkill.changeset(params)
+        |> schema.changeset(params)
         |> Repo.insert_or_update!()
 
-        Logger.debug("Combat Skill: #{name} updated...")
+        Logger.debug("#{name} updated...")
       end)
-  end
-
-  def seed(:skills) do
-    Skill.entries()
-    |> Enum.each(fn %{name: name} = params ->
-
-      case Repo.get_by(Skill, name: name) do
-        nil  -> %Skill{}
-        entry -> entry
-      end
-      |> Skill.changeset(params)
-      |> Repo.insert_or_update!()
-
-      Logger.debug("Skill: #{name} updated...")
+      Logger.info("All entries in #{Atom.to_string(schema)} updated.")
     end)
-  end
 
-  def seed(:species) do
-    Species.entries()
-    |> Enum.each(fn %{name: name} = params ->
-        case Repo.get_by(Species, name: name) do
-          nil  -> %Species{}
-          entry -> entry
-        end
-        |> Species.changeset(params)
-        |> Repo.insert_or_update!()
-
-        Logger.debug("Species: #{name} updated...")
-      end)
-  end
-
-  def seed(:mweapons) do
-    MWeapon.entries()
-    |> Enum.each(fn %{name: name} = params ->
-      case Repo.get_by(MWeapon, name: name) do
-        nil  -> %MWeapon{}
-        entry -> entry
-      end
-      |> MWeapon.changeset(params)
-      |> Repo.insert_or_update!()
-
-      Logger.debug("Weapon: #{name} updated...")
-    end)
-  end
-
-  def seed(:fweapons) do
-    FWeapon.entries()
-    |> Enum.each(fn %{name: name} = params ->
-      case Repo.get_by(FWeapon, name: name) do
-        nil  -> %FWeapon{}
-        entry -> entry
-      end
-      |> FWeapon.changeset(params)
-      |> Repo.insert_or_update!()
-
-      Logger.debug("Weapon: #{name} updated...")
-    end)
-  end
-
-  def seed(:special_skills) do
     SpecialSkill.entries()
     |> Enum.each(fn {%{name: name} = params, combat_skills} ->
 

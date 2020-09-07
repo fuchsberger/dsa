@@ -24,9 +24,6 @@ defmodule DsaWeb.CharacterLive do
       :index ->
         {:noreply, assign(socket, :characters, Accounts.list_user_characters(user_id))}
 
-      :new ->
-        {:noreply, assign(socket, :changeset, Accounts.change_character(%Accounts.Character{}))}
-
       :edit ->
         case Accounts.get_user_character!(user_id, Map.get(params, "character_id")) do
           nil ->
@@ -64,22 +61,15 @@ defmodule DsaWeb.CharacterLive do
         end
 
       true ->
-        changeset = Accounts.change_character(character, params)
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
-  end
+        case Accounts.update_character(character, params) do
+          {:ok, character} ->
+            Logger.debug("Held verändert.")
+            {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 
-  def handle_event("save", %{"character" => params}, socket) do
-    params = Map.put(params, "user_id", socket.assigns.user_id)
-    changeset = Accounts.change_character(socket.assigns.changeset.data, params)
-
-    case Repo.insert_or_update(changeset) do
-      {:ok, %{id: id}} ->
-        {:noreply, push_patch(socket, to: Routes.character_path(socket, :edit, id))}
-
-      {:error, changeset} ->
-        Logger.error(inspect(changeset.errors))
-        {:noreply, assign(socket, :changeset, changeset)}
+          {:error, changeset} ->
+            Logger.error(inspect(changeset.errors))
+            {:noreply, assign(socket, :changeset, changeset)}
+        end
     end
   end
 

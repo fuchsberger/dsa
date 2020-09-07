@@ -2,7 +2,6 @@ defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
   import DsaWeb.CharacterHelpers
-  import Ecto.Changeset, only: [get_field: 2]
 
   alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll, Routine}
 

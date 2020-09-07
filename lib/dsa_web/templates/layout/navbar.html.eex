@@ -23,7 +23,7 @@
               </li>
               <li>
                 <%= link "Held erstellen",
-                  to: Routes.character_path(@conn, :new),
+                  to: Routes.page_path(@conn, :create_character),
                   class: "dropdown-item"
                 %>
               </li>
@@ -40,19 +40,16 @@
               <% end %>
             </ul>
           </li>
-          <li class='nav-item dropdown'>
-            <a href='#' id='manage_dropdown' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'>Verwalten</a>
-            <ul class="dropdown-menu" aria-labelledby="manage_dropdown">
-              <%= link "Kampftechniken", to: Routes.manage_path(@conn, :combat_skills), class: "dropdown-item" %>
-              <%= link "Sonderfertigkeiten", to: Routes.manage_path(@conn, :special_skills), class: "dropdown-item" %>
-              <%= link "Talente", to: Routes.manage_path(@conn, :skills), class: "dropdown-item" %>
-              <%= link "Gruppen", to: Routes.manage_path(@conn, :groups), class: "dropdown-item" %>
-              <%= link "Benützer", to: Routes.manage_path(@conn, :users), class: "dropdown-item" %>
-              <%= link "Nahkampfwaffen", to: Routes.manage_path(@conn, :mweapons), class: "dropdown-item" %>
-              <%= link "Fernkampfwaffen", to: Routes.manage_path(@conn, :fweapons), class: "dropdown-item" %>
-              <%= link "Rüstungen", to: Routes.manage_path(@conn, :armors), class: "dropdown-item" %>
-            </ul>
+
+          <li class='nav-item'>
+            <%= link "Verwaltung", to: Routes.manage_path(@conn, :combat_skills), class: "nav-link" %>
           </li>
+
+          <%= if @current_user.admin do %>
+            <li class='nav-item'>
+              <%= link "Update Datenbank...", to: Routes.page_path(@conn, :seed), class: "nav-link" %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
 

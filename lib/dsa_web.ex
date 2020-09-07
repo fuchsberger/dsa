@@ -37,6 +37,7 @@ defmodule DsaWeb do
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
       import Phoenix.LiveView.Helpers
+      import Ecto.Changeset, only: [get_field: 2, get_field: 3]
 
       # Include shared imports and aliases for views
       unquote(view_helpers())

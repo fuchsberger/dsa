@@ -5,8 +5,7 @@ defmodule Dsa.Accounts.Character do
   schema "characters" do
 
     # Generell
-    field :name, :string
-    field :culture, :string
+    field :name, :string, default: "Held"
     field :profession, :string
 
     # Eigenschaften
@@ -52,18 +51,16 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @required_fields ~w(user_id species_id name at pa w2 tp rw le ae ke sk zk aw gw sp)a ++ Dsa.Lists.base_values()
-  @optional_fields ~w(culture profession group_id skill_id)a
+  @required_fields ~w(species_id name at pa w2 tp rw le ae ke sk zk aw gw sp)a ++ Dsa.Lists.base_values()
+  @optional_fields ~w(profession group_id skill_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
-    |> validate_length(:name, min: 2, max: 15)
-    |> validate_length(:culture, min: 3, max: 15)
+    |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:profession, min: 2, max: 15)
     |> foreign_key_constraint(:species_id)
     |> foreign_key_constraint(:group_id)
-    |> foreign_key_constraint(:user_id)
   end
 
   @cfields ~w()a

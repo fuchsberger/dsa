@@ -1,7 +1,19 @@
 defmodule DsaWeb.CharacterView do
   use DsaWeb, :view
 
+  # import DSA.Lists
   import DsaWeb.CharacterHelpers
+
+  def base_value_field(form, field) do
+    ~E"""
+    <div class='col'>
+      <div class="input-group input-group-sm">
+        <%= label form, field, Atom.to_string(field), class: "input-group-text px-1" %>
+        <%= number_input form, field, class: "form-control px-1 text-center" %>
+      </div>
+    </div>
+    """
+  end
 
   def dropdown_item(name, category) do
     content_tag :li, link(name, class: "dropdown-item",
