@@ -15,23 +15,7 @@ defmodule DsaWeb.CharacterView do
     """
   end
 
-  def ap(ctraits) do
-    ctraits
-    |> Enum.map(& &1.ap)
-    |> Enum.sum()
-  end
-
-  def character_advantages(changeset) do
-    Enum.filter(changeset.data.character_traits, & &1.trait.level > 0 && &1.ap > 0)
-  end
-
-  def character_disadvantages(changeset) do
-    Enum.filter(changeset.data.character_traits, & &1.trait.level > 0 && &1.ap < 0)
-  end
-
-  def character_general_skills(changeset) do
-    Enum.filter(changeset.data.character_traits, & &1.trait.level == 0)
-  end
+  def badge_list(traits), do: Enum.map(traits, & character_trait_badge(&1))
 
   def character_trait_badge(ctrait) do
     text =
@@ -67,6 +51,8 @@ defmodule DsaWeb.CharacterView do
 
         level_options =
           cond do
+            trait.level == -2 -> [{"Tradition", -2}]
+            trait.level == -1 -> [{"SP SF", -1}]
             trait.level == 0 -> [{"Allg. SF", 0}]
             trait.level == 1 && trait.ap > 0 -> [{"Vorteil", 1}]
             trait.level == 1 && trait.ap < 0 -> [{"Nachteil", 1}]

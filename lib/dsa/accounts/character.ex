@@ -21,9 +21,9 @@ defmodule Dsa.Accounts.Character do
     # stats
     field :be, :integer, default: 0
     field :rs, :integer, default: 0
-    field :le, :integer, default: 30
-    field :ae, :integer, default: 0
-    field :ke, :integer, default: 0
+    field :le_bonus, :integer, default: 0
+    field :ae_bonus, :integer, default: 0
+    field :ke_bonus, :integer, default: 0
     field :sk, :integer, default: 0
     field :zk, :integer, default: 0
     field :aw, :integer, default: 4
@@ -58,7 +58,7 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @required_fields ~w(species_id name at pa w2 tp rw le ae ke sk zk aw gw sp)a ++ Dsa.Lists.base_values()
+  @required_fields ~w(species_id name at pa w2 tp rw le_bonus ae_bonus ke_bonus sk zk aw gw)a ++ Dsa.Lists.base_values()
   @optional_fields ~w(profession group_id skill_id trait_id trait_level trait_ap trait_details)a
   def changeset(character, attrs) do
     character
@@ -66,8 +66,8 @@ defmodule Dsa.Accounts.Character do
     |> validate_required(@required_fields)
     |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:profession, min: 2, max: 15)
-    |> validate_number(:trait_level, greater_than_or_equal_to: 0)
     |> validate_number(:trait_ap, not_equal_to: 0)
+    |> validate_number(:le_bonus, greater_than_or_equal_to: 0)
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:species_id)
     |> foreign_key_constraint(:group_id)

@@ -40,11 +40,14 @@
 <% else %>
 
   <%= f = form_for @changeset, "#", [
+      id: "character-form",
+      phx_hook: "tooltip",
       phx_change: :change,
       phx_submit: nil,
       novalidate: true
     ]
   %>
+    <% ap = ap(@changeset.data) %>
     <div id='base-values' class='row g-1'>
       <div class='col-3'>
         <h3><%= get_field @changeset, :name, "Heldenübersicht" %></h3>
@@ -90,59 +93,31 @@
                 <%= error_tag f, :gruppe_id %>
               </div>
             </div>
-          </div>
-        </div>
 
-        <%# CARD TRAITS ------------------------------------------------------------------------- %>
-        <div id='trait-card' class="card mb-2">
-          <h5 class="card-header">Grundwerte</h5>
-          <div class="card-body">
-
-            <h6 class='mt-2'>Basiswerte</h6>
             <div class='row g-2'>
-              <%= field f, :le %>
-              <%= field f, :ae %>
-              <%= field f, :zk %>
-              <%= field f, :sk %>
-              <%= field f, :aw %>
-              <%= field f, :gw %>
-              <%= field f, :sp %>
-            </div>
+              <div class="col-sm-4 pt-1">Zukauf</div>
 
-            <h6 class='mt-2'>Kampfwerte</h6>
-            <div class='row g-2'>
-              <%= field f, :at %>
-              <%= field f, :pa %>
-
-              <div class='col-sm-3'>
-                <div class="input-group input-group-sm mb-2">
-                  <%= label f, :dmg, "TP", class: "input-group-text font-weight-bold" %>
-                  <div class='form-control'><%= tp(f) %></div>
-                </div>
-              </div>
-
-              <div class='col-sm-3'>
-                <div class="input-group input-group-sm mb-2">
-                  <div class="input-group-text">
-                    <%= checkbox f, :w2, class: "ml-2 form-check-input" %>
+              <div class="col-sm-8">
+                <div class='row g-2'>
+                  <div class='col'>
+                    <div class='input-group input-group-sm value'>
+                      <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
+                      <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
+                    </div>
                   </div>
-                  <%= number_input f, :tp %>
+                  <div class='col'>
+                    <div class='input-group input-group-sm value'>
+                      <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
+                      <%= number_input f, :ae_bonus, class: "form-control px-1 text-center" %>
+                    </div>
+                  </div>
+                  <div class='col'>
+                    <div class='input-group input-group-sm value'>
+                      <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
+                      <%= number_input f, :ke_bonus, class: "form-control px-1 text-center" %>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div class='col-sm-3'>
-                <div class="input-group input-group-sm mb-2">
-                  <%= label f, :rw, "RW", class: "input-group-text font-weight-bold" %>
-                  <div class='form-control'><%= range(f) %></div>
-                </div>
-              </div>
-
-              <div class='col-sm-3'>
-                <%= select(f, :rw, [
-                  "Kurz": 0,
-                  "Mittel": 1,
-                  "Lang": 2
-                  ], selected: 1, class: "form-select-sm") %>
               </div>
             </div>
           </div>
@@ -188,111 +163,200 @@
             </div>
 
             <%# Advadntages %>
-            <% advantages = character_advantages(@changeset) %>
-            <div class='d-flex justify-content-between'>
-              <h6 class='mb-0'>Vorteile</h6>
-              <i><%= ap(advantages) %> AP</i>
-            </div>
-            <hr class='my-1'>
-            <p><%=
-              Enum.map(advantages, & character_trait_badge(&1))
-            %></p>
+            <%= if Enum.count(advantages(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Vorteile</h6>
+                <i><%= Map.get(ap, :Vorteile, 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(advantages(@changeset.data)) %></p>
+            <% end %>
 
             <%# Disadvantages %>
-            <% disadvantages = character_disadvantages(@changeset) %>
-            <div class='d-flex justify-content-between'>
-              <h6 class='mb-0'>Nachteile</h6>
-              <i><%= ap(disadvantages) %> AP</i>
-            </div>
-            <hr class='my-1'>
-            <p><%=
-              Enum.map(disadvantages, & character_trait_badge(&1))
-            %></p>
+            <%= if Enum.count(disadvantages(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Nachteile</h6>
+                <i><%= Map.get(ap, :Nachteile, 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(disadvantages(@changeset.data)) %></p>
+            <% end %>
 
             <%# General Skills %>
-            <% general_skills = character_general_skills(@changeset) %>
-            <div class='d-flex justify-content-between'>
-              <h6 class='mb-0'>Allgemeine Sonderfertigkeiten</h6>
-              <i><%= ap(general_skills) %> AP</i>
-            </div>
-            <hr class='my-1'>
-            <p><%=
-              Enum.map(general_skills, & character_trait_badge(&1))
-            %></p>
-          </div>
-        </div>
-      </div>
-
-      <div class='col-lg'>
-        <div id='talente' class="card mb-3">
-          <div class="card-header pb-0 d-flex justify-content-between">
-            <h5 class='mb-0'><%= talent_group(@category) %></h5>
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                ...wähle
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right">
-                <%= dropdown_item "Kampftechniken", "0" %>
-                <%= dropdown_item "Körpertalente", "1" %>
-                <%= dropdown_item "Gesellschaftstalente", "2" %>
-                <%= dropdown_item "Naturtalente", "3" %>
-                <%= dropdown_item "Wissenstalente", "4" %>
-                <%= dropdown_item "Handwerkstalente", "5" %>
-                <%= dropdown_item "Zauber", "6" %>
-                <%= dropdown_item "Liturgien", "7" %>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card-body p-0">
-            <%= if is_nil(@category) do %>
-              <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
-                <table class='table table-sm mb-0'>
-                  <thead>
-                    <tr>
-                      <th scope='col'>Name</th>
-                      <th scope='col' class='text-center'></th>
-                      <th scope='col' class='text-center'>AT</th>
-                      <th scope='col' class='text-center'>PA</th>
-                      <th scope='col' class='text-center'>ST</th>
-                    </tr>
-                  </thead>
-                  <tbody class='small'>
-                  <%= for fs <- inputs_for f, :character_combat_skills do %>
-                    <%# character = @form.source.data %>
-                    <tr>
-                      <td>
-                        <%= hidden_inputs_for fs %>
-                        <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
-                      </td>
-                      <td class='text-center'></td>
-                      <td class='text-center'><small><em><%# at(character, talent) %></em></small></td>
-                      <td class='text-center'><%# pa(character, talent) || "-" %></td>
-                      <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
-                    </tr>
-                  <% end %>
-                  </tbody>
-                </table>
+            <%= if Enum.count(general_skills(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Allgemeine Sonderfertigkeiten</h6>
+                <i><%= Map.get(ap, :"Allgemeine SF", 0) %> AP</i>
               </div>
-            <% else %>
-              <div area-area_labeledby='#<%= @category %>' id='<%= @category %>' class='tab-pane' role='tabpanel'>
+              <hr class='my-1'>
+              <p><%= badge_list(general_skills(@changeset.data)) %></p>
+            <% end %>
+
+            <%# Fate Point Skills %>
+            <%= if Enum.count(fate_skills(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Schicksalspunkte Sonderfertigkeiten</h6>
+                <i><%= Map.get(ap, :"Schicksalspunkte SF", 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(fate_skills(@changeset.data)) %></p>
+            <% end %>
+
+            <%# Traditions %>
+            <%= if Enum.count(traditions(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Traditionen</h6>
+                <i><%= Map.get(ap, :Traditionen, 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(traditions(@changeset.data)) %></p>
+            <% end %>
+          </div>
+
+          <div id='talente' class="card mb-3">
+            <div class="card-header pb-0 d-flex justify-content-between">
+              <h5 class='mb-0'><%= talent_group(@category) %></h5>
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  ...wähle
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <%= dropdown_item "Kampftechniken", "0" %>
+                  <%= dropdown_item "Körpertalente", "1" %>
+                  <%= dropdown_item "Gesellschaftstalente", "2" %>
+                  <%= dropdown_item "Naturtalente", "3" %>
+                  <%= dropdown_item "Wissenstalente", "4" %>
+                  <%= dropdown_item "Handwerkstalente", "5" %>
+                  <%= dropdown_item "Zauber", "6" %>
+                  <%= dropdown_item "Liturgien", "7" %>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card-body p-0">
+              <%= if is_nil(@category) do %>
+                <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
+                  <table class='table table-sm mb-0'>
+                    <thead>
+                      <tr>
+                        <th scope='col'>Name</th>
+                        <th scope='col' class='text-center'></th>
+                        <th scope='col' class='text-center'>AT</th>
+                        <th scope='col' class='text-center'>PA</th>
+                        <th scope='col' class='text-center'>ST</th>
+                      </tr>
+                    </thead>
+                    <tbody class='small'>
+                    <%= for fs <- inputs_for f, :character_combat_skills do %>
+                      <%# character = @form.source.data %>
+                      <tr>
+                        <td>
+                          <%= hidden_inputs_for fs %>
+                          <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
+                        </td>
+                        <td class='text-center'></td>
+                        <td class='text-center'><small><em><%# at(character, talent) %></em></small></td>
+                        <td class='text-center'><%# pa(character, talent) || "-" %></td>
+                        <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              <% else %>
+                <div area-area_labeledby='#<%= @category %>' id='<%= @category %>' class='tab-pane' role='tabpanel'>
+                  <table class='table table-sm mb-0'>
+                    <thead>
+                      <tr>
+                        <th scope='col'>Name</th>
+                        <th scope='col' class='text-center'>Probe</th>
+                        <th scope='col' class='text-center'>
+                          <%= if @category == 6 || @category == 7, do: icon("cancel"), else: "BE" %>
+                        </th>
+                        <th scope='col' class='text-center'>ST</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <%= for fs <- form_group(f, @category) do %>
+                      <tr>
+                        <td>
+                          <%= hidden_inputs_for(fs) %>
+                          <%= fs.data.skill.name %>
+                        </td>
+                        <td class='text-center'>
+                          <small>
+                            <em><%= fs.data.skill.e1 %></em> /
+                            <em><%= fs.data.skill.e2 %></em> /
+                            <em><%= fs.data.skill.e3 %></em>
+                          </small>
+                        </td>
+                        <td class='text-center'>
+                          <%= if @category == 6 || @category == 7 do %>
+                            <button
+                              class='btn badge bg-light btn-sm p-0'
+                              phx-click='delete'
+                              phx-value-skill='<%= fs.data.skill.id %>'
+                              type='button'
+                            >
+                              <i class='icon-cancel text-danger'></i>
+                            </button>
+                          <% else %>
+                            <%= be(fs.data.skill.be) %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <%= if @category == 6 do %>
+                      <tr>
+                        <td colspan='4'>
+                          <%= if @changeset.data.__meta__.state == :loaded do %>
+                            <%= select f, :skill_id, list_options(@changeset.data, @spell_options), class: "border-0 form-select-sm", prompt: "Zauber hinzufügen" %>
+                          <% else %>
+                            <i>Du musst deinen Helden erst speichern bevor Zauber hinzugefügt werden können.</i>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    <%= if @category == 7 do %>
+                      <tr>
+                        <td colspan='4'>
+                          <%= if @changeset.data.__meta__.state == :loaded do %>
+                            <%= select f, :skill_id, list_options(@changeset.data, @wonder_options), class: "border-0 form-select-sm", prompt: "Liturgie hinzufügen" %>
+                          <% else %>
+                            <i>Du musst deinen Helden erst speichern bevor Liturgien hinzugefügt werden können.</i>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <% zauber_forms = form_group(f, "Zauber") %>
+          <%= if Enum.count(zauber_forms) > 0 do %>
+            <div class="card mb-3">
+              <h5 class='card-header'>Zauber</h5>
+              <div class="card-body tab-content p-0">
                 <table class='table table-sm mb-0'>
                   <thead>
                     <tr>
                       <th scope='col'>Name</th>
                       <th scope='col' class='text-center'>Probe</th>
-                      <th scope='col' class='text-center'>
-                        <%= if @category == 6 || @category == 7, do: icon("cancel"), else: "BE" %>
-                      </th>
+                      <th scope='col' class='text-center'></th>
                       <th scope='col' class='text-center'>ST</th>
                     </tr>
                   </thead>
                   <tbody>
-                  <%= for fs <- form_group(f, @category) do %>
+                  <%= for fs <- zauber_forms do %>
                     <tr>
                       <td>
                         <%= hidden_inputs_for(fs) %>
-                        <%= fs.data.skill.name %>
+                        <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
                       </td>
                       <td class='text-center'>
                         <small>
@@ -302,146 +366,168 @@
                         </small>
                       </td>
                       <td class='text-center'>
-                        <%= if @category == 6 || @category == 7 do %>
-                          <button
-                            class='btn badge bg-light btn-sm p-0'
-                            phx-click='delete'
-                            phx-value-skill='<%= fs.data.skill.id %>'
-                            type='button'
-                          >
-                            <i class='icon-cancel text-danger'></i>
-                          </button>
-                        <% else %>
-                          <%= be(fs.data.skill.be) %>
-                        <% end %>
+                        <%= button icon("remove", class: "text-danger"),
+                          to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                          class: "btn btn-sm py-0 btn-light",
+                          method: :delete,
+                          data_confirm: "Are you sure?"
+                        %>
                       </td>
                       <td>
                         <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
                       </td>
                     </tr>
                   <% end %>
-                  <%= if @category == 6 do %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          <% end %>
+
+          <% forms = form_group(f, "Liturgie") %>
+          <%= if Enum.count(forms) > 0 do %>
+            <div class="card mb-3">
+              <h5 class='card-header'>Liturgien</h5>
+              <div class="card-body tab-content p-0">
+                <table class='table table-sm mb-0'>
+                  <thead>
                     <tr>
-                      <td colspan='4'>
-                        <%= if @changeset.data.__meta__.state == :loaded do %>
-                          <%= select f, :skill_id, list_options(@changeset.data, @spell_options), class: "border-0 form-select-sm", prompt: "Zauber hinzufügen" %>
-                        <% else %>
-                          <i>Du musst deinen Helden erst speichern bevor Zauber hinzugefügt werden können.</i>
-                        <% end %>
-                      </td>
+                      <th scope='col'>Name</th>
+                      <th scope='col' class='text-center'>Probe</th>
+                      <th scope='col' class='text-center'></th>
+                      <th scope='col' class='text-center'>ST</th>
                     </tr>
-                  <% end %>
-                  <%= if @category == 7 do %>
+                  </thead>
+                  <tbody>
+                  <%= for fs <- forms do %>
                     <tr>
-                      <td colspan='4'>
-                        <%= if @changeset.data.__meta__.state == :loaded do %>
-                          <%= select f, :skill_id, list_options(@changeset.data, @wonder_options), class: "border-0 form-select-sm", prompt: "Liturgie hinzufügen" %>
-                        <% else %>
-                          <i>Du musst deinen Helden erst speichern bevor Liturgien hinzugefügt werden können.</i>
-                        <% end %>
+                      <td>
+                        <%= hidden_inputs_for(fs) %>
+                        <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
+                      </td>
+                      <td class='text-center'>
+                        <small>
+                          <em><%= fs.data.skill.e1 %></em> /
+                          <em><%= fs.data.skill.e2 %></em> /
+                          <em><%= fs.data.skill.e3 %></em>
+                        </small>
+                      </td>
+                      <td class='text-center'>
+                        <%= button icon("remove", class: "text-danger"),
+                          to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
+                          class: "btn btn-sm py-0 btn-light",
+                          method: :delete,
+                          data_confirm: "Are you sure?"
+                        %>
+                      </td>
+                      <td>
+                        <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
                       </td>
                     </tr>
                   <% end %>
                   </tbody>
                 </table>
               </div>
-            <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class='col-lg'>
+
+        <%# Computed Values %>
+        <div id='advanced-values' class="card mb-2">
+          <h5 class="card-header">Abgeleitete Werte</h5>
+          <div class="card-body">
+            <div class='row g-2'>
+              <div class='col'>
+                <% le = le(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :le_total, "LE", class: "input-group-text px-1" %>
+                  <%= text_input f, :le_total, value: le.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(le) %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% ae = ae(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :ae_total, "AE", class: "input-group-text px-1" %>
+                  <%= text_input f, :ae_total, value: ae.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: (if ae.total > 0, do: tooltip_text(ae), else: "<i>Kein Zauberer</i>") %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% ke = ke(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :ke_total, "KE", class: "input-group-text px-1" %>
+                  <%= text_input f, :ke_total, value: ke.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: (if ke.total > 0, do: tooltip_text(ke), else: "<i>Kein Geweihter</i>") %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% zk = zk(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :zk_total, "ZK", class: "input-group-text px-1" %>
+                  <%= text_input f, :zk_total, value: zk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(zk) %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row mt-1 g-2'>
+              <div class='col'>
+                <% ini = ini(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :ini_total, "INI", class: "input-group-text px-1" %>
+                  <%= text_input f, :ini_total, value: ini.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(ini) %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% gs = gs(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :gs_total, "GS", class: "input-group-text px-1" %>
+                  <%= text_input f, :gs_total, value: gs.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(gs) %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% aw = aw(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :aw_total, "AW", class: "input-group-text px-1" %>
+                  <%= text_input f, :aw_total, value: aw.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(aw) %>
+                </div>
+              </div>
+
+              <div class='col'>
+                <% sk = sk(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :sk_total, "SK", class: "input-group-text px-1" %>
+                  <%= text_input f, :sk_total, value: sk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sk) %>
+                </div>
+              </div>
+            </div>
+
+            <div class='row mt-1 g-2'>
+              <div class='col-6'>
+                <h6 class='mt-2'>AP / Schicksalspunkte</h6>
+              </div>
+              <div class='col-3'>
+                <% sp = sp(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :sp_total, "SP", class: "input-group-text px-1" %>
+                  <%= text_input f, :sp_total, value: sp.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sp) %>
+                </div>
+              </div>
+              <div class='col-3'>
+
+                <div class='input-group input-group-sm'>
+                  <%= label f, :ap_total, "AP", class: "input-group-text px-1" %>
+                  <%= text_input f, :ap_total, value: ap.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(ap) %>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <% zauber_forms = form_group(f, "Zauber") %>
-        <%= if Enum.count(zauber_forms) > 0 do %>
-          <div class="card mb-3">
-            <h5 class='card-header'>Zauber</h5>
-            <div class="card-body tab-content p-0">
-              <table class='table table-sm mb-0'>
-                <thead>
-                  <tr>
-                    <th scope='col'>Name</th>
-                    <th scope='col' class='text-center'>Probe</th>
-                    <th scope='col' class='text-center'></th>
-                    <th scope='col' class='text-center'>ST</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <%= for fs <- zauber_forms do %>
-                  <tr>
-                    <td>
-                      <%= hidden_inputs_for(fs) %>
-                      <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
-                    </td>
-                    <td class='text-center'>
-                      <small>
-                        <em><%= fs.data.skill.e1 %></em> /
-                        <em><%= fs.data.skill.e2 %></em> /
-                        <em><%= fs.data.skill.e3 %></em>
-                      </small>
-                    </td>
-                    <td class='text-center'>
-                      <%= button icon("remove", class: "text-danger"),
-                        to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
-                        class: "btn btn-sm py-0 btn-light",
-                        method: :delete,
-                        data_confirm: "Are you sure?"
-                      %>
-                    </td>
-                    <td>
-                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
-                    </td>
-                  </tr>
-                <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        <% end %>
-
-        <% forms = form_group(f, "Liturgie") %>
-        <%= if Enum.count(forms) > 0 do %>
-          <div class="card mb-3">
-            <h5 class='card-header'>Liturgien</h5>
-            <div class="card-body tab-content p-0">
-              <table class='table table-sm mb-0'>
-                <thead>
-                  <tr>
-                    <th scope='col'>Name</th>
-                    <th scope='col' class='text-center'>Probe</th>
-                    <th scope='col' class='text-center'></th>
-                    <th scope='col' class='text-center'>ST</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <%= for fs <- forms do %>
-                  <tr>
-                    <td>
-                      <%= hidden_inputs_for(fs) %>
-                      <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
-                    </td>
-                    <td class='text-center'>
-                      <small>
-                        <em><%= fs.data.skill.e1 %></em> /
-                        <em><%= fs.data.skill.e2 %></em> /
-                        <em><%= fs.data.skill.e3 %></em>
-                      </small>
-                    </td>
-                    <td class='text-center'>
-                      <%= button icon("remove", class: "text-danger"),
-                        to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
-                        class: "btn btn-sm py-0 btn-light",
-                        method: :delete,
-                        data_confirm: "Are you sure?"
-                      %>
-                    </td>
-                    <td>
-                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
-                    </td>
-                  </tr>
-                <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        <% end %>
-      </div>
     </div>
   </form>
 <% end %>

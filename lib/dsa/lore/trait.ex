@@ -16,7 +16,6 @@ defmodule Dsa.Lore.Trait do
     skill
     |> cast(attrs, @fields)
     |> validate_required(@fields)
-    |> validate_number(:level, greater_than_or_equal_to: 0)
     |> validate_number(:ap, not_equal_to: 0)
     |> unique_constraint(:name)
   end
@@ -165,12 +164,23 @@ defmodule Dsa.Lore.Trait do
       {0, "Wettervorhersage", 2, false, true},
       {0, "Zahlenmystik", 2, false, true},
       # Schicksalspunkte Sonderfertigkeiten
-      {0, "Attacke verbessern", 5, false, true},
-      {0, "Ausweichen verbessern", 5, false, true},
-      {0, "Eigenschaft verbessern", 5, false, true},
-      {0, "Fernkampf verbessern", 5, false, true},
-      {0, "Parade verbessern", 5, false, true},
-      {0, "Wachsamkeit verbessern", 10, false, true}
+      {-1, "Attacke verbessern", 5, false, true},
+      {-1, "Ausweichen verbessern", 5, false, true},
+      {-1, "Eigenschaft verbessern", 5, false, true},
+      {-1, "Fernkampf verbessern", 5, false, true},
+      {-1, "Parade verbessern", 5, false, true},
+      {-1, "Wachsamkeit verbessern", 10, false, true},
+      # Zauberertraditionen
+      {-2, "Tradition (Gildenmagier)", 155, true, true},
+      {-2, "Tradition (Hexe)", 135, true, true},
+      {-2, "Tradition (Elf)", 125, true, true},
+      # Geweihtentraditionen
+      {-2, "Tradition (Praioskirche)", 130, true, true},
+      {-2, "Tradition (Rondrakirche)", 150, true, true},
+      {-2, "Tradition (Boronkirche)", 130, true, true},
+      {-2, "Tradition (Hesindekirche)", 130, true, true},
+      {-2, "Tradition (Phexkirche)", 150, true, true},
+      {-2, "Tradition (Perainekirche)", 110, true, true},
     ]
     |> Enum.map(fn {level, name, ap, details, fixed_ap} ->
       %{name: name, ap: ap, level: level, fixed_ap: fixed_ap, details: details}

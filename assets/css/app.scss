@@ -7,7 +7,9 @@
   padding: 0rem 0rem;
 }
 
-#base-values label { display: inline-block !important; width: 33px; font-weight: 700; }
+.input-group.value label ,
+#base-values label,
+#advanced-values label { display: inline-block !important; width: 33px; font-weight: 700; }
 
 #log { max-height: 500px; overflow: auto; }
 

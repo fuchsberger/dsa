@@ -132,7 +132,6 @@ defmodule DsaWeb.CharacterLive do
         {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 
       {:error, changeset} ->
-        Logger.warn(inspect(params))
         Logger.error("Error adding character trait: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end

@@ -10,21 +10,24 @@ import Tooltip from 'bootstrap/js/dist/tooltip.js'
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
+let tooltipTriggerList, tooltipList
+
+const enableTooltips = () => {
+  tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+  tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl)
+  })
+}
+
 const hooks = {}
 
 hooks.tooltip = {
   mounted() {
-    this.el.tooltip = new Tooltip(this.el)
+    enableTooltips()
   },
 
-  beforeUpdate() {
-    console.log(this.el, this.el.tooltip)
-    this.el.tooltip.dispose()
-    this.el.tooltip = new Tooltip(this.el)
-  },
-
-  beforeDestroy() {
-    if(this.el.tooltip) this.el.tooltip.dispose()
+  updated() {
+    enableTooltips()
   }
 }
 
@@ -33,3 +36,6 @@ let liveSocket = new LiveSocket("/live", Socket, {hooks, params: {_csrf_token: c
 
 // Connect if there are any LiveViews on the page
 liveSocket.connect()
+
+// enable tooltips
+enableTooltips()

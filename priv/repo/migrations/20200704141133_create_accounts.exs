@@ -35,9 +35,12 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :be, :integer
       add :rs, :integer
 
-      add :le, :integer
-      add :ae, :integer
-      add :ke, :integer
+      add :le_bonus, :integer
+      add :ae_bonus, :integer
+      add :ke_bonus, :integer
+
+
+
       add :sk, :integer
       add :zk, :integer
       add :aw, :integer
