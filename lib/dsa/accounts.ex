@@ -23,7 +23,6 @@ defmodule Dsa.Accounts do
     :character_skills,
     :character_combat_skills,
     :character_traits,
-    special_skills: [:special_skill],
     combat_skills: @sorted_combat_skills,
     skills: @sorted_skills,
     traits: @sorted_traits

@@ -6,7 +6,7 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, SpecialSkill, Skill, Species, Trait, MWeapon, FWeapon}
+  alias Dsa.Lore.{Armor, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon}
 
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
 
@@ -33,8 +33,6 @@ defmodule Dsa.Lore do
 
   def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
 
-  def list_special_skills, do: Repo.all(from(s in SpecialSkill, preload: :combat_skills, order_by: s.name))
-
   def list_mweapons do
     Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
   end
@@ -58,22 +56,6 @@ defmodule Dsa.Lore do
         Logger.debug("#{name} updated...")
       end)
       Logger.info("All entries in #{Atom.to_string(schema)} updated.")
-    end)
-
-    SpecialSkill.entries()
-    |> Enum.each(fn {%{name: name} = params, combat_skills} ->
-
-      combat_skills = Repo.all(from(s in CombatSkill, where: s.id in ^combat_skills))
-
-      case Repo.get_by(SpecialSkill, name: name) do
-        nil  -> %SpecialSkill{}
-        entry -> Repo.preload(entry, :combat_skills)
-      end
-      |> SpecialSkill.changeset(params)
-      |> Ecto.Changeset.put_assoc(:combat_skills, combat_skills)
-      |> Repo.insert_or_update!()
-
-      Logger.debug("Special Skill: #{name} updated...")
     end)
   end
 end

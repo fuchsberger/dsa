@@ -26,11 +26,11 @@ defmodule DsaWeb.ManageLive do
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
-      :special_skills -> {:noreply, assign(socket, :entries, Lore.list_special_skills())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
       :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
       :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
+      :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end
   end

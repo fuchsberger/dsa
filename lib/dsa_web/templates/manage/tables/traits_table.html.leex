@@ -1,0 +1,36 @@
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>Type</th>
+      <th scope='col' class='text-center'>AP</th>
+      <th scope='col' class='text-center'>Details?</th>
+      <th scope='col' class='text-center'>Fixed AP?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for trait <- @entries do %>
+      <tr>
+        <th scope='row'><%= trait.name %></th>
+        <td class='text-center'>
+          <%=
+            case trait.level do
+              -3 -> "Kampf SF"
+              -2 -> "Tradition"
+              -1 -> "Schicksalsp. SF"
+              0 -> "Schicksalsp. SF"
+              _ ->
+                cond do
+                  trait.ap < 0 -> "Vorteil"
+                  trait.ap > 0 -> "Nachteil"
+                end
+            end
+          %>
+        </td>
+        <td class='text-center'><%= trait.ap %></td>
+        <%= check_cell :trait, :details, trait.details %>
+        <%= check_cell :trait, :fixed_ap, trait.fixed_ap %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

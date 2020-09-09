@@ -134,7 +134,7 @@
             <div class='row mb-1 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
               <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset, @traits) %>
               <div class='col-6 '>
-                <%= label f, :trait_id, "Vorteil / Nachteil / Allg. SF", class: "" %>
+                <%= label f, :trait_id, "Vorteil / Nachteil / SF", class: "" %>
                 <%= select(f, :trait_id, trait_options(@traits), prompt: "hinzufügen...", class: "form-select-sm")
                 %>
               </div>
@@ -183,24 +183,26 @@
             <% end %>
 
             <%# General Skills %>
-            <%= if Enum.count(general_skills(@changeset.data)) > 0 do %>
+            <%= if Enum.count(general_traits(@changeset.data)) > 0 do %>
               <div class='d-flex justify-content-between'>
                 <h6 class='mb-0'>Allgemeine Sonderfertigkeiten</h6>
                 <i><%= Map.get(ap, :"Allgemeine SF", 0) %> AP</i>
               </div>
               <hr class='my-1'>
-              <p><%= badge_list(general_skills(@changeset.data)) %></p>
+              <p><%= badge_list(general_traits(@changeset.data)) %></p>
             <% end %>
 
-            <%# Fate Point Skills %>
-            <%= if Enum.count(fate_skills(@changeset.data)) > 0 do %>
+            <%# Combat Skills %>
+            <%= if Enum.count(combat_traits(@changeset.data)) > 0 do %>
               <div class='d-flex justify-content-between'>
-                <h6 class='mb-0'>Schicksalspunkte Sonderfertigkeiten</h6>
-                <i><%= Map.get(ap, :"Schicksalspunkte SF", 0) %> AP</i>
+                <h6 class='mb-0'>Kampfsonderfertigkeiten</h6>
+                <i><%= Map.get(ap, :"Kampf SF", 0) %> AP</i>
               </div>
               <hr class='my-1'>
-              <p><%= badge_list(fate_skills(@changeset.data)) %></p>
+              <p><%= badge_list(combat_traits(@changeset.data)) %></p>
             <% end %>
+
+
 
             <%# Traditions %>
             <%= if Enum.count(traditions(@changeset.data)) > 0 do %>
@@ -210,6 +212,36 @@
               </div>
               <hr class='my-1'>
               <p><%= badge_list(traditions(@changeset.data)) %></p>
+            <% end %>
+
+            <%# Zaubertricks %>
+            <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Zaubertricks</h6>
+                <i><%= Map.get(ap, :Zaubertricks, 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(tricks(@changeset.data)) %></p>
+            <% end %>
+
+            <%# Segnungen %>
+            <%= if Enum.count(blessings(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Segnungen</h6>
+                <i><%= Map.get(ap, :Segnungen, 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(blessings(@changeset.data)) %></p>
+            <% end %>
+
+            <%# Fate Point Skills %>
+            <%= if Enum.count(fate_traits(@changeset.data)) > 0 do %>
+              <div class='d-flex justify-content-between'>
+                <h6 class='mb-0'>Schicksalspunkte Sonderfertigkeiten</h6>
+                <i><%= Map.get(ap, :"Schicksalspunkte SF", 0) %> AP</i>
+              </div>
+              <hr class='my-1'>
+              <p><%= badge_list(fate_traits(@changeset.data)) %></p>
             <% end %>
           </div>
 
@@ -439,7 +471,7 @@
         <div id='advanced-values' class="card mb-2">
           <h5 class="card-header">Abgeleitete Werte</h5>
           <div class="card-body">
-            <div class='row g-2'>
+            <div class='row g-1'>
               <div class='col'>
                 <% le = le(@changeset.data) %>
                 <div class='input-group input-group-sm'>
@@ -471,9 +503,17 @@
                   <%= text_input f, :zk_total, value: zk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(zk) %>
                 </div>
               </div>
+
+              <div class='col'>
+                <% sk = sk(@changeset.data) %>
+                <div class='input-group input-group-sm'>
+                  <%= label f, :sk_total, "SK", class: "input-group-text px-1" %>
+                  <%= text_input f, :sk_total, value: sk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sk) %>
+                </div>
+              </div>
             </div>
 
-            <div class='row mt-1 g-2'>
+            <div class='row mt-1 g-1'>
               <div class='col'>
                 <% ini = ini(@changeset.data) %>
                 <div class='input-group input-group-sm'>
@@ -499,27 +539,14 @@
               </div>
 
               <div class='col'>
-                <% sk = sk(@changeset.data) %>
-                <div class='input-group input-group-sm'>
-                  <%= label f, :sk_total, "SK", class: "input-group-text px-1" %>
-                  <%= text_input f, :sk_total, value: sk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sk) %>
-                </div>
-              </div>
-            </div>
-
-            <div class='row mt-1 g-2'>
-              <div class='col-6'>
-                <h6 class='mt-2'>AP / Schicksalspunkte</h6>
-              </div>
-              <div class='col-3'>
                 <% sp = sp(@changeset.data) %>
                 <div class='input-group input-group-sm'>
                   <%= label f, :sp_total, "SP", class: "input-group-text px-1" %>
                   <%= text_input f, :sp_total, value: sp.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sp) %>
                 </div>
               </div>
-              <div class='col-3'>
 
+              <div class='col'>
                 <div class='input-group input-group-sm'>
                   <%= label f, :ap_total, "AP", class: "input-group-text px-1" %>
                   <%= text_input f, :ap_total, value: ap.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(ap) %>

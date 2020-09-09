@@ -51,6 +51,11 @@ defmodule DsaWeb.CharacterView do
 
         level_options =
           cond do
+            trait.level == -7 -> [{"Segnung", -7}]
+            trait.level == -6 -> [{"Zaubertrick", -6}]
+            trait.level == -5 -> [{"Karmale SF", -5}]
+            trait.level == -4 -> [{"Magische SF", -4}]
+            trait.level == -3 -> [{"Kampf SF", -3}]
             trait.level == -2 -> [{"Tradition", -2}]
             trait.level == -1 -> [{"SP SF", -1}]
             trait.level == 0 -> [{"Allg. SF", 0}]

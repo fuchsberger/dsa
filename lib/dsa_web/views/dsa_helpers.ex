@@ -4,29 +4,6 @@ defmodule DsaWeb.DsaHelpers do
   """
   use Phoenix.HTML
 
-  @doc """
-  Attacke Wert für ein Kampftalent.
-  """
-  def at(_c, _talent) do
-    # trait = if Enum.any?(talents("Nahkampf"), & &1 == talent), do: :mu, else: :ff
-    # Map.get(c, talent) + floor((Map.get(c, trait) - 8) / 3)
-    ""
-  end
-
-  def pa(_c, _talent) do
-    # st = Map.get(character, talent)
-    # %{ge: ge, kk: kk} = character
-    # bon =
-    #   cond do
-    #     Enum.member?([:cc_dolche, :cc_faecher, :cc_fechtwaffen], talent) -> ge
-    #     Enum.member?([:cc_raufen, :cc_schwerter, :cc_stangenwaffen], talent) -> max(ge, kk)
-    #     Enum.member?([:cc_hiebwaffen, :cc_lanzen, :cc_schilde, :cc_zweihandhiebwaffen, :cc_zweihandschwerter], talent) -> kk
-    #     true -> nil
-    #   end
-    # if is_nil(bon), do: nil, else: round(st/2) + floor((bon - 8) / 3)
-    ""
-  end
-
   def be(be?) do
     case be? do
       true -> "Ja"
@@ -105,6 +82,20 @@ defmodule DsaWeb.DsaHelpers do
       5 -> "Handwerkstalente"
       6 -> "Zauber"
       7 -> "Liturgien"
+    end
+  end
+
+  def ap_cost(level, sf, activate? \\ false)
+  def ap_cost(level, sf, false), do: Enum.map(1..level, & ap_level(&1, sf)) |> Enum.sum()
+  def ap_cost(level, sf, true), do: Enum.map(0..level, & ap_level(&1, sf)) |> Enum.sum()
+
+  def ap_level(level, sf) do
+    case sf do
+      "A" -> if level < 13, do: 1, else: level - 11
+      "B" -> if level < 13, do: 2, else: level * 2 - 22
+      "C" -> if level < 13, do: 3, else: level * 3 - 33
+      "D" -> if level < 13, do: 4, else: level * 4 - 44
+      "E" -> if level == 0, do: 0, else: (if level < 15, do: 15, else: (level - 13) * 15)
     end
   end
 end

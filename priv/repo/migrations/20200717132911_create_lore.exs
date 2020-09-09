@@ -140,29 +140,5 @@ defmodule Dsa.Repo.Migrations.CreateLore do
       add :dmg, :integer
     end
     create index :character_fweapons, [:character_id, :fweapon_id]
-
-    # special skills
-    create table(:special_skills) do
-      add :name, :string
-      add :ap, :integer
-      add :type, :integer
-      add :modifier, :integer
-    end
-    create unique_index :special_skills, :name
-
-    # Combat Special Skills
-    create table(:combat_special_skills, primary_key: false) do
-      add :combat_skill_id, references(:combat_skills, on_delete: :delete_all), primary_key: true
-      add :special_skill_id, references(:special_skills, on_delete: :delete_all), primary_key: true
-    end
-
-    create index :combat_special_skills, [:combat_skill_id, :special_skill_id]
-
-    # character special skills
-    create table(:character_special_skills, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :special_skill_id, references(:special_skills, on_delete: :delete_all), primary_key: true
-    end
-    create index :character_special_skills, [:character_id, :special_skill_id]
   end
 end
