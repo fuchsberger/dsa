@@ -21,6 +21,7 @@ defmodule DsaWeb.CharacterHelpers do
   def blessings(char), do: Enum.filter(char.character_traits, & &1.level == -7)
   def tricks(char), do: Enum.filter(char.character_traits, & &1.level == -6)
 
+
   def ap(c) do
 
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
@@ -34,6 +35,11 @@ defmodule DsaWeb.CharacterHelpers do
     traditions = c |> traditions() |> Enum.map(& &1.ap) |> Enum.sum()
     tricks = Enum.count(tricks(c))
     blessings = Enum.count(blessings(c))
+    skills = Enum.map(c.character_skills, & ap_cost(&1.level, &1.skill.sf)) |> Enum.sum()
+
+    combat_skills = Enum.map(c.character_combat_skills, & ap_cost(&1.level, &1.combat_skill.sf))
+    |> Enum.sum()
+    combat_skills = combat_skills - 9*12 - 12*18 # start value 6, 9 B talents, 12 C talents
 
     energies =
       ap_cost(Map.get(c, :le_bonus), "D") +
@@ -51,7 +57,9 @@ defmodule DsaWeb.CharacterHelpers do
       Traditionen: traditions,
       Zaubertricks: tricks,
       Segnungen: blessings,
-      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + traditions + tricks + blessings
+      Talente: skills,
+      Kampftalente: combat_skills,
+      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + traditions + tricks + blessings + combat_skills
     }
   end
 
@@ -213,6 +221,28 @@ defmodule DsaWeb.CharacterHelpers do
           Zukauf: bonus,
           total: 20 + ltrait_value + advantages + disadvantages + bonus
         }
+    end
+  end
+
+  def at(c, cskill) do
+    case cskill.combat_skill.ranged do
+      true -> cskill.level + max(0, floor((Map.get(c, :FF) - 8)/3))
+      false -> cskill.level + max(0, floor((Map.get(c, :MU) - 8)/3))
+    end
+  end
+
+  def pa(c, cskill) do
+    bonus =
+      cond do
+        not cskill.combat_skill.parade -> nil
+        cskill.combat_skill.ge && cskill.combat_skill.kk -> max(Map.get(c, :KK), Map.get(c, :GE))
+        cskill.combat_skill.ge -> Map.get(c, :GE)
+        cskill.combat_skill.kk -> Map.get(c, :KK)
+        true -> nil
+      end
+    case bonus do
+      nil -> nil
+      bonus -> round(cskill.level/2 + max(0, floor((bonus - 8)/3)))
     end
   end
 

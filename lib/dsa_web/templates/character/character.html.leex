@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card mb-3">
           <div class="card-header py-0 d-flex justify-content-between">
             <h5 class='my-2'>Charakteristiken</h5>
             <button class='btn btn-light btn-sm' phx-click='toggle-trait-form' type='button'>
@@ -245,130 +245,7 @@
             <% end %>
           </div>
 
-          <div id='talente' class="card mb-3">
-            <div class="card-header pb-0 d-flex justify-content-between">
-              <h5 class='mb-0'><%= talent_group(@category) %></h5>
-              <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                  ...wähle
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <%= dropdown_item "Kampftechniken", "0" %>
-                  <%= dropdown_item "Körpertalente", "1" %>
-                  <%= dropdown_item "Gesellschaftstalente", "2" %>
-                  <%= dropdown_item "Naturtalente", "3" %>
-                  <%= dropdown_item "Wissenstalente", "4" %>
-                  <%= dropdown_item "Handwerkstalente", "5" %>
-                  <%= dropdown_item "Zauber", "6" %>
-                  <%= dropdown_item "Liturgien", "7" %>
-                </ul>
-              </div>
-            </div>
 
-            <div class="card-body p-0">
-              <%= if is_nil(@category) do %>
-                <div area-area_labeledby='#Kampf' id='Kampf' class='tab-pane active' role='tabpanel'>
-                  <table class='table table-sm mb-0'>
-                    <thead>
-                      <tr>
-                        <th scope='col'>Name</th>
-                        <th scope='col' class='text-center'></th>
-                        <th scope='col' class='text-center'>AT</th>
-                        <th scope='col' class='text-center'>PA</th>
-                        <th scope='col' class='text-center'>ST</th>
-                      </tr>
-                    </thead>
-                    <tbody class='small'>
-                    <%= for fs <- inputs_for f, :character_combat_skills do %>
-                      <%# character = @form.source.data %>
-                      <tr>
-                        <td>
-                          <%= hidden_inputs_for fs %>
-                          <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
-                        </td>
-                        <td class='text-center'></td>
-                        <td class='text-center'><small><em><%# at(character, talent) %></em></small></td>
-                        <td class='text-center'><%# pa(character, talent) || "-" %></td>
-                        <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              <% else %>
-                <div area-area_labeledby='#<%= @category %>' id='<%= @category %>' class='tab-pane' role='tabpanel'>
-                  <table class='table table-sm mb-0'>
-                    <thead>
-                      <tr>
-                        <th scope='col'>Name</th>
-                        <th scope='col' class='text-center'>Probe</th>
-                        <th scope='col' class='text-center'>
-                          <%= if @category == 6 || @category == 7, do: icon("cancel"), else: "BE" %>
-                        </th>
-                        <th scope='col' class='text-center'>ST</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <%= for fs <- form_group(f, @category) do %>
-                      <tr>
-                        <td>
-                          <%= hidden_inputs_for(fs) %>
-                          <%= fs.data.skill.name %>
-                        </td>
-                        <td class='text-center'>
-                          <small>
-                            <em><%= fs.data.skill.e1 %></em> /
-                            <em><%= fs.data.skill.e2 %></em> /
-                            <em><%= fs.data.skill.e3 %></em>
-                          </small>
-                        </td>
-                        <td class='text-center'>
-                          <%= if @category == 6 || @category == 7 do %>
-                            <button
-                              class='btn badge bg-light btn-sm p-0'
-                              phx-click='delete'
-                              phx-value-skill='<%= fs.data.skill.id %>'
-                              type='button'
-                            >
-                              <i class='icon-cancel text-danger'></i>
-                            </button>
-                          <% else %>
-                            <%= be(fs.data.skill.be) %>
-                          <% end %>
-                        </td>
-                        <td>
-                          <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
-                        </td>
-                      </tr>
-                    <% end %>
-                    <%= if @category == 6 do %>
-                      <tr>
-                        <td colspan='4'>
-                          <%= if @changeset.data.__meta__.state == :loaded do %>
-                            <%= select f, :skill_id, list_options(@changeset.data, @spell_options), class: "border-0 form-select-sm", prompt: "Zauber hinzufügen" %>
-                          <% else %>
-                            <i>Du musst deinen Helden erst speichern bevor Zauber hinzugefügt werden können.</i>
-                          <% end %>
-                        </td>
-                      </tr>
-                    <% end %>
-                    <%= if @category == 7 do %>
-                      <tr>
-                        <td colspan='4'>
-                          <%= if @changeset.data.__meta__.state == :loaded do %>
-                            <%= select f, :skill_id, list_options(@changeset.data, @wonder_options), class: "border-0 form-select-sm", prompt: "Liturgie hinzufügen" %>
-                          <% else %>
-                            <i>Du musst deinen Helden erst speichern bevor Liturgien hinzugefügt werden können.</i>
-                          <% end %>
-                        </td>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              <% end %>
-            </div>
-          </div>
           <% zauber_forms = form_group(f, "Zauber") %>
           <%= if Enum.count(zauber_forms) > 0 do %>
             <div class="card mb-3">
@@ -463,12 +340,51 @@
             </div>
           <% end %>
         </div>
+
+        <div class="card mb-3">
+          <div class="card-header d-flex justify-content-between">
+            <h5 class='mb-0'>Kampftalente</h5>
+            <i><%= Map.get(ap, :Kampftalente) %> AP</i>
+          </div>
+          <div class="card-body p-0">
+            <table class='table table-sm mb-0'>
+              <thead>
+                <tr>
+                  <th scope='col'>Name</th>
+                  <th scope='col' class='text-center'></th>
+                  <th scope='col' class='text-center'>AT</th>
+                  <th scope='col' class='text-center'>PA</th>
+                  <th scope='col' class='text-center'>ST</th>
+                </tr>
+              </thead>
+              <tbody>
+              <%= for fs <- inputs_for f, :character_combat_skills do %>
+                <%# character = @form.source.data %>
+                <tr>
+                  <td>
+                    <%= hidden_inputs_for fs %>
+                    <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
+                  </td>
+                  <td class='text-center'></td>
+                  <td class='text-center'>
+                    <small><em><%= at(@changeset.data, fs.data) %></em></small>
+                  </td>
+                  <td class='text-center'>
+                    <small><em><%= pa(@changeset.data, fs.data) %></em></small>
+                  </td>
+                  <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <div class='col-lg'>
 
         <%# Computed Values %>
-        <div id='advanced-values' class="card mb-2">
+        <div id='advanced-values' class="card mb-3">
           <h5 class="card-header">Abgeleitete Werte</h5>
           <div class="card-body">
             <div class='row g-1'>
@@ -553,6 +469,96 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div id='talente' class="card mb-3">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs d-flex justify-content-between">
+              <%= talent_tab "Körper", 1, @category %>
+              <%= talent_tab "Gesellschaft", 2, @category %>
+              <%= talent_tab "Natur", 3, @category %>
+              <%= talent_tab "Wissen", 4, @category %>
+              <%= talent_tab "Handwerk", 5, @category %>
+            </ul>
+          </div>
+
+          <div class="card-body p-0">
+            <%= if is_nil(@category) do %>
+
+
+
+            <% else %>
+              <div area-area_labeledby='#<%= @category %>' id='<%= @category %>' class='tab-pane' role='tabpanel'>
+                <table class='table table-sm mb-0'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>Name</th>
+                      <th scope='col' class='text-center'>Probe</th>
+                      <th scope='col' class='text-center'>
+                        <%= if @category == 6 || @category == 7, do: icon("cancel"), else: "BE" %>
+                      </th>
+                      <th scope='col' class='text-center'>ST</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <%= for fs <- form_group(f, @category) do %>
+                    <tr>
+                      <td>
+                        <%= hidden_inputs_for(fs) %>
+                        <%= fs.data.skill.name %>
+                      </td>
+                      <td class='text-center'>
+                        <small>
+                          <em><%= fs.data.skill.e1 %></em> /
+                          <em><%= fs.data.skill.e2 %></em> /
+                          <em><%= fs.data.skill.e3 %></em>
+                        </small>
+                      </td>
+                      <td class='text-center'>
+                        <%= if @category == 6 || @category == 7 do %>
+                          <button
+                            class='btn badge bg-light btn-sm p-0'
+                            phx-click='delete'
+                            phx-value-skill='<%= fs.data.skill.id %>'
+                            type='button'
+                          >
+                            <i class='icon-cancel text-danger'></i>
+                          </button>
+                        <% else %>
+                          <%= be(fs.data.skill.be) %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <%= if @category == 6 do %>
+                    <tr>
+                      <td colspan='4'>
+                        <%= if @changeset.data.__meta__.state == :loaded do %>
+                          <%= select f, :skill_id, list_options(@changeset.data, @spell_options), class: "border-0 form-select-sm", prompt: "Zauber hinzufügen" %>
+                        <% else %>
+                          <i>Du musst deinen Helden erst speichern bevor Zauber hinzugefügt werden können.</i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  <%= if @category == 7 do %>
+                    <tr>
+                      <td colspan='4'>
+                        <%= if @changeset.data.__meta__.state == :loaded do %>
+                          <%= select f, :skill_id, list_options(@changeset.data, @wonder_options), class: "border-0 form-select-sm", prompt: "Liturgie hinzufügen" %>
+                        <% else %>
+                          <i>Du musst deinen Helden erst speichern bevor Liturgien hinzugefügt werden können.</i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
           </div>
         </div>
     </div>

@@ -86,12 +86,17 @@ defmodule DsaWeb.CharacterView do
     end
   end
 
-  def dropdown_item(name, category) do
-    content_tag :li, link(name, class: "dropdown-item",
+  def talent_tab(name, category, active_category) do
+    active = category == active_category
+
+    lnk = link name,
       to: "#",
+      area_current: active,
+      class: "nav-link px-2 py-1#{if active, do: " active"}",
       phx_click: "select",
       phx_value_category: category
-    )
+
+    content_tag :li, lnk, class: "nav-item"
   end
 
   def field(form, field, _tooltip \\ nil) do
