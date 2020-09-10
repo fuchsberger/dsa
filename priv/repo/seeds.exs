@@ -23,18 +23,5 @@ Lore.seed()
 
 {:ok, group} = Accounts.create_group(%{ name: "DSA", master_id: admin.id })
 
-Accounts.create_character(admin, %{
-  name: "Rolo",
-  species_id: 1,
-  culture: "Mittelreich",
-  profession: "Raubritter",
-  group_id: group.id
-})
-
-Accounts.create_character(user, %{
-  name: "Test1",
-  species_id: 1,
-  culture: "Mittelreich",
-  profession: "Testcharacter",
-  group_id: group.id
-})
+Accounts.create_character(admin)
+Accounts.create_character(user)

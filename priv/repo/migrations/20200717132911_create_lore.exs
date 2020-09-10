@@ -49,6 +49,14 @@ defmodule Dsa.Repo.Migrations.CreateLore do
     end
     create unique_index :skills, :name
 
+    # character skills
+    create table(:character_skills, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :skill_id, references(:skills, on_delete: :delete_all), primary_key: true
+      add :level, :integer
+    end
+    create index :character_skills, [:character_id, :skill_id]
+
     # traits
     create table(:traits) do
       add :name, :string
@@ -69,13 +77,24 @@ defmodule Dsa.Repo.Migrations.CreateLore do
     end
     create index :character_traits, [:character_id, :trait_id]
 
-    # character skills
-    create table(:character_skills, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :skill_id, references(:skills, on_delete: :delete_all), primary_key: true
-      add :level, :integer
+    # casts
+    create table(:casts) do
+      add :name, :string
+      add :type, :integer
+      add :e1, :string, size: 2
+      add :e2, :string, size: 2
+      add :e3, :string, size: 2
+      add :sf, :string, size: 1
     end
-    create index :character_skills, [:character_id, :skill_id]
+    create unique_index :casts, :name
+
+    # character casts
+    create table(:character_casts, primary_key: false) do
+      add :level, :integer
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :cast_id, references(:casts, on_delete: :delete_all), primary_key: true
+    end
+    create index :character_casts, [:character_id, :cast_id]
 
     # armors
     create table(:armors) do

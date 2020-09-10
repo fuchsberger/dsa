@@ -39,8 +39,7 @@ defmodule DsaWeb.CharacterLive do
   end
 
   def handle_event("select", %{"category" => category}, socket) do
-    category = if category == "0", do: nil, else: String.to_integer(category)
-    {:noreply, assign(socket, :category, category)}
+    {:noreply, assign(socket, :category, String.to_integer(category))}
   end
 
   def handle_event("toggle-trait-form", _params, socket) do
@@ -91,7 +90,11 @@ defmodule DsaWeb.CharacterLive do
           params
           |> Map.get("trait_level", Integer.to_string(min(1, trait.level)))
           |> String.to_integer()
-        trait_ap = if trait_level > 1, do: trait.ap * trait_level, else: trait.ap
+
+        trait_ap = case trait.fixed_ap do
+          true -> if trait_level > 1, do: trait.ap * trait_level, else: trait.ap
+          false -> Map.get(params, "trait_ap")
+        end
 
         changeset =
           socket.assigns.changeset
@@ -106,6 +109,7 @@ defmodule DsaWeb.CharacterLive do
       true ->
         case Accounts.update_character(character, params) do
           {:ok, character} ->
+            character = Repo.preload(character, :species, force: true)
             Logger.debug("Held verändert.")
             {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 

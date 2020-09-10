@@ -285,6 +285,18 @@ defmodule Dsa.Lore.Trait do
       {-7, "Stärkungssegen", 1, false, true},
       {-7, "Tranksegen", 1, false, true},
       {-7, "Weisheitssegen", 1, false, true},
+      # Stabzauber
+      {-8, "Bindung des Stabes", 10, false, false},
+      {-8, "Doppeltes Maß", 5, false, true},
+      {-8, "Ewige Flamme", 10, false, true},
+      {-8, "Flammenschwert", 35, false, true},
+      {-8, "Kraftfokus", 30, false, true},
+      {-8, "Merkmalsfokus", 35, false, true},
+      {-8, "Seil des Adepten", 10, false, true},
+      {-8, "Stab-Apport", 15, false, true},
+      # Hexen
+      {-9, "Vertrautenbindung", 20, false, true},
+      {-9, "Flugsalbe", 15, false, true},
     ]
     |> Enum.map(fn {level, name, ap, details, fixed_ap} ->
       %{name: name, ap: ap, level: level, fixed_ap: fixed_ap, details: details}

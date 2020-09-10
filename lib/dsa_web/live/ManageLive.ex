@@ -28,6 +28,7 @@ defmodule DsaWeb.ManageLive do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
       :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
+      :casts -> {:noreply, assign(socket, :entries, Lore.list_casts())}
       :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
       :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
@@ -56,12 +57,6 @@ defmodule DsaWeb.ManageLive do
   def handle_event("edit", %{"id" => id}, socket) do
     entry = Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
     {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
-  end
-
-  def handle_event("refresh", _params, socket) do
-    Lore.seed(socket.assigns.live_action)
-    Logger.info("#{Atom.to_string(socket.assigns.live_action)} updated.")
-    handle_params(nil, nil, socket)
   end
 
   def handle_event("validate", %{"skill" => params}, socket) do

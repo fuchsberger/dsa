@@ -5,18 +5,14 @@ defmodule DsaWeb.PageController do
   alias Dsa.{Accounts, Lore}
 
   def create_character(conn, _) do
-    case Accounts.create_character(conn.assigns.current_user, %{species_id: 1}) do
-      {:ok, %{id: id}} ->
-        redirect(conn, to: Routes.character_path(conn, :edit, id))
-
-      {:error, changeset} ->
-        Logger.error("Error creating character: #{inspect(changeset.errors)}")
-        redirect(conn, to: Routes.character_path(conn, :index))
+    case Accounts.create_character(conn.assigns.current_user) do
+      :error -> redirect(conn, to: Routes.character_path(conn, :index))
+      character_id -> redirect(conn, to: Routes.character_path(conn, :edit, character_id))
     end
   end
 
   def seed(conn, _) do
     if conn.assigns.current_user.admin, do: Lore.seed()
-    redirect(conn, to: Routes.manage_path(conn, :combat_skills))
+    redirect(conn, to: Routes.manage_path(conn, :traits))
   end
 end

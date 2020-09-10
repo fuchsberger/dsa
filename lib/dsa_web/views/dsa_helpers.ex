@@ -86,6 +86,7 @@ defmodule DsaWeb.DsaHelpers do
   end
 
   def ap_cost(level, sf, activate? \\ false)
+  def ap_cost(0, _sf, false), do: 0
   def ap_cost(level, sf, false), do: Enum.map(1..level, & ap_level(&1, sf)) |> Enum.sum()
   def ap_cost(level, sf, true), do: Enum.map(0..level, & ap_level(&1, sf)) |> Enum.sum()
 

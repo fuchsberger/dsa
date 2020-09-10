@@ -6,9 +6,16 @@ defmodule Dsa.Lore do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Lore.{Armor, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon}
+  alias Dsa.Lore.{Armor, Cast, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon}
 
+  # list lore elements
   def list_armors, do: Repo.all(from(s in Armor, order_by: s.name))
+  def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
+  def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
+  def list_mweapons, do: Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
+  def list_fweapons, do: Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
+  def list_casts, do: Repo.all(from(c in Cast, order_by: c.name))
+  def list_traits, do: Repo.all(from(t in Trait, order_by: t.name))
 
   def options(type) do
     case type do
@@ -21,8 +28,6 @@ defmodule Dsa.Lore do
     |> Repo.all()
   end
 
-  def list_skills, do: Repo.all(from(s in Skill, order_by: [s.category, s.name]))
-
   def create_skill(params) do
     %Skill{}
     |> change_skill(params)
@@ -31,20 +36,8 @@ defmodule Dsa.Lore do
 
   def change_skill(%Skill{} = skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
 
-  def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
-
-  def list_mweapons do
-    Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
-  end
-
-  def list_fweapons do
-    Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
-  end
-
-  def list_traits, do: Repo.all(from(t in Trait, order_by: t.name))
-
   def seed do
-    Enum.each([Armor, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon], fn schema ->
+    Enum.each([Armor, Cast, CombatSkill, Skill, Species, Trait, MWeapon, FWeapon], fn schema ->
       Enum.each(schema.entries(), fn %{name: name} = params ->
         case Repo.get_by(schema, name: name) do
           nil  -> struct(schema)

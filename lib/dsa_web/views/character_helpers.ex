@@ -14,19 +14,21 @@ defmodule DsaWeb.CharacterHelpers do
     Enum.filter(character.character_traits, & &1.trait.level > 0 && &1.trait.ap < 0)
   end
 
-  def general_traits(char), do: Enum.filter(char.character_traits, & &1.trait.level == 0)
-  def fate_traits(char), do: Enum.filter(char.character_traits, & &1.trait.level == -1)
-  def traditions(char), do: Enum.filter(char.character_traits, & &1.trait.level == -2)
-  def combat_traits(char), do: Enum.filter(char.character_traits, & &1.trait.level == -3)
-  def blessings(char), do: Enum.filter(char.character_traits, & &1.level == -7)
-  def tricks(char), do: Enum.filter(char.character_traits, & &1.level == -6)
-
+  def general_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == 0)
+  def fate_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -1)
+  def traditions(c), do: Enum.filter(c.character_traits, & &1.trait.level == -2)
+  def combat_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -3)
+  def staff_spells(c), do: Enum.filter(c.character_traits, & &1.trait.level == -8)
+  def witchcraft(c), do: Enum.filter(c.character_traits, & &1.trait.level == -9)
+  def blessings(c), do: Enum.filter(c.character_traits, & &1.level == -7)
+  def tricks(c), do: Enum.filter(c.character_traits, & &1.level == -6)
 
   def ap(c) do
 
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
     base_values = base_values - 8 * 8 * 15
 
+    species = c.species.ap
     advantages = c |> advantages() |> Enum.map(& &1.ap) |> Enum.sum()
     disadvantages = c |> disadvantages() |> Enum.map(& &1.ap) |> Enum.sum()
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
@@ -36,6 +38,8 @@ defmodule DsaWeb.CharacterHelpers do
     tricks = Enum.count(tricks(c))
     blessings = Enum.count(blessings(c))
     skills = Enum.map(c.character_skills, & ap_cost(&1.level, &1.skill.sf)) |> Enum.sum()
+    staffspells = c |> staff_spells() |> Enum.map(& &1.ap) |> Enum.sum()
+    witchcraft = c |> witchcraft() |> Enum.map(& &1.ap) |> Enum.sum()
 
     combat_skills = Enum.map(c.character_combat_skills, & ap_cost(&1.level, &1.combat_skill.sf))
     |> Enum.sum()
@@ -57,9 +61,12 @@ defmodule DsaWeb.CharacterHelpers do
       Traditionen: traditions,
       Zaubertricks: tricks,
       Segnungen: blessings,
+      Spezies: species,
+      Stabzauber: staffspells,
+      Hexentricks: witchcraft,
       Talente: skills,
       Kampftalente: combat_skills,
-      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + traditions + tricks + blessings + combat_skills
+      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + traditions + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells
     }
   end
 

@@ -1,0 +1,31 @@
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>Type</th>
+      <th scope='col' class='text-center'>Probe</th>
+      <th scope='col' class='text-center'>SF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for cast <- @entries do %>
+      <tr>
+        <th scope='row'><%= cast.name %></th>
+        <td class='text-center'>
+          <%=
+            case cast.type do
+              1 -> "Zauber"
+              2 -> "Ritual"
+              3 -> "Liturgie"
+              4 -> "Zeremonie"
+            end
+          %>
+        </td>
+        <td class='text-center'>
+          <small><%= cast.e1 %>/<%= cast.e2 %>/<%= cast.e3 %></small>
+        </td>
+        <td class='text-center'><%= cast.sf %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

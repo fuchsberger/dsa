@@ -3,15 +3,11 @@ defmodule Dsa.Accounts do
   The Accounts context.
   """
   import Ecto.{Changeset, Query}
+  require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
-  alias Dsa.Lore.{CombatSkill, Skill, Trait}
-
-
-  @sorted_combat_skills from(s in CombatSkill, order_by: s.name)
-  @sorted_skills from(s in Skill, order_by: [s.category, s.name])
-  @sorted_traits from(t in Trait, order_by: t.name)
+  alias Dsa.Accounts.{Character, CharacterCast, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
+  alias Dsa.Lore.{CombatSkill, Cast, Skill, Trait}
 
   @character_preloads [
     :species,
@@ -21,11 +17,13 @@ defmodule Dsa.Accounts do
     :character_mweapons,
     :character_fweapons,
     :character_skills,
+    :character_casts,
     :character_combat_skills,
     :character_traits,
-    combat_skills: @sorted_combat_skills,
-    skills: @sorted_skills,
-    traits: @sorted_traits
+    combat_skills: from(s in CombatSkill, order_by: s.name),
+    skills: from(s in Skill, order_by: s.name),
+    traits: from(t in Trait, order_by: t.name),
+    casts: from(c in Cast, order_by: c.name)
   ]
 
   def get_user(id), do:  Repo.get(user_query(), id)
@@ -85,10 +83,7 @@ defmodule Dsa.Accounts do
   end
 
   def get_user_character!(user_id, id) do
-    from(c in Character,
-      preload: ^@character_preloads,
-      where: c.user_id == ^user_id and c.id == ^id
-    )
+    from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
     |> Repo.get!(id)
   end
 
@@ -114,27 +109,49 @@ defmodule Dsa.Accounts do
     Map.put(character, :character_skills, sorted_skills)
   end
 
-  def create_character(%User{} = user, attrs \\ %{}) do
+  def create_character(%User{} = user) do
     case (
       %Character{}
-      |> Character.changeset(attrs)
+      |> Character.changeset(%{name: "Held", species_id: 1})
       |> put_assoc(:user, user)
       |> Repo.insert()
     ) do
       {:ok, character} ->
         # add all standard skills to character
-        CombatSkill
+        from(s in CombatSkill, select: s.id)
         |> Repo.all()
-        |> Enum.each(& add_combat_skill!(character.id, &1))
+        |> Enum.each(& add_combat_skill!(%{character_id: character.id, combat_skill_id: &1}))
 
-        from(s in Skill, where: s.category != 6 and s.category != 7)
+        from(s in Skill, select: s.id)
         |> Repo.all()
-        |> Enum.each(& add_skill!(character.id, &1))
+        |> Enum.each(& add_character_skill!(%{character_id: character.id, skill_id: &1}))
 
-        {:ok, sort_skills(character)}
+        Logger.info("Character #{inspect(character.id)} successfully created.")
+        character.id
 
       {:error, changeset} ->
-        {:error, changeset}
+        Logger.error("Error adding character: #{inspect(changeset.errors)}")
+        :error
+    end
+  end
+
+  defp add_combat_skill!(attrs) do
+    case %CharacterCombatSkill{} |> CharacterCombatSkill.changeset(attrs) |> Repo.insert() do
+      {:ok, cskill} ->
+        Logger.debug("Added combat skill #{cskill.combat_skill_id} to character #{cskill.character_id}.")
+
+      {:error, changeset} ->
+        Logger.error("Error adding combat skill: #{inspect(changeset.errors)}")
+    end
+  end
+
+  defp add_character_skill!(attrs) do
+    case %CharacterSkill{} |> CharacterSkill.changeset(attrs) |> Repo.insert() do
+      {:ok, cskill} ->
+        Logger.debug("Added skill #{cskill.skill_id} to character #{cskill.character_id}.")
+
+      {:error, changeset} ->
+        Logger.error("Error adding skill: #{inspect(changeset.errors)}")
     end
   end
 
@@ -203,22 +220,4 @@ defmodule Dsa.Accounts do
   end
 
   def remove_character_trait(character_trait), do: Repo.delete(character_trait)
-
-  def add_combat_skill!(character_id, skill) do
-    %CharacterCombatSkill{}
-    |> CharacterCombatSkill.changeset(%{character_id: character_id, combat_skill_id: skill.id})
-    |> Repo.insert!()
-  end
-
-  def add_skill!(character_id, skill) do
-    %CharacterSkill{}
-    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill.id})
-    |> Repo.insert!()
-  end
-
-  def delete_character_skill!(character_id, skill_id) do
-    from(s in CharacterSkill, where: s.character_id == ^character_id and s.skill_id == ^skill_id)
-    |> Repo.one!()
-    |> Repo.delete!()
-  end
 end

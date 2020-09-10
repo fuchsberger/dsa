@@ -2,6 +2,9 @@ defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Dsa.Lore.Species
+  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, CharacterCast}
+
   schema "characters" do
 
     # Generell
@@ -30,26 +33,26 @@ defmodule Dsa.Accounts.Character do
     field :ini, :integer
     field :gw, :integer, default: 8
     field :sp, :integer, default: 3
-
-
     field :skill_id, :integer, virtual: true
     field :trait_id, :integer, virtual: true
     field :trait_level, :integer, virtual: true
     field :trait_ap, :integer, virtual: true
     field :trait_details, :string, virtual: true
 
-    belongs_to :species, Dsa.Lore.Species
-    belongs_to :group, Dsa.Accounts.Group
-    belongs_to :user, Dsa.Accounts.User
+    belongs_to :species, Species
+    belongs_to :group, Group
+    belongs_to :user, User
 
-    has_many :character_mweapons, Dsa.Accounts.CharacterMWeapon, on_replace: :delete
-    has_many :character_fweapons, Dsa.Accounts.CharacterFWeapon, on_replace: :delete
-    has_many :character_armors, Dsa.Accounts.CharacterArmor, on_replace: :delete
-    has_many :character_traits, Dsa.Accounts.CharacterTrait, on_replace: :delete
+    has_many :character_casts, CharacterCast, on_replace: :delete
+    has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
+    has_many :character_fweapons, CharacterFWeapon, on_replace: :delete
+    has_many :character_armors, CharacterArmor, on_replace: :delete
+    has_many :character_traits, CharacterTrait, on_replace: :delete
 
-    has_many :character_combat_skills, Dsa.Accounts.CharacterCombatSkill, on_replace: :delete
-    has_many :character_skills, Dsa.Accounts.CharacterSkill, on_replace: :delete
+    has_many :character_combat_skills, CharacterCombatSkill, on_replace: :delete
+    has_many :character_skills, CharacterSkill, on_replace: :delete
     has_many :combat_skills, through: [:character_combat_skills, :combat_skill]
+    has_many :casts, through: [:character_casts, :cast]
     has_many :skills, through: [:character_skills, :skill]
     has_many :traits, through: [:character_traits, :trait]
 
@@ -66,6 +69,8 @@ defmodule Dsa.Accounts.Character do
     |> validate_length(:profession, min: 2, max: 15)
     |> validate_number(:trait_ap, not_equal_to: 0)
     |> validate_number(:le_bonus, greater_than_or_equal_to: 0)
+    |> validate_number(:ae_bonus, greater_than_or_equal_to: 0)
+    |> validate_number(:ke_bonus, greater_than_or_equal_to: 0)
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:species_id)
     |> foreign_key_constraint(:group_id)

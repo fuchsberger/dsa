@@ -23,10 +23,10 @@ defmodule Dsa.Lore.Species do
 
   def entries do
     [
-      { "Mensch", 5, -5, -5, 8, 0},
-      { "Elf", 2, -4, -6, 8, 18},
-      { "Halbelf", -4, -6, 13, 8, 0},
-      { "Zwerg", 8, -4, -4, 6, 61}
+      { "Mensch",  5, -5, -5, 8, 0},
+      { "Elf",     2, -4, -6, 8, 18},
+      { "Halbelf", 5, -4, -6, 8, 0},
+      { "Zwerg",   8, -4, -4, 6, 61}
     ]
     |> Enum.map(fn {name, le, sk, zk, gs, ap} ->
       %{name: name, le: le, sk: sk, zk: zk, gs: gs, ap: ap}

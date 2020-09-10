@@ -42,7 +42,7 @@
           </li>
 
           <li class='nav-item'>
-            <%= link "Verwaltung", to: Routes.manage_path(@conn, :combat_skills), class: "nav-link" %>
+            <%= link "Übersicht", to: Routes.manage_path(@conn, :traits), class: "nav-link" %>
           </li>
 
           <%= if @current_user.admin do %>
