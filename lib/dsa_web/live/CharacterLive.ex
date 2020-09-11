@@ -17,6 +17,8 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:spell_options, Lore.options(:spells))
     |> assign(:wonder_options, Lore.options(:wonders))
+    |> assign(:magic_traditions_options, Lore.options(:magic_traditions))
+    |> assign(:karmal_traditions_options, Lore.options(:karmal_traditions))
     |> assign(:user_id, user_id)}
   end
 

@@ -22,6 +22,9 @@ defmodule DsaWeb.Router do
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     delete "/:id", SessionController, :delete
+
+    live "/casts", ManageLive, :casts
+    live "/traditions", ManageLive, :traditions
   end
 
   scope "/", DsaWeb do
@@ -39,7 +42,7 @@ defmodule DsaWeb.Router do
     live "/group/:id/roll", GroupLive, :roll
 
     live "/manage/armors", ManageLive, :armors
-    live "/manage/casts", ManageLive, :casts
+
     live "/manage/combat_skills", ManageLive, :combat_skills
     live "/manage/traits", ManageLive, :traits
     live "/manage/skills", ManageLive, :skills

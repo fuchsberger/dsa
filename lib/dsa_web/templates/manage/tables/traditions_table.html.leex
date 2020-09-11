@@ -1,0 +1,28 @@
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th scope='col' class='text-center'>Typ</th>
+      <th scope='col' class='text-center'>Leiteigenschaft</th>
+      <th scope='col' class='text-center'>AP</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <%= for tradition <- @entries do %>
+      <tr>
+        <th scope='row'><%= tradition.name %></th>
+        <td class='text-center'>
+          <%=
+            case tradition.magic do
+              true -> "Zauberer"
+              false -> "Geweihten"
+            end
+          %>
+        </td>
+        <td class='text-center'><%= tradition.le %></td>
+        <td class='text-center'><%= tradition.ap %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

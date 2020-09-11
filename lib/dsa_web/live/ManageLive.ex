@@ -24,6 +24,7 @@ defmodule DsaWeb.ManageLive do
   def handle_info(%{event: "update"}, socket), do: handle_params(nil, nil, socket)
 
   def handle_params(_params, _session, socket) do
+    action = socket.assigns.live_action
     case socket.assigns.live_action do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
@@ -31,6 +32,7 @@ defmodule DsaWeb.ManageLive do
       :casts -> {:noreply, assign(socket, :entries, Lore.list_casts())}
       :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
+      :traditions -> {:noreply, assign(socket, :entries, Lore.list(action))}
       :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end

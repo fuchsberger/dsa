@@ -5,6 +5,7 @@
       <th scope='col' class='text-center'>Type</th>
       <th scope='col' class='text-center'>Probe</th>
       <th scope='col' class='text-center'>SF</th>
+      <th scope='col'>Verbreitung</th>
     </tr>
   </thead>
   <tbody>
@@ -25,6 +26,7 @@
           <small><%= cast.e1 %>/<%= cast.e2 %>/<%= cast.e3 %></small>
         </td>
         <td class='text-center'><%= cast.sf %></td>
+        <td><%= Enum.map(cast.traditions, & &1.name) |> Enum.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>

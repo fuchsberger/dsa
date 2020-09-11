@@ -237,10 +237,6 @@ defmodule Dsa.Lore.Trait do
       {-3, "Wuchtiger Wurf", 15, false, true}, # [21]},
       {-3, "Zertrümmern", 5, false, true}, # [4, 5, 13]},
       {-3, "Drohgebärden", 10, false, true}, # @all_combat_skills},
-      # Zauberertraditionen
-      {-2, "Tradition (Gildenmagier)", 155, true, true},
-      {-2, "Tradition (Hexe)", 135, true, true},
-      {-2, "Tradition (Elf)", 125, true, true},
       # Magische Sonderfertigkeiten
       {-4, "Aura verbergen", 20, false, true},
       {-4, "Merkmalskenntnis", 10, true, false},
@@ -260,13 +256,6 @@ defmodule Dsa.Lore.Trait do
       {-6, "Schnipsen", 1, false, true},
       {-6, "Signatur", 1, false, true},
       {-6, "Trocken", 1, false, true},
-      # Geweihtentraditionen
-      {-2, "Tradition (Praioskirche)", 130, true, true},
-      {-2, "Tradition (Rondrakirche)", 150, true, true},
-      {-2, "Tradition (Boronkirche)", 130, true, true},
-      {-2, "Tradition (Hesindekirche)", 130, true, true},
-      {-2, "Tradition (Phexkirche)", 150, true, true},
-      {-2, "Tradition (Perainekirche)", 110, true, true},
       # Karmale Sonderfertigkeiten
       {-5, "Aspektkenntnis", 15, true, false},
       {-5, "Fokussierung", 8, false, true},

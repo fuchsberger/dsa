@@ -13,9 +13,21 @@ defmodule Dsa.Repo.Migrations.CreateLore do
     end
     create unique_index :species, :name
 
+    # traditions
+    create table(:traditions) do
+      add :name, :string
+      add :magic, :boolean
+      add :le, :string, size: 2
+      add :ap, :integer
+    end
+    create unique_index :traditions, :name
+
     alter table(:characters) do
       add :species_id, references(:species, on_delete: :delete_all)
+      add :magic_tradition_id, references(:traditions, on_delete: :delete_all)
+      add :karmal_tradition_id, references(:traditions, on_delete: :delete_all)
     end
+    create index :characters, [:species_id, :magic_tradition_id, :karmal_tradition_id]
 
     # combat skills
     create table(:combat_skills) do
@@ -95,6 +107,12 @@ defmodule Dsa.Repo.Migrations.CreateLore do
       add :cast_id, references(:casts, on_delete: :delete_all), primary_key: true
     end
     create index :character_casts, [:character_id, :cast_id]
+
+    create table(:tradition_casts, primary_key: false) do
+      add :cast_id, references(:casts, on_delete: :delete_all), primary_key: true
+      add :tradition_id, references(:traditions, on_delete: :delete_all), primary_key: true
+    end
+    create index :tradition_casts, [:cast_id, :tradition_id]
 
     # armors
     create table(:armors) do

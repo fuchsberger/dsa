@@ -2,7 +2,7 @@ defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Dsa.Lore.Species
+  alias Dsa.Lore.{Species, Tradition}
   alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, CharacterCast}
 
   schema "characters" do
@@ -30,6 +30,7 @@ defmodule Dsa.Accounts.Character do
     field :sk, :integer, default: 0
     field :zk, :integer, default: 0
     field :aw, :integer, default: 4
+
     field :ini, :integer
     field :gw, :integer, default: 8
     field :sp, :integer, default: 3
@@ -39,9 +40,11 @@ defmodule Dsa.Accounts.Character do
     field :trait_ap, :integer, virtual: true
     field :trait_details, :string, virtual: true
 
-    belongs_to :species, Species
     belongs_to :group, Group
     belongs_to :user, User
+    belongs_to :species, Species
+    belongs_to :magic_tradition, Tradition
+    belongs_to :karmal_tradition, Tradition
 
     has_many :character_casts, CharacterCast, on_replace: :delete
     has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
@@ -60,7 +63,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(species_id name at pa w2 tp rw le_bonus ae_bonus ke_bonus sk zk aw gw)a ++ Dsa.Lists.base_values()
-  @optional_fields ~w(profession group_id skill_id trait_id trait_level trait_ap trait_details)a
+  @optional_fields ~w(profession group_id skill_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields)
@@ -73,6 +76,8 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_bonus, greater_than_or_equal_to: 0)
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:species_id)
+    |> foreign_key_constraint(:magic_tradition_id)
+    |> foreign_key_constraint(:karmal_tradition_id)
     |> foreign_key_constraint(:group_id)
   end
 
