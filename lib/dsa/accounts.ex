@@ -6,8 +6,8 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
-  alias Dsa.Lore.{CombatSkill, Cast, Skill, Trait}
+  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
+  alias Dsa.Lore.{CombatSkill, Skill, Trait}
 
   @character_preloads [
     :species,
@@ -17,14 +17,13 @@ defmodule Dsa.Accounts do
     :character_mweapons,
     :character_fweapons,
     :character_skills,
-    :character_casts,
     :character_combat_skills,
     :character_traits,
-    :karmal_tradition,
+    character_spells: from(s in CharacterSpell, order_by: s.spell_id),
+    character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id),
     combat_skills: from(s in CombatSkill, order_by: s.name),
     skills: from(s in Skill, order_by: s.name),
-    traits: from(t in Trait, order_by: t.name),
-    casts: from(c in Cast, order_by: c.name)
+    traits: from(t in Trait, order_by: t.name)
   ]
 
   def get_user(id), do:  Repo.get(user_query(), id)
@@ -161,6 +160,7 @@ defmodule Dsa.Accounts do
     |> Character.changeset(attrs)
     |> cast_assoc(:character_combat_skills, with: &CharacterCombatSkill.changeset/2)
     |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
+    |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> Repo.update()
   end
 
@@ -220,5 +220,11 @@ defmodule Dsa.Accounts do
     |> Repo.insert()
   end
 
-  def remove_character_trait(character_trait), do: Repo.delete(character_trait)
+  def add_character_spell(params) do
+    %CharacterSpell{}
+    |> CharacterSpell.changeset(params)
+    |> Repo.insert()
+  end
+
+  def remove(struct), do: Repo.delete(struct)
 end

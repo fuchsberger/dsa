@@ -2,8 +2,8 @@ defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Dsa.Lore.{Species, Tradition}
-  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, CharacterCast}
+  alias Dsa.Lore.Species
+  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, CharacterSpell, CharacterPrayer}
 
   schema "characters" do
 
@@ -34,21 +34,26 @@ defmodule Dsa.Accounts.Character do
     field :ini, :integer
     field :gw, :integer, default: 8
     field :sp, :integer, default: 3
+
+    # Virtual Fields for adding traits, spells and liturgies
     field :skill_id, :integer, virtual: true
     field :trait_id, :integer, virtual: true
     field :trait_level, :integer, virtual: true
     field :trait_ap, :integer, virtual: true
     field :trait_details, :string, virtual: true
+    field :spell_id, :integer, virtual: true
+    field :prayer_id, :integer, virtual: true
 
     # ETS relations
     field :magic_tradition_id, :integer
+    field :karmal_tradition_id, :integer
 
     belongs_to :group, Group
     belongs_to :user, User
     belongs_to :species, Species
-    belongs_to :karmal_tradition, Tradition
 
-    has_many :character_casts, CharacterCast, on_replace: :delete
+    has_many :character_prayers, CharacterPrayer, on_replace: :delete
+    has_many :character_spells, CharacterSpell, on_replace: :delete
     has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
     has_many :character_fweapons, CharacterFWeapon, on_replace: :delete
     has_many :character_armors, CharacterArmor, on_replace: :delete
@@ -57,7 +62,6 @@ defmodule Dsa.Accounts.Character do
     has_many :character_combat_skills, CharacterCombatSkill, on_replace: :delete
     has_many :character_skills, CharacterSkill, on_replace: :delete
     has_many :combat_skills, through: [:character_combat_skills, :combat_skill]
-    has_many :casts, through: [:character_casts, :cast]
     has_many :skills, through: [:character_skills, :skill]
     has_many :traits, through: [:character_traits, :trait]
 
@@ -65,7 +69,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(species_id name at pa w2 tp rw le_bonus ae_bonus ke_bonus sk zk aw gw)a ++ Dsa.Lists.base_values()
-  @optional_fields ~w(profession group_id skill_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details)a
+  @optional_fields ~w(profession group_id skill_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields)
@@ -79,7 +83,6 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_bonus, greater_than_or_equal_to: 0)
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:species_id)
-    |> foreign_key_constraint(:karmal_tradition_id)
     |> foreign_key_constraint(:group_id)
   end
 

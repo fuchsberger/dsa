@@ -3,7 +3,8 @@ defmodule DsaWeb.CharacterHelpers do
   Conveniences for translating and building error messages.
   """
   use Phoenix.HTML
-  import Dsa.Lists
+
+  import Dsa.{Lists, Data}
   import DsaWeb.DsaHelpers
 
   def advantages(character) do
@@ -16,7 +17,7 @@ defmodule DsaWeb.CharacterHelpers do
 
   def general_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == 0)
   def fate_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -1)
-  def traditions(c), do: Enum.filter(c.character_traits, & &1.trait.level == -2)
+
   def combat_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -3)
   def staff_spells(c), do: Enum.filter(c.character_traits, & &1.trait.level == -8)
   def witchcraft(c), do: Enum.filter(c.character_traits, & &1.trait.level == -9)
@@ -34,7 +35,13 @@ defmodule DsaWeb.CharacterHelpers do
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     combat_traits = c |> combat_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     fate_traits = c |> fate_traits() |> Enum.map(& &1.ap) |> Enum.sum()
-    traditions = c |> traditions() |> Enum.map(& &1.ap) |> Enum.sum()
+
+    magic_tradition =
+      if c.magic_tradition_id, do: tradition(c.magic_tradition_id, :ap), else: 0
+
+    karmal_tradition =
+      if c.karmal_tradition_id, do: tradition(c.karmal_tradition_id, :ap), else: 0
+
     tricks = Enum.count(tricks(c))
     blessings = Enum.count(blessings(c))
     skills = Enum.map(c.character_skills, & ap_cost(&1.level, &1.skill.sf)) |> Enum.sum()
@@ -58,7 +65,8 @@ defmodule DsaWeb.CharacterHelpers do
       "Allgemeine SF": general_traits,
       "Kampf SF": combat_traits,
       "Schicksalspunkte SF": fate_traits,
-      Traditionen: traditions,
+      "Magische Tradition": magic_tradition,
+      "Karmale Tradition": karmal_tradition,
       Zaubertricks: tricks,
       Segnungen: blessings,
       Spezies: species,
@@ -66,7 +74,7 @@ defmodule DsaWeb.CharacterHelpers do
       Hexentricks: witchcraft,
       Talente: skills,
       Kampftalente: combat_skills,
-      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + traditions + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells
+      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells
     }
   end
 
@@ -178,23 +186,25 @@ defmodule DsaWeb.CharacterHelpers do
         %{total: 0}
 
       _ctrait ->
-        ltrait_name =
-          cond do
-            has_trait?(c, "Tradition (Hexe)") -> :CH
-            has_trait?(c, "Tradition (Elf)") -> :IN
-            true -> :KL
+        {name, value} =
+          case c.magic_tradition_id do
+            nil ->
+              {"-", 0}
+            id ->
+              name = tradition(id, :le)
+              {name, Map.get(c, String.to_atom(name))}
           end
-        ltrait_value = Map.get(c, ltrait_name)
+
         bonus = Map.get(c, :ae_bonus)
         advantages = trait_level(c, "Hohe Astralkraft")
         disadvantages = trait_level(c, "Niedrige Astralkraft") * -1
         %{
           Zauberer: 20,
-          "Leiteigenschaft #{ltrait_name}": ltrait_value,
+          "Leiteigenschaft #{name}": value,
           "Hohe Astralkraft": advantages,
           "Niedrige Astralkraft": disadvantages,
           Zukauf: bonus,
-          total: 20 + ltrait_value + advantages + disadvantages + bonus
+          total: 20 + value + advantages + disadvantages + bonus
         }
     end
   end
@@ -205,28 +215,26 @@ defmodule DsaWeb.CharacterHelpers do
         %{ total: 0 }
 
       _ctrait ->
-        ltrait_name =
-          cond do
-            has_trait?(c, "Tradition (Praioskirche)") -> :KL
-            has_trait?(c, "Tradition (Rondrakirche)") -> :MU
-            has_trait?(c, "Tradition (Boronkirche)") -> :MU
-            has_trait?(c, "Tradition (Hesindekirche)") -> :KL
-            has_trait?(c, "Tradition (Phexkirche)") -> :IN
-            has_trait?(c, "Tradition (Perainekirche)") -> :IN
-            true -> :KL
+        {name, value} =
+          case c.karmal_tradition_id do
+            nil ->
+              {"-", 0}
+            id ->
+              name = tradition(id, :le)
+              {name, Map.get(c, String.to_atom(name))}
           end
 
-        ltrait_value = Map.get(c, ltrait_name)
         bonus = Map.get(c, :ke_bonus)
         advantages = trait_level(c, "Hohe Karmalkraft")
         disadvantages = trait_level(c, "Niedrige Karmalkraft") * -1
+
         %{
           Gelehrter: 20,
-          "Leiteigenschaft #{ltrait_name}": ltrait_value,
+          "Leiteigenschaft #{name}": value,
           "Hohe Karmalkraft": advantages,
           "Niedrige Karmalkraft": disadvantages,
           Zukauf: bonus,
-          total: 20 + ltrait_value + advantages + disadvantages + bonus
+          total: 20 + value + advantages + disadvantages + bonus
         }
     end
   end

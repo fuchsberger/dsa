@@ -13,12 +13,13 @@ defmodule DsaWeb.CharacterLive do
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
     |> assign(:show_trait_form?, false)
+    |> assign(:show_spell_form?, false)
     |> assign(:category, 1)
     |> assign(:traits, Lore.list_traits())
     |> assign(:species_options, Lore.options(:species))
     |> assign(:group_options, Accounts.list_group_options())
-    |> assign(:spell_options, Lore.options(:spells))
-    |> assign(:wonder_options, Lore.options(:wonders))
+    |> assign(:spell_options, spell_options())
+    |> assign(:prayer_options, prayer_options())
     |> assign(:magic_tradition_options, tradition_options(:magic))
     |> assign(:karmal_tradition_options, tradition_options(:karmal))
     |> assign(:user_id, user_id)}
@@ -59,6 +60,12 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:changeset, changeset)}
   end
 
+  def handle_event("toggle-spell-form", _params, socket) do
+    {:noreply, socket
+    |> assign(:show_spell_form?, !socket.assigns.show_spell_form?)
+    |> assign(:changeset, Ecto.Changeset.put_change(socket.assigns.changeset, :spell_id, nil))}
+  end
+
   def handle_event("change", %{"character" => params}, socket) do
     character = socket.assigns.changeset.data
 
@@ -67,24 +74,25 @@ defmodule DsaWeb.CharacterLive do
         do: nil,
         else: String.to_integer(Map.get(params, "trait_id"))
 
+
     cond do
-      not is_nil(Map.get(params, "skill_id")) ->
-        skill_id = params |> Map.get("skill_id") |> String.to_integer()
-        case Accounts.add_character_skill(character.id, skill_id) do
-          {:ok, _character_skill} ->
-            Logger.debug("Added Skill...")
-            changeset =
-              character
-              |> Accounts.preload()
-              |> Accounts.change_character(Map.delete(params, "skill_id"))
-            {:noreply, assign(socket, :changeset, changeset)}
+      not (is_nil(Map.get(params, "spell_id")) || Map.get(params, "spell_id") == "") ->
+        params = %{
+          character_id: get_field(socket.assigns.changeset, :id),
+          spell_id: String.to_integer(Map.get(params, "spell_id"))
+        }
+
+        case Accounts.add_character_spell(params) do
+          {:ok, _character_trait} ->
+            Logger.debug("Spell / Ritual added.")
+            character = Accounts.preload(socket.assigns.changeset.data)
+            {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 
           {:error, changeset} ->
-            Logger.error(inspect(changeset.errors))
+            Logger.error("Error adding character spell: #{inspect(changeset.errors)}")
             {:noreply, socket}
         end
 
-      # a new trait is being selected_for adding
       not is_nil(trait_id) ->
         trait = Enum.find(socket.assigns.traits, & &1.id == trait_id)
 
@@ -164,7 +172,7 @@ defmodule DsaWeb.CharacterLive do
     character = socket.assigns.changeset.data
     character_trait = Enum.find(character.character_traits, & &1.id == String.to_integer(id))
 
-    case Accounts.remove_character_trait(character_trait) do
+    case Accounts.remove(character_trait) do
       {:ok, _character_skill} ->
         character = Accounts.preload(character)
         Logger.debug("Removed trait from #{character.name}.")
@@ -176,20 +184,18 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
-  def handle_event("delete", %{"skill" => skill_id}, socket) do
+  def handle_event("delete", %{"spell" => id}, socket) do
     character = socket.assigns.changeset.data
+    character_spell = Enum.find(character.character_spells, & &1.spell_id == String.to_integer(id))
 
-    case Accounts.remove_character_skill(character.id, String.to_integer(skill_id)) do
+    case Accounts.remove(character_spell) do
       {:ok, _character_skill} ->
-        Logger.debug("Held hat Zauber / Liturgie vergessen.")
-        changeset =
-          character
-          |> Accounts.preload()
-          |> Accounts.change_character(socket.assigns.changeset.changes)
-        {:noreply, assign(socket, :changeset, changeset)}
+        character = Accounts.preload(character)
+        Logger.debug("Removed spell from #{character.name}.")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 
       {:error, reason} ->
-        Logger.error(inspect(reason))
+        Logger.error("Error removing spell: #{inspect(reason)}")
         {:noreply, socket}
     end
   end

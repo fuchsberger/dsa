@@ -39,7 +39,8 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :ae_bonus, :integer
       add :ke_bonus, :integer
 
-
+      add :magic_tradition_id, :integer
+      add :karmal_tradition_id, :integer
 
       add :sk, :integer
       add :zk, :integer

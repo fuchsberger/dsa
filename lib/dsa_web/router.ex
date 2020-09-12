@@ -23,7 +23,8 @@ defmodule DsaWeb.Router do
     post "/login", SessionController, :create
     delete "/:id", SessionController, :delete
 
-    live "/casts", ManageLive, :casts
+    live "/spells", ManageLive, :spells
+    live "/prayers", ManageLive, :prayers
     live "/traditions", ManageLive, :traditions
   end
 

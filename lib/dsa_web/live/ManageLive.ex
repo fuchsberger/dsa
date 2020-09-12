@@ -34,6 +34,7 @@ defmodule DsaWeb.ManageLive do
       :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
 
+      :spells -> {:noreply, assign(socket, :entries, spells())}
       :traditions -> {:noreply, assign(socket, :entries, traditions())}
       :casts -> {:noreply, assign(socket, :entries, Lore.list(action))}
 

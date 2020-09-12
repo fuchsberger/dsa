@@ -1,0 +1,20 @@
+<table class='table table-sm w-100'>
+  <thead>
+    <tr>
+      <th scope='col'>Zauberspruch / Liturgie</th>
+      <th scope='col' class='text-center'>Probe</th>
+      <th scope='col' class='text-center'>SF</th>
+      <th scope='col'>Verbreitung</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for {_id, sf, probe, name, traditions} <- @entries do %>
+      <tr>
+        <th scope='row'><%= name %></th>
+        <td class='text-center'><small><%= probe %></small></td>
+        <td class='text-center'><%= sf %></td>
+        <td class='w-auto'><%= Enum.map(traditions, & tradition(&1, :name)) |> Enum.join(", ") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
