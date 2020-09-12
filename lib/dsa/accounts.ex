@@ -6,7 +6,7 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCast, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
+  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User}
   alias Dsa.Lore.{CombatSkill, Cast, Skill, Trait}
 
   @character_preloads [
@@ -20,6 +20,7 @@ defmodule Dsa.Accounts do
     :character_casts,
     :character_combat_skills,
     :character_traits,
+    :karmal_tradition,
     combat_skills: from(s in CombatSkill, order_by: s.name),
     skills: from(s in Skill, order_by: s.name),
     traits: from(t in Trait, order_by: t.name),

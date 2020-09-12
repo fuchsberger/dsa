@@ -5,23 +5,23 @@
       <th scope='col' class='text-center'>Typ</th>
       <th scope='col' class='text-center'>Leiteigenschaft</th>
       <th scope='col' class='text-center'>AP</th>
-
     </tr>
   </thead>
   <tbody>
-    <%= for tradition <- @entries do %>
+    <%= for {_id, magic, le, name, ap} <- @entries do %>
       <tr>
-        <th scope='row'><%= tradition.name %></th>
+        <th scope='row'><%= name %></th>
         <td class='text-center'>
           <%=
-            case tradition.magic do
+            case magic do
+              nil -> "-"
               true -> "Zauberer"
               false -> "Geweihten"
             end
           %>
         </td>
-        <td class='text-center'><%= tradition.le %></td>
-        <td class='text-center'><%= tradition.ap %></td>
+        <td class='text-center'><%= le %></td>
+        <td class='text-center'><%= ap %></td>
       </tr>
     <% end %>
   </tbody>

@@ -106,10 +106,7 @@
                 </div>
               </div>
               <div class='col'>
-                <div class='input-group input-group-sm value'>
-                  <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
-                  <%= number_input f, :ae_bonus, class: "form-control px-1 text-center" %>
-                </div>
+
               </div>
               <div class='col'>
                 <div class='input-group input-group-sm value'>
@@ -427,52 +424,151 @@
       </div>
     </div>
 
-    <% zauber_forms = form_group(f, "Zauber") %>
-      <%= if Enum.find(@changeset.data.character_traits, & &1.name == "Zauberer") do %>
-        <div class="card mb-3">
-          <h5 class='card-header'>Zauber / Rituale</h5>
-          <div class="card-body tab-content p-0">
-            <table class='table table-sm mb-0'>
-              <thead>
-                <tr>
-                  <th scope='col'>Name</th>
-                  <th scope='col' class='text-center'>Probe</th>
-                  <th scope='col' class='text-center'></th>
-                  <th scope='col' class='text-center'>ST</th>
-                </tr>
-              </thead>
-              <tbody>
-              <%= for fs <- zauber_forms do %>
-                <tr>
-                  <td>
-                    <%= hidden_inputs_for(fs) %>
-                    <%= label fs, :level, fs.data.skill.name, class: "col-sm-10" %>
-                  </td>
-                  <td class='text-center'>
-                    <small>
-                      <em><%= fs.data.skill.e1 %></em> /
-                      <em><%= fs.data.skill.e2 %></em> /
-                      <em><%= fs.data.skill.e3 %></em>
-                    </small>
-                  </td>
-                  <td class='text-center'>
-                    <%= button icon("remove", class: "text-danger"),
-                      to: Routes.character_path(@conn, :remove_skill, fs.data.character_id, fs.data.skill_id),
-                      class: "btn btn-sm py-0 btn-light",
-                      method: :delete,
-                      data_confirm: "Are you sure?"
-                    %>
-                  </td>
-                  <td>
-                    <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
-                  </td>
-                </tr>
+    <%= if Enum.find(@changeset.data.character_traits, & &1.trait.name == "Zauberer") do %>
+
+      <div class="card mb-3">
+        <h5 class='card-header'>Zauber / Rituale</h5>
+        <div class="card-body tab-content p-0">
+
+          <div class='row g-2 p-2'>
+            <div class='col-4'>
+              <% id = @changeset.data.magic_tradition_id %>
+              <%= label f, :magic_tradition_id, "Tradition" %>
+              <%= select f, :magic_tradition_id, @magic_tradition_options, class: "form-select-sm", prompt: "keine" %>
+              <%= if id do %>
+                <small>Leiteig: <%= tradition(id, :le) %>, <%= tradition(id, :ap) %> AP</small>
               <% end %>
-              </tbody>
-            </table>
+            </div>
+
+            <div class='col-8 text-center'>
+              <div class='row g-1'>
+                <div class='col-4'>
+                  <%= label f, :ae_bonus, "Zukauf" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_bonus, class: "form-control px-1 text-center" %>
+                  </div>
+                  <small>0 AP</small>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ae_bonus, "Perm. Verloren", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_lost, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_lost, class: "form-control px-1 text-center" %>
+                  </div>
+                  <small>0 AP</small>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ae_bonus, "Zurück gekauft", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_back, class: "form-control px-1 text-center" %>
+                  </div>
+                  <small>0 AP</small>
+                </div>
+              </div>
+            </div>
           </div>
+
+
+          <% spell_forms = Enum.filter(inputs_for(f, :character_casts), & &1.type == 1) %>
+          <table class='table table-sm mb-0'>
+            <thead>
+              <tr>
+                <th scope='col'>Zauberspruch</th>
+                <th scope='col' class='text-center'>Probe</th>
+                <th scope='col' class='text-center'>SF</th>
+                <th scope='col' class='text-center'>ST</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%= for fs <- spell_forms do %>
+              <tr>
+                <td>
+                  <%= hidden_inputs_for(fs) %>
+                  <%= label fs, :level, fs.data.cast.name, class: "col-sm-10" %>
+                </td>
+                <td class='text-center'>
+                  <small>
+                    <em><%= fs.data.cast.e1 %></em> /
+                    <em><%= fs.data.cast.e2 %></em> /
+                    <em><%= fs.data.cast.e3 %></em>
+                  </small>
+                </td>
+                <td><%= fs.data.cast.sf %></td>
+                <td class='text-center'>
+                  <%= button icon("remove", class: "text-danger"),
+                    to: "#",
+                    class: "btn btn-sm py-0 btn-light",
+                    method: :delete,
+                    data_confirm: "Are you sure?"
+                  %>
+                </td>
+                <td>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                </td>
+              </tr>
+            <% end %>
+            <%= if Enum.count(spell_forms) == 0 do %>
+              <tr>
+                <td class='text-center text-secondary' colspan='4'>
+                  <i>noch keine Zaubersprüche erlernt...</i>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+
+          <% spell_forms = Enum.filter(inputs_for(f, :character_casts), & &1.type == 2) %>
+          <table class='table table-sm mb-0'>
+            <thead>
+              <tr>
+                <th scope='col'>Ritual</th>
+                <th scope='col' class='text-center'>Probe</th>
+                <th scope='col' class='text-center'>SF</th>
+                <th scope='col' class='text-center'>ST</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%= for fs <- spell_forms do %>
+              <tr>
+                <td>
+                  <%= hidden_inputs_for(fs) %>
+                  <%= label fs, :level, fs.data.cast.name, class: "col-sm-10" %>
+                </td>
+                <td class='text-center'>
+                  <small>
+                    <em><%= fs.data.cast.e1 %></em> /
+                    <em><%= fs.data.cast.e2 %></em> /
+                    <em><%= fs.data.cast.e3 %></em>
+                  </small>
+                </td>
+                <td><%= fs.data.cast.sf %></td>
+                <td class='text-center'>
+                  <%= button icon("remove", class: "text-danger"),
+                    to: "#",
+                    class: "btn btn-sm py-0 btn-light",
+                    method: :delete,
+                    data_confirm: "Are you sure?"
+                  %>
+                </td>
+                <td>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                </td>
+              </tr>
+            <% end %>
+            <%= if Enum.count(spell_forms) == 0 do %>
+              <tr>
+                <td class='text-center text-secondary' colspan='4'>
+                  <i>noch keine Rituale erlernt...</i>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
         </div>
-      <% end %>
+      </div>
+    <% end %>
 
       <% forms = form_group(f, "Liturgie") %>
       <%= if Enum.count(forms) > 0 do %>

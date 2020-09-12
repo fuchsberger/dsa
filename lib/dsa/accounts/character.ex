@@ -40,10 +40,12 @@ defmodule Dsa.Accounts.Character do
     field :trait_ap, :integer, virtual: true
     field :trait_details, :string, virtual: true
 
+    # ETS relations
+    field :magic_tradition_id, :integer
+
     belongs_to :group, Group
     belongs_to :user, User
     belongs_to :species, Species
-    belongs_to :magic_tradition, Tradition
     belongs_to :karmal_tradition, Tradition
 
     has_many :character_casts, CharacterCast, on_replace: :delete
@@ -71,12 +73,12 @@ defmodule Dsa.Accounts.Character do
     |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:profession, min: 2, max: 15)
     |> validate_number(:trait_ap, not_equal_to: 0)
+    |> validate_number(:magic_tradition_id, greater_than: 1, less_than_or_equal_to: 4)
     |> validate_number(:le_bonus, greater_than_or_equal_to: 0)
     |> validate_number(:ae_bonus, greater_than_or_equal_to: 0)
     |> validate_number(:ke_bonus, greater_than_or_equal_to: 0)
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:species_id)
-    |> foreign_key_constraint(:magic_tradition_id)
     |> foreign_key_constraint(:karmal_tradition_id)
     |> foreign_key_constraint(:group_id)
   end

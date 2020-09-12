@@ -2,6 +2,8 @@ defmodule DsaWeb.CharacterLive do
   use Phoenix.LiveView
   require Logger
 
+  import Dsa.Data
+
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
   alias Dsa.{Accounts, Lore, Repo}
   alias DsaWeb.Router.Helpers, as: Routes
@@ -17,8 +19,8 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:spell_options, Lore.options(:spells))
     |> assign(:wonder_options, Lore.options(:wonders))
-    |> assign(:magic_traditions_options, Lore.options(:magic_traditions))
-    |> assign(:karmal_traditions_options, Lore.options(:karmal_traditions))
+    |> assign(:magic_tradition_options, tradition_options(:magic))
+    |> assign(:karmal_tradition_options, tradition_options(:karmal))
     |> assign(:user_id, user_id)}
   end
 

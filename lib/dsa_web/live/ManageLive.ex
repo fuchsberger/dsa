@@ -3,6 +3,7 @@ defmodule DsaWeb.ManageLive do
   use Phoenix.LiveView
   require Logger
 
+  import Dsa.Data
   alias Dsa.{Accounts, Lore, Event, Repo}
 
   @topic "manage"
@@ -29,11 +30,13 @@ defmodule DsaWeb.ManageLive do
       :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
       :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
       :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
-      :casts -> {:noreply, assign(socket, :entries, Lore.list_casts())}
+      :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
       :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
-      :traditions -> {:noreply, assign(socket, :entries, Lore.list(action))}
-      :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
+
+      :traditions -> {:noreply, assign(socket, :entries, traditions())}
+      :casts -> {:noreply, assign(socket, :entries, Lore.list(action))}
+
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end
   end
@@ -41,7 +44,6 @@ defmodule DsaWeb.ManageLive do
   defp get_changeset(socket, struct, params \\ %{}) do
     case socket.assigns.live_action do
       :groups -> Accounts.change_group(struct, params)
-      :skills -> Lore.change_skill(struct, params)
       :users -> Accounts.change_registration(struct, params)
     end
   end
@@ -50,7 +52,6 @@ defmodule DsaWeb.ManageLive do
     changeset =
       case socket.assigns.live_action do
         :groups -> Accounts.change_group(%Accounts.Group{})
-        :skills -> Lore.change_skill(%Lore.Skill{})
         :users -> Accounts.change_registration(%Accounts.User{})
       end
     {:noreply, assign(socket, :changeset, changeset)}
@@ -59,11 +60,6 @@ defmodule DsaWeb.ManageLive do
   def handle_event("edit", %{"id" => id}, socket) do
     entry = Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
     {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
-  end
-
-  def handle_event("validate", %{"skill" => params}, socket) do
-    changeset = Lore.change_skill(socket.assigns.changeset.data, params)
-    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("validate", %{"group" => params}, socket) do

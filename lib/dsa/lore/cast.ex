@@ -45,7 +45,7 @@ defmodule Dsa.Lore.Cast do
       {1, "C", "MU/KL/IN", "Blick in die Gedanken", ["Allgemein"]},
       {1, "A", "MU/IN/CH", "Blitz dich find", ["Allgemein"]},
       {1, "C", "KL/IN/KO", "Corpofesso", ["Gildenmagier"]},
-      {1, "B", "MU/KL/CH", "Disruptivo", [""]},
+      {1, "B", "MU/KL/CH", "Disruptivo", ["Allgemein"]},
       {1, "C", "KL/IN/CH", "Duplicatus", ["Gildenmagier"]},
       {1, "B", "MU/KL/IN", "Falkenauge", ["Elf"]},
       {1, "A", "MU/KL/CH", "Flim Flam", ["Allgemein"]},

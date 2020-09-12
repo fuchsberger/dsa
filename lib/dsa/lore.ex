@@ -15,12 +15,11 @@ defmodule Dsa.Lore do
   def list_combat_skills, do: Repo.all(from(s in CombatSkill, order_by: [s.ranged, s.name]))
   def list_mweapons, do: Repo.all(from(w in MWeapon, preload: :combat_skill, order_by: w.name))
   def list_fweapons, do: Repo.all(from(w in FWeapon, preload: :combat_skill, order_by: w.name))
-  def list_casts, do: Repo.all(from(c in Cast, preload: :traditions, order_by: c.name))
   def list_traits, do: Repo.all(from(t in Trait, order_by: t.name))
 
   def list(type) do
     case type do
-      :traditions -> from(t in Tradition, where: not is_nil(t.magic))
+      :casts -> from(c in Cast, preload: :traditions)
     end
     |> order_by(:name)
     |> Repo.all()
@@ -29,8 +28,6 @@ defmodule Dsa.Lore do
   def options(type) do
     case type do
       :armors -> from(a in Armor)
-      :karmal_traditions -> from(t in Tradition, where: t.magic == false)
-      :magic_traditions -> from(t in Tradition, where: t.magic)
       :species -> from(a in Species)
       :spells -> from(s in Skill, where: s.category == 6)
       :wonders -> from(s in Skill, where: s.category == 7)
