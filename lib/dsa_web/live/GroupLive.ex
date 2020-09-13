@@ -2,11 +2,12 @@ defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
 
+  import Dsa.Data
   import Ecto.Changeset, only: [get_field: 2]
 
   require Logger
 
-  alias Dsa.{Event, Lore, Accounts, Repo}
+  alias Dsa.{Event, Accounts, Repo}
 
   defp topic(group_id), do: "group:#{group_id}"
 
@@ -51,7 +52,7 @@ defmodule DsaWeb.GroupLive do
       |> Enum.map(& &1.id)
 
     {:ok, socket
-    |> assign(:armor_options, Lore.options(:armors))
+    |> assign(:armor_options, armors())
     |> assign(:group, group)
     |> assign(:logs, logs)
     |> assign(:character, character)

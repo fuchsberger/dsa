@@ -29,7 +29,7 @@ defmodule DsaWeb.CharacterHelpers do
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
     base_values = base_values - 8 * 8 * 15
 
-    species = c.species.ap
+    species = species(c.species_id, :ap)
     advantages = c |> advantages() |> Enum.map(& &1.ap) |> Enum.sum()
     disadvantages = c |> disadvantages() |> Enum.map(& &1.ap) |> Enum.sum()
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
@@ -52,29 +52,47 @@ defmodule DsaWeb.CharacterHelpers do
     |> Enum.sum()
     combat_skills = combat_skills - 9*12 - 12*18 # start value 6, 9 B talents, 12 C talents
 
-    energies =
-      ap_cost(Map.get(c, :le_bonus), "D") +
-      ap_cost(Map.get(c, :ae_bonus), "D") +
-      ap_cost(Map.get(c, :ke_bonus), "D")
+    spells =
+      c.character_spells
+      |> Enum.map(& ap_cost(&1.level, spell(&1.spell_id, :sf), true))
+      |> Enum.sum()
+
+    prayers =
+      c.character_prayers
+      |> Enum.map(& ap_cost(&1.level, prayer(&1.prayer_id, :sf), true))
+      |> Enum.sum()
+
+    le_bonus = ap_cost(Map.get(c, :le_bonus), "D")
+    ae_bonus = ap_cost(Map.get(c, :ae_bonus), "D")
+    ke_bonus = ap_cost(Map.get(c, :ke_bonus), "D")
+
+    ae_back = ap_cost(Map.get(c, :ae_back), "D")
+    ke_back = ap_cost(Map.get(c, :ke_back), "D")
 
     %{
       Eigenschaften: base_values,
       Vorteile: advantages,
       Nachteile: disadvantages,
-      Energien: energies,
       "Allgemeine SF": general_traits,
       "Kampf SF": combat_traits,
       "Schicksalspunkte SF": fate_traits,
       "Magische Tradition": magic_tradition,
       "Karmale Tradition": karmal_tradition,
       Zaubertricks: tricks,
+      "Zaubersprüche / Rituale": spells,
+      "Liturgien / Zeremonien": prayers,
       Segnungen: blessings,
       Spezies: species,
       Stabzauber: staffspells,
       Hexentricks: witchcraft,
       Talente: skills,
       Kampftalente: combat_skills,
-      total: base_values + advantages + disadvantages + energies + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells
+      "Gekaufte LE": le_bonus,
+      "Gekaufte AE": ae_bonus,
+      "Gekaufte KE": ke_bonus,
+      "Zurückgekaufte AE": ae_back,
+      "Zurückgekaufte KE": ke_back,
+      total: base_values + advantages + disadvantages + le_bonus + ae_bonus + ke_bonus + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells + ae_back + ke_back + spells + prayers
     }
   end
 
@@ -116,17 +134,17 @@ defmodule DsaWeb.CharacterHelpers do
   def gs(c) do
     advantages = if has_trait?(c, "Flink"), do: 1, else: 0
     disadvantages = if has_trait?(c, "Behäbig"), do: 1, else: 0
-    basis = c.species.gs
+    species = species(c.species_id, :ge)
     %{
-      Basis: basis,
+      Spezies: species,
       Flink: advantages,
       Behäbig: disadvantages,
-      total: basis + advantages + disadvantages
+      total: species + advantages + disadvantages
     }
   end
 
   def zk(c) do
-    species = c.species.zk
+    species = species(c.species_id, :zk)
     basis = round((Map.get(c, :KO) * 2 + Map.get(c, :KK)) / 6)
     advantages = if has_trait?(c, "Hohe Zähigkeit"), do: 1, else: 0
     disadvantages = if has_trait?(c, "Niedrige Zähigkeit"), do: 1, else: 0
@@ -140,7 +158,7 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def sk(c) do
-    species = c.species.sk
+    species = species(c.species_id, :sk)
     basis = round((Map.get(c, :MU) + Map.get(c, :KL) + Map.get(c, :IN)) / 6)
     advantages = if has_trait?(c, "Hohe Seelenkraft"), do: 1, else: 0
     disadvantages = if has_trait?(c, "Niedrige Seelenkraft"), do: 1, else: 0
@@ -165,18 +183,20 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def le(c) do
-    species = c.species.le
+    species = species(c.species_id, :le)
     ko = 2 * Map.get(c, :KO)
     bonus = Map.get(c, :le_bonus)
+    lost = Map.get(c, :le_lost)
     advantages = trait_level(c, "Hohe Lebenskraft")
     disadvantages = trait_level(c, "Niedrige Lebenskraft") * -1
     %{
       Spezies: species,
       "2 x KO": ko,
       "Hohe Lebenskraft": advantages,
+      "Perm. verloren": -lost,
       "Niedrige Lebenskraft": disadvantages,
       Zukauf: bonus,
-      total: species + ko + advantages + disadvantages + bonus
+      total: species + ko + advantages + disadvantages + bonus - lost
     }
   end
 
@@ -198,13 +218,15 @@ defmodule DsaWeb.CharacterHelpers do
         bonus = Map.get(c, :ae_bonus)
         advantages = trait_level(c, "Hohe Astralkraft")
         disadvantages = trait_level(c, "Niedrige Astralkraft") * -1
+        lost = Map.get(c, :ae_lost) - Map.get(c, :ae_back)
         %{
           Zauberer: 20,
           "Leiteigenschaft #{name}": value,
           "Hohe Astralkraft": advantages,
           "Niedrige Astralkraft": disadvantages,
+          "Perm. verloren": -lost,
           Zukauf: bonus,
-          total: 20 + value + advantages + disadvantages + bonus
+          total: 20 + value + advantages + disadvantages + bonus - lost
         }
     end
   end
@@ -227,14 +249,16 @@ defmodule DsaWeb.CharacterHelpers do
         bonus = Map.get(c, :ke_bonus)
         advantages = trait_level(c, "Hohe Karmalkraft")
         disadvantages = trait_level(c, "Niedrige Karmalkraft") * -1
+        lost = Map.get(c, :ke_lost) - Map.get(c, :ke_back)
 
         %{
           Gelehrter: 20,
           "Leiteigenschaft #{name}": value,
           "Hohe Karmalkraft": advantages,
           "Niedrige Karmalkraft": disadvantages,
+          "Perm. verloren": -lost,
           Zukauf: bonus,
-          total: 20 + value + advantages + disadvantages + bonus
+          total: 20 + value + advantages + disadvantages + bonus - lost
         }
     end
   end

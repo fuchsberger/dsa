@@ -9,8 +9,8 @@ defmodule Dsa.Accounts.CharacterTrait do
     field :ap, :integer
     field :level, :integer
     field :details, :string
+    field :trait_id, :integer
     belongs_to :character, Dsa.Accounts.Character
-    belongs_to :trait, Dsa.Lore.Trait
   end
 
   @fields ~w(character_id trait_id ap level)a
@@ -21,6 +21,5 @@ defmodule Dsa.Accounts.CharacterTrait do
     |> validate_length(:details, max: 50)
     |> validate_number(:ap, not_equal_to: 0)
     |> foreign_key_constraint(:character_id)
-    |> foreign_key_constraint(:trait_id)
   end
 end

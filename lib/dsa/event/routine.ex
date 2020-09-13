@@ -4,7 +4,7 @@ defmodule Dsa.Event.Routine do
 
   schema "routine" do
     field :fw, :integer
-    belongs_to :skill, Dsa.Lore.Skill
+    field :skill_id, :integer
     belongs_to :character, Dsa.Accounts.Character
     belongs_to :group, Dsa.Accounts.Group
     timestamps()
@@ -16,7 +16,6 @@ defmodule Dsa.Event.Routine do
     roll
     |> cast(attrs, @fields)
     |> validate_required(@fields)
-    |> foreign_key_constraint(:skill_id)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:group_id)
   end

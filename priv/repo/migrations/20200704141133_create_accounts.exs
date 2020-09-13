@@ -1,8 +1,6 @@
 defmodule Dsa.Repo.Migrations.CreateAccounts do
   use Ecto.Migration
 
-  import Dsa.Lists
-
   def change do
     create table(:users) do
       add :name, :string
@@ -22,42 +20,114 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
 
     create table(:characters) do
       add :name, :string
-      add :species, :string
-      add :culture, :string
       add :profession, :string
+
+      # base values
+      add :mu, :integer
+      add :kl, :integer
+      add :in, :integer
+      add :ch, :integer
+      add :ff, :integer
+      add :ge, :integer
+      add :ko, :integer
+      add :kk, :integer
 
       # combat
       add :at, :integer
       add :pa, :integer
-      add :w2, :boolean
-      add :tp, :integer
-      add :rw, :integer
+      add :tp_dice, :integer
+      add :tp_bonus, :integer
       add :be, :integer
       add :rs, :integer
 
+      # stats
       add :le_bonus, :integer
+      add :le_lost, :integer
       add :ae_bonus, :integer
+      add :ae_lost, :integer
+      add :ae_back, :integer
       add :ke_bonus, :integer
+      add :ke_lost, :integer
+      add :ke_back, :integer
 
+      # ets relations
+      add :species_id, :integer
       add :magic_tradition_id, :integer
       add :karmal_tradition_id, :integer
 
-      add :sk, :integer
-      add :zk, :integer
-      add :aw, :integer
-      add :ini, :integer
-      add :gw, :integer
-      add :sp, :integer
-
       # talents
-      Enum.each(base_values(), & add(&1, :integer))
       add :group_id, references(:groups, on_delete: :nilify_all)
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps()
     end
 
-    create index(:characters, [:group_id])
-    create index(:characters, [:user_id])
+    create index(:characters, [:group_id, :user_id])
+
+    # character combat skills
+    create table(:character_combat_skills, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :combat_skill_id, :integer, primary_key: true
+      add :level, :integer
+    end
+    create index :character_combat_skills, [:character_id, :combat_skill_id]
+
+    # character skills
+    create table(:character_skills, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :skill_id, :integer, primary_key: true
+      add :level, :integer
+    end
+    create index :character_skills, [:character_id, :skill_id]
+
+    # character traits
+    create table(:character_traits) do
+      add :details, :string
+      add :ap, :integer
+      add :level, :integer
+      add :character_id, references(:characters, on_delete: :delete_all)
+      add :trait_id, :integer
+    end
+    create index :character_traits, [:character_id, :trait_id]
+
+    # character spells
+    create table(:character_spells, primary_key: false) do
+      add :level, :integer
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :spell_id, :integer, primary_key: true
+    end
+    create index :character_spells, [:character_id, :spell_id]
+
+      # character prayers
+    create table(:character_prayers, primary_key: false) do
+      add :level, :integer
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :prayer_id, :integer, primary_key: true
+    end
+    create index :character_prayers, [:character_id, :prayer_id]
+
+    # character armors
+    create table(:character_armors, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :armor_id, :integer, primary_key: true
+      add :dmg, :integer
+    end
+    create index :character_armors, [:character_id, :armor_id]
+
+    # Character Meele Weapons
+    create table(:character_mweapons, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :mweapon_id, :integer, primary_key: true
+      add :dmg, :integer
+    end
+    create index :character_mweapons, [:character_id, :mweapon_id]
+
+    # character projectile weapons
+    create table(:character_fweapons, primary_key: false) do
+      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
+      add :fweapon_id, :integer, primary_key: true
+      add :dmg, :integer
+    end
+    create index :character_fweapons, [:character_id, :fweapon_id]
   end
 end

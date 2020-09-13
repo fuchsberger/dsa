@@ -4,7 +4,7 @@ defmodule DsaWeb.ManageLive do
   require Logger
 
   import Dsa.Data
-  alias Dsa.{Accounts, Lore, Event, Repo}
+  alias Dsa.{Accounts, Event, Repo}
 
   @topic "manage"
 
@@ -25,18 +25,16 @@ defmodule DsaWeb.ManageLive do
   def handle_info(%{event: "update"}, socket), do: handle_params(nil, nil, socket)
 
   def handle_params(_params, _session, socket) do
-    action = socket.assigns.live_action
     case socket.assigns.live_action do
-      :armors -> {:noreply, assign(socket, :entries, Lore.list_armors())}
-      :combat_skills -> {:noreply, assign(socket, :entries, Lore.list_combat_skills())}
-      :skills -> {:noreply, assign(socket, :entries, Lore.list_skills())}
-      :traits -> {:noreply, assign(socket, :entries, Lore.list_traits())}
-      :mweapons -> {:noreply, assign(socket, :entries, Lore.list_mweapons())}
-      :fweapons -> {:noreply, assign(socket, :entries, Lore.list_fweapons())}
+      :armors -> {:noreply, assign(socket, :entries, armors())}
+      :combat_skills -> {:noreply, assign(socket, :entries, combat_skills())}
+      :skills -> {:noreply, assign(socket, :entries, skills())}
+      :traits -> {:noreply, assign(socket, :entries, traits())}
+      :mweapons -> {:noreply, assign(socket, :entries, mweapons())}
+      :fweapons -> {:noreply, assign(socket, :entries, fweapons())}
 
       :spells -> {:noreply, assign(socket, :entries, spells())}
       :traditions -> {:noreply, assign(socket, :entries, traditions())}
-      :casts -> {:noreply, assign(socket, :entries, Lore.list(action))}
 
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end

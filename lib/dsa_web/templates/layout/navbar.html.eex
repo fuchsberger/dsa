@@ -44,12 +44,6 @@
           <li class='nav-item'>
             <%= link "Übersicht", to: Routes.manage_path(@conn, :traits), class: "nav-link" %>
           </li>
-
-          <%= if @current_user.admin do %>
-            <li class='nav-item'>
-              <%= link "Update Datenbank...", to: Routes.page_path(@conn, :seed), class: "nav-link" %>
-            </li>
-          <% end %>
         <% end %>
       </ul>
 

@@ -128,7 +128,7 @@ defmodule DsaWeb.CharacterView do
     end
   end
 
-  defp leiteigenschaft(form, %Dsa.Lore.Skill{e1: e1, e2: e2}) do
+  defp leiteigenschaft(form, %{e1: e1, e2: e2}) do
     a = e1 |> String.downcase() |> String.to_atom()
     b = e2 && e2 |> String.downcase() |> String.to_atom()
 

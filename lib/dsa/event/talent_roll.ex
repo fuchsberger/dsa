@@ -18,8 +18,8 @@ defmodule Dsa.Event.TalentRoll do
     field :e3, :string
     field :modifier, :integer, default: 0
     field :be, :integer
+    field :skill_id, :integer
 
-    belongs_to :skill, Dsa.Lore.Skill
     belongs_to :character, Dsa.Accounts.Character
     belongs_to :group, Dsa.Accounts.Group
 
@@ -39,7 +39,6 @@ defmodule Dsa.Event.TalentRoll do
     |> validate_number(:t3, greater_than: 5)
     |> validate_number(:modifier, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
     |> validate_number(:be, greater_than_or_equal_to: 0)
-    |> foreign_key_constraint(:skill_id)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:group_id)
   end

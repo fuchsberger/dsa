@@ -31,8 +31,6 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
 
-    get "/manage", PageController, :seed
-
     get "/characters/new", PageController, :create_character
 
     live "/characters", CharacterLive, :index

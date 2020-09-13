@@ -3,27 +3,24 @@ defmodule Dsa.Accounts do
   The Accounts context.
   """
   import Ecto.{Changeset, Query}
+  import Dsa.Data
+
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterSkill, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
-  alias Dsa.Lore.{CombatSkill, Skill, Trait}
+  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
 
   @character_preloads [
-    :species,
     :group,
     :user,
-    :character_armors,
-    :character_mweapons,
-    :character_fweapons,
-    :character_skills,
-    :character_combat_skills,
-    :character_traits,
+    character_armors: from(s in CharacterCombatSkill, order_by: s.armor_id),
+    character_combat_skills: from(s in CharacterCombatSkill, order_by: s.combat_skill_id),
+    character_fweapons: from(s in CharacterFWeapon, order_by: s.fweapon_id),
+    character_mweapons: from(s in CharacterMWeapon, order_by: s.mweapon_id),
+    character_skills: from(s in CharacterSkill, order_by: s.skill_id),
     character_spells: from(s in CharacterSpell, order_by: s.spell_id),
-    character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id),
-    combat_skills: from(s in CombatSkill, order_by: s.name),
-    skills: from(s in Skill, order_by: s.name),
-    traits: from(t in Trait, order_by: t.name)
+    character_traits: from(s in CharacterTrait, order_by: s.trait_id),
+    character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id)
   ]
 
   def get_user(id), do:  Repo.get(user_query(), id)
@@ -118,13 +115,8 @@ defmodule Dsa.Accounts do
     ) do
       {:ok, character} ->
         # add all standard skills to character
-        from(s in CombatSkill, select: s.id)
-        |> Repo.all()
-        |> Enum.each(& add_combat_skill!(%{character_id: character.id, combat_skill_id: &1}))
-
-        from(s in Skill, select: s.id)
-        |> Repo.all()
-        |> Enum.each(& add_character_skill!(%{character_id: character.id, skill_id: &1}))
+        Enum.each(1..21, & add_combat_skill!(%{character_id: character.id, combat_skill_id: &1}))
+        Enum.each(1..58, & add_character_skill!(%{character_id: character.id, skill_id: &1}))
 
         Logger.info("Character #{inspect(character.id)} successfully created.")
         character.id
@@ -138,7 +130,7 @@ defmodule Dsa.Accounts do
   defp add_combat_skill!(attrs) do
     case %CharacterCombatSkill{} |> CharacterCombatSkill.changeset(attrs) |> Repo.insert() do
       {:ok, cskill} ->
-        Logger.debug("Added combat skill #{cskill.combat_skill_id} to character #{cskill.character_id}.")
+        Logger.debug("Added combat skill #{combat_skill(cskill.combat_skill_id, :name)} to character #{cskill.character_id}.")
 
       {:error, changeset} ->
         Logger.error("Error adding combat skill: #{inspect(changeset.errors)}")
@@ -148,7 +140,7 @@ defmodule Dsa.Accounts do
   defp add_character_skill!(attrs) do
     case %CharacterSkill{} |> CharacterSkill.changeset(attrs) |> Repo.insert() do
       {:ok, cskill} ->
-        Logger.debug("Added skill #{cskill.skill_id} to character #{cskill.character_id}.")
+        Logger.debug("Added skill #{skill(cskill.skill_id, :name)} to character #{cskill.character_id}.")
 
       {:error, changeset} ->
         Logger.error("Error adding skill: #{inspect(changeset.errors)}")
@@ -161,6 +153,7 @@ defmodule Dsa.Accounts do
     |> cast_assoc(:character_combat_skills, with: &CharacterCombatSkill.changeset/2)
     |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
+    |> cast_assoc(:character_prayers, with: &CharacterPrayer.changeset/2)
     |> Repo.update()
   end
 
@@ -168,18 +161,6 @@ defmodule Dsa.Accounts do
     character
     |> Character.combat_changeset(attrs)
     |> Repo.update()
-  end
-
-  def add_character_skill(character_id, skill_id) do
-    %CharacterSkill{}
-    |> CharacterSkill.changeset(%{character_id: character_id, skill_id: skill_id})
-    |> Repo.insert()
-  end
-
-  def remove_character_skill(character_id, skill_id) do
-    from(c in CharacterSkill, where: c.character_id == ^character_id and c.skill_id == ^skill_id)
-    |> Repo.one!()
-    |> Repo.delete()
   end
 
   def delete_character!(character), do: Repo.delete!(character)
@@ -223,6 +204,12 @@ defmodule Dsa.Accounts do
   def add_character_spell(params) do
     %CharacterSpell{}
     |> CharacterSpell.changeset(params)
+    |> Repo.insert()
+  end
+
+  def add_character_prayer(params) do
+    %CharacterPrayer{}
+    |> CharacterPrayer.changeset(params)
     |> Repo.insert()
   end
 

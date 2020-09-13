@@ -4,11 +4,13 @@ defmodule Dsa.Lists do
   """
 
   @sf_values ~w(A B C D E)
-  @base_values ~w(MU KL IN CH FF GE KO KK)a
+  @base_values ~w(mu kl in ch ff ge ko kk)a
   @talent_categories ~w(Körper Gesellschaft Natur Wissen Handwerk Zauber Liturgie)
 
   def base_values, do: @base_values
-  def base_value_options, do: Enum.map(@base_values, & Atom.to_string(&1))
+  def base_value_options do
+    Enum.map(@base_values, & {String.upcase(Atom.to_string(&1)), Atom.to_string(&1)})
+  end
 
   def sf_values, do: @sf_values
 

@@ -95,7 +95,7 @@
         </div>
 
         <div class='row g-2'>
-          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :Energien) %> AP)</div>
+          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
 
           <div class="col-sm-8">
             <div class='row g-2'>
@@ -105,13 +105,13 @@
                   <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
                 </div>
               </div>
-              <div class='col'>
-
+              <div class='col pt-1 small text-right'>
+                p. verloren:
               </div>
               <div class='col'>
                 <div class='input-group input-group-sm value'>
-                  <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
-                  <%= number_input f, :ke_bonus, class: "form-control px-1 text-center" %>
+                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
                 </div>
               </div>
             </div>
@@ -465,7 +465,7 @@
                     <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
                     <%= number_input f, :ae_bonus, class: "form-control px-1 text-center" %>
                   </div>
-                  <small>0 AP</small>
+                  <small><%= Map.get(ap, :"Gekaufte AE") %> AP</small>
                 </div>
                 <div class='col-4'>
                   <%= label f, :ae_lost, "Perm. Verloren", class: "small" %>
@@ -480,7 +480,7 @@
                     <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
                     <%= number_input f, :ae_back, class: "form-control px-1 text-center" %>
                   </div>
-                  <small>0 AP</small>
+                  <small><%= Map.get(ap, :"Zurückgekaufte AE") %> AP</small>
                 </div>
               </div>
             </div>
@@ -540,7 +540,7 @@
               <h5 class='my-2'>Liturgien / Zerem.</h5>
             </div>
             <div class='col-6 pt-1'>
-              <%= select(f, :spell_id, character_prayer_options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
+              <%= select(f, :prayer_id, character_prayer_options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
             </div>
           </div>
         </div>
@@ -564,7 +564,7 @@
                     <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
                     <%= number_input f, :ke_bonus, class: "form-control px-1 text-center" %>
                   </div>
-                  <small>0 AP</small>
+                  <small><%= Map.get(ap, :"Gekaufte KE") %> AP</small>
                 </div>
                 <div class='col-4'>
                   <%= label f, :ke_lost, "Perm. Verloren", class: "small" %>
@@ -579,7 +579,7 @@
                     <%= label f, :ke_back, "KE", class: "input-group-text px-1" %>
                     <%= number_input f, :ke_back, class: "form-control px-1 text-center" %>
                   </div>
-                  <small>0 AP</small>
+                  <small><%= Map.get(ap, :"Zurückgekaufte KE") %> AP</small>
                 </div>
               </div>
             </div>
@@ -601,14 +601,14 @@
               <tr>
                 <td>
                   <%= hidden_inputs_for(fs) %>
-                  <%= label fs, :level, spell(fs.data.prayer_id, :name), class: "col-sm-10" %>
+                  <%= label fs, :level, prayer(fs.data.prayer_id, :name), class: "col-sm-10" %>
                 </td>
                 <td class='text-center'>
-                  <small><%= spell(fs.data.prayer_id, :probe) %></small>
+                  <small><%= prayer(fs.data.prayer_id, :probe) %></small>
                 </td>
-                <td class='text-center'><%= spell(fs.data.prayer_id, :sf) %></td>
+                <td class='text-center'><%= prayer(fs.data.prayer_id, :sf) %></td>
                 <td class='text-center'>
-                  <button type='button' class='btn btn-sm py-0 btn-light' data-confirm='Are you sure?' phx-click='delete' phx-value-spell='<%= fs.data.prayer_id %>'
+                  <button type='button' class='btn btn-sm py-0 btn-light' data-confirm='Are you sure?' phx-click='delete' phx-value-prayer='<%= fs.data.prayer_id %>'
                   ><i class='icon-remove text-danger'></i></button>
                 </td>
                 <td>

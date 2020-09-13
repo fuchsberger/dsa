@@ -34,7 +34,7 @@ defmodule Dsa.Repo.Migrations.CreateEvents do
     create index :trait_rolls, :character_id
     create index :trait_rolls, :group_id
 
-    # Talent Rolls
+    # talent rolls
     create table(:talent_rolls) do
       add :level, :integer
       add :w1, :integer
@@ -50,11 +50,10 @@ defmodule Dsa.Repo.Migrations.CreateEvents do
       add :be, :integer
       add :character_id, references(:characters, on_delete: :delete_all)
       add :group_id, references(:groups, on_delete: :delete_all)
-      add :skill_id, references(:skills, on_delete: :delete_all)
+      add :skill_id, :integer
       timestamps()
     end
-    create index :talent_rolls, :character_id
-    create index :talent_rolls, :group_id
+    create index :talent_rolls, [:character_id, :group_id]
 
     # Logs
     create table(:logs) do
@@ -64,21 +63,17 @@ defmodule Dsa.Repo.Migrations.CreateEvents do
       add :group_id, references(:groups, on_delete: :delete_all)
       timestamps()
     end
-
     create index :logs, :character_id
     create index :logs, :group_id
 
     # Routine
     create table(:routine) do
       add :fw, :integer
-      add :skill_id, references(:skills, on_delete: :delete_all)
+      add :skill_id, :integer
       add :character_id, references(:characters, on_delete: :delete_all)
       add :group_id, references(:groups, on_delete: :delete_all)
       timestamps()
     end
-
-    create index :routine, :skill_id
-    create index :routine, :character_id
-    create index :routine, :group_id
+    create index :routine, [:character_id, :group_id]
   end
 end

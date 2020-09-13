@@ -1,10 +1,7 @@
 # Scripts for populating the database. You can them as:
 # mix run priv/repo/seeds.exs (regenerates armors and weapons)
 
-alias Dsa.{Accounts, Lore}
-
-# Add DSA data
-Lore.seed()
+alias Dsa.Accounts
 
 # Create Admin User
 {:ok, admin} = Accounts.register_user(%{
@@ -21,7 +18,6 @@ Lore.seed()
   password: "testtest"
 })
 
-{:ok, group} = Accounts.create_group(%{ name: "DSA", master_id: admin.id })
-
+Accounts.create_group(%{ name: "DSA", master_id: admin.id })
 Accounts.create_character(admin)
 Accounts.create_character(user)
