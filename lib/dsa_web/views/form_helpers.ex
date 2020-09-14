@@ -63,7 +63,12 @@ defmodule DsaWeb.FormHelpers do
   end
 
   def number_input(f, field, opts \\ []), do: Form.number_input(f, field, opts(f, field, opts))
-  def text_input(f, field, opts \\ []), do: Form.text_input(f, field, opts(f, field, opts))
+
+  def text_input(f, field, opts \\ [])
+  def text_input(f, field, opts) when is_atom(f), do: Form.text_input(f, field, opts)
+  def text_input(f, field, opts), do: Form.text_input(f, field, opts(f, field, opts))
+
+
   def password_input(f, field, opts \\ []), do: Form.password_input(f, field, opts(f, field, opts))
   def range_input(f, field, opts \\ []), do: Form.range_input(f, field, opts(f, field, opts, "form-range"))
 

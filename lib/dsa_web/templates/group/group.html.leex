@@ -8,7 +8,7 @@
   <table class="table table-xs table-hover">
     <thead>
       <tr>
-        <%= unless is_nil(@character), do: content_tag :th, "", scope: "col" %>
+        <%= unless is_nil(@changeset), do: content_tag :th, "", scope: "col" %>
         <th scope='col'>INI</th>
         <th scope='col'>Charakter</th>
         <th scope='col'>Player</th>
@@ -18,12 +18,12 @@
       <%= for character <- @group.characters do %>
         <%= if character.user_id != @group.master_id || @master? do %>
           <tr>
-            <%= unless is_nil(@character) do %>
+            <%= unless is_nil(@changeset) do %>
               <td>
                 <%= radio_button(f, :id, character.id,
                   # not master and character belongs to someone else
                   disabled: not @master? && character.user_id != @user_id,
-                  checked: character.id == get_field(@character, :id))
+                  checked: character.id == get_field(@changeset, :id))
                 %>
               </td>
             <% end %>
@@ -39,8 +39,12 @@
 </form>
 
 <div class='row g-2'>
-  <%= unless is_nil(@character) do %>
+  <%= unless is_nil(@changeset) do %>
+
   <div class='col-lg'>
+    <%= render DsaWeb.CharacterView, "cstats_card.html", assigns %>
+
+
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <h5 class='my-1'>Aktion</h5>
@@ -54,52 +58,16 @@
       <%# Action: Kampf %>
       <%= if @live_action == :combat do %>
         <div class='card-body'>
-          <%= f = form_for @character,  "#", [
-            phx_change: :change,
-            phx_submit: nil,
-            no_validate: true
-          ] %>
-
-
-            <div class="row g-1">
-              <% ini = ini(@character.data) %>
-              <div class="col-1">
-                <strong><%= label f, :ini, "INI" %></strong>
-              </div>
-              <div class="col-1">
-                <span
-                  id='ini'
-                  class="badge bg-secondary"
-                  data-html='true'
-                  data-toggle='tooltip'
-                  title='<%= tooltip_text(ini) %>'
-                ><%= ini.total %></span>
-              </div>
-              <div class="col-2">
-                <%= number_input f, :ini, class: "form-control-sm" %>
-              </div>
-              <div class="col-2">
-                <div class='btn-group btn-group-sm' role='group'>
-                  <button
-                    type='button'
-                    id='roll-ini'
-                    class='btn btn-light icon-roll'
-                    data-toggle='tooltip'
-                    title='Roll INI Basis + 1W6'
-                    phx-click='roll-ini'
-                  ></button>
-                  <button
-                    type='button'
-                    id='reset-ini'
-                    class='btn btn-light icon-cancel'
-                    data-toggle='tooltip'
-                    title='Kampf verlassen'
-                    phx-click='reset-ini'
-                  ></button>
-                </div>
-              </div>
-            </div>
-          </form>
+          <button
+            type='button'
+            class='btn btn-sm btn-light'
+            phx-click='roll-ini'
+          ><i class='icon-roll'></i> Initiative auswürfeln</button>
+          <button
+            type='button'
+            class='btn btn-sm btn-light'
+            phx-click='reset-ini'
+          ><i class='icon-cancel'></i> Kampf verlassen</button>
         </div>
       <% end %>
 
@@ -167,7 +135,7 @@
                   <tr>
                     <th scope='row'><%= name %></th>
                     <td class='text-center'><%= Atom.to_string(short) |> String.upcase() %></td>
-                    <td class='text-center'><%= Map.get(@character.data, short) %></td>
+                    <td class='text-center'><%= Map.get(@changeset.data, short) %></td>
                     <td class='text-center'>
                       <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' type='button' phx-value-trait='<%= short %>'></button>
                     </td>
@@ -193,12 +161,12 @@
                     <th scope='row'><%= name %></th>
                     <td class='text-center'><small><%= probe %></small></td>
                     <td class='text-center'>
-                      <%= Map.get(@character.data, String.to_atom("t#{id}")) %>
+                      <%= Map.get(@changeset.data, String.to_atom("t#{id}")) %>
                     </td>
 
                     <%# Routine %>
                     <td class='text-center'>
-                      <% {allowed?, val} = routine_possible?(@character.data, id, get_field(@settings, :modifier)) %>
+                      <% {allowed?, val} = routine_possible?(@changeset.data, id, get_field(@settings, :modifier)) %>
                       <%= if allowed? do %>
                         <button class='btn btn-light text-success btn-sm py-0' type='button' phx-click='routine' phx-value-talent='<%= id %>'><strong> <%= "Q#{val}" %></strong></button>
                       <% else %>
@@ -244,11 +212,13 @@
   <% end %>
 
   <div class='col-lg'>
+    <%= render DsaWeb.CharacterView, "stats_card.html", assigns %>
+
     <%# Log %>
     <div class="card mb-3">
       <div class='card-header d-flex justify-content-between'>
         <h5 class='mb-0'>Ereignislog</h5>
-        <%= unless is_nil(@character) do %>
+        <%= unless is_nil(@changeset) do %>
           <%= f = form_for :show_details, "#", phx_change: "toggle-details", phx_submit: nil %>
             <div class="form-check">
               <%= checkbox f, :show_details, class: "form-check-input", value: @show_details %>

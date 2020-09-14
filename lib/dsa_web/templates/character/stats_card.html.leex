@@ -1,0 +1,88 @@
+<div id='advanced-values' class="card mb-3">
+  <h5 class="card-header">Grundwerte</h5>
+  <div class="card-body">
+    <div class='row g-1'>
+      <div class='col'>
+        <% le = le(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :le_total, "LE", class: "input-group-text px-1" %>
+          <%= text_input :character, :le_total, value: le.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(le) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% ae = ae(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :ae_total, "AE", class: "input-group-text px-1" %>
+          <%= text_input :character, :ae_total, value: ae.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: (if ae.total > 0, do: tooltip_text(ae), else: "<i>Kein Zauberer</i>") %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% ke = ke(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :ke_total, "KE", class: "input-group-text px-1" %>
+          <%= text_input :character, :ke_total, value: ke.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: (if ke.total > 0, do: tooltip_text(ke), else: "<i>Kein Geweihter</i>") %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% zk = zk(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :zk_total, "ZK", class: "input-group-text px-1" %>
+          <%= text_input :character, :zk_total, value: zk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(zk) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% sk = sk(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :sk_total, "SK", class: "input-group-text px-1" %>
+          <%= text_input :character, :sk_total, value: sk.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sk) %>
+        </div>
+      </div>
+    </div>
+
+    <div class='row mt-1 g-1'>
+      <div class='col'>
+        <% ini = ini(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :ini_total, "INI", class: "input-group-text px-1" %>
+          <%= text_input :character, :ini_total, value: ini.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(ini) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% gs = gs(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :gs_total, "GS", class: "input-group-text px-1" %>
+          <%= text_input :character, :gs_total, value: gs.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(gs) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% aw = aw(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :aw_total, "AW", class: "input-group-text px-1" %>
+          <%= text_input :character, :aw_total, value: aw.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(aw) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% sp = sp(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label :character, :sp_total, "SP", class: "input-group-text px-1" %>
+          <%= text_input :character, :sp_total, value: sp.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(sp) %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+          <% ap = ap(@changeset.data) %>
+          <%= label :character, :ap_total, "AP", class: "input-group-text px-1" %>
+          <%= text_input :character, :ap_total, value: ap.total, class: "bg-light form-control px-1 text-center", readonly: true, data_toggle: "tooltip", data_html: "true", title: tooltip_text(ap) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

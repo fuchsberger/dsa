@@ -1,0 +1,89 @@
+<%= f = form_for @changeset,  "#", [
+  phx_change: :change,
+  phx_submit: nil,
+  no_validate: true
+] %>
+
+<div id='advanced-values' class="card mb-3">
+  <h5 class="card-header">Aktuelle Werte</h5>
+  <div class="card-body">
+    <div class='row g-1'>
+      <div class='col'>
+        <% le = le(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label f, :le, "LE", class: "input-group-text px-1" %>
+          <%= text_input f, :le, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+          <%= label f, :ae, "AE", class: "input-group-text px-1" %>
+          <%= text_input f, :ae, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+          <%= label f, :ke, "KE", class: "input-group-text px-1" %>
+          <%= text_input f, :ke, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+          <%= label f, :zk, "ZK", class: "input-group-text px-1" %>
+          <%= text_input f, :zk, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% sk = sk(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label f, :sk, "SK", class: "input-group-text px-1" %>
+          <%= text_input f, :sk, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+    </div>
+
+    <div class='row mt-1 g-1'>
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+          <%= label f, :ini, "INI", class: "input-group-text px-1" %>
+          <%= number_input f, :ini, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% gs = gs(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label f, :gs, "GS", class: "input-group-text px-1" %>
+          <%= text_input f, :gs, placeholder: gs.total, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% aw = aw(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label f, :aw, "AW", class: "input-group-text px-1" %>
+          <%= text_input f, :aw, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <% sp = sp(@changeset.data) %>
+        <div class='input-group input-group-sm'>
+          <%= label f, :sp, "SP", class: "input-group-text px-1" %>
+          <%= text_input f, :sp, class: "form-control px-1 text-center" %>
+        </div>
+      </div>
+
+      <div class='col'>
+        <div class='input-group input-group-sm'>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form>

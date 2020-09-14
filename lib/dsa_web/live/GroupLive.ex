@@ -23,9 +23,9 @@ defmodule DsaWeb.GroupLive do
       |> List.replace_at(idx, character)
       |> Enum.sort_by(& {&1.ini && &1.ini * -1, &1.name})
 
-    if socket.assigns.character.data.id == character.id do
+    if socket.assigns.changeset.data.id == character.id do
       {:noreply, socket
-      |> assign(:character, Accounts.change_character(character, %{}, :combat))
+      |> assign(:changeset, Accounts.change_character(character, %{}, :combat))
       |> assign(:group, Map.put(socket.assigns.group, :characters, characters))}
     else
       {:noreply, assign(socket, :group, Map.put(socket.assigns.group, :characters, characters))}
@@ -41,7 +41,7 @@ defmodule DsaWeb.GroupLive do
     DsaWeb.Endpoint.subscribe(topic(group.id))
 
     # character changeset
-    character =
+    changeset =
       case Enum.find(group.characters, & &1.user_id == user_id) do
         nil -> nil
         character -> Accounts.change_character(character, %{}, :combat)
@@ -56,7 +56,7 @@ defmodule DsaWeb.GroupLive do
     |> assign(:armor_options, armors())
     |> assign(:group, group)
     |> assign(:logs, logs)
-    |> assign(:character, character)
+    |> assign(:changeset, changeset)
     |> assign(:settings, Event.change_settings())
     |> assign(:show_details, false)
     |> assign(:master?, group.master_id == user_id)
@@ -82,7 +82,7 @@ defmodule DsaWeb.GroupLive do
 
   def handle_event("change", %{"character" => params}, socket) do
 
-    case Accounts.update_character(socket.assigns.character.data, params, :combat) do
+    case Accounts.update_character(socket.assigns.changeset.data, params, :combat) do
       {:ok, character} ->
         character = Accounts.preload(character)
         Logger.debug("Character updated.")
@@ -96,12 +96,12 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("select_character", %{"character" => %{"id" => id}}, socket) do
-    character =
+    changeset =
       socket.assigns.group.characters
       |> Enum.find(& &1.id == String.to_integer(id))
       |> Accounts.change_character(%{}, :combat)
 
-    {:noreply, assign(socket, :character, character)}
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("toggle-details", _params, socket) do
@@ -230,8 +230,8 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("roll-ini", _params, socket) do
-    ini = ini(socket.assigns.character.data).total + Enum.random(1..6)
-    case Accounts.update_character(socket.assigns.character.data, %{ini: ini}, :combat) do
+    ini = ini(socket.assigns.changeset.data).total + Enum.random(1..6)
+    case Accounts.update_character(socket.assigns.changeset.data, %{ini: ini}, :combat) do
       {:ok, character} ->
         character = Accounts.preload(character)
         Logger.debug("#{character.name} rolled initiative #{character.ini}")
@@ -245,7 +245,7 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("reset-ini", _params, socket) do
-    case Accounts.update_character(socket.assigns.character.data, %{ini: nil}, :combat) do
+    case Accounts.update_character(socket.assigns.changeset.data, %{ini: nil}, :combat) do
       {:ok, character} ->
         character = Accounts.preload(character)
         Logger.debug("#{character.name} left combat.")
@@ -259,6 +259,6 @@ defmodule DsaWeb.GroupLive do
   end
 
   defp active_character(socket) do
-    Enum.find(socket.assigns.group.characters, & &1.id == get_field(socket.assigns.character, :id))
+    Enum.find(socket.assigns.group.characters, & &1.id == get_field(socket.assigns.changeset, :id))
   end
 end

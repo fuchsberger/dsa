@@ -107,10 +107,12 @@ defmodule Dsa.Accounts.Character do
     end)
   end
 
-  @cfields ~w(ini)a
+  @required ~w()a
+  @optional ~w(ini)a
   def combat_changeset(character, attrs) do
     character
-    |> cast(attrs, @cfields)
-    |> validate_required(@cfields)
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
+    |> validate_number(:ini, greater_than_or_equal_to: 0)
   end
 end

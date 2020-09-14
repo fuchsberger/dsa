@@ -10,7 +10,7 @@ import Tooltip from 'bootstrap/js/dist/tooltip.js'
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
-let tooltipTriggerList, tooltipList
+let tooltipTriggerList, tooltipList = []
 
 const enableTooltips = () => {
   tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
