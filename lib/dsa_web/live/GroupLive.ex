@@ -2,8 +2,9 @@ defmodule DsaWeb.GroupLive do
 
   use Phoenix.LiveView
 
-  import Dsa.Data
   import Ecto.Changeset, only: [get_field: 2]
+  import Dsa.Data
+  import DsaWeb.CharacterHelpers
 
   require Logger
 
@@ -145,20 +146,20 @@ defmodule DsaWeb.GroupLive do
     end
   end
 
-  def handle_event("routine", %{"talent" => skill_id}, socket) do
+  def handle_event("routine", %{"talent" => id}, socket) do
     c = active_character(socket)
-    cskill = Enum.find(c.character_skills, & &1.skill.id == String.to_integer(skill_id))
+    level = Map.get(c, String.to_atom("t#{id}"))
 
     params = %{
-      fw: Kernel.trunc(cskill.level / 2),
-      skill_id: cskill.skill.id,
+      fw: Kernel.trunc(level / 2),
+      skill_id: String.to_integer(id),
       character_id: c.id,
       group_id: c.group_id
     }
 
     case Event.create_routine(params) do
       {:ok, routine} ->
-        routine = Repo.preload(routine, [:character, :skill])
+        routine = Repo.preload(routine, [:character])
         Logger.debug("Routine created.")
         DsaWeb.Endpoint.broadcast(topic(routine.group_id), "add-event", routine)
         {:noreply, socket}
@@ -196,33 +197,28 @@ defmodule DsaWeb.GroupLive do
   end
 
   def handle_event("talent-roll", %{"be" => be, "talent" => id}, socket) do
+    id = String.to_integer(id)
     c = active_character(socket)
-    cskill = Enum.find(c.character_skills, & &1.skill_id == String.to_integer(id))
-    e1 = cskill.skill.e1
-    e2 = cskill.skill.e2
-    e3 = cskill.skill.e3
+    [t1, t2, t3] = skill(id, :probe) |> probe_values(c)
 
     params = %{
-      "w1" => Enum.random(1..20),
-      "w2" => Enum.random(1..20),
-      "w3" => Enum.random(1..20),
-      "modifier" => get_field(socket.assigns.settings, :modifier),
-      "level" => cskill.level,
-      "t1" => Map.get(c, String.to_atom(e1)),
-      "t2" => Map.get(c, String.to_atom(e2)),
-      "t3" => Map.get(c, String.to_atom(e3)),
-      "e1" => e1,
-      "e2" => e2,
-      "e3" => e3,
-      "be" => (if be == "true", do: c.be, else: 0),
-      "skill_id" => cskill.skill.id,
-      "character_id" => c.id,
-      "group_id" => c.group_id
+      w1: Enum.random(1..20),
+      w2: Enum.random(1..20),
+      w3: Enum.random(1..20),
+      modifier: get_field(socket.assigns.settings, :modifier),
+      level: Map.get(c, String.to_atom("t#{id}")),
+      t1: t1,
+      t2: t2,
+      t3: t3,
+      be: (if be == "true", do: c.be, else: 0),
+      skill_id: id,
+      character_id: c.id,
+      group_id: c.group_id
     }
 
     case Event.create_talent_roll(params) do
       {:ok, roll} ->
-        roll = Repo.preload(roll, [:character, :skill])
+        roll = Repo.preload(roll, [:character])
         Logger.debug("Talent roll created.")
         DsaWeb.Endpoint.broadcast(topic(roll.group_id), "add-event", roll)
         {:noreply, socket}

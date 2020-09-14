@@ -1,7 +1,6 @@
 defmodule Dsa.Event.TraitRoll do
   use Ecto.Schema
   import Ecto.Changeset
-  import Dsa.Lists
 
   schema "trait_rolls" do
     field :trait, :string
@@ -19,7 +18,7 @@ defmodule Dsa.Event.TraitRoll do
     roll
     |> cast(attrs, @fields)
     |> validate_required(@fields)
-    |> validate_inclusion(:trait, base_value_options())
+    |> validate_inclusion(:trait, ~w(mu kl in ch ff ge ko kk))
     |> validate_number(:modifier, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
   end
 end

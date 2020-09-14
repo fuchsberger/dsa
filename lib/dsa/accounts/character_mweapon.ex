@@ -8,7 +8,7 @@ defmodule Dsa.Accounts.CharacterMWeapon do
   @primary_key false
   schema "character_mweapons" do
     field :dmg, :integer, default: 0
-    field :mweapon, :integer, primary_key: true
+    field :mweapon_id, :integer, primary_key: true
     belongs_to :character, Dsa.Accounts.Character, primary_key: true
   end
 

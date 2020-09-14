@@ -2,7 +2,9 @@
 
 <li id='log-trait-roll-<%= @roll.id %>' class="list-group-item">
   <p class='mb-0'>
-    <%= badge(:name, @roll.character.name) %> hat eine <%= badge(:roll, @roll.skill.name, @roll.modifier) %> Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
+    <%= badge(:name, @roll.character.name) %> hat eine
+    <span class="badge bg-secondary<%= if @roll.modifier != 0, do: " rounded-0 rounded-left" %>"><%= skill(@roll.skill_id, :name) %></span><%= modifier_badge(@roll.modifier) %>
+    Probe <%= result_text(res, critical) %><%= badge(:quality, res, critical) %>
   </p>
   <%= if @show_details? do %>
     <small>
@@ -10,7 +12,7 @@
       <%= if @roll.be > 0 do %>
         BE: <span class="badge bg-warning"><%= @roll.be %></span>
       <% end %>
-      Probe: <span class="badge bg-light text-dark"><%= String.upcase("#{@roll.t1}|#{@roll.t2}|#{@roll.t3}") %></span>
+      Probe: <span class="badge bg-light text-dark"><%= skill(@roll.skill_id, :probe) %></span>
       Würfel: <span class="badge bg-primary"><%= "#{@roll.w1}|#{@roll.w2}|#{@roll.w3}" %></span>
       EFF: <span class="badge bg-<%= color %>"><%= res %></span>
     </small>

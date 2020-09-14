@@ -3,25 +3,24 @@ defmodule Dsa.Accounts do
   The Accounts context.
   """
   import Ecto.{Changeset, Query}
-  import Dsa.Data
 
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterCombatSkill, CharacterFWeapon, CharacterMWeapon, CharacterSkill, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
+  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
 
   @character_preloads [
     :group,
     :user,
-    character_armors: from(s in CharacterCombatSkill, order_by: s.armor_id),
-    character_combat_skills: from(s in CharacterCombatSkill, order_by: s.combat_skill_id),
+    character_armors: from(s in CharacterArmor, order_by: s.armor_id),
     character_fweapons: from(s in CharacterFWeapon, order_by: s.fweapon_id),
     character_mweapons: from(s in CharacterMWeapon, order_by: s.mweapon_id),
-    character_skills: from(s in CharacterSkill, order_by: s.skill_id),
     character_spells: from(s in CharacterSpell, order_by: s.spell_id),
     character_traits: from(s in CharacterTrait, order_by: s.trait_id),
     character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id)
   ]
+
+  def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
   def get_user(id), do:  Repo.get(user_query(), id)
 
@@ -48,6 +47,7 @@ defmodule Dsa.Accounts do
   end
 
   def list_users, do: Repo.all(User)
+  def list_user_options, do: Repo.all(from(u in User, select: {u.name, u.id}, order_by: u.name))
 
   def list_user_characters(user_id) do
     from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
@@ -66,22 +66,18 @@ defmodule Dsa.Accounts do
 
   def delete_user!(user), do: Repo.delete!(user)
 
-  def list_characters(%User{} = user) do
-    Character
-    |> user_characters_query(user)
-    |> Repo.all()
+  def list_characters() do
+    Repo.all(from(c in Character, preload: [:user, :group]))
   end
 
   def get_user_character!(%User{} = user, id) do
     Character
     |> user_characters_query(user)
     |> Repo.get!(id)
-    |> sort_skills()
   end
 
-  def get_user_character!(user_id, id) do
-    from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
-    |> Repo.get!(id)
+  def get_character!(id) do
+    Repo.get!(from(c in Character, preload: ^@character_preloads), id)
   end
 
   def preload(%Character{} = character) do
@@ -89,37 +85,23 @@ defmodule Dsa.Accounts do
   end
 
   defp user_characters_query(query, %User{id: user_id}) do
-    from(v in query, preload: [
-      :group,
-      character_skills: :skill,
-      character_combat_skills: :combat_skill
-    ], where: v.user_id == ^user_id)
+    from(v in query, preload: :group, where: v.user_id == ^user_id)
   end
 
   defp user_characters_query(query, user_id) do
     from(v in query, preload: :group, where: v.user_id == ^user_id)
   end
 
-  def sort_skills(%Character{} = character) do
-    character = Repo.preload(character, [character_skills: :skill])
-    sorted_skills = Enum.sort_by(character.character_skills, & &1.skill.name)
-    Map.put(character, :character_skills, sorted_skills)
-  end
-
   def create_character(%User{} = user) do
     case (
       %Character{}
-      |> Character.changeset(%{name: "Held", species_id: 1})
-      |> put_assoc(:user, user)
+      |> Character.changeset(%{name: "Held", species_id: 1, user_id: user.id})
+      |> Character.combat_changeset(%{})
       |> Repo.insert()
     ) do
-      {:ok, character} ->
-        # add all standard skills to character
-        Enum.each(1..21, & add_combat_skill!(%{character_id: character.id, combat_skill_id: &1}))
-        Enum.each(1..58, & add_character_skill!(%{character_id: character.id, skill_id: &1}))
-
-        Logger.info("Character #{inspect(character.id)} successfully created.")
-        character.id
+      {:ok, %Character{id: id}} ->
+        Logger.info("#{user.name} successfully created a character.")
+        id
 
       {:error, changeset} ->
         Logger.error("Error adding character: #{inspect(changeset.errors)}")
@@ -127,31 +109,9 @@ defmodule Dsa.Accounts do
     end
   end
 
-  defp add_combat_skill!(attrs) do
-    case %CharacterCombatSkill{} |> CharacterCombatSkill.changeset(attrs) |> Repo.insert() do
-      {:ok, cskill} ->
-        Logger.debug("Added combat skill #{combat_skill(cskill.combat_skill_id, :name)} to character #{cskill.character_id}.")
-
-      {:error, changeset} ->
-        Logger.error("Error adding combat skill: #{inspect(changeset.errors)}")
-    end
-  end
-
-  defp add_character_skill!(attrs) do
-    case %CharacterSkill{} |> CharacterSkill.changeset(attrs) |> Repo.insert() do
-      {:ok, cskill} ->
-        Logger.debug("Added skill #{skill(cskill.skill_id, :name)} to character #{cskill.character_id}.")
-
-      {:error, changeset} ->
-        Logger.error("Error adding skill: #{inspect(changeset.errors)}")
-    end
-  end
-
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
-    |> cast_assoc(:character_combat_skills, with: &CharacterCombatSkill.changeset/2)
-    |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> cast_assoc(:character_prayers, with: &CharacterPrayer.changeset/2)
     |> Repo.update()
@@ -188,9 +148,9 @@ defmodule Dsa.Accounts do
   def get_group!(id) do
     Repo.get!(from(g in Group, preload: [
       general_rolls: [:character],
-      talent_rolls: [:character, :skill],
+      talent_rolls: [:character],
       trait_rolls: [:character],
-      routine: [:character, :skill],
+      routine: [:character],
       characters: ^@character_preloads
     ]), id)
   end

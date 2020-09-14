@@ -1,6 +1,8 @@
 defmodule Dsa.Repo.Migrations.CreateAccounts do
   use Ecto.Migration
 
+  import Dsa.Lists
+
   def change do
     create table(:users) do
       add :name, :string
@@ -20,17 +22,13 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
 
     create table(:characters) do
       add :name, :string
-      add :profession, :string
 
       # base values
-      add :mu, :integer
-      add :kl, :integer
-      add :in, :integer
-      add :ch, :integer
-      add :ff, :integer
-      add :ge, :integer
-      add :ko, :integer
-      add :kk, :integer
+      Enum.each(base_values(), & add(&1, :integer))
+
+      # talents
+      Enum.each(combat_fields(), & add(&1, :integer))
+      Enum.each(talent_fields(), & add(&1, :integer))
 
       # combat
       add :at, :integer
@@ -50,6 +48,9 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :ke_lost, :integer
       add :ke_back, :integer
 
+      # overwrites
+      add :ini, :integer
+
       # ets relations
       add :species_id, :integer
       add :magic_tradition_id, :integer
@@ -63,22 +64,6 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
     end
 
     create index(:characters, [:group_id, :user_id])
-
-    # character combat skills
-    create table(:character_combat_skills, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :combat_skill_id, :integer, primary_key: true
-      add :level, :integer
-    end
-    create index :character_combat_skills, [:character_id, :combat_skill_id]
-
-    # character skills
-    create table(:character_skills, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :skill_id, :integer, primary_key: true
-      add :level, :integer
-    end
-    create index :character_skills, [:character_id, :skill_id]
 
     # character traits
     create table(:character_traits) do

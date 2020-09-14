@@ -8,7 +8,7 @@ defmodule DsaWeb.CharacterView do
     ~E"""
     <div class='col'>
       <div class="input-group input-group-sm">
-        <%= label form, field, Atom.to_string(field), class: "input-group-text px-1" %>
+        <%= label form, field, String.upcase(Atom.to_string(field)), class: "input-group-text px-1" %>
         <%= number_input form, field, class: "form-control px-1 text-center" %>
       </div>
     </div>
@@ -18,19 +18,20 @@ defmodule DsaWeb.CharacterView do
   def badge_list(traits), do: Enum.map(traits, & character_trait_badge(&1))
 
   def character_trait_badge(ctrait) do
+    {_id, level, name, _ap, _details, _fixed_ap} = trait(ctrait.trait_id)
     text =
       cond do
-        ctrait.trait.level > 1 && not is_nil(ctrait.details) ->
-          "#{ctrait.trait.name} #{roman(ctrait.level)}: #{ctrait.details}"
+        level > 1 && not is_nil(ctrait.details) ->
+          "#{name} #{roman(ctrait.level)}: #{ctrait.details}"
 
-        ctrait.trait.level > 1 ->
-          "#{ctrait.trait.name} #{roman(ctrait.level)}"
+        level > 1 ->
+          "#{name} #{roman(ctrait.level)}"
 
         not is_nil(ctrait.details) ->
-          "#{ctrait.trait.name}: #{ctrait.details}"
+          "#{name}: #{ctrait.details}"
 
         true ->
-          ctrait.trait.name
+          name
       end
 
     ~E"""
@@ -38,33 +39,33 @@ defmodule DsaWeb.CharacterView do
     """
   end
 
-  def disables(changeset, traits) do
+  def disables(changeset) do
     case get_field(changeset, :trait_id) do
       nil ->
         {true, true, true, []}
 
       id ->
-        trait = Enum.find(traits, & &1.id == id)
-        dis_details = not trait.details
-        dis_level = trait.level < 2
-        dis_ap = trait.fixed_ap
+        {_id, level, _name, ap, details, fixed_ap} = trait(id)
+
+        dis_details = not details
+        dis_level = level < 2
+        dis_ap = fixed_ap
 
         level_options =
           cond do
-            trait.level == -9 -> [{"Hexentricks", -9}]
-            trait.level == -8 -> [{"Stabzauber", -8}]
-            trait.level == -7 -> [{"Segnung", -7}]
-            trait.level == -6 -> [{"Zaubertrick", -6}]
-            trait.level == -5 -> [{"Karmale SF", -5}]
-            trait.level == -4 -> [{"Magische SF", -4}]
-            trait.level == -3 -> [{"Kampf SF", -3}]
-            trait.level == -2 -> [{"Tradition", -2}]
-            trait.level == -1 -> [{"SP SF", -1}]
-            trait.level == 0 -> [{"Allg. SF", 0}]
-            trait.level == 1 && trait.ap > 0 -> [{"Vorteil", 1}]
-            trait.level == 1 && trait.ap < 0 -> [{"Nachteil", 1}]
-            trait.level > 1 ->
-              1..trait.level
+            level == -9 -> [{"Hexentricks", -9}]
+            level == -8 -> [{"Stabzauber", -8}]
+            level == -7 -> [{"Segnung", -7}]
+            level == -6 -> [{"Zaubertrick", -6}]
+            level == -5 -> [{"Karmale SF", -5}]
+            level == -4 -> [{"Magische SF", -4}]
+            level == -3 -> [{"Kampf SF", -3}]
+            level == -1 -> [{"SP SF", -1}]
+            level == 0 -> [{"Allg. SF", 0}]
+            level == 1 && ap > 0 -> [{"Vorteil", 1}]
+            level == 1 && ap < 0 -> [{"Nachteil", 1}]
+            level > 1 ->
+              1..level
               |> Enum.to_list()
               |> Enum.map(& {roman(&1), &1})
           end
@@ -208,6 +209,4 @@ defmodule DsaWeb.CharacterView do
     character_spell_ids = Enum.map(character.character_spells, & &1.spell_id)
     Enum.reject(spell_options(), fn {_name, id} -> Enum.member?(character_spell_ids, id) end)
   end
-
-  def trait_options(traits), do: Enum.map(traits, & {&1.name, &1.id})
 end

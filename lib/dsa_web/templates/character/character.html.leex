@@ -4,11 +4,11 @@
     <%= live_patch "Neu erstellen", to: Routes.page_path(@socket, :create_character), class: "btn btn-primary" %>
   </div>
 
-  <table class='table'>
+  <table class='table table-sm['>
     <thead>
       <tr>
-        <th scope='col'>Name</th>
-        <th scope='col'>Profession</th>
+        <th scope='col'>Held</th>
+        <th scope='col'>Spieler</th>
         <th scope='col'>Gruppe</th>
         <th scope='col' class='text-center'>Aktionen</th>
       </tr>
@@ -17,7 +17,7 @@
       <%= for character <- @characters do %>
         <tr>
           <th scope='row'><%= character.name %></th>
-          <td><%= character.profession %></td>
+          <td><%= character.user.name %></td>
           <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
           <td class='text-center'>
             <%= live_patch icon("edit"), to: Routes.character_path(@socket, :edit, character.id) %>
@@ -66,19 +66,17 @@
     <%# CARD GENERELL ----------------------------------------------------------------------- %>
     <div class="card mb-2">
 
-
       <h5 class="card-header">Generell</h5>
       <div class="card-body">
 
         <div class='row g-2'>
-          <%= label f, :name, "Name / Profession", class: "col-sm-4 col-form-label" %>
+          <%= label f, :name, "Name / Spieler", class: "col-sm-4 col-form-label" %>
           <div class="col-sm-4">
             <%= text_input f, :name, class: "form-control-sm", placeholder: "Name" %>
             <%= error_tag f, :name %>
           </div>
           <div class="col-sm-4">
-            <%= text_input f, :profession, class: "form-control-sm", placeholder: "Profession" %>
-            <%= error_tag f, :profession %>
+            <%= select f, :user_id, @user_options, class: "form-select-sm", default: @user_id, disabled: not @admin? %>
           </div>
         </div>
 
@@ -90,7 +88,6 @@
           </div>
           <div class="col-sm-4">
             <%= select f, :group_id, @group_options, class: "form-select-sm", prompt: "keine Gruppe" %>
-            <%= error_tag f, :gruppe_id %>
           </div>
         </div>
 
@@ -129,10 +126,10 @@
       </div>
       <div class="card-body">
         <div class='row mb-1 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
-          <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset, @traits) %>
+          <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset) %>
           <div class='col-6 '>
             <%= label f, :trait_id, "Vorteil / Nachteil / SF", class: "" %>
-            <%= select(f, :trait_id, trait_options(@traits), prompt: "hinzufügen...", class: "form-select-sm")
+            <%= select(f, :trait_id, trait_options(), prompt: "hinzufügen...", class: "form-select-sm")
             %>
           </div>
           <div class='col-3'>
@@ -199,25 +196,6 @@
           <p><%= badge_list(combat_traits(@changeset.data)) %></p>
         <% end %>
 
-        <%# Traditions %>
-        <%= if @changeset.data.magic_tradition_id do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>
-              Magische Tradition: <%= tradition(@changeset.data.magic_tradition_id, :name) %>
-            </h6>
-            <i><%= tradition(@changeset.data.magic_tradition_id, :ap) %> AP</i>
-          </div>
-        <% end %>
-
-        <%= if @changeset.data.karmal_tradition_id do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>
-              Karmale Tradition: <%= tradition(@changeset.data.karmal_tradition_id, :name) %>
-            </h6>
-            <i><%= tradition(@changeset.data.karmal_tradition_id, :ap) %> AP</i>
-          </div>
-        <% end %>
-
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
           <div class='d-flex justify-content-between'>
@@ -271,21 +249,19 @@
             </tr>
           </thead>
           <tbody>
-          <%= for fs <- inputs_for f, :character_combat_skills do %>
-            <%# character = @form.source.data %>
+          <%= for id <- 1..21 do %>
             <tr>
               <td>
-                <%= hidden_inputs_for fs %>
-                <%= label fs, :level, fs.data.combat_skill.name, class: "col-sm-10" %>
+                <%= label f, String.to_atom("c#{id}"), combat_skill(id, :name), class: "col-sm-10" %>
               </td>
               <td class='text-center'></td>
               <td class='text-center'>
-                <small><em><%= at(@changeset.data, fs.data) %></em></small>
+                <small><em><%= at(@changeset.data, id) %></em></small>
               </td>
               <td class='text-center'>
-                <small><em><%= pa(@changeset.data, fs.data) %></em></small>
+                <small><em><%= pa(@changeset.data, id) %></em></small>
               </td>
-              <td><%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %></td>
+              <td><%= number_input f, String.to_atom("c#{id}"), class: "border-0 col-sm-2 form-control-sm" %></td>
             </tr>
           <% end %>
           </tbody>
@@ -407,22 +383,13 @@
             </tr>
           </thead>
           <tbody>
-            <%= for fs <- inputs_for f, :character_skills do %>
-              <tr class='<%= if fs.data.skill.category != @category, do: "d-none" %>'>
+            <%= for id <- 1..58 do %>
+              <tr class='<%= if skill(id, :category) != @category, do: "d-none" %>'>
+                <td><%= label f, String.to_atom("t#{id}"), skill(id, :name) %></td>
+                <td class='text-center small'><%= skill(id, :probe) %></td>
+                <td class='text-center'><%= be(skill(id, :be)) %></td>
                 <td>
-                  <%= hidden_inputs_for(fs) %>
-                  <%= fs.data.skill.name %>
-                </td>
-                <td class='text-center'>
-                  <small>
-                    <em><%= fs.data.skill.e1 %></em> /
-                    <em><%= fs.data.skill.e2 %></em> /
-                    <em><%= fs.data.skill.e3 %></em>
-                  </small>
-                </td>
-                <td class='text-center'><%= be(fs.data.skill.be) %></td>
-                <td>
-                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                  <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm" %>
                 </td>
               </tr>
             <% end %>
@@ -431,7 +398,7 @@
       </div>
     </div>
 
-    <%= if Enum.find(@changeset.data.character_traits, & &1.trait.name == "Zauberer") do %>
+    <%= if Enum.find(@changeset.data.character_traits, & &1.trait_id == 47) do %>
 
       <div class="card mb-3">
 
@@ -530,7 +497,7 @@
       </div>
     <% end %>
 
-    <%= if Enum.find(@changeset.data.character_traits, & &1.trait.name == "Geweihter") do %>
+    <%= if Enum.find(@changeset.data.character_traits, & &1.trait_id == 12) do %>
 
       <div class="card mb-3">
 

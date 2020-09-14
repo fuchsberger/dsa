@@ -8,26 +8,62 @@ defmodule DsaWeb.CharacterHelpers do
   import DsaWeb.DsaHelpers
 
   def advantages(character) do
-    Enum.filter(character.character_traits, & &1.trait.level > 0 && &1.trait.ap > 0)
+    Enum.filter(character.character_traits, & Enum.member?(1..50, &1.trait_id))
   end
 
   def disadvantages(character) do
-    Enum.filter(character.character_traits, & &1.trait.level > 0 && &1.trait.ap < 0)
+    Enum.filter(character.character_traits, & Enum.member?(51..110, &1.trait_id))
   end
 
-  def general_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == 0)
-  def fate_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -1)
+  def general_traits(c) do
+    Enum.filter(c.character_traits, & Enum.member?(111..146, &1.trait_id))
+  end
 
-  def combat_traits(c), do: Enum.filter(c.character_traits, & &1.trait.level == -3)
-  def staff_spells(c), do: Enum.filter(c.character_traits, & &1.trait.level == -8)
-  def witchcraft(c), do: Enum.filter(c.character_traits, & &1.trait.level == -9)
-  def blessings(c), do: Enum.filter(c.character_traits, & &1.level == -7)
-  def tricks(c), do: Enum.filter(c.character_traits, & &1.level == -6)
+  def fate_traits(c) do
+    Enum.filter(c.character_traits, & Enum.member?(147..152, &1.trait_id))
+  end
+
+  def combat_traits(c) do
+    Enum.filter(c.character_traits, & Enum.member?(153..217, &1.trait_id))
+  end
+
+  def staff_spells(c) do
+    Enum.filter(c.character_traits, & Enum.member?(251..258, &1.trait_id))
+  end
+
+  def witchcraft(c) do
+    Enum.filter(c.character_traits, & Enum.member?(261..262, &1.trait_id))
+  end
+
+  def blessings(c) do
+    Enum.filter(c.character_traits, & Enum.member?(239..250, &1.trait_id))
+  end
+
+  def tricks(c) do
+    Enum.filter(c.character_traits, & Enum.member?(223..234, &1.trait_id))
+  end
 
   def ap(c) do
 
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
     base_values = base_values - 8 * 8 * 15
+
+    combat_skills =
+      combat_fields()
+      |> Enum.map(fn field ->
+          id = Atom.to_string(field) |> String.slice(1, 2) |> String.to_integer()
+          ap_cost(Map.get(c, field), combat_skill(id, :sf))
+        end)
+      |> Enum.sum()
+    combat_skills = combat_skills - 9*12 - 12*18 # start value 6, 9 B talents, 12 C talents
+
+    skills =
+      talent_fields()
+      |> Enum.map(fn field ->
+          id = Atom.to_string(field) |> String.slice(1, 2) |> String.to_integer()
+          ap_cost(Map.get(c, field), skill(id, :sf))
+        end)
+      |> Enum.sum()
 
     species = species(c.species_id, :ap)
     advantages = c |> advantages() |> Enum.map(& &1.ap) |> Enum.sum()
@@ -44,13 +80,9 @@ defmodule DsaWeb.CharacterHelpers do
 
     tricks = Enum.count(tricks(c))
     blessings = Enum.count(blessings(c))
-    skills = Enum.map(c.character_skills, & ap_cost(&1.level, &1.skill.sf)) |> Enum.sum()
+
     staffspells = c |> staff_spells() |> Enum.map(& &1.ap) |> Enum.sum()
     witchcraft = c |> witchcraft() |> Enum.map(& &1.ap) |> Enum.sum()
-
-    combat_skills = Enum.map(c.character_combat_skills, & ap_cost(&1.level, &1.combat_skill.sf))
-    |> Enum.sum()
-    combat_skills = combat_skills - 9*12 - 12*18 # start value 6, 9 B talents, 12 C talents
 
     spells =
       c.character_spells
@@ -96,19 +128,19 @@ defmodule DsaWeb.CharacterHelpers do
     }
   end
 
-  defp trait_level(c, trait) do
-    case Enum.find(c.character_traits, & &1.trait.name == trait) do
+  defp trait_level(c, id) do
+    case Enum.find(c.character_traits, & &1.trait_id == id) do
       nil -> 0
       trait -> trait.level
     end
   end
 
-  defp has_trait?(c, trait) do
-    if Enum.find(c.character_traits, & &1.trait.name == trait), do: true, else: false
+  defp has_trait?(c, id) do
+    if Enum.find(c.character_traits, & &1.trait_id == id), do: true, else: false
   end
 
   def ini(c) do
-    basis = round((Map.get(c, :MU) + Map.get(c, :GE)) / 2)
+    basis = round((c.mu + c.ge) / 2)
     r1 = if has_trait?(c, "Kampfreflexe I"), do: 1, else: 0
     r2 = if has_trait?(c, "Kampfreflexe II"), do: 1, else: 0
     r3 = if has_trait?(c, "Kampfreflexe III"), do: 1, else: 0
@@ -120,7 +152,7 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def aw(c) do
-    basis = round(Map.get(c, :GE) / 2)
+    basis = round(c.ge / 2)
     r1 = if has_trait?(c, "Verbessertes Ausweichen I"), do: 1, else: 0
     r2 = if has_trait?(c, "Verbessertes Ausweichen II"), do: 1, else: 0
     r3 = if has_trait?(c, "Verbessertes Ausweichen III"), do: 1, else: 0
@@ -132,8 +164,8 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def gs(c) do
-    advantages = if has_trait?(c, "Flink"), do: 1, else: 0
-    disadvantages = if has_trait?(c, "Behäbig"), do: 1, else: 0
+    advantages = if has_trait?(c, 9), do: 1, else: 0
+    disadvantages = if has_trait?(c, 54), do: 1, else: 0
     species = species(c.species_id, :ge)
     %{
       Spezies: species,
@@ -145,9 +177,10 @@ defmodule DsaWeb.CharacterHelpers do
 
   def zk(c) do
     species = species(c.species_id, :zk)
-    basis = round((Map.get(c, :KO) * 2 + Map.get(c, :KK)) / 6)
-    advantages = if has_trait?(c, "Hohe Zähigkeit"), do: 1, else: 0
-    disadvantages = if has_trait?(c, "Niedrige Zähigkeit"), do: 1, else: 0
+    basis = round((c.ko * 2 + c.kk) / 6)
+    advantages = if has_trait?(c, 24), do: 1, else: 0
+    disadvantages = if has_trait?(c, 86), do: 1, else: 0
+
     %{
       Spezies: species,
       "(KO+KO+KK)/6": basis,
@@ -159,9 +192,9 @@ defmodule DsaWeb.CharacterHelpers do
 
   def sk(c) do
     species = species(c.species_id, :sk)
-    basis = round((Map.get(c, :MU) + Map.get(c, :KL) + Map.get(c, :IN)) / 6)
-    advantages = if has_trait?(c, "Hohe Seelenkraft"), do: 1, else: 0
-    disadvantages = if has_trait?(c, "Niedrige Seelenkraft"), do: 1, else: 0
+    basis = round((c.mu + c.kl + c.in) / 6)
+    advantages = if has_trait?(c, 23), do: 1, else: 0
+    disadvantages = if has_trait?(c, 85), do: 1, else: 0
     %{
       Spezies: species,
       "(MU+KL+IN)/6": basis,
@@ -172,8 +205,8 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def sp(c) do
-    advantages = trait_level(c, "Glück")
-    disadvantages = trait_level(c, "Pech") * -1
+    advantages = trait_level(c, 14)
+    disadvantages = trait_level(c, 87) * -1
     %{
       Grundwert: 3,
       Glück: advantages,
@@ -184,24 +217,22 @@ defmodule DsaWeb.CharacterHelpers do
 
   def le(c) do
     species = species(c.species_id, :le)
-    ko = 2 * Map.get(c, :KO)
-    bonus = Map.get(c, :le_bonus)
-    lost = Map.get(c, :le_lost)
-    advantages = trait_level(c, "Hohe Lebenskraft")
-    disadvantages = trait_level(c, "Niedrige Lebenskraft") * -1
+    advantages = trait_level(c, 22)
+    disadvantages = trait_level(c, 84) * -1
+
     %{
       Spezies: species,
-      "2 x KO": ko,
+      "2 x KO": 2 * c.ko,
       "Hohe Lebenskraft": advantages,
-      "Perm. verloren": -lost,
+      "Perm. verloren": -c.le_lost,
       "Niedrige Lebenskraft": disadvantages,
-      Zukauf: bonus,
-      total: species + ko + advantages + disadvantages + bonus - lost
+      Zukauf: c.le_bonus,
+      total: species + 2 * c.ko + advantages + disadvantages + c.le_bonus - c.le_lost
     }
   end
 
   def ae(c) do
-    case Enum.find(c.character_traits, & &1.trait.name == "Zauberer") do
+    case Enum.find(c.character_traits, & &1.trait_id == 47) do
       nil ->
         %{total: 0}
 
@@ -215,24 +246,23 @@ defmodule DsaWeb.CharacterHelpers do
               {name, Map.get(c, String.to_atom(name))}
           end
 
-        bonus = Map.get(c, :ae_bonus)
-        advantages = trait_level(c, "Hohe Astralkraft")
-        disadvantages = trait_level(c, "Niedrige Astralkraft") * -1
-        lost = Map.get(c, :ae_lost) - Map.get(c, :ae_back)
+        advantages = trait_level(c, 20)
+        disadvantages = trait_level(c, 82) * -1
+        lost = c.ae_lost - c.ae_back
         %{
           Zauberer: 20,
           "Leiteigenschaft #{name}": value,
           "Hohe Astralkraft": advantages,
           "Niedrige Astralkraft": disadvantages,
           "Perm. verloren": -lost,
-          Zukauf: bonus,
-          total: 20 + value + advantages + disadvantages + bonus - lost
+          Zukauf: c.ae_bonus,
+          total: 20 + value + advantages + disadvantages + c.ae_bonus - lost
         }
     end
   end
 
   def ke(c) do
-    case Enum.find(c.character_traits, & &1.trait.name == "Geweihter") do
+    case Enum.find(c.character_traits, & &1.trait_id == 12) do
       nil ->
         %{ total: 0 }
 
@@ -243,13 +273,12 @@ defmodule DsaWeb.CharacterHelpers do
               {"-", 0}
             id ->
               name = tradition(id, :le)
-              {name, Map.get(c, String.to_atom(name))}
+              {name, Map.get(c, String.downcase(name) |> String.to_atom())}
           end
 
-        bonus = Map.get(c, :ke_bonus)
-        advantages = trait_level(c, "Hohe Karmalkraft")
-        disadvantages = trait_level(c, "Niedrige Karmalkraft") * -1
-        lost = Map.get(c, :ke_lost) - Map.get(c, :ke_back)
+        advantages = trait_level(c, 21)
+        disadvantages = trait_level(c, 83) * -1
+        lost = c.ke_lost - c.ke_back
 
         %{
           Gelehrter: 20,
@@ -257,32 +286,39 @@ defmodule DsaWeb.CharacterHelpers do
           "Hohe Karmalkraft": advantages,
           "Niedrige Karmalkraft": disadvantages,
           "Perm. verloren": -lost,
-          Zukauf: bonus,
-          total: 20 + value + advantages + disadvantages + bonus - lost
+          Zukauf: c.ke_bonus,
+          total: 20 + value + advantages + disadvantages + c.ke_bonus - lost
         }
     end
   end
 
-  def at(c, cskill) do
-    case cskill.combat_skill.ranged do
-      true -> cskill.level + max(0, floor((Map.get(c, :FF) - 8)/3))
-      false -> cskill.level + max(0, floor((Map.get(c, :MU) - 8)/3))
+  def at(c, id) do
+    case combat_skill(id, :ranged) do
+      true -> Map.get(c, String.to_atom("c#{id}")) + max(0, floor((c.ff - 8)/3))
+      false -> Map.get(c, String.to_atom("c#{id}")) + max(0, floor((c.mu - 8)/3))
     end
   end
 
-  def pa(c, cskill) do
+  def pa(c, id) do
     bonus =
       cond do
-        not cskill.combat_skill.parade -> nil
-        cskill.combat_skill.ge && cskill.combat_skill.kk -> max(Map.get(c, :KK), Map.get(c, :GE))
-        cskill.combat_skill.ge -> Map.get(c, :GE)
-        cskill.combat_skill.kk -> Map.get(c, :KK)
+        not combat_skill(id, :parade) -> nil
+        combat_skill(id, :ge) && combat_skill(id, :kk) -> max(c.kk, c.ge)
+        combat_skill(id, :ge) -> c.ge
+        combat_skill(id, :kk) -> c.kk
         true -> nil
       end
     case bonus do
       nil -> nil
-      bonus -> round(cskill.level/2 + max(0, floor((bonus - 8)/3)))
+      bonus -> round(Map.get(c, String.to_atom("c#{id}"))/2 + max(0, floor((bonus - 8)/3)))
     end
+  end
+
+  def probe_values(probe, character) do
+    probe
+    |> String.downcase()
+    |> String.split("/")
+    |> Enum.map(& Map.get(character, String.to_atom(&1)))
   end
 
   def tooltip_text(stat) do

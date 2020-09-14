@@ -239,7 +239,8 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # Vorteile Basiswerk
+    # {id, level, name, ap, details, fixed_ap}
+    # Vorteile
     {1, 3, "Adel", 5, true, true},
     {2, 1, "Altersresistenz", 5, false, true},
     {3, 1, "Angenehmer Geruch", 6, false, true},
@@ -290,7 +291,7 @@ defmodule Dsa.Data do
     {48, 1, "Zeitgefühl", 2, false, true},
     {49, 1, "Zweistimmiger Gesang", 5, false, true},
     {50, 1, "Zwergennase", 8, false, true},
-    # Nachteile Basisregelwerk
+    # Nachteile
     {51, 3, "Angst vor", -8, true, true},
     {52, 3, "Arm", -1, false, true},
     {53, 1, "Artefaktgebunden", -10, false, true},
@@ -648,7 +649,12 @@ defmodule Dsa.Data do
   # combat skills
   def combat_skills, do: :ets.tab2list(:combat_skills)
 
+  def combat_skill(id, :ge), do: :ets.lookup_element(:combat_skills, id, 5)
+  def combat_skill(id, :kk), do: :ets.lookup_element(:combat_skills, id, 6)
   def combat_skill(id, :name), do: :ets.lookup_element(:combat_skills, id, 7)
+  def combat_skill(id, :parade), do: :ets.lookup_element(:combat_skills, id, 4)
+  def combat_skill(id, :ranged), do: :ets.lookup_element(:combat_skills, id, 3)
+  def combat_skill(id, :sf), do: :ets.lookup_element(:combat_skills, id, 2)
 
   # fweapons
   def fweapons, do: :ets.tab2list(:fweapons)
@@ -659,7 +665,11 @@ defmodule Dsa.Data do
   # skills
   def skills, do: :ets.tab2list(:skills)
 
+  def skill(id, :category), do: :ets.lookup_element(:skills, id, 3)
   def skill(id, :name), do: :ets.lookup_element(:skills, id, 5)
+  def skill(id, :probe), do: :ets.lookup_element(:skills, id, 4)
+  def skill(id, :sf), do: :ets.lookup_element(:skills, id, 2)
+  def skill(id, :be), do: :ets.lookup_element(:skills, id, 6)
 
   # Prayers
   def prayers, do: :ets.tab2list(:prayers)
@@ -731,4 +741,15 @@ defmodule Dsa.Data do
 
   # traits
   def traits, do: :ets.tab2list(:traits)
+
+  def trait(id) do
+    case :ets.lookup(:traits, id) do
+      [] -> nil
+      [data] -> data
+    end
+  end
+
+  def trait_options do
+    Enum.map(traits(), fn {id, _level, name, _ap, _details, _fixed_ap} -> {name, id} end)
+  end
 end

@@ -43,9 +43,6 @@ defmodule Dsa.Repo.Migrations.CreateEvents do
       add :t1, :integer
       add :t2, :integer
       add :t3, :integer
-      add :e1, :string, size: 2
-      add :e2, :string, size: 2
-      add :e3, :string, size: 2
       add :modifier, :integer
       add :be, :integer
       add :character_id, references(:characters, on_delete: :delete_all)

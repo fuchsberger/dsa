@@ -2,7 +2,6 @@ defmodule Dsa.Event.TalentRoll do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Dsa.Lists
 
   schema "talent_rolls" do
 
@@ -13,9 +12,7 @@ defmodule Dsa.Event.TalentRoll do
     field :t1, :integer
     field :t2, :integer
     field :t3, :integer
-    field :e1, :string
-    field :e2, :string
-    field :e3, :string
+
     field :modifier, :integer, default: 0
     field :be, :integer
     field :skill_id, :integer
@@ -26,19 +23,20 @@ defmodule Dsa.Event.TalentRoll do
     timestamps()
   end
 
-  @fields ~w(skill_id character_id group_id level w1 w2 w3 t1 t2 t3 e1 e2 e3 modifier be)a
+  @fields ~w(skill_id character_id group_id level w1 w2 w3 t1 t2 t3 modifier be)a
   def changeset(roll, attrs) do
     roll
     |> cast(attrs, @fields)
     |> validate_required(@fields)
-    |> validate_inclusion(:e1, base_value_options())
-    |> validate_inclusion(:e2, base_value_options())
-    |> validate_inclusion(:e3, base_value_options())
+    |> validate_number(:w1, greater_than_or_equal_to: 1, less_than_or_equal_to: 20)
+    |> validate_number(:w2, greater_than_or_equal_to: 1, less_than_or_equal_to: 20)
+    |> validate_number(:w3, greater_than_or_equal_to: 1, less_than_or_equal_to: 20)
     |> validate_number(:t1, greater_than: 5)
     |> validate_number(:t2, greater_than: 5)
     |> validate_number(:t3, greater_than: 5)
     |> validate_number(:modifier, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
     |> validate_number(:be, greater_than_or_equal_to: 0)
+    |> validate_number(:skill_id, greater_than: 0, less_than_or_equal_to: 58)
     |> foreign_key_constraint(:character_id)
     |> foreign_key_constraint(:group_id)
   end

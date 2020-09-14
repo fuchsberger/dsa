@@ -2,8 +2,9 @@
 
 <li id='log-talent-roll-<%= @roll.id %>' class="list-group-item">
   <p class='mb-0'>
-    <span class="badge bg-secondary"><%= @roll.character.name %></span> hat eine <span class="badge bg-secondary"><%= @roll.trait %></span>
-    <%= modifier_badge(@roll.modifier) %> Probe <%= result_text(res, critical) %>
+    <span class="badge bg-secondary">
+      <%= @roll.character.name %></span> hat eine
+      <span class="badge bg-secondary<%= if @roll.modifier != 0, do: " rounded-0 rounded-left" %>"><%= String.upcase(@roll.trait) %></span><%= modifier_badge(@roll.modifier) %> Probe <%= result_text(res, critical) %>
   </p>
   <%= if @show_details? do %>
     <small>

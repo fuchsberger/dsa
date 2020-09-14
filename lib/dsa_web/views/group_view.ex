@@ -15,22 +15,16 @@ defmodule DsaWeb.GroupView do
 
   def badge(:quality, _res, _critical), do: ""
 
-  def badge(:roll, name, modifier) do
-    [
-      content_tag(:span, name, class: "badge bg-secondary rounded-0 rounded-left"),
-      content_tag(:span, modifier, class: "badge bg-info rounded-0 rounded-right"),
-    ]
-  end
+  def modifier_badge(0), do: ""
 
   def modifier_badge(modifier) do
     {color, symbol} =
       cond do
-        modifier == 0 -> {"secondary", "+"}
         modifier < 0 -> {"danger", ""}
         modifier > 0 -> {"success", "+"}
       end
 
-    content_tag(:span, "#{symbol}#{modifier}", class: "badge bg-#{color}")
+    content_tag(:span, "#{symbol}#{modifier}", class: "rounded-0 rounded-right badge bg-#{color}")
   end
 
   def character(assigns) do
@@ -95,11 +89,10 @@ defmodule DsaWeb.GroupView do
     end
   end
 
-  def routine_possible?(character, cskill, modifier) do
-    t1 = Map.get(character, String.to_atom(cskill.skill.e1))
-    t2 = Map.get(character, String.to_atom(cskill.skill.e1))
-    t3 = Map.get(character, String.to_atom(cskill.skill.e1))
-    fw = cskill.level
+  def routine_possible?(character, skill_id, modifier) do
+    probe = skill(skill_id, :probe)
+    [t1, t2, t3] = probe_values(probe, character)
+    fw = Map.get(character, String.to_atom("t#{skill_id}"))
 
     cond do
       Enum.min([t1, t2, t3]) < 13 -> {false, nil}

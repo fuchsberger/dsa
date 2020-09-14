@@ -4,7 +4,7 @@ defmodule Dsa.Event.Setting do
   import Ecto.Changeset
 
   embedded_schema do
-    field :type, :string, default: "Eigenschaft"
+    field :type, :integer, default: 0
     field :dice_count, :integer, default: 3
     field :dice_type, :integer, default: 20
     field :dice_hidden, :boolean, default: false
@@ -19,6 +19,6 @@ defmodule Dsa.Event.Setting do
     |> cast(attrs, @fields)
     |> validate_required(@fields)
     |> validate_number(:modifier, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
-    |> validate_inclusion(:type, ["Eigenschaft", "Körper", "Natur", "Gesellschaft", "Wissen", "Handwerk"])
+    |> validate_number(:type, greater_than_or_equal_to: 0, less_than_or_equal_to: 5)
   end
 end

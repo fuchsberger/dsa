@@ -18,22 +18,22 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:traits, traits())
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
+    |> assign(:user_options, Accounts.list_user_options())
     |> assign(:spell_options, spell_options())
     |> assign(:prayer_options, prayer_options())
     |> assign(:magic_tradition_options, tradition_options(:magic))
     |> assign(:karmal_tradition_options, tradition_options(:karmal))
-    |> assign(:user_id, user_id)}
+    |> assign(:user_id, user_id)
+    |> assign(:admin?, Accounts.admin?(user_id))}
   end
 
   def handle_params(params, _session, socket) do
-    user_id = socket.assigns.user_id
-
     case socket.assigns.live_action do
       :index ->
-        {:noreply, assign(socket, :characters, Accounts.list_user_characters(user_id))}
+        {:noreply, assign(socket, :characters, Accounts.list_characters())}
 
       :edit ->
-        case Accounts.get_user_character!(user_id, Map.get(params, "character_id")) do
+        case Accounts.get_character!(Map.get(params, "character_id")) do
           nil ->
             {:noreply, push_redirect(socket, to: Routes.character_path(socket, :index))}
 
@@ -110,18 +110,19 @@ defmodule DsaWeb.CharacterLive do
             {:noreply, socket}
         end
 
+      # a trait is being added...
       not is_nil(trait_id) ->
-        trait = Enum.find(socket.assigns.traits, & &1.id == trait_id)
+        {_id, level, _name, ap, details, fixed_ap} = trait(trait_id)
 
-        trait_details = if trait.details, do: params |> Map.get("trait_details"), else: ""
+        trait_details = if details, do: params |> Map.get("trait_details"), else: ""
 
         trait_level =
           params
-          |> Map.get("trait_level", Integer.to_string(min(1, trait.level)))
+          |> Map.get("trait_level", Integer.to_string(min(1, level)))
           |> String.to_integer()
 
-        trait_ap = case trait.fixed_ap do
-          true -> if trait_level > 1, do: trait.ap * trait_level, else: trait.ap
+        trait_ap = case fixed_ap do
+          true -> if trait_level > 1, do: ap * trait_level, else: ap
           false -> Map.get(params, "trait_ap")
         end
 

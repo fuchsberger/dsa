@@ -7,7 +7,6 @@
         <%= unless is_nil(@character), do: content_tag :th, "", scope: "col" %>
         <th scope='col'>INI</th>
         <th scope='col'>Charakter</th>
-        <th scope='col'>Profession</th>
         <th scope='col'>Player</th>
       </tr>
     </thead>
@@ -26,7 +25,6 @@
             <% end %>
             <td><%= if character.ini == 0, do: "-", else: character.ini %></td>
             <td><%= character.name %></td>
-            <td><%= character.profession %></td>
             <td><%= character.user.name %></td>
           </tr>
         <% end %>
@@ -142,14 +140,12 @@
 
 
             <div class='col-lg-5'>
-              <%= select f, :type, [
-                  "Eigenschaft"
-                  | Enum.map(@character.data.character_skills, & &1.skill.category) |> Enum.uniq()
-                ], class: "form-select-sm" %>
+              <%= select f, :type, Enum.with_index(["Eigenschaft" | talent_categories()]),
+                class: "form-select-sm" %>
             </div>
           </div>
 
-          <%= if get_field(@settings, :type) == "Eigenschaft" do %>
+          <%= if get_field(@settings, :type) == 0 do %>
             <table class="table table-sm m-0 table-hover">
               <thead>
                 <tr>
@@ -160,10 +156,10 @@
                 </tr>
               </thead>
               <tbody>
-                <%= for {short, name} <- [{:MU, "Mut"}, {:KL, "Klugheit"}, {:IN, "Intuition"}, {:CH, "Charisma"}, {:FF, "Fingerfertigkeit"}, {:GE, "Gewandheit"}, {:KO, "Konstitution"}, {:KK, "Körperkraft"}] do %>
+                <%= for {short, name} <- [{:mu, "Mut"}, {:kl, "Klugheit"}, {:in, "Intuition"}, {:ch, "Charisma"}, {:ff, "Fingerfertigkeit"}, {:ge, "Gewandheit"}, {:ko, "Konstitution"}, {:kk, "Körperkraft"}] do %>
                   <tr>
                     <th scope='row'><%= name %></th>
-                    <td class='text-center'><%= short %></td>
+                    <td class='text-center'><%= Atom.to_string(short) |> String.upcase() %></td>
                     <td class='text-center'><%= Map.get(@character.data, short) %></td>
                     <td class='text-center'>
                       <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' type='button' phx-value-trait='<%= short %>'></button>
@@ -185,21 +181,19 @@
                 </tr>
               </thead>
               <tbody>
-                <%= for cskill <- Enum.filter(@character.data.character_skills, & &1.skill.category == get_field(@settings, :type)) |> Enum.sort_by(& &1.skill.name) do %>
-                  <tr>
-                    <th scope='row'><%= cskill.skill.name %></th>
+                <%= for {id, sf, category, probe, name, be} <- skills() do %>
+                  <tr class='<%= if category != get_field(@settings, :type), do: "d-none" %>'>
+                    <th scope='row'><%= name %></th>
+                    <td class='text-center'><small><%= probe %></small></td>
                     <td class='text-center'>
-                      <small>
-                      <%= cskill.skill.e1 %>/<%= cskill.skill.e2 %>/<%= cskill.skill.e3 %>
-                      </small>
+                      <%= Map.get(@character.data, String.to_atom("t#{id}")) %>
                     </td>
-                    <td class='text-center'><%= cskill.level %></td>
 
                     <%# Routine %>
                     <td class='text-center'>
-                      <% {allowed?, val} = routine_possible?(@character.data, cskill, get_field(@settings, :modifier)) %>
+                      <% {allowed?, val} = routine_possible?(@character.data, id, get_field(@settings, :modifier)) %>
                       <%= if allowed? do %>
-                        <button class='btn btn-light text-success btn-sm py-0' type='button' phx-click='routine' phx-value-talent='<%= cskill.skill.id %>'><strong> <%= "Q#{val}" %></strong></button>
+                        <button class='btn btn-light text-success btn-sm py-0' type='button' phx-click='routine' phx-value-talent='<%= id %>'><strong> <%= "Q#{val}" %></strong></button>
                       <% else %>
                         <%= val %>
                       <% end %>
@@ -207,25 +201,26 @@
 
                     <%# Roll without BE %>
                     <td class='text-center'>
-                      <%= unless cskill.skill.be do %>
+                      <%= unless skill(id, :be) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
-                          phx-click='talent-roll'
                           type='button'
+                          phx-click='talent-roll'
                           phx-value-be='false'
-                          phx-value-talent='<%= cskill.skill.id %>'
+                          phx-value-talent='<%= id %>'
                         ></button>
                       <% end %>
                     </td>
 
                     <%# Roll with BE %>
                     <td class='text-center'>
-                      <%= if cskill.skill.be || is_nil(cskill.skill.be) do %>
+                      <%= if skill(id, :be) || is_nil(skill(id, :be)) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
+                          type='button'
                           phx-click='talent-roll'
                           phx-value-be='true'
-                          phx-value-talent='<%= cskill.skill.id %>'
+                          phx-value-talent='<%= id %>'
                         ></button>
                       <% end %>
                     </td>
