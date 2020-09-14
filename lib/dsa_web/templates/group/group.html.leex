@@ -212,7 +212,7 @@
   <% end %>
 
   <div class='col-lg'>
-    <%= render DsaWeb.CharacterView, "stats_card.html", assigns %>
+    <%= unless is_nil(@changeset), do: render DsaWeb.CharacterView, "stats_card.html", assigns %>
 
     <%# Log %>
     <div class="card mb-3">

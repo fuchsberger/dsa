@@ -2,6 +2,7 @@ defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
   import Dsa.Lists
+  import DsaWeb.CharacterHelpers
 
   alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer}
 
@@ -36,7 +37,15 @@ defmodule Dsa.Accounts.Character do
     field :ke_back, :integer, default: 0
 
     # overwrites
-    field :ini, :integer, default: 0
+    field :le, :integer
+    field :ke, :integer
+    field :ae, :integer
+    field :sk, :integer
+    field :zk, :integer
+    field :ini, :integer
+    field :gs, :integer
+    field :aw, :integer
+    field :sp, :integer
 
     # ets relations
     field :species_id, :integer, default: 1
@@ -107,12 +116,39 @@ defmodule Dsa.Accounts.Character do
     end)
   end
 
-  @required ~w()a
-  @optional ~w(ini)a
+  @optional ~w(le ae ke sk zk gs aw sp ini)a
   def combat_changeset(character, attrs) do
+    le = le(character)
+    ae = ae(character)
+    ke = ke(character)
+    sk = sk(character)
+    zk = zk(character)
+    ini = ini(character)
+    gs = gs(character)
+    aw = aw(character)
+    sp = sp(character)
+
     character
-    |> cast(attrs, @required ++ @optional)
-    |> validate_required(@required)
-    |> validate_number(:ini, greater_than_or_equal_to: 0)
+    |> cast(attrs, @optional)
+    |> set_default_value(:le, le.total)
+    |> set_default_value(:ae, ae.total)
+    |> set_default_value(:ke, ke.total)
+    |> set_default_value(:sk, sk.total)
+    |> set_default_value(:zk, zk.total)
+    |> set_default_value(:gs, gs.total)
+    |> set_default_value(:aw, aw.total)
+    |> set_default_value(:sp, sp.total)
+    |> validate_number(:le, less_than_or_equal_to: le.total)
+    |> validate_number(:ae, greater_than_or_equal_to: 0, less_than_or_equal_to: ae.total)
+    |> validate_number(:ke, greater_than_or_equal_to: 0, less_than_or_equal_to: ae.total)
+    |> validate_number(:ini, greater_than_or_equal_to: ini.total, less_than_or_equal_to: ini.total + 6)
+    |> validate_number(:sp, greater_than_or_equal_to: 0, less_than_or_equal_to: sp.total)
+  end
+
+  defp set_default_value(changeset, field, default) do
+    case get_field(changeset, field) do
+      nil -> put_change(changeset, field, default)
+      _value -> changeset
+    end
   end
 end

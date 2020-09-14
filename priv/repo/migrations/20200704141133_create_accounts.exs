@@ -49,7 +49,15 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :ke_back, :integer
 
       # overwrites
+      add :le, :integer
+      add :ke, :integer
+      add :ae, :integer
+      add :sk, :integer
+      add :zk, :integer
       add :ini, :integer
+      add :gs, :integer
+      add :aw, :integer
+      add :sp, :integer
 
       # ets relations
       add :species_id, :integer

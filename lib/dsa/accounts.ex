@@ -95,8 +95,7 @@ defmodule Dsa.Accounts do
   def create_character(%User{} = user) do
     case (
       %Character{}
-      |> Character.changeset(%{name: "Held", species_id: 1, user_id: user.id})
-      |> Character.combat_changeset(%{})
+      |> Character.changeset(%{name: "Held", species_id: 1, user_id: user.id, group_id: 1})
       |> Repo.insert()
     ) do
       {:ok, %Character{id: id}} ->
