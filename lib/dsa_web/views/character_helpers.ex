@@ -141,11 +141,11 @@ defmodule DsaWeb.CharacterHelpers do
 
   def ini(c) do
     basis = round((c.mu + c.ge) / 2)
-    r1 = if has_trait?(c, "Kampfreflexe I"), do: 1, else: 0
-    r2 = if has_trait?(c, "Kampfreflexe II"), do: 1, else: 0
-    r3 = if has_trait?(c, "Kampfreflexe III"), do: 1, else: 0
+    r1 = if has_trait?(c, 168), do: 1, else: 0
+    r2 = if has_trait?(c, 169), do: 1, else: 0
+    r3 = if has_trait?(c, 170), do: 1, else: 0
     %{
-      Basis: basis,
+      "(MU+GE)/2": basis,
       Kampfreflexe: r1 + r2 + r3,
       total: basis + r1 + r2 + r3
     }
@@ -153,11 +153,11 @@ defmodule DsaWeb.CharacterHelpers do
 
   def aw(c) do
     basis = round(c.ge / 2)
-    r1 = if has_trait?(c, "Verbessertes Ausweichen I"), do: 1, else: 0
-    r2 = if has_trait?(c, "Verbessertes Ausweichen II"), do: 1, else: 0
-    r3 = if has_trait?(c, "Verbessertes Ausweichen III"), do: 1, else: 0
+    r1 = if has_trait?(c, 190), do: 1, else: 0
+    r2 = if has_trait?(c, 191), do: 1, else: 0
+    r3 = if has_trait?(c, 192), do: 1, else: 0
     %{
-      Basis: basis,
+      "GE/2": basis,
       "Verbessertes Ausweichen": r1 + r2 + r3,
       total: basis + r1 + r2 + r3
     }

@@ -1,5 +1,9 @@
+<div id='group-live' phx-hook='tooltip'>
+<%= f = form_for :character, "#",
+  phx_change: "select_character",
+  phx_submit: nil
+%>
 
-<%= f = form_for :character, "#", phx_change: "select_character", phx_submit: nil %>
 <div class="table-responsive">
   <table class="table table-xs table-hover">
     <thead>
@@ -58,17 +62,17 @@
 
 
             <div class="row g-1">
-              <% ini = ini(@character) %>
+              <% ini = ini(@character.data) %>
               <div class="col-1">
                 <strong><%= label f, :ini, "INI" %></strong>
               </div>
-              <div id='ini-wrapper' class="col-1" phx-update='ignore'>
+              <div class="col-1">
                 <span
                   id='ini'
                   class="badge bg-secondary"
                   data-html='true'
-                  phx-hook='tooltip'
-                  title='Basis <span class="badge bg-info"><%= ini.basis %></span>'
+                  data-toggle='tooltip'
+                  title='<%= tooltip_text(ini) %>'
                 ><%= ini.total %></span>
               </div>
               <div class="col-2">
@@ -79,16 +83,19 @@
                   <button
                     type='button'
                     id='roll-ini'
-                    class='btn btn-light'
+                    class='btn btn-light icon-roll'
+                    data-toggle='tooltip'
+                    title='Roll INI Basis + 1W6'
                     phx-click='roll-ini'
-                    phx-value-ini='<%= ini.total %>'
-                  ><i class='icon-roll'></i></button>
+                  ></button>
                   <button
                     type='button'
                     id='reset-ini'
-                    class='btn btn-light'
+                    class='btn btn-light icon-cancel'
+                    data-toggle='tooltip'
+                    title='Kampf verlassen'
                     phx-click='reset-ini'
-                  ><i class='icon-cancel'></i></button>
+                  ></button>
                 </div>
               </div>
             </div>
@@ -280,4 +287,5 @@
       </ul>
     </div>
   </div>
+</div>
 </div>

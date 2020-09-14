@@ -229,8 +229,8 @@ defmodule DsaWeb.GroupLive do
     end
   end
 
-  def handle_event("roll-ini", %{"ini" => ini}, socket) do
-    ini = String.to_integer(ini) + Enum.random(1..6)
+  def handle_event("roll-ini", _params, socket) do
+    ini = ini(socket.assigns.character.data).total + Enum.random(1..6)
     case Accounts.update_character(socket.assigns.character.data, %{ini: ini}, :combat) do
       {:ok, character} ->
         character = Accounts.preload(character)
