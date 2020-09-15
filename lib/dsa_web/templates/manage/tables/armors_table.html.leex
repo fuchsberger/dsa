@@ -10,14 +10,14 @@
     </tr>
   </thead>
   <tbody>
-    <%= for armor <- @entries do %>
+    <%= for {id, name, rs, be, stability, penalties} <- @entries do %>
       <tr>
-        <td class='text-center'><%= armor.id %></td>
-        <th scope='row'><%= armor.name %></th>
-        <td class='text-center'><%= armor.rs %></td>
-        <td class='text-center'><%= armor.be %></td>
-        <td class='text-center'><%= armor.sw %></td>
-        <td class='text-center'><%= if armor.penalties, do: "-1 GS, -1 INI", else: "-" %></td>
+        <td class='text-center'><%= id %></td>
+        <th scope='row'><%= name %></th>
+        <td class='text-center'><%= rs %></td>
+        <td class='text-center'><%= be %></td>
+        <td class='text-center'><%= stability %></td>
+        <td class='text-center'><%= if penalties, do: content_tag(:span, "-1 GS, -1 INI", class: "badge bg-warning text-dark"), else: "-" %></td>
       </tr>
     <% end %>
   </tbody>

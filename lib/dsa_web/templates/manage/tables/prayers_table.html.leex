@@ -1,32 +1,19 @@
 <table class='table table-sm'>
   <thead>
     <tr>
-      <th scope='col'>Name</th>
-      <th scope='col' class='text-center'>Type</th>
+      <th scope='col'>Liturgie / Zeremonie</th>
       <th scope='col' class='text-center'>Probe</th>
       <th scope='col' class='text-center'>SF</th>
       <th scope='col'>Verbreitung</th>
     </tr>
   </thead>
   <tbody>
-    <%= for cast <- @entries do %>
+    <%= for {_id, sf, probe, name, traditions} <- @entries do %>
       <tr>
-        <th scope='row'><%= cast.name %></th>
-        <td class='text-center'>
-          <%=
-            case cast.type do
-              1 -> "Zauber"
-              2 -> "Ritual"
-              3 -> "Liturgie"
-              4 -> "Zeremonie"
-            end
-          %>
-        </td>
-        <td class='text-center'>
-          <small><%= cast.e1 %>/<%= cast.e2 %>/<%= cast.e3 %></small>
-        </td>
-        <td class='text-center'><%= cast.sf %></td>
-        <td><%= Enum.map(cast.traditions, & &1.name) |> Enum.join(", ") %></td>
+        <th scope='row'><%= name %></th>
+        <td class='text-center'><small><%= probe %></small></td>
+        <td class='text-center'><%= sf %></td>
+        <td><%= Enum.map(traditions, & tradition(&1, :name)) |> Enum.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>

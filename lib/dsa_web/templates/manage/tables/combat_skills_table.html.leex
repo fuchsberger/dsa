@@ -11,15 +11,15 @@
     </tr>
   </thead>
   <tbody>
-    <%= for skill <- @entries do %>
+    <%= for {id, sf, ranged, parade, ge, kk, name, stability} <- @entries do %>
       <tr>
-        <td class='text-center'><%= skill.id %></td>
-        <th scope='row'><%= skill.name %></th>
-        <%= check_cell :skill, :ranged, skill.ranged %>
-        <%= check_cell :skill, :parade, skill.parade %>
+        <td class='text-center'><%= id %></td>
+        <th scope='row'><%= name %></th>
+        <%= check_cell :skill, :ranged, ranged %>
+        <%= check_cell :skill, :parade, parade %>
         <td class='text-center'>
           <%=
-            case {skill.ge, skill.kk} do
+            case {ge, kk} do
               {true, true} -> "GE/KK"
               {true, false} -> "GE"
               {false, true} -> "KK"
@@ -27,8 +27,8 @@
             end
           %>
         </td>
-        <td class='text-center'><%= skill.bf %></td>
-        <td class='text-center'><%= skill.sf %></td>
+        <td class='text-center'><%= stability %></td>
+        <td class='text-center'><%= sf %></td>
       </tr>
     <% end %>
   </tbody>

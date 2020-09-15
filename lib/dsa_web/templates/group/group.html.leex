@@ -156,7 +156,7 @@
                 </tr>
               </thead>
               <tbody>
-                <%= for {id, sf, category, probe, name, be} <- skills() do %>
+                <%= for {id, _sf, category, probe, name, _be} <- skills() do %>
                   <tr class='<%= if category != get_field(@settings, :type), do: "d-none" %>'>
                     <th scope='row'><%= name %></th>
                     <td class='text-center'><small><%= probe %></small></td>

@@ -9,7 +9,6 @@
   <div class="card-body">
     <div class='row g-1'>
       <div class='col'>
-        <% le = le(@changeset.data) %>
         <div class='input-group input-group-sm'>
           <%= label f, :le, "LE", class: "input-group-text px-1" %>
           <%= number_input f, :le, class: "form-control px-1 text-center" %>
@@ -38,7 +37,6 @@
       </div>
 
       <div class='col'>
-        <% sk = sk(@changeset.data) %>
         <div class='input-group input-group-sm'>
           <%= label f, :sk, "SK", class: "input-group-text px-1" %>
           <%= number_input f, :sk, class: "form-control px-1 text-center" %>
@@ -55,7 +53,6 @@
       </div>
 
       <div class='col'>
-        <% gs = gs(@changeset.data) %>
         <div class='input-group input-group-sm'>
           <%= label f, :gs, "GS", class: "input-group-text px-1" %>
           <%= number_input f, :gs, class: "form-control px-1 text-center" %>
@@ -63,7 +60,6 @@
       </div>
 
       <div class='col'>
-        <% aw = aw(@changeset.data) %>
         <div class='input-group input-group-sm'>
           <%= label f, :aw, "AW", class: "input-group-text px-1" %>
           <%= number_input f, :aw, class: "form-control px-1 text-center" %>
@@ -71,7 +67,6 @@
       </div>
 
       <div class='col'>
-        <% sp = sp(@changeset.data) %>
         <div class='input-group input-group-sm'>
           <%= label f, :sp, "SP", class: "input-group-text px-1" %>
           <%= number_input f, :sp, class: "form-control px-1 text-center" %>

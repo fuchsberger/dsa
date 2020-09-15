@@ -11,15 +11,15 @@
     </tr>
   </thead>
   <tbody>
-    <%= for weapon <- Enum.reject(@entries, & &1.combat_skill.ranged) do %>
+    <%= for {id, combat_skill_id, name, tp_dice, tp_bonus, ge, kk, ls, at_mod, pa_mod, rw} <- @entries do %>
       <tr>
-        <td class='text-center'><%= weapon.id %></td>
-        <th scope='row'><%= weapon.name %></th>
-        <td><%= weapon.combat_skill.name %></td>
-        <td class='text-center'><%= "#{weapon.tp_dice}W+#{weapon.tp_bonus}" %></td>
+        <td class='text-center'><%= id %></td>
+        <th scope='row'><%= name %></th>
+        <td><%= combat_skill(combat_skill_id, :name) %></td>
+        <td class='text-center'><%= "#{tp_dice}W+#{tp_bonus}" %></td>
         <td class='text-center'>
           <%=
-            case weapon.rw do
+            case rw do
               1 -> "Kurz"
               2 -> "Mittel"
               3 -> "Lang"
@@ -28,16 +28,16 @@
         </td>
         <td class='text-center'>
           <%=
-            case {weapon.ge, weapon.kk} do
+            case {ge, kk} do
               {true, true} -> "GE/KK "
               {false, true} -> "KK "
               {true, false} -> "GE "
               {false, false} -> "FF "
             end
           %>
-          <%= weapon.ls %>
+          <%= ls %>
         </td>
-        <td class='text-center'><%= "#{weapon.at_mod}/#{weapon.pa_mod}" %></td>
+        <td class='text-center'><%= "#{at_mod}/#{pa_mod}" %></td>
       </tr>
     <% end %>
   </tbody>

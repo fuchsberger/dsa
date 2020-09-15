@@ -23,6 +23,12 @@ defmodule DsaWeb.Router do
     post "/login", SessionController, :create
     delete "/:id", SessionController, :delete
 
+    live "/armors", ManageLive, :armors
+    live "/combat_skills", ManageLive, :combat_skills
+    live "/mweapons", ManageLive, :mweapons
+    live "/fweapons", ManageLive, :fweapons
+    live "/traits", ManageLive, :traits
+    live "/skills", ManageLive, :skills
     live "/spells", ManageLive, :spells
     live "/prayers", ManageLive, :prayers
     live "/traditions", ManageLive, :traditions
@@ -40,14 +46,7 @@ defmodule DsaWeb.Router do
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll
 
-    live "/manage/armors", ManageLive, :armors
-
-    live "/manage/combat_skills", ManageLive, :combat_skills
-    live "/manage/traits", ManageLive, :traits
-    live "/manage/skills", ManageLive, :skills
     live "/manage/groups", ManageLive, :groups
     live "/manage/users", ManageLive, :users
-    live "/manage/mweapons", ManageLive, :mweapons
-    live "/manage/fweapons", ManageLive, :fweapons
   end
 end

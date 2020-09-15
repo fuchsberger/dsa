@@ -10,14 +10,14 @@
     </tr>
   </thead>
   <tbody>
-    <%= for weapon <- Enum.filter(@entries, & &1.combat_skill.ranged) do %>
+    <%= for {id, combat_skill_id, name, tp_dice, tp_bonus, rw1, rw2, rw3, lz} <- @entries do %>
       <tr>
-        <td class='text-center'><%= weapon.id %></td>
-        <th scope='row'><%= weapon.name %></th>
-        <td><%= weapon.combat_skill.name %></td>
-        <td class='text-center'><%= "#{weapon.tp_dice}W+#{weapon.tp_bonus}" %></td>
-        <td class='text-center'><%= "#{weapon.rw1}/#{weapon.rw2}/#{weapon.rw3}" %></td>
-        <td class='text-center'><%= weapon.lz %></td>
+        <td class='text-center'><%= id %></td>
+        <th scope='row'><%= name %></th>
+        <td><%= combat_skill(combat_skill_id, :name) %></td>
+        <td class='text-center'><%= "#{tp_dice}W+#{tp_bonus}" %></td>
+        <td class='text-center'><%= "#{rw1}/#{rw2}/#{rw3}" %></td>
+        <td class='text-center'><%= lz %></td>
       </tr>
     <% end %>
   </tbody>
