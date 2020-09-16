@@ -1,17 +1,42 @@
 defmodule Dsa.Data.Language do
 
+  use Phoenix.HTML
+
   @table :languages
 
   def count, do: 27
   def list, do: :ets.tab2list(@table)
 
-  def options do
-    Enum.map(list(), fn {id, name, _dialects, _writings, _description} -> {name, id} end)
+  def get(id), do: :ets.lookup(@table, id) |> List.first()
+
+  def options(clanguages) do
+    list()
+    |> Enum.map(fn {id, name, _dialects, _writings, _description} -> {name, id} end)
+    |> Enum.reject(fn {_name, id} -> Enum.member?(Enum.map(clanguages, & &1.language_id), id) end)
   end
 
-  def level_options, do: [{"MS", 4}, {"III", 3}, {"II", 2}, {"I", 1}]
+  def level(level) do
+    case level do
+      1 -> "I"
+      2 -> "II"
+      3 -> "III"
+      0 -> "MS"
+    end
+  end
+
+  def level_options, do: [{"MS", 0}, {"III", 3}, {"II", 2}, {"I", 1}]
 
   def name(id), do: :ets.lookup_element(@table, id, 2)
+
+  def tooltip(id) do
+    {_id, _name, dialects, writings, description} = get(id)
+
+    ~E"""
+    <p class="small mb-1"><%= description %></p>
+    <p class="small mb-1"><strong>Dialekte:</strong> <%= dialects || "keine" %></p>
+    <p class="small mb-0"><strong>Schriften:</strong> <%= writings || "schriftlos" %></p>
+    """
+  end
 
   def seed do
     :ets.new(@table , [:ordered_set, :protected, :named_table])

@@ -1,11 +1,32 @@
 <div class='d-flex justify-content-between'>
-  <h6 class='mb-0'>Sprachen</h6>
-  <i>? AP</i>
+  <h6 class='mb-0'>
+    <button
+      class='btn btn-sm btn-link p-0'
+      phx-click='toggle'
+      phx-value-edit='languages'
+      type='button'
+    ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
+    Sprachen
+  </h6>
+  <i><%= @ap %> AP</i>
 </div>
 <hr class='my-1'>
 
+<p class='<%= if @edit?, do: " d-none" %>'>
+  <%= for fs <- inputs_for(@f, :character_languages) do %>
+    <% id = input_value(fs, :language_id) %>
+    <span
+      class="badge bg-light text-dark"
+      data-html='true'
+      data-toggle='popover'
+      data-trigger='hover'
+      data-placement="bottom"
+      data-content='<%= Language.tooltip(fs.data.language_id) %>'
+    ><%= Language.name(id) %>: <%= Language.level(input_value(fs, :level)) %></span>
+  <% end %>
+</p>
 
-<table class='table table-sm'>
+<table class='table table-sm<%= unless @edit?, do: " d-none" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
@@ -14,8 +35,24 @@
   </thead>
   <tbody>
   <%= for fs <- inputs_for(@f, :character_languages) do %>
+    <% id = input_value(fs, :language_id) %>
     <tr>
-      <th scope='row'><%= Language.name(fs.data.language_id) %></th>
+      <th scope='row'>
+        <span
+          data-html='true'
+          data-toggle='popover'
+          data-trigger='hover'
+          data-placement="right"
+          data-content='<%= Language.tooltip(id) %>'
+        ><%= Language.name(id) %></span>
+        <button
+          type='button'
+          class='btn btn-link btn-sm p-0'
+          phx-click='remove'
+          phx-value-id='<%= id %>'
+          phx-value-type='language'
+        ><i class='icon-cancel text-danger'></i></button>
+      </th>
       <td>
         <%= hidden_inputs_for(fs) %>
         <%= select fs, :level, Language.level_options(), class: "form-select-sm" %>
@@ -24,7 +61,7 @@
   <% end %>
   <tr>
     <td colspan='2'>
-      <%= select @f, :language_id, Language.options(),
+      <%= select @f, :language_id, Language.options(@f.data.character_languages),
         class: "form-select-sm",
         prompt: "hinzufügen..."
       %>

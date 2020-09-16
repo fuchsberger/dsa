@@ -196,7 +196,7 @@
           <p><%= badge_list(combat_traits(@changeset.data)) %></p>
         <% end %>
 
-        <%= render "languages.html", languages: @languages, f: f %>
+        <%= render "languages.html", ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit_languages? %>
 
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>

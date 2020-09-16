@@ -13,10 +13,10 @@ defmodule DsaWeb.CharacterLive do
 
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
+    |> assign(:edit_languages?, false)
     |> assign(:show_trait_form?, false)
     |> assign(:show_spell_form?, false)
     |> assign(:category, 1)
-    |> assign(:languages, Language.list())
     |> assign(:traits, traits())
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
@@ -245,6 +245,32 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, reason} ->
         Logger.error("Error removing prayer: #{inspect(reason)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("toggle", %{"edit" => type}, socket) do
+    atom = String.to_atom("edit_#{type}?")
+    {:noreply, assign(socket, atom, !Map.get(socket.assigns, atom))}
+  end
+
+  def handle_event("remove", %{"id" => id, "type" => type}, socket) do
+    id = String.to_integer(id)
+    character = socket.assigns.changeset.data
+
+    entry =
+      case type do
+        "language" -> Enum.find(character.character_languages, & &1.language_id == id)
+      end
+
+    case Accounts.remove(entry) do
+      {:ok, _entry} ->
+        character = Accounts.preload(character)
+        Logger.debug("#{character.name} lost #{Language.name(id)} (#{type}).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
+
+      {:error, reason} ->
+        Logger.error("Error removing #{type}: #{inspect(reason)}")
         {:noreply, socket}
     end
   end

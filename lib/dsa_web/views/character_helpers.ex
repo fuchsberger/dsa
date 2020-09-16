@@ -72,6 +72,8 @@ defmodule DsaWeb.CharacterHelpers do
     combat_traits = c |> combat_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     fate_traits = c |> fate_traits() |> Enum.map(& &1.ap) |> Enum.sum()
 
+    languages = Enum.map(c.character_languages, & &1.level * 2) |> Enum.sum()
+
     magic_tradition =
       if c.magic_tradition_id, do: tradition(c.magic_tradition_id, :ap), else: 0
 
@@ -113,6 +115,7 @@ defmodule DsaWeb.CharacterHelpers do
       Zaubertricks: tricks,
       "Zaubersprüche / Rituale": spells,
       "Liturgien / Zeremonien": prayers,
+      Sprachen: languages,
       Segnungen: blessings,
       Spezies: species,
       Stabzauber: staffspells,
@@ -124,7 +127,7 @@ defmodule DsaWeb.CharacterHelpers do
       "Gekaufte KE": ke_bonus,
       "Zurückgekaufte AE": ae_back,
       "Zurückgekaufte KE": ke_back,
-      total: base_values + advantages + disadvantages + le_bonus + ae_bonus + ke_bonus + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells + ae_back + ke_back + spells + prayers
+      total: base_values + advantages + disadvantages + le_bonus + ae_bonus + ke_bonus + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells + ae_back + ke_back + spells + prayers + languages
     }
   end
 

@@ -7,7 +7,7 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.0.0",
     "bootstrap": "^5.0.0-alpha1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
@@ -19,15 +19,15 @@
     "@babel/preset-env": "^7.11.5",
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^6.1.0",
-    "css-loader": "^4.2.2",
+    "css-loader": "^4.3.0",
     "file-loader": "^6.1.0",
-    "mini-css-extract-plugin": "^0.11.0",
+    "mini-css-extract-plugin": "^0.11.2",
     "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
-    "postcss-loader": "^3.0.0",
+    "postcss-loader": "^4.0.2",
     "sass-loader": "^10.0.2",
     "style-loader": "^1.2.1",
-    "terser-webpack-plugin": "^4.1.0",
+    "terser-webpack-plugin": "^4.2.1",
     "url-loader": "^4.1.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.2"

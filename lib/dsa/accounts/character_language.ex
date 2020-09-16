@@ -18,8 +18,8 @@ defmodule Dsa.Accounts.CharacterLanguage do
     character_language
     |> cast(params, @fields)
     |> validate_required(@fields)
-    |> validate_number(:level, greater_than_or_equal_to: 1, less_than_or_equal_to: 4)
-    |> validate_number(:language_id, greater_than: 1, less_than_or_equal_to: Language.count())
+    |> validate_number(:level, greater_than_or_equal_to: 0, less_than_or_equal_to: 3)
+    |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
     |> foreign_key_constraint(:character_id)
     |> unique_constraint([:character_id, :language_id])
   end

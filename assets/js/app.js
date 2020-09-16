@@ -2,21 +2,21 @@ import "../css/app.scss"
 import "phoenix_html"
 
 import "popper.js"
-import Dropdown from 'bootstrap/js/dist/dropdown.js'
-import Alert from 'bootstrap/js/dist/alert.js'
-import Tab from 'bootstrap/js/dist/tab.js'
-import Tooltip from 'bootstrap/js/dist/tooltip.js'
+import { Alert, Dropdown, Tab, Tooltip, Popover } from 'bootstrap';
 
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
 let tooltipTriggerList, tooltipList = []
+let popoverTriggerList, popoverList = []
 
 const enableTooltips = () => {
   tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
-  tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl)
-  })
+  tooltipList = tooltipTriggerList.map(el => new Tooltip(el))
+
+  // also enable popovers
+  popoverTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="popover"]'))
+  popoverList = popoverTriggerList.map(el => new Popover(el))
 }
 
 const hooks = {}
