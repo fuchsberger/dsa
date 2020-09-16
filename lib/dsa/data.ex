@@ -1,6 +1,8 @@
 defmodule Dsa.Data do
   use GenServer
 
+  alias Dsa.Data.Language
+
   @name __MODULE__
 
   @armors [
@@ -616,6 +618,8 @@ defmodule Dsa.Data do
 
     :ets.new(:fweapons, [:ordered_set, :protected, :named_table])
     :ets.insert(:fweapons, @fweapons)
+
+    Language.seed()
 
     :ets.new(:mweapons, [:ordered_set, :protected, :named_table])
     :ets.insert(:mweapons, @mweapons)

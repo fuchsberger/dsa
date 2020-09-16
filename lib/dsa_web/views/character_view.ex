@@ -4,6 +4,8 @@ defmodule DsaWeb.CharacterView do
   # import DSA.Lists
   import DsaWeb.CharacterHelpers
 
+  alias Dsa.Data.Language
+
   def base_value_field(form, field) do
     ~E"""
     <div class='col'>

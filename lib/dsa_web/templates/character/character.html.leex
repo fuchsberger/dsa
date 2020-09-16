@@ -196,6 +196,8 @@
           <p><%= badge_list(combat_traits(@changeset.data)) %></p>
         <% end %>
 
+        <%= render "languages.html", languages: @languages, f: f %>
+
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
           <div class='d-flex justify-content-between'>

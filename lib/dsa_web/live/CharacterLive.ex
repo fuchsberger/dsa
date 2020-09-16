@@ -3,9 +3,10 @@ defmodule DsaWeb.CharacterLive do
   require Logger
 
   import Dsa.Data
-
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
+
   alias Dsa.{Accounts, Repo}
+  alias Dsa.Data.Language
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
@@ -15,6 +16,7 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:show_trait_form?, false)
     |> assign(:show_spell_form?, false)
     |> assign(:category, 1)
+    |> assign(:languages, Language.list())
     |> assign(:traits, traits())
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
@@ -66,7 +68,21 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:changeset, Ecto.Changeset.put_change(socket.assigns.changeset, :spell_id, nil))}
   end
 
+  def handle_event("change", %{"character" => %{"language_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_character_language(%{language_id: id, character_id: c.id}) do
+      {:ok, %{language_id: id}} ->
+        Logger.debug("#{c.name} has learned #{Language.name(id)} (language).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding language: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => params}, socket) do
+
     character = socket.assigns.changeset.data
 
     trait_id =

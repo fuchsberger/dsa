@@ -7,7 +7,7 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
+  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer, CharacterLanguage}
 
   @character_preloads [
     :group,
@@ -15,6 +15,7 @@ defmodule Dsa.Accounts do
     character_armors: from(s in CharacterArmor, order_by: s.armor_id),
     character_fweapons: from(s in CharacterFWeapon, order_by: s.fweapon_id),
     character_mweapons: from(s in CharacterMWeapon, order_by: s.mweapon_id),
+    character_languages: from(s in CharacterLanguage, order_by: s.language_id),
     character_spells: from(s in CharacterSpell, order_by: s.spell_id),
     character_traits: from(s in CharacterTrait, order_by: s.trait_id),
     character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id)
@@ -113,6 +114,7 @@ defmodule Dsa.Accounts do
     |> Character.changeset(attrs)
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> cast_assoc(:character_prayers, with: &CharacterPrayer.changeset/2)
+    |> cast_assoc(:character_languages, with: &CharacterLanguage.changeset/2)
     |> Repo.update()
   end
 
@@ -169,6 +171,12 @@ defmodule Dsa.Accounts do
   def add_character_prayer(params) do
     %CharacterPrayer{}
     |> CharacterPrayer.changeset(params)
+    |> Repo.insert()
+  end
+
+  def add_character_language(params) do
+    %CharacterLanguage{}
+    |> CharacterLanguage.changeset(params)
     |> Repo.insert()
   end
 

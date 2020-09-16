@@ -1,0 +1,34 @@
+<div class='d-flex justify-content-between'>
+  <h6 class='mb-0'>Sprachen</h6>
+  <i>? AP</i>
+</div>
+<hr class='my-1'>
+
+
+<table class='table table-sm'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th scope='col'>Kenntnis</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for fs <- inputs_for(@f, :character_languages) do %>
+    <tr>
+      <th scope='row'><%= Language.name(fs.data.language_id) %></th>
+      <td>
+        <%= hidden_inputs_for(fs) %>
+        <%= select fs, :level, Language.level_options(), class: "form-select-sm" %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='2'>
+      <%= select @f, :language_id, Language.options(),
+        class: "form-select-sm",
+        prompt: "hinzufügen..."
+      %>
+    </td>
+  </tr>
+  </tbody>
+</table>
