@@ -4,8 +4,8 @@ defmodule Dsa.Accounts.Character do
   import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Data.Language
-  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer, CharacterLanguage}
+  alias Dsa.Data.{Language, Script}
+  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer, CharacterLanguage, CharacterScript}
 
   schema "characters" do
 
@@ -55,6 +55,7 @@ defmodule Dsa.Accounts.Character do
 
     # Virtual Fields for adding various information
     field :language_id, :integer, virtual: true
+    field :script_id, :integer, virtual: true
     field :trait_id, :integer, virtual: true
     field :trait_level, :integer, virtual: true
     field :trait_ap, :integer, virtual: true
@@ -66,6 +67,7 @@ defmodule Dsa.Accounts.Character do
     belongs_to :user, User
 
     has_many :character_languages, CharacterLanguage, on_replace: :delete
+    has_many :character_scripts, CharacterScript, on_replace: :delete
     has_many :character_prayers, CharacterPrayer, on_replace: :delete
     has_many :character_spells, CharacterSpell, on_replace: :delete
     has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
@@ -78,7 +80,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id language_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id language_id script_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -97,6 +99,7 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_lost, greater_than_or_equal_to: 0)
     |> validate_number(:ke_back, greater_than_or_equal_to: 0)
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
+    |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)

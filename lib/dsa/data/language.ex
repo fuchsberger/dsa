@@ -7,7 +7,7 @@ defmodule Dsa.Data.Language do
   def count, do: 27
   def list, do: :ets.tab2list(@table)
 
-  def get(id), do: :ets.lookup(@table, id) |> List.first()
+  def get(id), do: List.first(:ets.lookup(@table, id))
 
   def options(clanguages) do
     list()
