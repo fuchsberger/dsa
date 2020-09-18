@@ -4,7 +4,7 @@ defmodule DsaWeb.CharacterView do
   # import DSA.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Data.Language
+  alias Dsa.Data.{Advantage, Language, Script}
 
   def base_value_field(form, field) do
     ~E"""
@@ -73,21 +73,6 @@ defmodule DsaWeb.CharacterView do
           end
 
         {dis_details, dis_ap, dis_level, level_options}
-    end
-  end
-
-  defp roman(number) do
-    case number do
-      1 -> "I"
-      2 -> "II"
-      3 -> "III"
-      4 -> "IV"
-      5 -> "V"
-      6 -> "VI"
-      7 -> "VII"
-      8 -> "VIII"
-      9 -> "IX"
-      10 -> "X"
     end
   end
 

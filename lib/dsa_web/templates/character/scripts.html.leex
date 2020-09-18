@@ -3,26 +3,26 @@
     <button
       class='btn btn-sm btn-link p-0'
       phx-click='toggle'
-      phx-value-edit='languages'
+      phx-value-edit='scripts'
       type='button'
     ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
-    Sprachen
+    Schriften
   </h6>
   <i><%= @ap %> AP</i>
 </div>
 <hr class='my-1'>
 
 <p class='<%= if @edit?, do: " d-none" %>'>
-  <%= for fs <- inputs_for(@f, :languages) do %>
-    <% id = input_value(fs, :language_id) %>
+  <%= for fs <- inputs_for(@f, :scripts) do %>
+    <% id = input_value(fs, :script_id) %>
     <span
       class="badge bg-light text-dark"
       data-html='true'
       data-toggle='popover'
       data-trigger='hover'
       data-placement="bottom"
-      data-content='<%= Language.tooltip(fs.data.language_id) %>'
-    ><%= Language.name(id) %>: <%= Language.level(input_value(fs, :level)) %></span>
+      data-content='<%= Script.tooltip(fs.data.script_id) %>'
+    ><%= Script.name(id) %></span>
   <% end %>
 </p>
 
@@ -30,12 +30,12 @@
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th scope='col'>Kenntnis</th>
+      <th class='text-center' scope='col'>AP</th>
     </tr>
   </thead>
   <tbody>
-  <%= for fs <- inputs_for(@f, :languages) do %>
-    <% id = input_value(fs, :language_id) %>
+  <%= for fs <- inputs_for(@f, :scripts) do %>
+    <% id = input_value(fs, :script_id) %>
     <tr>
       <th scope='row'>
         <span
@@ -43,25 +43,25 @@
           data-toggle='popover'
           data-trigger='hover'
           data-placement="right"
-          data-content='<%= Language.tooltip(id) %>'
-        ><%= Language.name(id) %></span>
+          data-content='<%= Script.tooltip(id) %>'
+        ><%= Script.name(id) %></span>
         <button
           type='button'
           class='btn btn-link btn-sm p-0'
           phx-click='remove'
           phx-value-id='<%= id %>'
-          phx-value-type='language'
+          phx-value-type='script'
         ><i class='icon-cancel text-danger'></i></button>
       </th>
-      <td>
+      <td class='text-center'>
         <%= hidden_inputs_for(fs) %>
-        <%= select fs, :level, Language.level_options(), class: "form-select-sm" %>
+        <%= Script.ap(id) %>
       </td>
     </tr>
   <% end %>
   <tr>
     <td colspan='2'>
-      <%= select @f, :language_id, Language.options(@f.data.languages),
+      <%= select @f, :script_id, Script.options(@f.data.scripts),
         class: "form-select-sm",
         prompt: "hinzufügen..."
       %>

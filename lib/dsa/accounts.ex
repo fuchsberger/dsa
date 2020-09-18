@@ -7,16 +7,20 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer, CharacterLanguage, CharacterScript}
+  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
+
+  alias Dsa.Data.{Advantage, Language, Script}
 
   @character_preloads [
     :group,
     :user,
+    advantages: from(s in Advantage, order_by: s.advantage_id),
+    languages: from(s in Language, order_by: s.language_id),
+    scripts: from(s in Script, order_by: s.script_id),
+
     character_armors: from(s in CharacterArmor, order_by: s.armor_id),
     character_fweapons: from(s in CharacterFWeapon, order_by: s.fweapon_id),
     character_mweapons: from(s in CharacterMWeapon, order_by: s.mweapon_id),
-    character_languages: from(s in CharacterLanguage, order_by: s.language_id),
-    character_scripts: from(s in CharacterScript, order_by: s.script_id),
     character_spells: from(s in CharacterSpell, order_by: s.spell_id),
     character_traits: from(s in CharacterTrait, order_by: s.trait_id),
     character_prayers: from(s in CharacterPrayer, order_by: s.prayer_id)
@@ -115,7 +119,9 @@ defmodule Dsa.Accounts do
     |> Character.changeset(attrs)
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> cast_assoc(:character_prayers, with: &CharacterPrayer.changeset/2)
-    |> cast_assoc(:character_languages, with: &CharacterLanguage.changeset/2)
+    |> cast_assoc(:advantages, with: &Advantage.changeset/2)
+    |> cast_assoc(:languages, with: &Language.changeset/2)
+    |> cast_assoc(:scripts, with: &Script.changeset/2)
     |> Repo.update()
   end
 
@@ -175,17 +181,9 @@ defmodule Dsa.Accounts do
     |> Repo.insert()
   end
 
-  def add_character_language(params) do
-    %CharacterLanguage{}
-    |> CharacterLanguage.changeset(params)
-    |> Repo.insert()
-  end
-
-  def add_character_script(params) do
-    %CharacterScript{}
-    |> CharacterScript.changeset(params)
-    |> Repo.insert()
-  end
+  def add_advantage(params), do:  Advantage.changeset(%Advantage{}, params) |> Repo.insert()
+  def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
+  def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
 
   def remove(struct), do: Repo.delete(struct)
 end

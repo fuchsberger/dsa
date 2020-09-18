@@ -7,9 +7,7 @@ defmodule DsaWeb.CharacterHelpers do
   import Dsa.{Lists, Data}
   import DsaWeb.DsaHelpers
 
-  def advantages(character) do
-    Enum.filter(character.character_traits, & Enum.member?(1..50, &1.trait_id))
-  end
+  alias Dsa.Data.Script
 
   def disadvantages(character) do
     Enum.filter(character.character_traits, & Enum.member?(51..110, &1.trait_id))
@@ -66,13 +64,14 @@ defmodule DsaWeb.CharacterHelpers do
       |> Enum.sum()
 
     species = species(c.species_id, :ap)
-    advantages = c |> advantages() |> Enum.map(& &1.ap) |> Enum.sum()
     disadvantages = c |> disadvantages() |> Enum.map(& &1.ap) |> Enum.sum()
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     combat_traits = c |> combat_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     fate_traits = c |> fate_traits() |> Enum.map(& &1.ap) |> Enum.sum()
 
-    languages = Enum.map(c.character_languages, & &1.level * 2) |> Enum.sum()
+    advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
+    languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
+    scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
 
     magic_tradition =
       if c.magic_tradition_id, do: tradition(c.magic_tradition_id, :ap), else: 0
@@ -116,6 +115,7 @@ defmodule DsaWeb.CharacterHelpers do
       "Zaubersprüche / Rituale": spells,
       "Liturgien / Zeremonien": prayers,
       Sprachen: languages,
+      Schriften: scripts,
       Segnungen: blessings,
       Spezies: species,
       Stabzauber: staffspells,
@@ -127,7 +127,7 @@ defmodule DsaWeb.CharacterHelpers do
       "Gekaufte KE": ke_bonus,
       "Zurückgekaufte AE": ae_back,
       "Zurückgekaufte KE": ke_back,
-      total: base_values + advantages + disadvantages + le_bonus + ae_bonus + ke_bonus + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells + ae_back + ke_back + spells + prayers + languages
+      total: base_values + advantages + disadvantages + le_bonus + ae_bonus + ke_bonus + combat_traits + general_traits + fate_traits + magic_tradition + karmal_tradition + tricks + blessings + combat_skills + skills + species + witchcraft + staffspells + ae_back + ke_back + spells + prayers + languages + scripts
     }
   end
 
@@ -167,7 +167,7 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def gs(c) do
-    advantages = if has_trait?(c, 9), do: 1, else: 0
+    advantages = if Enum.find(c.advantages, & &1.advantage_id == 9), do: 1, else: 0
     disadvantages = if has_trait?(c, 54), do: 1, else: 0
     species = species(c.species_id, :ge)
     %{
@@ -181,7 +181,7 @@ defmodule DsaWeb.CharacterHelpers do
   def zk(c) do
     species = species(c.species_id, :zk)
     basis = round((c.ko * 2 + c.kk) / 6)
-    advantages = if has_trait?(c, 24), do: 1, else: 0
+    advantages = if Enum.find(c.advantages, & &1.advantage_id == 24), do: 1, else: 0
     disadvantages = if has_trait?(c, 86), do: 1, else: 0
 
     %{
@@ -196,7 +196,7 @@ defmodule DsaWeb.CharacterHelpers do
   def sk(c) do
     species = species(c.species_id, :sk)
     basis = round((c.mu + c.kl + c.in) / 6)
-    advantages = if has_trait?(c, 23), do: 1, else: 0
+    advantages = if Enum.find(c.advantages, & &1.advantage_id == 23), do: 1, else: 0
     disadvantages = if has_trait?(c, 85), do: 1, else: 0
     %{
       Spezies: species,
@@ -208,7 +208,11 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def sp(c) do
-    advantages = trait_level(c, 14)
+    advantages =
+      case Enum.find(c.advantages, & &1.advantage_id == 14) do
+        nil -> 0
+        advantage -> advantage.level
+      end
     disadvantages = trait_level(c, 87) * -1
     %{
       Grundwert: 3,
@@ -220,7 +224,13 @@ defmodule DsaWeb.CharacterHelpers do
 
   def le(c) do
     species = species(c.species_id, :le)
-    advantages = trait_level(c, 22)
+
+    advantages =
+      case Enum.find(c.advantages, & &1.advantage_id == 22) do
+        nil -> 0
+        advantage -> advantage.level
+      end
+
     disadvantages = trait_level(c, 84) * -1
 
     %{
@@ -249,7 +259,11 @@ defmodule DsaWeb.CharacterHelpers do
               {name, Map.get(c, String.to_atom(name))}
           end
 
-        advantages = trait_level(c, 20)
+        advantages =
+          case Enum.find(c.advantages, & &1.advantage_id == 20) do
+            nil -> 0
+            advantage -> advantage.level
+          end
         disadvantages = trait_level(c, 82) * -1
         lost = c.ae_lost - c.ae_back
         %{
@@ -279,7 +293,11 @@ defmodule DsaWeb.CharacterHelpers do
               {name, Map.get(c, String.downcase(name) |> String.to_atom())}
           end
 
-        advantages = trait_level(c, 21)
+        advantages =
+          case Enum.find(c.advantages, & &1.advantage_id == 21) do
+            nil -> 0
+            advantage -> advantage.level
+          end
         disadvantages = trait_level(c, 83) * -1
         lost = c.ke_lost - c.ke_back
 

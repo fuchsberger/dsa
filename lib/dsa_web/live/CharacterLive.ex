@@ -6,14 +6,14 @@ defmodule DsaWeb.CharacterLive do
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
 
   alias Dsa.{Accounts, Repo}
-  alias Dsa.Data.Language
+  alias Dsa.Data.{Advantage, Language, Script}
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
 
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
-    |> assign(:edit_languages?, false)
+    |> assign(:edit, nil)
     |> assign(:show_trait_form?, false)
     |> assign(:show_spell_form?, false)
     |> assign(:category, 1)
@@ -68,15 +68,47 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:changeset, Ecto.Changeset.put_change(socket.assigns.changeset, :spell_id, nil))}
   end
 
+  def handle_event("change", %{"character" => %{"advantage_id" => id}}, socket) when id != "" do
+    id = String.to_integer(id)
+    c = socket.assigns.changeset.data
+    case Accounts.add_advantage(%{
+      advantage_id: id,
+      character_id: c.id,
+      level: Advantage.level(id),
+      ap: Advantage.ap(id) * Advantage.level(id)
+    }) do
+      {:ok, %{advantage_id: id}} ->
+        Logger.debug("#{c.name} has learned #{Advantage.name(id)} (advantage).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding advantage: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => %{"language_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
-    case Accounts.add_character_language(%{language_id: id, character_id: c.id}) do
+    case Accounts.add_language(%{language_id: id, character_id: c.id}) do
       {:ok, %{language_id: id}} ->
         Logger.debug("#{c.name} has learned #{Language.name(id)} (language).")
         {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
 
       {:error, changeset} ->
         Logger.error("Error adding language: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"script_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_script(%{script_id: id, character_id: c.id}) do
+      {:ok, %{script_id: id}} ->
+        Logger.debug("#{c.name} has learned #{Script.name(id)} (script).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding script: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -249,29 +281,36 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
-  def handle_event("toggle", %{"edit" => type}, socket) do
-    atom = String.to_atom("edit_#{type}?")
-    {:noreply, assign(socket, atom, !Map.get(socket.assigns, atom))}
-  end
-
   def handle_event("remove", %{"id" => id, "type" => type}, socket) do
     id = String.to_integer(id)
     character = socket.assigns.changeset.data
 
-    entry =
+    {entry, name} =
       case type do
-        "language" -> Enum.find(character.character_languages, & &1.language_id == id)
+        "advantage" ->
+          {Enum.find(character.advantages, & &1.advantage_id == id), Advantage.name(id)}
+
+        "language" ->
+          {Enum.find(character.languages, & &1.language_id == id), Language.name(id)}
+
+        "script" ->
+          {Enum.find(character.scripts, & &1.script_id == id), Script.name(id)}
       end
 
     case Accounts.remove(entry) do
       {:ok, _entry} ->
         character = Accounts.preload(character)
-        Logger.debug("#{character.name} lost #{Language.name(id)} (#{type}).")
+        Logger.debug("#{character.name} lost #{name} (#{type}).")
         {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
 
       {:error, reason} ->
         Logger.error("Error removing #{type}: #{inspect(reason)}")
         {:noreply, socket}
     end
+  end
+
+  def handle_event("toggle", %{"edit" => type}, socket) do
+    edit = String.to_atom(type)
+    {:noreply, assign(socket, :edit, (unless edit == socket.assigns.edit, do: edit, else: nil))}
   end
 end

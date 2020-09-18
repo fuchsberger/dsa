@@ -91,7 +91,7 @@
           </div>
         </div>
 
-        <div class='row g-2'>
+        <div class='row g-2 mb-3'>
           <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
 
           <div class="col-sm-8">
@@ -114,6 +114,15 @@
             </div>
           </div>
         </div>
+
+        <%= render "advantages.html",
+          ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
+
+        <%= render "languages.html",
+          ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
+
+        <%= render "scripts.html",
+          ap: Map.get(ap, :"Schriften"), f: f, edit?: @edit == :scripts %>
       </div>
     </div>
 
@@ -156,16 +165,6 @@
           </div>
         </div>
 
-        <%# Advantages %>
-        <%= if Enum.count(advantages(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Vorteile</h6>
-            <i><%= Map.get(ap, :Vorteile, 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(advantages(@changeset.data)) %></p>
-        <% end %>
-
         <%# Disadvantages %>
         <%= if Enum.count(disadvantages(@changeset.data)) > 0 do %>
           <div class='d-flex justify-content-between'>
@@ -195,8 +194,6 @@
           <hr class='my-1'>
           <p><%= badge_list(combat_traits(@changeset.data)) %></p>
         <% end %>
-
-        <%= render "languages.html", ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit_languages? %>
 
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>

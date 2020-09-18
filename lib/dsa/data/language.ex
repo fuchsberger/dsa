@@ -1,8 +1,29 @@
 defmodule Dsa.Data.Language do
 
+  use Ecto.Schema
   use Phoenix.HTML
 
+  import Ecto.Changeset
+
   @table :languages
+
+  @primary_key false
+  schema "languages" do
+    field :level, :integer, default: 1
+    field :language_id, :integer, primary_key: true
+    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+  end
+
+  @fields ~w(character_id language_id level)a
+  def changeset(language, params \\ %{}) do
+    language
+    |> cast(params, @fields)
+    |> validate_required(@fields)
+    |> validate_number(:level, greater_than_or_equal_to: 0, less_than_or_equal_to: 3)
+    |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: count())
+    |> foreign_key_constraint(:character_id)
+    |> unique_constraint([:character_id, :language_id])
+  end
 
   def count, do: 27
   def list, do: :ets.tab2list(@table)
