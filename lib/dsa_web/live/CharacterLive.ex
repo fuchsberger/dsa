@@ -6,7 +6,7 @@ defmodule DsaWeb.CharacterLive do
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
 
   alias Dsa.{Accounts, Repo}
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, Language, Script}
+  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
@@ -116,6 +116,20 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding disadvantage: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"general_trait_id" => id}}, socket) when id != "" do
+    id = String.to_integer(id)
+    c = socket.assigns.changeset.data
+    case Accounts.add_general_trait(%{id: id, character_id: c.id, ap: GeneralTrait.ap(id)}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has learned #{GeneralTrait.name(id)} (general trait).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding general trait: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -328,6 +342,9 @@ defmodule DsaWeb.CharacterLive do
 
         "disadvantage" ->
           {Enum.find(character.disadvantages, & &1.disadvantage_id == id), Disadvantage.name(id)}
+
+        "general_trait" ->
+          {Enum.find(character.general_traits, & &1.id == id), GeneralTrait.name(id)}
 
         "language" ->
           {Enum.find(character.languages, & &1.language_id == id), Language.name(id)}

@@ -4,7 +4,7 @@ defmodule Dsa.Accounts.Character do
   import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, Language, Script}
+  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
   alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer}
 
   schema "characters" do
@@ -57,6 +57,7 @@ defmodule Dsa.Accounts.Character do
     field :advantage_id, :integer, virtual: true
     field :combat_trait_id, :integer, virtual: true
     field :disadvantage_id, :integer, virtual: true
+    field :general_trait_id, :integer, virtual: true
     field :language_id, :integer, virtual: true
     field :script_id, :integer, virtual: true
 
@@ -73,6 +74,7 @@ defmodule Dsa.Accounts.Character do
     has_many :advantages, Advantage, on_replace: :delete
     has_many :combat_traits, CombatTrait, on_replace: :delete
     has_many :disadvantages, Advantage, on_replace: :delete
+    has_many :general_traits, GeneralTrait, on_replace: :delete
     has_many :languages, Language, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
 
@@ -88,7 +90,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id advantage_id combat_trait_id disadvantage_id language_id script_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id advantage_id combat_trait_id disadvantage_id general_trait_id language_id script_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -109,6 +111,7 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: Advantage.count())
     |> validate_number(:combat_trait_id, greater_than: 0, less_than_or_equal_to: CombatTrait.count())
     |> validate_number(:disadvantage_id, greater_than: 0, less_than_or_equal_to: Disadvantage.count())
+    |> validate_number(:general_trait_id, greater_than: 0, less_than_or_equal_to: GeneralTrait.count())
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
     |> validate_length(:trait_details, max: 50)

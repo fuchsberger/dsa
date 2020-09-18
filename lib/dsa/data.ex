@@ -1,7 +1,7 @@
 defmodule Dsa.Data do
   use GenServer
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, Language, Script}
+  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
 
   @name __MODULE__
 
@@ -241,43 +241,6 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # Allgemeine Sonderfertigkeiten (Basisregelwerk)
-    {111, 0, "Analytiker", 5, false, true},
-    {112, 0, "Anführer", 10, false, true},
-    {113, 0, "Berufsgeheimnis", 1, true, false},
-    {114, 0, "Dokumentfälscher", 5, false, true},
-    {115, 0, "Eiserner Wille I", 15, false, true},
-    {116, 0, "Eiserner Wille II", 15, false, true},
-    {117, 0, "Fächersprache", 3, false, true},
-    {118, 0, "Fallen entschärfen", 5, false, true},
-    {119, 0, "Falschspielen", 5, false, true},
-    {120, 0, "Fertigkeitsspezialisierung (Talente)", 1, true, false},
-    {121, 0, "Fischer", 3, false, true},
-    {122, 0, "Füchsisch", 3, false, true},
-    {123, 0, "Geländekunde", 15, false, true},
-    {124, 0, "Gildenrecht", 2, false, true},
-    {125, 0, "Glasbläserei", 2, false, true},
-    {126, 0, "Hehlerei", 5, false, true},
-    {127, 0, "Heraldik", 2, false, true},
-    {128, 0, "Instrumente bauen", 2, false, true},
-    {129, 0, "Jäger", 5, false, true},
-    {130, 0, "Kartographie", 5, false, true},
-    {131, 0, "Lippenlesen", 10, false, true},
-    {132, 0, "Meister der Improvisation", 10, false, true},
-    {133, 0, "Ortskenntnis", 2, true, false},
-    {134, 0, "Rosstäuscher", 5, false, true},
-    {135, 0, "Sammler", 2, false, true},
-    {136, 0, "Schmerzen unterdrücken", 20, false, true},
-    {137, 0, "Schnapsbrennerei", 2, false, true},
-    {138, 0, "Schrift", 2, true, false},
-    {139, 0, "Schriftstellerei", 2, true, true},
-    {140, 0, "Sprache I", 2, true, true},
-    {141, 0, "Sprache II", 2, true, true},
-    {142, 0, "Sprache III", 6, true, true},
-    {143, 0, "Tierstimmen imitieren", 5, false, true},
-    {144, 0, "Töpferei", 2, false, true},
-    {145, 0, "Wettervorhersage", 2, false, true},
-    {146, 0, "Zahlenmystik", 2, false, true},
     # Schicksalspunkte Sonderfertigkeiten
     {147, -1, "Attacke verbessern", 5, false, true},
     {148, -1, "Ausweichen verbessern", 5, false, true},
@@ -441,6 +404,7 @@ defmodule Dsa.Data do
     Advantage.seed()
     Disadvantage.seed()
     CombatTrait.seed()
+    GeneralTrait.seed()
     Language.seed()
     Script.seed()
 

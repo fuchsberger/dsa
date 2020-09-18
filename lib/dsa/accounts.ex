@@ -9,7 +9,7 @@ defmodule Dsa.Accounts do
   alias Dsa.Repo
   alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, Language, Script}
+  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
 
   @character_preloads [
     :group,
@@ -17,6 +17,7 @@ defmodule Dsa.Accounts do
     advantages: from(s in Advantage, order_by: s.advantage_id),
     combat_traits: from(s in CombatTrait, order_by: s.id),
     disadvantages: from(s in Disadvantage, order_by: s.disadvantage_id),
+    general_traits: from(s in GeneralTrait, order_by: s.id),
     languages: from(s in Language, order_by: s.language_id),
     scripts: from(s in Script, order_by: s.script_id),
 
@@ -124,6 +125,7 @@ defmodule Dsa.Accounts do
     |> cast_assoc(:advantages, with: &Advantage.changeset/2)
     |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
     |> cast_assoc(:disadvantages, with: &Disadvantage.changeset/2)
+    |> cast_assoc(:general_traits, with: &GeneralTrait.changeset/2)
     |> cast_assoc(:languages, with: &Language.changeset/2)
     |> cast_assoc(:scripts, with: &Script.changeset/2)
     |> Repo.update()
@@ -188,6 +190,7 @@ defmodule Dsa.Accounts do
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
   def add_combat_trait(params), do: CombatTrait.changeset(%CombatTrait{}, params) |> Repo.insert()
   def add_disadvantage(params), do: Disadvantage.changeset(%Disadvantage{}, params) |> Repo.insert()
+  def add_general_trait(params), do: GeneralTrait.changeset(%GeneralTrait{}, params) |> Repo.insert()
   def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
   def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
 

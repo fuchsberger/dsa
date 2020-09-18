@@ -121,6 +121,9 @@
         <%= render "disadvantages.html",
           ap: Map.get(ap, :"Nachteile"), f: f, edit?: @edit == :disadvantages %>
 
+        <%= render "general_traits.html",
+          ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
+
         <%= render "languages.html",
           ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
 
@@ -129,7 +132,7 @@
       </div>
     </div>
 
-    <div class="card mb-3 mt-3">
+    <div class="card mb-3 mt-3 d-none">
       <div class="card-header py-0 d-flex justify-content-between">
         <h5 class='my-2'>Charakteristiken</h5>
         <button class='btn btn-light btn-sm' phx-click='toggle-trait-form' type='button'>
@@ -167,16 +170,6 @@
             </button>
           </div>
         </div>
-
-        <%# General Skills %>
-        <%= if Enum.count(general_traits(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Allgemeine Sonderfertigkeiten</h6>
-            <i><%= Map.get(ap, :"Allgemeine SF", 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(general_traits(@changeset.data)) %></p>
-        <% end %>
 
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
