@@ -118,6 +118,9 @@
         <%= render "advantages.html",
           ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
 
+        <%= render "disadvantages.html",
+          ap: Map.get(ap, :"Nachteile"), f: f, edit?: @edit == :disadvantages %>
+
         <%= render "languages.html",
           ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
 
@@ -137,7 +140,7 @@
         <div class='row mb-1 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
           <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset) %>
           <div class='col-6 '>
-            <%= label f, :trait_id, "Vorteil / Nachteil / SF", class: "" %>
+            <%= label f, :trait_id, "SF", class: "" %>
             <%= select(f, :trait_id, trait_options(), prompt: "hinzufügen...", class: "form-select-sm")
             %>
           </div>
@@ -164,16 +167,6 @@
             </button>
           </div>
         </div>
-
-        <%# Disadvantages %>
-        <%= if Enum.count(disadvantages(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Nachteile</h6>
-            <i><%= Map.get(ap, :Nachteile, 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(disadvantages(@changeset.data)) %></p>
-        <% end %>
 
         <%# General Skills %>
         <%= if Enum.count(general_traits(@changeset.data)) > 0 do %>

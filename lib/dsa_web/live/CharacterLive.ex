@@ -6,7 +6,7 @@ defmodule DsaWeb.CharacterLive do
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
 
   alias Dsa.{Accounts, Repo}
-  alias Dsa.Data.{Advantage, Language, Script}
+  alias Dsa.Data.{Advantage, Disadvantage, Language, Script}
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
@@ -83,6 +83,25 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding advantage: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"disadvantage_id" => id}}, socket) when id != "" do
+    id = String.to_integer(id)
+    c = socket.assigns.changeset.data
+    case Accounts.add_disadvantage(%{
+      disadvantage_id: id,
+      character_id: c.id,
+      level: Disadvantage.level(id),
+      ap: Disadvantage.ap(id) * Disadvantage.level(id)
+    }) do
+      {:ok, %{disadvantage_id: id}} ->
+        Logger.debug("#{c.name} has learned #{Disadvantage.name(id)} (disadvantage).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding disadvantage: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -289,6 +308,9 @@ defmodule DsaWeb.CharacterLive do
       case type do
         "advantage" ->
           {Enum.find(character.advantages, & &1.advantage_id == id), Advantage.name(id)}
+
+        "disadvantage" ->
+          {Enum.find(character.disadvantages, & &1.disadvantage_id == id), Disadvantage.name(id)}
 
         "language" ->
           {Enum.find(character.languages, & &1.language_id == id), Language.name(id)}

@@ -9,10 +9,6 @@ defmodule DsaWeb.CharacterHelpers do
 
   alias Dsa.Data.Script
 
-  def disadvantages(character) do
-    Enum.filter(character.character_traits, & Enum.member?(51..110, &1.trait_id))
-  end
-
   def general_traits(c) do
     Enum.filter(c.character_traits, & Enum.member?(111..146, &1.trait_id))
   end
@@ -64,12 +60,12 @@ defmodule DsaWeb.CharacterHelpers do
       |> Enum.sum()
 
     species = species(c.species_id, :ap)
-    disadvantages = c |> disadvantages() |> Enum.map(& &1.ap) |> Enum.sum()
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     combat_traits = c |> combat_traits() |> Enum.map(& &1.ap) |> Enum.sum()
     fate_traits = c |> fate_traits() |> Enum.map(& &1.ap) |> Enum.sum()
 
     advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
+    disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
     languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
 
@@ -131,13 +127,6 @@ defmodule DsaWeb.CharacterHelpers do
     }
   end
 
-  defp trait_level(c, id) do
-    case Enum.find(c.character_traits, & &1.trait_id == id) do
-      nil -> 0
-      trait -> trait.level
-    end
-  end
-
   defp has_trait?(c, id) do
     if Enum.find(c.character_traits, & &1.trait_id == id), do: true, else: false
   end
@@ -168,7 +157,7 @@ defmodule DsaWeb.CharacterHelpers do
 
   def gs(c) do
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 9), do: 1, else: 0
-    disadvantages = if has_trait?(c, 54), do: 1, else: 0
+    disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 4), do: -1, else: 0
     species = species(c.species_id, :ge)
     %{
       Spezies: species,
@@ -182,7 +171,7 @@ defmodule DsaWeb.CharacterHelpers do
     species = species(c.species_id, :zk)
     basis = round((c.ko * 2 + c.kk) / 6)
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 24), do: 1, else: 0
-    disadvantages = if has_trait?(c, 86), do: 1, else: 0
+    disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 27), do: -1, else: 0
 
     %{
       Spezies: species,
@@ -197,7 +186,7 @@ defmodule DsaWeb.CharacterHelpers do
     species = species(c.species_id, :sk)
     basis = round((c.mu + c.kl + c.in) / 6)
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 23), do: 1, else: 0
-    disadvantages = if has_trait?(c, 85), do: 1, else: 0
+    disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 26), do: -1, else: 0
     %{
       Spezies: species,
       "(MU+KL+IN)/6": basis,
@@ -213,7 +202,12 @@ defmodule DsaWeb.CharacterHelpers do
         nil -> 0
         advantage -> advantage.level
       end
-    disadvantages = trait_level(c, 87) * -1
+    disadvantages =
+      case Enum.find(c.disadvantages, & &1.disadvantage_id == 28) do
+        nil -> 0
+        disadvantage -> -disadvantage.level
+      end
+
     %{
       Grundwert: 3,
       Glück: advantages,
@@ -231,7 +225,11 @@ defmodule DsaWeb.CharacterHelpers do
         advantage -> advantage.level
       end
 
-    disadvantages = trait_level(c, 84) * -1
+    disadvantages =
+      case Enum.find(c.disadvantages, & &1.disadvantage_id == 25) do
+        nil -> 0
+        disadvantage -> -disadvantage.level
+      end
 
     %{
       Spezies: species,
@@ -264,7 +262,12 @@ defmodule DsaWeb.CharacterHelpers do
             nil -> 0
             advantage -> advantage.level
           end
-        disadvantages = trait_level(c, 82) * -1
+        disadvantages =
+          case Enum.find(c.disadvantages, & &1.disadvantage_id == 23) do
+            nil -> 0
+            disadvantage -> -disadvantage.level
+          end
+
         lost = c.ae_lost - c.ae_back
         %{
           Zauberer: 20,
@@ -298,7 +301,12 @@ defmodule DsaWeb.CharacterHelpers do
             nil -> 0
             advantage -> advantage.level
           end
-        disadvantages = trait_level(c, 83) * -1
+        disadvantages =
+          case Enum.find(c.disadvantages, & &1.disadvantage_id == 24) do
+            nil -> 0
+            disadvantage -> -disadvantage.level
+          end
+
         lost = c.ke_lost - c.ke_back
 
         %{

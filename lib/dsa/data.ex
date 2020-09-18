@@ -1,7 +1,7 @@
 defmodule Dsa.Data do
   use GenServer
 
-  alias Dsa.Data.{Advantage, Language, Script}
+  alias Dsa.Data.{Advantage, Disadvantage, Language, Script}
 
   @name __MODULE__
 
@@ -241,60 +241,6 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # {id, level, name, ap, details, fixed_ap}
-    # Nachteile
-    {51, 3, "Angst vor", -8, true, true},
-    {52, 3, "Arm", -1, false, true},
-    {53, 1, "Artefaktgebunden", -10, false, true},
-    {54, 1, "Behäbig", -4, false, true},
-    {55, 1, "Blind", -50, false, true},
-    {56, 1, "Blutrausch", -10, false, true},
-    {57, 1, "Eingeschränkter Sinn", -2, true, false},
-    {58, 1, "Farbenblind", -2, false, true},
-    {59, 1, "Fettleibig", -25, false, true},
-    {60, 2, "Giftanfällig", -5, false, true},
-    {61, 2, "Hässlich", -10, false, true},
-    {62, 1, "Hitzeempfindlich", -3, false, true},
-    {63, 1, "Kälteempfindlich", -3, false, true},
-    {64, 1, "Keine Flugsalbe", -25, false, true},
-    {65, 1, "Kein Vertrauter", -25, false, true},
-    {66, 1, "Körpergebundene Kraft", -5, false, true},
-    {67, 1, "Körperliche Auffälligkeit", -2, true, true},
-    {68, 2, "Krankheitsanfällig", -5, false, true},
-    {69, 1, "Lästige Mindergeister", -20, false, true},
-    {70, 1, "Lichtempfindlich", -20, false, true},
-    {80, 1, "Magische Einschränkung", -30, true, true},
-    {81, 1, "Nachtblind", -10, false, true},
-    {82, 7, "Niedrige Astralkraft", -2, false, true},
-    {83, 7, "Niedrige Karmalkraft", -2, false, true},
-    {84, 7, "Niedrige Lebenskraft", -2, false, true},
-    {85, 1, "Niedrige Seelenkraft", -25, false, true},
-    {86, 1, "Niedrige Zähigkeit", -25, false, true},
-    {87, 3, "Pech", -20, false, true},
-    {88, 1, "Pechmagnet", -5, false, true},
-    {89, 1, "Persönlichkeitsschwächen", -5, true, false},
-    {90, 3, "Prinzipientreue", -10, true, true},
-    {91, 1, "Schlafwandler", -10, false, true},
-    {92, 1, "Schlechte Angewohnheit", -2, true, true},
-    {93, 1, "Schlechte Eigenschaft", -5, true, false},
-    {94, 3, "Schlechte Regeneration (Astralenergie)", -10, false, true},
-    {95, 3, "Schlechte Regeneration (Karmaenergie)", -10, false, true},
-    {96, 3, "Schlechte Regeneration (Lebensenergie)", -10, false, true},
-    {97, 1, "Schwacher Astralkörper", -15, false, true},
-    {98, 1, "Schwacher Karmalkörper", -15, false, true},
-    {99, 1, "Sensibler Geruchssinn", -10, false, true},
-    {100, 1, "Sprachfehler", -15, false, true},
-    {101, 1, "Stigma", -10, true, true},
-    {101, 1, "Stumm", -40, false, true},
-    {102, 1, "Taub", -40, false, true},
-    {103, 1, "Unfähig", -1, true, false},
-    {104, 1, "Unfrei", -8, false, true},
-    {105, 1, "Verpflichtungen", -10, true, true},
-    {106, 1, "Verstümmelt", -5, true, false},
-    {107, 1, "Wahrer Name", -10, false, true},
-    {108, 1, "Wilde Magie", -10, false, true},
-    {109, 2, "Zauberanfällig", -12, false, true},
-    {110, 1, "Zerbrechlich", -20, false, true},
     # Allgemeine Sonderfertigkeiten (Basisregelwerk)
     {111, 0, "Analytiker", 5, false, true},
     {112, 0, "Anführer", 10, false, true},
@@ -560,6 +506,7 @@ defmodule Dsa.Data do
 
   def init(_) do
     Advantage.seed()
+    Disadvantage.seed()
     Language.seed()
     Script.seed()
 

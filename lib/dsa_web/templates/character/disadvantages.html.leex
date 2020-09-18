@@ -1,0 +1,77 @@
+<div class='d-flex justify-content-between'>
+  <h6 class='mb-0'>
+    <button
+      class='btn btn-sm btn-link p-0'
+      phx-click='toggle'
+      phx-value-edit='disadvantages'
+      type='button'
+    ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
+    Nachteile
+  </h6>
+  <i><%= @ap %> AP</i>
+</div>
+<hr class='my-1'>
+
+<p class='small<%= if @edit?, do: " d-none" %>'>
+  <%=
+    @f.source.data.disadvantages
+    |> Enum.map(fn %{disadvantage_id: id, details: details, level: level} ->
+        "#{Disadvantage.name(id)}#{if Disadvantage.level(id) > 1, do: " #{roman(level)}"}#{details && ": #{details}"}"
+      end)
+    |> Enum.join(", ")
+  %>
+</p>
+
+<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th class='text-center' scope='col'>LVL</th>
+      <th class='text-center' scope='col'>AP</th>
+      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for fs <- inputs_for(@f, :disadvantages) do %>
+    <% id = input_value(fs, :disadvantage_id) %>
+    <tr >
+      <td>
+        <%= Disadvantage.name(id) %>
+        <%= if Disadvantage.details(id), do:
+          text_input fs, :details, class: "small", placeholder: "Details..."
+        %>
+      </td>
+      <td class='text-center p-0' style="width: 50px;">
+        <%= if Disadvantage.level(id) > 1, do:
+          select fs, :level, Disadvantage.level_options(id), class: "small py-0"
+        %>
+      </td>
+      <td class='text-center' style="width: 55px;">
+        <%= hidden_inputs_for(fs) %>
+        <%= if Disadvantage.fixed_ap(id) do %>
+          <%= input_value(fs, :level) * Disadvantage.ap(id) %>
+        <% else %>
+          <%= number_input fs, :ap, class: "small" %>
+        <% end %>
+      </td>
+      <td class='text-center p-0'>
+        <button
+          type='button'
+          class='btn btn-link btn-sm p-0'
+          phx-click='remove'
+          phx-value-id='<%= id %>'
+          phx-value-type='disadvantage'
+        ><i class='icon-cancel text-danger'></i></button>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='4'>
+      <%= select @f, :disadvantage_id, Disadvantage.options(@f.data.disadvantages),
+        class: "form-select-sm font-italic",
+        prompt: "hinzufügen..."
+      %>
+    </td>
+  </tr>
+  </tbody>
+</table>
