@@ -1,0 +1,57 @@
+<div class='d-flex justify-content-between'>
+  <h6 class='mb-0'>
+    <button
+      class='btn btn-sm btn-link p-0'
+      phx-click='toggle'
+      phx-value-edit='combat_traits'
+      type='button'
+    ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
+    Kampfsonderfertigkeiten
+  </h6>
+  <i><%= @ap %> AP</i>
+</div>
+<hr class='my-1'>
+
+<p class='small<%= if @edit?, do: " d-none" %>'>
+  <%=
+    @f.source.data.combat_traits
+    |> Enum.map(fn %{id: id} -> "#{CombatTrait.name(id)}" end)
+    |> Enum.join(", ")
+  %>
+</p>
+
+<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th class='text-center' scope='col'>AP</th>
+      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for fs <- inputs_for(@f, :combat_traits) do %>
+    <% id = input_value(fs, :id) %>
+    <tr >
+      <td><%= CombatTrait.name(id) %></td>
+      <td class='text-center'><%= CombatTrait.ap(id) %></td>
+      <td class='text-center p-0'>
+        <button
+          type='button'
+          class='btn btn-link btn-sm p-0'
+          phx-click='remove'
+          phx-value-id='<%= id %>'
+          phx-value-type='combat_trait'
+        ><i class='icon-cancel text-danger'></i></button>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='3'>
+      <%= select @f, :combat_trait_id, CombatTrait.options(@f.data.combat_traits),
+        class: "form-select-sm font-italic",
+        prompt: "hinzufügen..."
+      %>
+    </td>
+  </tr>
+  </tbody>
+</table>

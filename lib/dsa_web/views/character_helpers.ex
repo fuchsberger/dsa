@@ -7,7 +7,7 @@ defmodule DsaWeb.CharacterHelpers do
   import Dsa.{Lists, Data}
   import DsaWeb.DsaHelpers
 
-  alias Dsa.Data.Script
+  alias Dsa.Data.{CombatTrait, Script}
 
   def general_traits(c) do
     Enum.filter(c.character_traits, & Enum.member?(111..146, &1.trait_id))
@@ -15,10 +15,6 @@ defmodule DsaWeb.CharacterHelpers do
 
   def fate_traits(c) do
     Enum.filter(c.character_traits, & Enum.member?(147..152, &1.trait_id))
-  end
-
-  def combat_traits(c) do
-    Enum.filter(c.character_traits, & Enum.member?(153..217, &1.trait_id))
   end
 
   def staff_spells(c) do
@@ -61,10 +57,11 @@ defmodule DsaWeb.CharacterHelpers do
 
     species = species(c.species_id, :ap)
     general_traits = c |> general_traits() |> Enum.map(& &1.ap) |> Enum.sum()
-    combat_traits = c |> combat_traits() |> Enum.map(& &1.ap) |> Enum.sum()
+
     fate_traits = c |> fate_traits() |> Enum.map(& &1.ap) |> Enum.sum()
 
     advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
+    combat_traits = Enum.map(c.combat_traits, & CombatTrait.ap(&1.id)) |> Enum.sum()
     disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
     languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()

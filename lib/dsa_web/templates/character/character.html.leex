@@ -178,16 +178,6 @@
           <p><%= badge_list(general_traits(@changeset.data)) %></p>
         <% end %>
 
-        <%# Combat Skills %>
-        <%= if Enum.count(combat_traits(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Kampfsonderfertigkeiten</h6>
-            <i><%= Map.get(ap, :"Kampf SF", 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(combat_traits(@changeset.data)) %></p>
-        <% end %>
-
         <%# Zaubertricks %>
         <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
           <div class='d-flex justify-content-between'>
@@ -229,7 +219,11 @@
         <h5 class='mb-0'>Kampftalente</h5>
         <i><%= Map.get(ap, :Kampftalente) %> AP</i>
       </div>
-      <div class="card-body p-0">
+      <div class="card-body">
+        <%= render "combat_traits.html",
+          ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
+        %>
+
         <table class='table table-sm mb-0'>
           <thead>
             <tr>
@@ -304,7 +298,7 @@
       </div>
     </div>
 
-    <%= if Enum.find(@changeset.data.character_traits, & &1.trait_id == 47) do %>
+    <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 47) do %>
 
       <div class="card mb-3">
 
@@ -403,7 +397,7 @@
       </div>
     <% end %>
 
-    <%= if Enum.find(@changeset.data.character_traits, & &1.trait_id == 12) do %>
+    <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 12) do %>
 
       <div class="card mb-3">
 

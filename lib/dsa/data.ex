@@ -1,7 +1,7 @@
 defmodule Dsa.Data do
   use GenServer
 
-  alias Dsa.Data.{Advantage, Disadvantage, Language, Script}
+  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, Language, Script}
 
   @name __MODULE__
 
@@ -285,73 +285,6 @@ defmodule Dsa.Data do
     {150, -1, "Fernkampf verbessern", 5, false, true},
     {151, -1, "Parade verbessern", 5, false, true},
     {152, -1, "Wachsamkeit verbessern", 10, false, true},
-    # Kampfsonderfertigkeiten
-    {153, -3, "Aufmerksamkeit", 10, false, true}, # @all_combat_skills},
-    {154, -3, "Belastungsgewöhnung I", 20, false, true}, # @all_combat_skills},
-    {155, -3, "Belastungsgewöhnung II", 35, false, true}, # @all_combat_skills},
-    {156, -3, "Beidhändiger Kampf I", 20, false, true}, # [1,3,4,8,9,10]},
-    {157, -3, "Beidhändiger Kampf II", 35, false, true}, # [1,3,4,8,9,10]},
-    {158, -3, "Berittener Kampf", 20, false, true}, # @all_combat_skills},
-    {159, -3, "Berittener Schütze", 10, false, true}, # [15, 17, 21]},
-    {160, -3, "Einhändiger Kampf", 10, false, true}, # [3, 10]},
-    {161, -3, "Entwaffnen", 40, false, true}, # [3, 4, 7, 8, 10, 11, 12, 13, 14]},
-    {162, -3, "Feindgespür", 10, false, true}, # @all_combat_skills},
-    {163, -3, "Finte I", 15, false, true}, # [1, 3, 4, 7, 8, 10, 12, 13, 14]},
-    {164, -3, "Finte II", 20, false, true}, # [1, 3, 4, 7, 8, 10, 12, 13, 14]},
-    {165, -3, "Finte III", 25, false, true}, # [1, 3, 4, 7, 8, 10, 12, 13, 14]},
-    {166, -3, "Haltegriff", 5, false, true}, # [8]},
-    {167, -3, "Hammerschlag", 25, false, true}, # [4, 5, 10, 13, 14]},
-    {168, -3, "Kampfreflexe I", 10, false, true}, # @all_combat_skills}, // done
-    {169, -3, "Kampfreflexe II", 15, false, true}, # @all_combat_skills}, // done
-    {170, -3, "Kampfreflexe III", 20, false, true}, # @all_combat_skills}, // done
-    {171, -3, "Klingenfänger", 10, false, true}, # [1]},
-    {172, -3, "Kreuzblock", 10, false, true}, # [1, 3]},
-    {173, -3, "Lanzenangriff", 10, false, true}, # [6]},
-    {174, -3, "Präziser Schuss/Wurf I", 15, false, true}, # [15, 16, 17, 18, 20, 21]},
-    {175, -3, "Präziser Schuss/Wurf II", 20, false, true}, # [15, 16, 17, 18, 20, 21]},
-    {176, -3, "Präziser Schuss/Wurf III", 25, false, true}, # [15, 16, 17, 18, 20, 21]},
-    {177, -3, "Präziser Stich I", 15, false, true}, # [1, 3]},
-    {178, -3, "Präziser Stich II", 20, false, true}, # [1, 3]},
-    {179, -3, "Präziser Stich III", 25, false, true}, # [1, 3]},
-    {180, -3, "Riposte", 40, false, true}, # [1, 3]},
-    {181, -3, "Rundumschlag I", 25, false, true}, # [4, 5, 9, 10, 12, 13, 14]},
-    {182, -3, "Rundumschlag II", 35, false, true}, # [4, 5, 9, 10, 12, 13, 14]},
-    {183, -3, "Schildspalter", 15, false, true}, # [4, 5, 13, 14]},
-    {184, -3, "Schnellladen (Armbrüste)", 5, false, true}, # [15]},
-    {185, -3, "Schnellladen (Bögen)", 20, false, true}, # [17]},
-    {186, -3, "Schnellladen (Wurfwaffen)", 10, false, true}, # [21]},
-    {187, -3, "Schnellziehen", 10, false, true}, # [1, 3, 4, 5, 7, 10, 12, 13, 14]},
-    {188, -3, "Sturmangriff", 25, false, true}, # [4, 10, 12, 13, 14]},
-    {189, -3, "Todesstoß", 30, false, true}, # [1, 3]},
-    {190, -3, "Verbessertes Ausweichen I", 15, false, true}, # @all_combat_skills},        // done
-    {191, -3, "Verbessertes Ausweichen II", 20, false, true}, # @all_combat_skills},       // done
-    {192, -3, "Verbessertes Ausweichen III", 25, false, true}, # @all_combat_skills},      // done
-    {193, -3, "Verteidigungshaltung", 10, false, true}, # [1, 3, 4, 8, 9, 10, 12, 13, 14]},
-    {194, -3, "Vorstoß", 10, false, true}, # [1, 3, 4, 5, 8, 10, 12, 13, 14]},
-    {195, -3, "Wuchtschlag I", 15, false, true}, # [4, 5, 8, 10, 12, 13, 14]},
-    {196, -3, "Wuchtschlag II", 20, false, true}, # [4, 5, 8, 10, 12, 13, 14]},
-    {197, -3, "Wuchtschlag III", 25, false, true}, # [4, 5, 8, 10, 12, 13, 14]},
-    {198, -3, "Wurf", 10, false, true}, # [8]},
-    {199, -3, "Zu Fall bringen", 20, false, true}, # [7, 12]},
-    # Ruestkammer erweiterung
-    {200, -3, "Schnellladen (Blasrohre)", 5, false, true}, # [16]},
-    {201, -3, "Schnellladen (Diskusse)", 5, false, true}, # [18]},
-    {202, -3, "Schnellladen (Schleudern)", 5, false, true}, # [20]},
-    {203, -3, "Ballistischer Schuss", 10, false, true}, # [17]},
-    {204, -3, "Betäubungsschlag", 15, false, true}, # [4, 10, 12]},
-    {205, -3, "Festnageln", 20, false, true}, # [12]},
-    {206, -3, "Klingensturm", 25, false, true}, # [1, 3, 4, 10]},
-    {207, -3, "Unterlaufen I", 10, false, true}, # [1, 3, 4, 5, 8, 9, 10, 13, 14]},
-    {208, -3, "Unterlaufen II", 15, false, true}, # [1, 3, 4, 5, 8, 9, 10, 13, 14]},
-    {209, -3, "Binden", 25, false, true}, # [1, 3, 10, 12]},
-    {210, -3, "Hohe Klinge", 15, false, true}, # [3, 10, 14]},
-    {211, -3, "Sprungangriff", 20, false, true}, # [3, 10, 14]},
-    {212, -3, "Vorbeiziehen", 15, false, true}, # [1, 3, 4, 10]},
-    {213, -3, "Weiter Schwung", 15, false, true}, # [13, 14]},
-    {214, -3, "Windmühle", 25, false, true}, # [4, 10, 13, 13, 14]},
-    {215, -3, "Wuchtiger Wurf", 15, false, true}, # [21]},
-    {216, -3, "Zertrümmern", 5, false, true}, # [4, 5, 13]},
-    {217, -3, "Drohgebärden", 10, false, true}, # @all_combat_skills},
     # Magische Sonderfertigkeiten
     {218, -4, "Aura verbergen", 20, false, true},
     {219, -4, "Merkmalskenntnis", 10, true, false},
@@ -507,9 +440,9 @@ defmodule Dsa.Data do
   def init(_) do
     Advantage.seed()
     Disadvantage.seed()
+    CombatTrait.seed()
     Language.seed()
     Script.seed()
-
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])
     :ets.insert(:armors, @armors)
