@@ -1,8 +1,6 @@
 defmodule Dsa.Data do
   use GenServer
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
-
   @name __MODULE__
 
   @armors [
@@ -17,32 +15,6 @@ defmodule Dsa.Data do
     {8, "Schuppenpanzer", 5, 2, 12, true },
     {9, "Spiegelpanzer", 4, 2, 13, false },
     {10, "Tuchrüstung", 2, 1, 6, false }
-  ]
-
-  @combat_skills [
-    # {id, sf, ranged, parade, ge, kk, name, stability}
-    {1, "B", false, true, true, false, "Dolche", 14 },
-    {2, "C", false, true, true, false, "Fächer", 13 },
-    {3, "C", false, true, true, false, "Fechtwaffen", 8 },
-    {4, "C", false, true, false, true, "Hiebwaffen", 12 },
-    {5, "C", false, false, false, true, "Kettenwaffen", 10 },
-    {6, "B", false, true, false, true, "Lanzen", 6 },
-    {7, "B", false, false, false, false, "Peitschen", 4 },
-    {8, "B", false, true, true, true, "Raufen", 12 },
-    {9, "C", false, true, false, true, "Schilde", 10 },
-    {10, "C", false, true, true, true, "Schwerter", 13 },
-    {11, "C", false, false, false, true, "Spießwaffen", 12 },
-    {12, "C", false, true, true, true, "Stangenwaffen", 12 },
-    {13, "C", false, true, false, true, "Zweihandhiebwaffen", 11 },
-    {14, "C", false, true, false, true, "Zweihandschwerter", 12 },
-    # Ranged combat
-    {15, "B", true, false, false, false, "Armbrüste", 6 },
-    {16, "B", true, false, false, false, "Blasrohre", 10 },
-    {17, "C", true, false, false, false, "Bögen", 4 },
-    {18, "C", true, false, false, false, "Diskusse", 12 },
-    {19, "B", true, false, false, false, "Feuerspeien", 20 },
-    {20, "B", true, false, false, false, "Schleudern", 4 },
-    {21, "B", true, false, false, false, "Wurfwaffen", 10 }
   ]
 
   @fweapons [
@@ -241,13 +213,6 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # Schicksalspunkte Sonderfertigkeiten
-    {147, -1, "Attacke verbessern", 5, false, true},
-    {148, -1, "Ausweichen verbessern", 5, false, true},
-    {149, -1, "Eigenschaft verbessern", 5, false, true},
-    {150, -1, "Fernkampf verbessern", 5, false, true},
-    {151, -1, "Parade verbessern", 5, false, true},
-    {152, -1, "Wachsamkeit verbessern", 10, false, true},
     # Magische Sonderfertigkeiten
     {218, -4, "Aura verbergen", 20, false, true},
     {219, -4, "Merkmalskenntnis", 10, true, false},
@@ -401,18 +366,17 @@ defmodule Dsa.Data do
   def start_link(_), do: GenServer.start_link(__MODULE__, [], name: @name)
 
   def init(_) do
-    Advantage.seed()
-    Disadvantage.seed()
-    CombatTrait.seed()
-    GeneralTrait.seed()
-    Language.seed()
-    Script.seed()
+    Dsa.Data.Advantage.seed()
+    Dsa.Data.Disadvantage.seed()
+    Dsa.Data.CombatSkill.seed()
+    Dsa.Data.CombatTrait.seed()
+    Dsa.Data.FateTrait.seed()
+    Dsa.Data.GeneralTrait.seed()
+    Dsa.Data.Language.seed()
+    Dsa.Data.Script.seed()
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])
     :ets.insert(:armors, @armors)
-
-    :ets.new(:combat_skills, [:ordered_set, :protected, :named_table])
-    :ets.insert(:combat_skills, @combat_skills)
 
     :ets.new(:fweapons, [:ordered_set, :protected, :named_table])
     :ets.insert(:fweapons, @fweapons)
@@ -445,16 +409,6 @@ defmodule Dsa.Data do
   def armors, do: :ets.tab2list(:armors)
 
   def armor(id, :name), do: :ets.lookup_element(:armors, id, 2)
-
-  # combat skills
-  def combat_skills, do: :ets.tab2list(:combat_skills)
-
-  def combat_skill(id, :ge), do: :ets.lookup_element(:combat_skills, id, 5)
-  def combat_skill(id, :kk), do: :ets.lookup_element(:combat_skills, id, 6)
-  def combat_skill(id, :name), do: :ets.lookup_element(:combat_skills, id, 7)
-  def combat_skill(id, :parade), do: :ets.lookup_element(:combat_skills, id, 4)
-  def combat_skill(id, :ranged), do: :ets.lookup_element(:combat_skills, id, 3)
-  def combat_skill(id, :sf), do: :ets.lookup_element(:combat_skills, id, 2)
 
   # fweapons
   def fweapons, do: :ets.tab2list(:fweapons)

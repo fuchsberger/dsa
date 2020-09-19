@@ -91,30 +91,6 @@
           </div>
         </div>
 
-        <div class='row g-2 mb-3'>
-          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
-
-          <div class="col-sm-8">
-            <div class='row g-2'>
-              <div class='col'>
-                <div class='input-group input-group-sm value'>
-                  <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
-                  <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
-                </div>
-              </div>
-              <div class='col pt-1 small text-right'>
-                p. verloren:
-              </div>
-              <div class='col'>
-                <div class='input-group input-group-sm value'>
-                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
-                  <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <%= render "advantages.html",
           ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
 
@@ -123,6 +99,10 @@
 
         <%= render "general_traits.html",
           ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
+
+        <%= render "fate_traits.html",
+          ap: Map.get(ap, :"Schicksalspunkte SF"), f: f, edit?: @edit == :fate_traits
+        %>
 
         <%= render "languages.html",
           ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
@@ -191,16 +171,6 @@
           <p><%= badge_list(blessings(@changeset.data)) %></p>
         <% end %>
 
-        <%# Fate Point Skills %>
-        <%= if Enum.count(fate_traits(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Schicksalspunkte Sonderfertigkeiten</h6>
-            <i><%= Map.get(ap, :"Schicksalspunkte SF", 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(fate_traits(@changeset.data)) %></p>
-        <% end %>
-
         <%= if Enum.count(@changeset.data.character_traits) == 0 do %>
           <p class='mb-0'>Hier kannst du Vorteile, Nachteile, Sonderfertigkeiten (Allgemein, Magisch, und Kampf), Zaubertricks und Segnungen hinzufügen.</p>
         <% end %>
@@ -217,10 +187,34 @@
           ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
         %>
 
+        <div class='row g-2 mb-3'>
+          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
+
+          <div class="col-sm-8">
+            <div class='row g-2'>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
+                </div>
+              </div>
+              <div class='col pt-1 small text-right'>
+                p. verloren:
+              </div>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <table class='table table-sm mb-0'>
           <thead>
             <tr>
-              <th scope='col'>Name</th>
+              <th scope='col'>Kampftechnik</th>
               <th scope='col' class='text-center'></th>
               <th scope='col' class='text-center'>AT</th>
               <th scope='col' class='text-center'>PA</th>
@@ -231,7 +225,7 @@
           <%= for id <- 1..21 do %>
             <tr>
               <td>
-                <%= label f, String.to_atom("c#{id}"), combat_skill(id, :name), class: "col-sm-10" %>
+                <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
               </td>
               <td class='text-center'></td>
               <td class='text-center'>

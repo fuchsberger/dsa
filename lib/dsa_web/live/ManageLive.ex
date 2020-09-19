@@ -27,7 +27,7 @@ defmodule DsaWeb.ManageLive do
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
       :armors -> {:noreply, assign(socket, :entries, armors())}
-      :combat_skills -> {:noreply, assign(socket, :entries, combat_skills())}
+      :combat_skills -> {:noreply, assign(socket, :entries, Dsa.Data.CombatSkill.list())}
       :skills -> {:noreply, assign(socket, :entries, skills())}
       :traits -> {:noreply, assign(socket, :entries, traits())}
       :mweapons -> {:noreply, assign(socket, :entries, mweapons())}

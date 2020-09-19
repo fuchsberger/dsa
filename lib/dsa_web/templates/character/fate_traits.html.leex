@@ -3,41 +3,51 @@
     <button
       class='btn btn-sm btn-link p-0'
       phx-click='toggle'
-      phx-value-edit='general_traits'
+      phx-value-edit='fate_traits'
       type='button'
     ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
-    Allgemeine Sonderfertigkeiten
+    Schicksalspunkte Sonderfertigkeiten
   </h6>
   <i><%= @ap %> AP</i>
 </div>
 <hr class='my-1'>
 
 <p class='small<%= if @edit?, do: " d-none" %>'>
-  <%=
-    @f.source.data.general_traits
-    |> Enum.map(fn %{id: id, details: details} -> "#{GeneralTrait.name(id)}#{unless is_nil(details), do: ": #{details}"}" end)
-    |> Enum.join(", ")
-  %>
+  <%= for %{id: id} <- @f.source.data.fate_traits do %>
+    <span
+      data-html='true'
+      data-toggle='popover'
+      data-trigger='hover'
+      data-placement="right"
+      data-content='<%= FateTrait.tooltip(id) %>'
+    ><%= FateTrait.name(id) %></span>,
+  <% end %>
 </p>
 
 <table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th scope='col'>Details</th>
       <th class='text-center' scope='col'>AP</th>
       <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
-  <%= for fs <- inputs_for(@f, :general_traits) do %>
+  <%= for fs <- inputs_for(@f, :fate_traits) do %>
     <% id = input_value(fs, :id) %>
     <tr >
-      <td><%= GeneralTrait.name(id) %></td>
-      <td><%= if GeneralTrait.details(id), do: text_input(fs, :details, class: "small", placeholder: "Details...") %></td>
-      <td class='text-center' style="width: 55px;">
+      <td>
+        <span
+          data-html='true'
+          data-toggle='popover'
+          data-trigger='hover'
+          data-placement="right"
+          data-content='<%= FateTrait.tooltip(id) %>'
+        ><%= FateTrait.name(id) %></span>
+      </td>
+      <td class='text-center'>
         <%= hidden_inputs_for(fs) %>
-        <%= if GeneralTrait.fixed_ap(id), do: GeneralTrait.ap(id), else: number_input(fs, :ap, class: "small") %>
+        <%= FateTrait.ap(id) %>
       </td>
       <td class='text-center p-0'>
         <button
@@ -45,14 +55,14 @@
           class='btn btn-link btn-sm p-0'
           phx-click='remove'
           phx-value-id='<%= id %>'
-          phx-value-type='general_trait'
+          phx-value-type='fate_trait'
         ><i class='icon-cancel text-danger'></i></button>
       </td>
     </tr>
   <% end %>
   <tr>
     <td colspan='4'>
-      <%= select @f, :general_trait_id, GeneralTrait.options(),
+      <%= select @f, :fate_trait_id, FateTrait.options(),
         class: "form-select-sm",
         prompt: "hinzufügen..."
       %>

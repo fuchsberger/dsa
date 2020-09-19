@@ -4,7 +4,16 @@ defmodule DsaWeb.CharacterView do
   # import DSA.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, GeneralTrait, Language, Script}
+  alias Dsa.Data.{
+    Advantage,
+    CombatSkill,
+    CombatTrait,
+    Disadvantage,
+    FateTrait,
+    GeneralTrait,
+    Language,
+    Script
+  }
 
   def base_value_field(form, field) do
     ~E"""
