@@ -11,7 +11,9 @@ defmodule DsaWeb.CharacterView do
     Disadvantage,
     FateTrait,
     GeneralTrait,
+    KarmalTradition,
     Language,
+    MagicTradition,
     Script
   }
 

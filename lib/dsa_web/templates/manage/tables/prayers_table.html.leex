@@ -13,7 +13,7 @@
         <th scope='row'><%= name %></th>
         <td class='text-center'><small><%= probe %></small></td>
         <td class='text-center'><%= sf %></td>
-        <td><%= Enum.map(traditions, & tradition(&1, :name)) |> Enum.join(", ") %></td>
+        <td><%= Enum.map(traditions, & KarmalTradition.name(&1)) |> Enum.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>

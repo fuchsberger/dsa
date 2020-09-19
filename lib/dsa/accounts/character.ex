@@ -4,7 +4,18 @@ defmodule Dsa.Accounts.Character do
   import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, FateTrait, GeneralTrait, Language, Script}
+  alias Dsa.Data.{
+    Advantage,
+    CombatTrait,
+    Disadvantage,
+    FateTrait,
+    GeneralTrait,
+    KarmalTradition,
+    Language,
+    MagicTradition,
+    Script
+  }
+
   alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer}
 
   schema "characters" do
@@ -110,6 +121,10 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_bonus, greater_than_or_equal_to: 0, less_than_or_equal_to: 25)
     |> validate_number(:ke_lost, greater_than_or_equal_to: 0)
     |> validate_number(:ke_back, greater_than_or_equal_to: 0)
+
+    |> validate_number(:magic_tradition_id, greater_than: 0, less_than_or_equal_to: MagicTradition.count())
+    |> validate_number(:karmal_tradition_id, greater_than: 0, less_than_or_equal_to: KarmalTradition.count())
+
     |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: Advantage.count())
     |> validate_number(:combat_trait_id, greater_than: 0, less_than_or_equal_to: CombatTrait.count())
     |> validate_number(:disadvantage_id, greater_than: 0, less_than_or_equal_to: Disadvantage.count())

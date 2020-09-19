@@ -6,7 +6,19 @@ defmodule DsaWeb.CharacterLive do
   import Ecto.Changeset, only: [get_change: 2, get_field: 2]
 
   alias Dsa.{Accounts, Repo}
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, FateTrait, GeneralTrait, Language, Script}
+
+  alias Dsa.Data.{
+    Advantage,
+    CombatTrait,
+    Disadvantage,
+    FateTrait,
+    GeneralTrait,
+    KarmalTradition,
+    Language,
+    MagicTradition,
+    Script
+  }
+
   alias DsaWeb.Router.Helpers, as: Routes
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
@@ -23,8 +35,8 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:user_options, Accounts.list_user_options())
     |> assign(:spell_options, spell_options())
     |> assign(:prayer_options, prayer_options())
-    |> assign(:magic_tradition_options, tradition_options(:magic))
-    |> assign(:karmal_tradition_options, tradition_options(:karmal))
+    |> assign(:magic_tradition_options, MagicTradition.options())
+    |> assign(:karmal_tradition_options, KarmalTradition.options())
     |> assign(:user_id, user_id)
     |> assign(:admin?, Accounts.admin?(user_id))}
   end

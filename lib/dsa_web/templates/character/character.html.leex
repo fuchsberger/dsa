@@ -307,7 +307,7 @@
               <%= label f, :magic_tradition_id, "Tradition" %>
               <%= select f, :magic_tradition_id, @magic_tradition_options, class: "form-select-sm", prompt: "keine" %>
               <%= if id do %>
-                <small>Leiteig: <%= tradition(id, :le) %>, <%= tradition(id, :ap) %> AP</small>
+                <small>Leiteig: <%= MagicTradition.le(id) %>, <%= MagicTradition.ap(id) %> AP</small>
               <% end %>
             </div>
 
@@ -406,7 +406,7 @@
               <%= label f, :karmal_tradition_id, "Tradition" %>
               <%= select f, :karmal_tradition_id, @karmal_tradition_options, class: "form-select-sm", prompt: "keine" %>
               <%= if id do %>
-                <small>Leiteig: <%= tradition(id, :le) %>, <%= tradition(id, :ap) %> AP</small>
+                <small>Leiteig: <%= KarmalTradition.le(id) %>, <%= KarmalTradition.ap(id) %> AP</small>
               <% end %>
             </div>
 

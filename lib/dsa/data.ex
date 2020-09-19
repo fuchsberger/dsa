@@ -196,22 +196,6 @@ defmodule Dsa.Data do
     {4, "Zwerg",   8, -4, -4, 6, 61}
   ]
 
-  @traditions [
-    #  {id, magic, le, name, ap}
-    {1, nil, nil, "Allgemein", nil},
-    # Zauberertraditionen
-    {2, true, "KL", "Gildenmagier", 155},
-    {3, true, "IN", "Elfen", 125},
-    {4, true, "CH", "Hexen", 135},
-    # Geweihtentraditionen
-    {5, false, "MU", "Boronkirche", 130},
-    {6, false, "KL", "Hesindekirche", 130},
-    {7, false, "IN", "Perainekirche", 110},
-    {8, false, "IN", "Phexkirche", 150},
-    {9, false, "KL", "Praioskirche", 130},
-    {10, false, "MU", "Rondrakirche", 150}
-  ]
-
   @traits [
     # Magische Sonderfertigkeiten
     {218, -4, "Aura verbergen", 20, false, true},
@@ -372,7 +356,9 @@ defmodule Dsa.Data do
     Dsa.Data.CombatTrait.seed()
     Dsa.Data.FateTrait.seed()
     Dsa.Data.GeneralTrait.seed()
+    Dsa.Data.KarmalTradition.seed()
     Dsa.Data.Language.seed()
+    Dsa.Data.MagicTradition.seed()
     Dsa.Data.Script.seed()
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])
@@ -395,9 +381,6 @@ defmodule Dsa.Data do
 
     :ets.new(:spells, [:ordered_set, :protected, :named_table])
     :ets.insert(:spells, @spells)
-
-    :ets.new(:traditions, [:ordered_set, :protected, :named_table])
-    :ets.insert(:traditions, @traditions)
 
     :ets.new(:traits, [:ordered_set, :protected, :named_table])
     :ets.insert(:traits, @traits)
@@ -464,34 +447,6 @@ defmodule Dsa.Data do
   def species(id, :zk), do: :ets.lookup_element(:species, id, 5)
   def species(id, :ge), do: :ets.lookup_element(:species, id, 6)
   def species(id, :ap), do: :ets.lookup_element(:species, id, 7)
-
-  # Traditions
-
-  def traditions, do: :ets.tab2list(:traditions)
-
-  def tradition(id) do
-    case :ets.lookup(:traditions, id) do
-      [] -> nil
-      [data] -> data
-    end
-  end
-
-  def tradition(nil, _), do: nil
-  def tradition(id, :ap), do: :ets.lookup_element(:traditions, id, 5)
-  def tradition(id, :le), do: :ets.lookup_element(:traditions, id, 3)
-  def tradition(id, :name), do: :ets.lookup_element(:traditions, id, 4)
-
-  def tradition_options(:magic) do
-    traditions()
-    |> Enum.filter(fn {_id, magic, _le, _name, _ap} -> magic end)
-    |> Enum.map(fn {id, _magic, _le, name, _ap} -> {name, id} end)
-  end
-
-  def tradition_options(:karmal) do
-    traditions()
-    |> Enum.filter(fn {_id, magic, _le, _name, _ap} -> magic == false end)
-    |> Enum.map(fn {id, _magic, _le, name, _ap} -> {name, id} end)
-  end
 
   # traits
   def traits, do: :ets.tab2list(:traits)

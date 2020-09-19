@@ -7,15 +7,7 @@ defmodule DsaWeb.CharacterHelpers do
   import Dsa.{Lists, Data}
   import DsaWeb.DsaHelpers
 
-  alias Dsa.Data.{CombatSkill, CombatTrait, FateTrait, Script}
-
-  def general_traits(c) do
-    Enum.filter(c.character_traits, & Enum.member?(111..146, &1.trait_id))
-  end
-
-  def fate_traits(c) do
-    Enum.filter(c.character_traits, & Enum.member?(147..152, &1.trait_id))
-  end
+  alias Dsa.Data.{CombatSkill, CombatTrait, FateTrait, KarmalTradition, MagicTradition, Script}
 
   def staff_spells(c) do
     Enum.filter(c.character_traits, & Enum.member?(251..258, &1.trait_id))
@@ -66,10 +58,10 @@ defmodule DsaWeb.CharacterHelpers do
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
 
     magic_tradition =
-      if c.magic_tradition_id, do: tradition(c.magic_tradition_id, :ap), else: 0
+      if c.magic_tradition_id, do: MagicTradition.ap(c.magic_tradition_id), else: 0
 
     karmal_tradition =
-      if c.karmal_tradition_id, do: tradition(c.karmal_tradition_id, :ap), else: 0
+      if c.karmal_tradition_id, do: KarmalTradition.ap(c.karmal_tradition_id), else: 0
 
     tricks = Enum.count(tricks(c))
     blessings = Enum.count(blessings(c))
@@ -225,7 +217,7 @@ defmodule DsaWeb.CharacterHelpers do
             nil ->
               {"-", 0}
             id ->
-              name = tradition(id, :le)
+              name = MagicTradition.le(id)
               {name, Map.get(c, String.to_atom(name))}
           end
 
@@ -263,7 +255,7 @@ defmodule DsaWeb.CharacterHelpers do
             nil ->
               {"-", 0}
             id ->
-              name = tradition(id, :le)
+              name = KarmalTradition.le(id)
               {name, Map.get(c, String.downcase(name) |> String.to_atom())}
           end
 
