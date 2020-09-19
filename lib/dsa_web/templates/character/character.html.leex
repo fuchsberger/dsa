@@ -218,11 +218,12 @@
               <th scope='col' class='text-center'></th>
               <th scope='col' class='text-center'>AT</th>
               <th scope='col' class='text-center'>PA</th>
+              <th scope='col' class='text-center'>Max</th>
               <th scope='col' class='text-center'>ST</th>
             </tr>
           </thead>
           <tbody>
-          <%= for id <- 1..21 do %>
+          <%= for id <- 1..CombatSkill.count() do %>
             <tr>
               <td>
                 <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
@@ -232,7 +233,10 @@
                 <small><em><%= at(@changeset.data, id) %></em></small>
               </td>
               <td class='text-center'>
-                <small><em><%= pa(@changeset.data, id) %></em></small>
+                <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
+              </td>
+              <td class='text-center'>
+                <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
               </td>
               <td><%= number_input f, String.to_atom("c#{id}"), class: "border-0 col-sm-2 form-control-sm" %></td>
             </tr>
@@ -300,8 +304,11 @@
           </div>
         </div>
 
-        <div class="card-body tab-content p-0">
-          <div class='row g-2 p-2'>
+        <div class="card-body tab-content">
+
+          <%= render "magic_traits.html", ap: Map.get(ap, :"Magische SF"), f: f, edit?: @edit == :magic_traits %>
+
+          <div class='row g-2'>
             <div class='col-4'>
               <% id = @changeset.data.magic_tradition_id %>
               <%= label f, :magic_tradition_id, "Tradition" %>
@@ -329,7 +336,7 @@
                   </div>
                 </div>
                 <div class='col-4'>
-                  <%= label f, :ae_back, "Zurück gekauft", class: "small" %>
+                  <%= label f, :ae_back, "Zurück gek.", class: "small" %>
                   <div class='input-group input-group-sm value'>
                     <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
                     <%= number_input f, :ae_back, class: "form-control px-1 text-center" %>
@@ -339,6 +346,8 @@
               </div>
             </div>
           </div>
+
+
 
           <% spell_forms = inputs_for(f, :character_spells) %>
           <table class='table table-sm mb-0'>

@@ -13,6 +13,7 @@ defmodule Dsa.Accounts.Character do
     KarmalTradition,
     Language,
     MagicTradition,
+    MagicTrait,
     Script
   }
 
@@ -71,6 +72,7 @@ defmodule Dsa.Accounts.Character do
     field :fate_trait_id, :integer, virtual: true
     field :general_trait_id, :integer, virtual: true
     field :language_id, :integer, virtual: true
+    field :magic_trait_id, :integer, virtual: true
     field :script_id, :integer, virtual: true
 
     field :trait_id, :integer, virtual: true
@@ -89,6 +91,7 @@ defmodule Dsa.Accounts.Character do
     has_many :general_traits, GeneralTrait, on_replace: :delete
     has_many :fate_traits, FateTrait, on_replace: :delete
     has_many :languages, Language, on_replace: :delete
+    has_many :magic_traits, MagicTrait, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
 
     has_many :character_prayers, CharacterPrayer, on_replace: :delete
@@ -103,7 +106,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id language_id script_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id language_id magic_trait_id script_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -131,6 +134,7 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:fate_trait_id, greater_than: 0, less_than_or_equal_to: FateTrait.count())
     |> validate_number(:general_trait_id, greater_than: 0, less_than_or_equal_to: GeneralTrait.count())
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
+    |> validate_number(:magic_trait_id, greater_than: 0, less_than_or_equal_to: MagicTrait.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
     |> validate_length(:trait_details, max: 50)
     |> foreign_key_constraint(:group_id)

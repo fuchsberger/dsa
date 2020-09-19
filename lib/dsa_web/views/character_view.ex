@@ -14,6 +14,7 @@ defmodule DsaWeb.CharacterView do
     KarmalTradition,
     Language,
     MagicTradition,
+    MagicTrait,
     Script
   }
 
@@ -58,7 +59,7 @@ defmodule DsaWeb.CharacterView do
         {true, true, true, []}
 
       id ->
-        {_id, level, _name, ap, details, fixed_ap} = trait(id)
+        {_id, level, _name, _ap, details, fixed_ap} = trait(id)
 
         dis_details = not details
         dis_level = level < 2
@@ -71,16 +72,6 @@ defmodule DsaWeb.CharacterView do
             level == -7 -> [{"Segnung", -7}]
             level == -6 -> [{"Zaubertrick", -6}]
             level == -5 -> [{"Karmale SF", -5}]
-            level == -4 -> [{"Magische SF", -4}]
-            level == -3 -> [{"Kampf SF", -3}]
-            level == -1 -> [{"SP SF", -1}]
-            level == 0 -> [{"Allg. SF", 0}]
-            level == 1 && ap > 0 -> [{"Vorteil", 1}]
-            level == 1 && ap < 0 -> [{"Nachteil", 1}]
-            level > 1 ->
-              1..level
-              |> Enum.to_list()
-              |> Enum.map(& {roman(&1), &1})
           end
 
         {dis_details, dis_ap, dis_level, level_options}

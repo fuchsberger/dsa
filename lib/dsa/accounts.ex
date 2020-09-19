@@ -9,7 +9,16 @@ defmodule Dsa.Accounts do
   alias Dsa.Repo
   alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, Group, User, CharacterSpell, CharacterPrayer}
 
-  alias Dsa.Data.{Advantage, CombatTrait, Disadvantage, FateTrait, GeneralTrait, Language, Script}
+  alias Dsa.Data.{
+    Advantage,
+    CombatTrait,
+    Disadvantage,
+    FateTrait,
+    GeneralTrait,
+    Language,
+    MagicTrait,
+    Script
+  }
 
   @character_preloads [
     :group,
@@ -20,6 +29,7 @@ defmodule Dsa.Accounts do
     fate_traits: from(s in FateTrait, order_by: s.id),
     general_traits: from(s in GeneralTrait, order_by: s.id),
     languages: from(s in Language, order_by: s.language_id),
+    magic_traits: from(s in MagicTrait, order_by: s.magic_trait_id),
     scripts: from(s in Script, order_by: s.script_id),
 
     character_armors: from(s in CharacterArmor, order_by: s.armor_id),
@@ -129,6 +139,7 @@ defmodule Dsa.Accounts do
     |> cast_assoc(:fate_traits, with: &FateTrait.changeset/2)
     |> cast_assoc(:general_traits, with: &GeneralTrait.changeset/2)
     |> cast_assoc(:languages, with: &Language.changeset/2)
+    |> cast_assoc(:magic_traits, with: &MagicTrait.changeset/2)
     |> cast_assoc(:scripts, with: &Script.changeset/2)
     |> Repo.update()
   end
@@ -195,6 +206,7 @@ defmodule Dsa.Accounts do
   def add_fate_trait(params), do: FateTrait.changeset(%FateTrait{}, params) |> Repo.insert()
   def add_general_trait(params), do: GeneralTrait.changeset(%GeneralTrait{}, params) |> Repo.insert()
   def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
+  def add_magic_trait(params), do: MagicTrait.changeset(%MagicTrait{}, params) |> Repo.insert()
   def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
 
   def remove(struct), do: Repo.delete(struct)

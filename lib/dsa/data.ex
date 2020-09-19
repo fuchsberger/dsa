@@ -197,12 +197,6 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # Magische Sonderfertigkeiten
-    {218, -4, "Aura verbergen", 20, false, true},
-    {219, -4, "Merkmalskenntnis", 10, true, false},
-    {220, -4, "Starke Zaubertricks", 2, false, true},
-    {221, -4, "Verbotene Pforten", 10, false, true},
-    {222, -4, "Zauberzeichen", 20, false, true},
     # Zaubertricks
     {223, -6, "Abkühlung", 1, false, true},
     {224, -6, "Bauchreden", 1, false, true},
@@ -359,6 +353,7 @@ defmodule Dsa.Data do
     Dsa.Data.KarmalTradition.seed()
     Dsa.Data.Language.seed()
     Dsa.Data.MagicTradition.seed()
+    Dsa.Data.MagicTrait.seed()
     Dsa.Data.Script.seed()
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])

@@ -54,6 +54,7 @@ defmodule DsaWeb.CharacterHelpers do
     disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
     fate_traits = Enum.map(c.fate_traits, & FateTrait.ap(&1.id)) |> Enum.sum()
     general_traits = Enum.map(c.general_traits, & &1.ap) |> Enum.sum()
+    magic_traits = Enum.map(c.magic_traits, & &1.ap) |> Enum.sum()
     languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
 
@@ -92,6 +93,7 @@ defmodule DsaWeb.CharacterHelpers do
       Nachteile: disadvantages,
       "Allgemeine SF": general_traits,
       "Kampf SF": combat_traits,
+      "Magische SF": magic_traits,
       "Schicksalspunkte SF": fate_traits,
       "Magische Tradition": magic_tradition,
       "Karmale Tradition": karmal_tradition,
@@ -285,23 +287,35 @@ defmodule DsaWeb.CharacterHelpers do
 
   def at(c, id) do
     case CombatSkill.ranged(id) do
-      true -> Map.get(c, String.to_atom("c#{id}")) + max(0, floor((c.ff - 8)/3))
-      false -> Map.get(c, String.to_atom("c#{id}")) + max(0, floor((c.mu - 8)/3))
+      true -> combat_skill_value(c, id) + max(0, floor((c.ff - 8)/3))
+      false -> combat_skill_value(c, id) + max(0, floor((c.mu - 8)/3))
     end
   end
 
   def pa(c, id) do
-    bonus =
-      cond do
-        not CombatSkill.parade(id) -> nil
-        CombatSkill.ge(id) && CombatSkill.kk(id) -> max(c.kk, c.ge)
-        CombatSkill.ge(id) -> c.ge
-        CombatSkill.kk(id) -> c.kk
-        true -> nil
-      end
-    case bonus do
-      nil -> nil
-      bonus -> round(Map.get(c, String.to_atom("c#{id}"))/2 + max(0, floor((bonus - 8)/3)))
+    if CombatSkill.parade(id) do
+      bonus =
+        case {CombatSkill.ge(id), CombatSkill.kk(id)} do
+          {true, true} -> max(c.kk, c.ge)
+          {true, false} -> c.ge
+          {false, true} -> c.kk
+          {false, false} -> c.ff
+        end
+
+      round(combat_skill_value(c, id)/2 + max(0, floor((bonus - 8)/3)))
+    else
+      nil
+    end
+  end
+
+  def combat_skill_value(c, id), do: Map.get(c, String.to_atom("c#{id}"))
+
+  def combat_skill_max(c, id) do
+    case {CombatSkill.ge(id), CombatSkill.kk(id)} do
+      {true, true} -> max(c.ge, c.kk) + 2
+      {true, false} -> c.ge + 2
+      {false, true} -> c.kk + 2
+      {false, false} -> c.ff + 2
     end
   end
 

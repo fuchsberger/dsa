@@ -16,6 +16,7 @@ defmodule DsaWeb.CharacterLive do
     KarmalTradition,
     Language,
     MagicTradition,
+    MagicTrait,
     Script
   }
 
@@ -169,6 +170,20 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding language: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"magic_trait_id" => id}}, socket) when id != "" do
+    id = String.to_integer(id)
+    c = socket.assigns.changeset.data
+    case Accounts.add_magic_trait(%{magic_trait_id: id, character_id: c.id, ap: MagicTrait.ap(id)}) do
+      {:ok, %{magic_trait_id: id}} ->
+        Logger.debug("#{c.name} has learned #{MagicTrait.name(id)} (magic trait).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding magic trait: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -377,6 +392,9 @@ defmodule DsaWeb.CharacterLive do
 
         "language" ->
           {Enum.find(character.languages, & &1.language_id == id), Language.name(id)}
+
+        "magic_trait" ->
+          {Enum.find(character.magic_traits, & &1.id == id), MagicTrait.name(id)}
 
         "script" ->
           {Enum.find(character.scripts, & &1.script_id == id), Script.name(id)}
