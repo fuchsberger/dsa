@@ -72,29 +72,5 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
     end
 
     create index(:characters, [:group_id, :user_id])
-
-    # character armors
-    create table(:character_armors, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :armor_id, :integer, primary_key: true
-      add :dmg, :integer
-    end
-    create index :character_armors, [:character_id, :armor_id]
-
-    # Character Meele Weapons
-    create table(:character_mweapons, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :mweapon_id, :integer, primary_key: true
-      add :dmg, :integer
-    end
-    create index :character_mweapons, [:character_id, :mweapon_id]
-
-    # character projectile weapons
-    create table(:character_fweapons, primary_key: false) do
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :fweapon_id, :integer, primary_key: true
-      add :dmg, :integer
-    end
-    create index :character_fweapons, [:character_id, :fweapon_id]
   end
 end

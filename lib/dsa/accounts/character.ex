@@ -6,16 +6,19 @@ defmodule Dsa.Accounts.Character do
 
   alias Dsa.Data.{
     Advantage,
+    Armor,
     Blessing,
     CombatTrait,
     Disadvantage,
     FateTrait,
+    FWeapon,
     GeneralTrait,
     KarmalTradition,
     KarmalTrait,
     Language,
     MagicTradition,
     MagicTrait,
+    MWeapon,
     Prayer,
     Script,
     Spell,
@@ -23,7 +26,7 @@ defmodule Dsa.Accounts.Character do
     StaffSpell
   }
 
-  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon}
+  alias Dsa.Accounts.{Group, User}
 
   schema "characters" do
 
@@ -73,14 +76,17 @@ defmodule Dsa.Accounts.Character do
 
     # virtual fields
     field :advantage_id, :integer, virtual: true
+    field :armor_id, :integer, virtual: true
     field :blessing_id, :integer, virtual: true
     field :combat_trait_id, :integer, virtual: true
     field :disadvantage_id, :integer, virtual: true
     field :fate_trait_id, :integer, virtual: true
+    field :fweapon_id, :integer, virtual: true
     field :general_trait_id, :integer, virtual: true
     field :karmal_trait_id, :integer, virtual: true
     field :language_id, :integer, virtual: true
     field :magic_trait_id, :integer, virtual: true
+    field :mweapon_id, :integer, virtual: true
     field :prayer_id, :integer, virtual: true
     field :script_id, :integer, virtual: true
     field :spell_id, :integer, virtual: true
@@ -91,29 +97,28 @@ defmodule Dsa.Accounts.Character do
     belongs_to :user, User
 
     has_many :advantages, Advantage, on_replace: :delete
+    has_many :armors, Armor, on_replace: :delete
     has_many :blessings, Blessing, on_replace: :delete
     has_many :combat_traits, CombatTrait, on_replace: :delete
     has_many :disadvantages, Advantage, on_replace: :delete
+    has_many :fweapons, FWeapon, on_replace: :delete
     has_many :general_traits, GeneralTrait, on_replace: :delete
     has_many :fate_traits, FateTrait, on_replace: :delete
     has_many :karmal_traits, KarmalTrait, on_replace: :delete
     has_many :languages, Language, on_replace: :delete
     has_many :magic_traits, MagicTrait, on_replace: :delete
+    has_many :mweapons, MWeapon, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
     has_many :prayers, Prayer, on_replace: :delete
     has_many :spells, Spell, on_replace: :delete
     has_many :spell_tricks, SpellTrick, on_replace: :delete
     has_many :staff_spells, StaffSpell, on_replace: :delete
 
-    has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
-    has_many :character_fweapons, CharacterFWeapon, on_replace: :delete
-    has_many :character_armors, CharacterArmor, on_replace: :delete
-
     timestamps()
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id advantage_id blessing_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
+  @optional_fields ~w(advantage_id armor_id blessing_id combat_trait_id disadvantage_id fate_trait_id fweapon_id general_trait_id group_id karmal_tradition_id karmal_trait_id language_id magic_tradition_id magic_trait_id mweapon_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -131,18 +136,20 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_lost, greater_than_or_equal_to: 0)
     |> validate_number(:ke_back, greater_than_or_equal_to: 0)
 
-    |> validate_number(:magic_tradition_id, greater_than: 0, less_than_or_equal_to: MagicTradition.count())
-    |> validate_number(:karmal_tradition_id, greater_than: 0, less_than_or_equal_to: KarmalTradition.count())
-
     |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: Advantage.count())
+    |> validate_number(:armor_id, greater_than: 0, less_than_or_equal_to: Armor.count())
     |> validate_number(:blessing_id, greater_than: 0, less_than_or_equal_to: Blessing.count())
     |> validate_number(:combat_trait_id, greater_than: 0, less_than_or_equal_to: CombatTrait.count())
     |> validate_number(:disadvantage_id, greater_than: 0, less_than_or_equal_to: Disadvantage.count())
     |> validate_number(:fate_trait_id, greater_than: 0, less_than_or_equal_to: FateTrait.count())
+    |> validate_number(:fweapon_id, greater_than: 0, less_than_or_equal_to: FWeapon.count())
     |> validate_number(:general_trait_id, greater_than: 0, less_than_or_equal_to: GeneralTrait.count())
+    |> validate_number(:karmal_tradition_id, greater_than: 0, less_than_or_equal_to: KarmalTradition.count())
     |> validate_number(:karmal_trait_id, greater_than: 0, less_than_or_equal_to: KarmalTrait.count())
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
+    |> validate_number(:magic_tradition_id, greater_than: 0, less_than_or_equal_to: MagicTradition.count())
     |> validate_number(:magic_trait_id, greater_than: 0, less_than_or_equal_to: MagicTrait.count())
+    |> validate_number(:mweapon_id, greater_than: 0, less_than_or_equal_to: MWeapon.count())
     |> validate_number(:prayer_id, greater_than: 0, less_than_or_equal_to: Prayer.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
     |> validate_number(:spell_id, greater_than: 0, less_than_or_equal_to: Spell.count())

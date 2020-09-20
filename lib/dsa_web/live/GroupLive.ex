@@ -40,12 +40,7 @@ defmodule DsaWeb.GroupLive do
 
     DsaWeb.Endpoint.subscribe(topic(group.id))
 
-    # character changeset
-    changeset =
-      case Enum.find(group.characters, & &1.user_id == user_id) do
-        nil -> nil
-        character -> Accounts.change_character(character, %{}, :combat)
-      end
+    c = Enum.find(group.characters, & &1.user_id == user_id)
 
     user_character_ids =
       group.characters
@@ -53,10 +48,10 @@ defmodule DsaWeb.GroupLive do
       |> Enum.map(& &1.id)
 
     {:ok, socket
-    |> assign(:armor_options, armors())
+    |> assign(:armor_options, (unless is_nil(c), do: Dsa.Data.Armor.options(c), else: []))
     |> assign(:group, group)
     |> assign(:logs, logs)
-    |> assign(:changeset, changeset)
+    |> assign(:changeset, (unless is_nil(c), do: Accounts.change_character(c, %{}, :combat), else: nil))
     |> assign(:settings, Event.change_settings())
     |> assign(:show_details, false)
     |> assign(:master?, group.master_id == user_id)

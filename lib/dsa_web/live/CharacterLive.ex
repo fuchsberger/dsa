@@ -8,16 +8,19 @@ defmodule DsaWeb.CharacterLive do
 
   alias Dsa.Data.{
     Advantage,
+    Armor,
     Blessing,
     CombatTrait,
     Disadvantage,
     FateTrait,
+    FWeapon,
     GeneralTrait,
     KarmalTradition,
     KarmalTrait,
     Language,
     MagicTradition,
     MagicTrait,
+    MWeapon,
     Prayer,
     Script,
     Spell,
@@ -83,6 +86,19 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def handle_event("change", %{"character" => %{"armor_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_armor(%{id: id, character_id: c.id, dmg: 0}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has aquired #{Armor.name(id)} (armor).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding armor: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => %{"blessing_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
     case Accounts.add_blessing(%{id: id, character_id: c.id}) do
@@ -143,6 +159,19 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def handle_event("change", %{"character" => %{"fweapon_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_fweapon(%{id: id, character_id: c.id, dmg: 0}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has aquired #{FWeapon.name(id)} (fweapon).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding fweapon: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => %{"general_trait_id" => id}}, socket) when id != "" do
     id = String.to_integer(id)
     c = socket.assigns.changeset.data
@@ -194,6 +223,19 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding magic trait: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"mweapon_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_mweapon(%{id: id, character_id: c.id, dmg: 0}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has aquired #{MWeapon.name(id)} (meele weapon).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding meele weapon: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -299,6 +341,9 @@ defmodule DsaWeb.CharacterLive do
         "advantage" ->
           {Enum.find(character.advantages, & &1.advantage_id == id), Advantage.name(id)}
 
+        "armor" ->
+          {Enum.find(character.armors, & &1.id == id), Armor.name(id)}
+
         "blessing" ->
           {Enum.find(character.blessings, & &1.id == id), Blessing.name(id)}
 
@@ -311,6 +356,9 @@ defmodule DsaWeb.CharacterLive do
         "fate_trait" ->
           {Enum.find(character.fate_traits, & &1.id == id), FateTrait.name(id)}
 
+        "fweapon" ->
+          {Enum.find(character.fweapons, & &1.id == id), FWeapon.name(id)}
+
         "general_trait" ->
           {Enum.find(character.general_traits, & &1.id == id), GeneralTrait.name(id)}
 
@@ -322,6 +370,9 @@ defmodule DsaWeb.CharacterLive do
 
         "magic_trait" ->
           {Enum.find(character.magic_traits, & &1.magic_trait_id == id), MagicTrait.name(id)}
+
+        "mweapon" ->
+          {Enum.find(character.mweapons, & &1.id == id), MWeapon.name(id)}
 
         "prayer" ->
           {Enum.find(character.prayers, & &1.id == id), Prayer.name(id)}

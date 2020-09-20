@@ -1,6 +1,12 @@
 defmodule DsaWeb.ManageView do
   use DsaWeb, :view
 
+  alias Dsa.Data.{
+    CombatSkill,
+    KarmalTradition,
+    MagicTradition,
+  }
+
   import Dsa.Lists
 
   def entries(action, armors, combat_skills, skills, groups, users, weapons) do

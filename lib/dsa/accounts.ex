@@ -7,18 +7,21 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Character, CharacterArmor, CharacterFWeapon, CharacterMWeapon, Group, User}
+  alias Dsa.Accounts.{Character, Group, User}
 
   alias Dsa.Data.{
     Advantage,
+    Armor,
     Blessing,
     CombatTrait,
     Disadvantage,
     FateTrait,
+    FWeapon,
     GeneralTrait,
     KarmalTrait,
     Language,
     MagicTrait,
+    MWeapon,
     Prayer,
     Script,
     Spell,
@@ -30,23 +33,22 @@ defmodule Dsa.Accounts do
     :group,
     :user,
     advantages: from(s in Advantage, order_by: s.advantage_id),
+    armors: from(s in Armor, order_by: s.id),
     blessings: from(s in Blessing, order_by: s.id),
     combat_traits: from(s in CombatTrait, order_by: s.id),
     disadvantages: from(s in Disadvantage, order_by: s.disadvantage_id),
     fate_traits: from(s in FateTrait, order_by: s.id),
+    fweapons: from(s in FWeapon, order_by: s.id),
     general_traits: from(s in GeneralTrait, order_by: s.id),
     karmal_traits: from(s in KarmalTrait, order_by: s.karmal_trait_id),
     languages: from(s in Language, order_by: s.language_id),
     magic_traits: from(s in MagicTrait, order_by: s.magic_trait_id),
+    mweapons: from(s in MWeapon, order_by: s.id),
     prayers: from(s in Prayer, order_by: s.id),
     scripts: from(s in Script, order_by: s.script_id),
     spells: from(s in Spell, order_by: s.id),
     spell_tricks: from(s in SpellTrick, order_by: s.id),
-    staff_spells: from(s in StaffSpell, order_by: s.id),
-
-    character_armors: from(s in CharacterArmor, order_by: s.armor_id),
-    character_fweapons: from(s in CharacterFWeapon, order_by: s.fweapon_id),
-    character_mweapons: from(s in CharacterMWeapon, order_by: s.mweapon_id)
+    staff_spells: from(s in StaffSpell, order_by: s.id)
   ]
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
@@ -141,14 +143,17 @@ defmodule Dsa.Accounts do
     character
     |> Character.changeset(attrs)
     |> cast_assoc(:advantages, with: &Advantage.changeset/2)
+    |> cast_assoc(:armors, with: &Armor.changeset/2)
     |> cast_assoc(:blessings, with: &Blessing.changeset/2)
     |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
     |> cast_assoc(:disadvantages, with: &Disadvantage.changeset/2)
     |> cast_assoc(:fate_traits, with: &FateTrait.changeset/2)
+    |> cast_assoc(:fweapons, with: &FWeapon.changeset/2)
     |> cast_assoc(:general_traits, with: &GeneralTrait.changeset/2)
     |> cast_assoc(:karmal_traits, with: &KarmalTrait.changeset/2)
     |> cast_assoc(:languages, with: &Language.changeset/2)
     |> cast_assoc(:magic_traits, with: &MagicTrait.changeset/2)
+    |> cast_assoc(:mweapons, with: &MWeapon.changeset/2)
     |> cast_assoc(:prayers, with: &Prayer.changeset/2)
     |> cast_assoc(:scripts, with: &Script.changeset/2)
     |> cast_assoc(:spells, with: &Spell.changeset/2)
@@ -196,14 +201,17 @@ defmodule Dsa.Accounts do
   end
 
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
+  def add_armor(params), do: Armor.changeset(%Armor{}, params) |> Repo.insert()
   def add_blessing(params), do: Blessing.changeset(%Blessing{}, params) |> Repo.insert()
   def add_combat_trait(params), do: CombatTrait.changeset(%CombatTrait{}, params) |> Repo.insert()
   def add_disadvantage(params), do: Disadvantage.changeset(%Disadvantage{}, params) |> Repo.insert()
   def add_fate_trait(params), do: FateTrait.changeset(%FateTrait{}, params) |> Repo.insert()
+  def add_fweapon(params), do: FWeapon.changeset(%FWeapon{}, params) |> Repo.insert()
   def add_general_trait(params), do: GeneralTrait.changeset(%GeneralTrait{}, params) |> Repo.insert()
   def add_karmal_trait(params), do: KarmalTrait.changeset(%KarmalTrait{}, params) |> Repo.insert()
   def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
   def add_magic_trait(params), do: MagicTrait.changeset(%MagicTrait{}, params) |> Repo.insert()
+  def add_mweapon(params), do: MWeapon.changeset(%MWeapon{}, params) |> Repo.insert()
   def add_prayer(params), do: Prayer.changeset(%Prayer{}, params) |> Repo.insert()
   def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
   def add_spell(params), do: Spell.changeset(%Spell{}, params) |> Repo.insert()

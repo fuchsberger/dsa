@@ -3,124 +3,6 @@ defmodule Dsa.Data do
 
   @name __MODULE__
 
-  @armors [
-    # {id, name, rs, be, stability, penalties}
-    {1, "Normale Kleidung / Nackt", 0, 0, 4, false},
-    {2, "Schwere Kleidung / Winter", 1, 0, 5, true },
-    {3, "Iryanrüstung", 3, 1, 8, true },
-    {4, "Kettenhemd", 4, 2, 13, false },
-    {5, "Krötenhaut", 3, 1, 8, true },
-    {6, "Lederharnisch", 3, 1, 8, true },
-    {7, "Leichte Platte", 6, 3, 11, false },
-    {8, "Schuppenpanzer", 5, 2, 12, true },
-    {9, "Spiegelpanzer", 4, 2, 13, false },
-    {10, "Tuchrüstung", 2, 1, 6, false }
-  ]
-
-  @fweapons [
-    # {id, combat_skill_id, name, tp_dice, tp_bonus, rw1, rw2, rw3, lz}
-    {1, 15, "Balestrina", 1, 4, 5, 25, 40, 2},
-    {2, 15, "Balläster", 1, 3, 20, 60, 100, 2},
-    {3, 16, "Blasrohr", 0, 1, 5, 20, 40, 2},
-    {4, 18, "Diskus", 1, 2, 5, 25, 40, 2},
-    {5, 15, "Eisenwalder", 1, 4, 10, 50, 80, 2},
-    {6, 17, "Elfenbogen", 1, 5, 50, 100, 200, 1},
-    {7, 15, "Handarmbrust", 1, 3, 5, 25, 40, 3},
-    {8, 17, "Kompositbogen", 1, 7, 20, 100, 160, 2},
-    {9, 17, "Kurzbogen", 1, 4, 10, 50, 80, 1},
-    {10, 17, "Langbogen", 1, 8, 20, 100, 160, 2},
-    {11, 15, "Leichte Armbrust", 1, 6, 10, 50, 80, 8},
-    {12, 21, "Schneidzahn", 1, 4, 2, 10, 15, 2},
-    {13, 15, "Schwere Armbrust", 2, 6, 20, 100, 160, 15},
-    {14, 21, "Wurfbeil", 1, 3, 2, 10, 15, 1},
-    {15, 21, "Wurfdolch", 1, 1, 2, 10, 15, 1},
-    {16, 21, "Wurfkeule", 1, 2, 2, 10, 15, 1},
-    {17, 21, "Wurfnetz", 0, 0, 1, 3, 5, 1},
-    {18, 21, "Wurfring", 1, 1, 2, 10, 15, 1},
-    {19, 21, "Wurfscheibe", 1, 1, 2, 10, 15, 1},
-    {20, 21, "Wurfstern", 1, 1, 2, 10, 15, 1},
-    {21, 21, "Wurfspeer", 2, 2, 5, 25, 40, 2}
-  ]
-
-  @mweapons [
-    # {id, combat_skill_id, name, tp_dice, tp_bonus, ge, kk, ls, at_mod, pa_mod, rw}
-    {1, 10, "Amazonensäbel", 1, 4, true, true, 15, 0, 0, 2},
-    {2, 14, "Anderthalbhänder", 1, 6, false, true, 14, 0, 0, 2},
-    {3, 10, "Barbarenschwert", 1, 5, true, true, 15, -1, -1, 2},
-    {4, 13, "Barbarenstreitaxt", 2, 4, false, true, 13, 0, -4, 2},
-    {5, 1, "Basiliskenzunge", 1, 2, true, false, 14, 0, -1, 1},
-    {6, 4, "Brabakbengel", 1, 5, false, true, 14, -1, -2, 2},
-    {7, 10, "Breitschwert", 1, 4, true, true, 14, -1, -1, 2},
-    {8, 1, "Dolch", 1, 1, true, false, 14, 0, 0, 2},
-    {9, 14, "Doppelkhunchomer", 2, 3, false, true, 14, 0, -2, 2},
-    {10, 1, "Drachenzahn", 1, 2, true, false, 14, 0, -1, 1},
-    {11, 12, "Dreizack", 1, 4, true, true, 15, 0, 0, 3},
-    {12, 12, "Dschadra", 1, 5, true, true, 15, 0, -1, 3},
-    {13, 10, "Entermesser", 1, 3, true, true, 15, 0, -1, 2},
-    {14, 9, "Faustschild", 1, 0, false, true, 16, -3, 0, 1},
-    {15, 13, "Felsspalter", 2, 2, false, true, 13, 0, -2, 2},
-    {16, 3, "Florett", 1, 3, true, false, 14, 1, 0, 2},
-    {17, 7, "Fuhrmannspeitsche", 1, 0, false, false, 16, 0, 0, 3},
-    {18, 12, "Glefe", 1, 5, true, true, 15, 0, -2, 3},
-    {19, 14, "Großer Sklaventod", 2, 3, false, true, 14, 0, -2, 2},
-    {20, 9, "Großschild", 1, 1, false, true, 16, -6, 3, 1},
-    {21, 1, "Hakendolch", 1, 1, true, false, 14, -1, 0, 1},
-    {22, 10, "Haumesser", 1, 3, true, true, 15, 0, -1, 2},
-    {23, 12, "Hellebarde", 1, 6, true, true, 15, 0, -2, 3},
-    {24, 9, "Holzschild", 1, 0, false, true, 16, -4, 1, 1},
-    {25, 12, "Holzspeer", 1, 2, true, true, 15, 0, 0, 3},
-    {26, 1, "Jagdmesser", 1, 1, true, false, 14, 0, -2, 1},
-    {27, 12, "Jagdspieß", 1, 5, true, true, 15, 0, -1, 3},
-    {28, 12, "Kampfstab", 1, 1, true, true, 15, 0, 2, 3},
-    {29, 1, "Katar", 1, 1, true, false, 13, 0, -1, 1},
-    {30, 4, "Keule", 1, 3, false, true, 14, 0, -1, 2},
-    {31, 10, "Khunchomer", 1, 4, true, true, 15, 0, 0, 2},
-    {32, 4, "Knüppel", 1, 2, false, true, 14, 0, -2, 2},
-    {33, 13, "Kriegshammer", 2, 3, false, true, 13, 0, -3, 2},
-    {34, 10, "Kurzschwert", 1, 2, true, true, 15, 0, 0, 1},
-    {35, 10, "Langschwert", 1, 4, true, true, 15, 0, 0, 2},
-    {36, 9, "Lederschild", 1, 0, false, true, 16, -4, 1, 1},
-    {37, 4, "Lindwurmschläger", 1, 4, false, true, 14, 0, -1, 1},
-    {38, 1, "Linkhand", 1, 1, true, false, 14, 0, 0, 1},
-    {39, 4, "Magierstab (Kurz)", 1, 1, false, true, 14, 0, -1, 1},
-    {40, 4, "Magierstab (Mittel)", 1, 2, false, true, 14, 0, -1, 2},
-    {41, 12, "Magierstab (Lang)", 1, 2, true, true, 16, -1, 2, 3},
-    {42, 1, "Mengbilar", 1, 1, true, false, 14, 0, -2, 1},
-    {43, 1, "Messer", 1, 1, true, false, 14, 0, -2, 1},
-    {44, 4, "Molokdeschnaja", 1, 4, false, true, 14, 0, -1, 2},
-    {45, 5, "Morgenstern", 1, 5, false, true, 14, 0, 0, 2},
-    {46, 10, "Nachtwind", 1, 4, true, true, 15, 0, 0, 2},
-    {47, 5, "Ochsenherde", 2, 6, false, true, 14, -2, 0, 2},
-    {48, 1, "Ogerfänger", 1, 2, true, false, 14, 0, -1, 1},
-    {49, 5, "Ogerschelle", 2, 2, false, true, 14, -2, 0, 2},
-    {50, 8, "Orchidee", 1, 2, true, true, 15, 0, -1, 1},
-    {51, 4, "Orknase", 1, 5, false, true, 14, -1, -2, 2},
-    {52, 8, "Panzerarm", 1, 1, true, true, 15, 0, 0, 1},
-    {53, 4, "Rabenschnabel", 1, 4, false, true, 14, 0, -2, 2},
-    {54, 3, "Rapier", 1, 3, true, false, 15, 1, 1, 2},
-    {55, 14, "Richtschwert", 2, 6, false, true, 14, -2, -3, 2},
-    {56, 10, "Robbentöter", 1, 4, true, true, 15, 0, 0, 2},
-    {57, 14, "Rondrakamm", 2, 2, false, true, 14, 0, -1, 2},
-    {58, 10, "Säbel", 1, 3, true, true, 15, 0, 0, 2},
-    {59, 8, "Schlagring", 1, 1, true, true, 15, 0, 0, 1},
-    {60, 12, "Schnitter", 1, 5, true, true, 15, -1, -1, 3},
-    {61, 1, "Schwerer Dolch", 1, 2, true, false, 14, 0, -1, 1},
-    {62, 10, "Sklaventod", 1, 4, true, true, 15, 0, 0, 2},
-    {63, 4, "Sonnenzepter", 1, 3, false, true, 14, 0, -1, 2},
-    {64, 12, "Speer", 1, 4, true, true, 15, 0, 0, 3},
-    {65, 3, "Stockdegen", 1, 2, true, false, 15, 1, 0, 2},
-    {66, 4, "Streitaxt", 1, 4, false, true, 14, 0, -1, 2},
-    {67, 4, "Streitkolben", 1, 4, false, true, 14, 0, -1, 2},
-    {68, 9, "Thorwalerschild", 1, 1, false, true, 16, -5, 2, 1},
-    {69, 14, "Tuzakmesser", 1, 6, false, true, 14, 0, 0, 2},
-    {70, 1, "Waqqif", 1, 2, true, false, 14, 0, -1, 1},
-    {71, 13, "Warunker Hammer", 1, 6, false, true, 14, 0, -3, 2},
-    {72, 3, "Wolfsmesser", 1, 4, true, false, 15, 1, 0, 2},
-    {73, 14, "Zweihänder", 2, 4, false, true, 14, 0, -3, 2},
-    {74, 12, "Zweililie", 1, 4, true, true, 15, 0, 2, 2},
-    {75, 13, "Zwergenschlägel", 1, 6, false, true, 13, 0, -1, 2}
-  ]
-
   @skills [
     # {id, sf, category, probe, name, be}
     # Körper (1)
@@ -200,31 +82,25 @@ defmodule Dsa.Data do
 
   def init(_) do
     Dsa.Data.Advantage.seed()
+    Dsa.Data.Armor.seed()
     Dsa.Data.Blessing.seed()
     Dsa.Data.Disadvantage.seed()
     Dsa.Data.CombatSkill.seed()
     Dsa.Data.CombatTrait.seed()
     Dsa.Data.FateTrait.seed()
+    Dsa.Data.FWeapon.seed()
     Dsa.Data.GeneralTrait.seed()
     Dsa.Data.KarmalTradition.seed()
     Dsa.Data.KarmalTrait.seed()
     Dsa.Data.Language.seed()
     Dsa.Data.MagicTradition.seed()
     Dsa.Data.MagicTrait.seed()
+    Dsa.Data.MWeapon.seed()
     Dsa.Data.Prayer.seed()
     Dsa.Data.Script.seed()
     Dsa.Data.Spell.seed()
     Dsa.Data.SpellTrick.seed()
     Dsa.Data.StaffSpell.seed()
-
-    :ets.new(:armors, [:ordered_set, :protected, :named_table])
-    :ets.insert(:armors, @armors)
-
-    :ets.new(:fweapons, [:ordered_set, :protected, :named_table])
-    :ets.insert(:fweapons, @fweapons)
-
-    :ets.new(:mweapons, [:ordered_set, :protected, :named_table])
-    :ets.insert(:mweapons, @mweapons)
 
     :ets.new(:skills, [:ordered_set, :protected, :named_table])
     :ets.insert(:skills, @skills)
@@ -234,17 +110,6 @@ defmodule Dsa.Data do
 
     {:ok, "In-Memory Database created and filled."}
   end
-
-  # Armors
-  def armors, do: :ets.tab2list(:armors)
-
-  def armor(id, :name), do: :ets.lookup_element(:armors, id, 2)
-
-  # fweapons
-  def fweapons, do: :ets.tab2list(:fweapons)
-
-  # mweapons
-  def mweapons, do: :ets.tab2list(:mweapons)
 
   # skills
   def skills, do: :ets.tab2list(:skills)

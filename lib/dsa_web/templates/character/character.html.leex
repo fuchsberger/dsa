@@ -112,81 +112,6 @@
       </div>
     </div>
 
-    <div class="card mb-3">
-      <div class="card-header d-flex justify-content-between">
-        <h5 class='mb-0'>Kampftalente</h5>
-        <i><%= Map.get(ap, :Kampftalente) %> AP</i>
-      </div>
-      <div class="card-body">
-        <%= render "combat_traits.html",
-          ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
-        %>
-
-        <div class='row g-2 mb-3'>
-          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
-
-          <div class="col-sm-8">
-            <div class='row g-2'>
-              <div class='col'>
-                <div class='input-group input-group-sm value'>
-                  <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
-                  <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
-                </div>
-              </div>
-              <div class='col pt-1 small text-right'>
-                p. verloren:
-              </div>
-              <div class='col'>
-                <div class='input-group input-group-sm value'>
-                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
-                  <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <table class='table table-sm mb-0'>
-          <thead>
-            <tr>
-              <th scope='col'>Kampftechnik</th>
-              <th scope='col' class='text-center'></th>
-              <th scope='col' class='text-center'>AT</th>
-              <th scope='col' class='text-center'>PA</th>
-              <th scope='col' class='text-center'>Max</th>
-              <th scope='col' class='text-center'>ST</th>
-            </tr>
-          </thead>
-          <tbody>
-          <%= for id <- 1..CombatSkill.count() do %>
-            <tr>
-              <td>
-                <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
-              </td>
-              <td class='text-center'></td>
-              <td class='text-center'>
-                <small><em><%= at(@changeset.data, id) %></em></small>
-              </td>
-              <td class='text-center'>
-                <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
-              </td>
-              <td class='text-center'>
-                <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
-              </td>
-              <td><%= number_input f, String.to_atom("c#{id}"), class: "border-0 col-sm-2 form-control-sm" %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class='col-lg'>
-
-    <%# Computed Values %>
-    <%= render "stats_card.html", assigns %>
-
     <div id='talente' class="card mb-3">
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs d-flex justify-content-between">
@@ -225,9 +150,7 @@
     </div>
 
     <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 47) do %>
-
       <div class="card mb-3">
-
         <div class="card-header py-0">
           <div class='row'>
             <div class='col-6 '>
@@ -331,9 +254,7 @@
     <% end %>
 
     <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 12) do %>
-
       <div class="card mb-3">
-
         <div class="card-header py-0">
           <div class='row'>
             <div class='col-6 '>
@@ -432,6 +353,90 @@
         </div>
       </div>
     <% end %>
+  </div>
+
+  <div class='col-lg'>
+
+    <%# Computed Values %>
+    <%= render "stats_card.html", assigns %>
+
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between">
+        <h5 class='mb-0'>Kampftalente</h5>
+        <i><%= Map.get(ap, :Kampftalente) %> AP</i>
+      </div>
+      <div class="card-body">
+        <%= render "combat_traits.html",
+          ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
+        %>
+
+        <div class='row g-2 mb-3'>
+          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
+
+          <div class="col-sm-8">
+            <div class='row g-2'>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
+                </div>
+              </div>
+              <div class='col pt-1 small text-right'>
+                p. verloren:
+              </div>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table class='table table-sm mb-0'>
+          <thead>
+            <tr>
+              <th scope='col'>Kampftechnik</th>
+              <th scope='col' class='text-center'></th>
+              <th scope='col' class='text-center'>AT</th>
+              <th scope='col' class='text-center'>PA</th>
+              <th scope='col' class='text-center'>Max</th>
+              <th scope='col' class='text-center'>ST</th>
+            </tr>
+          </thead>
+          <tbody>
+          <%= for id <- 1..CombatSkill.count() do %>
+            <tr>
+              <td>
+                <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
+              </td>
+              <td class='text-center'></td>
+              <td class='text-center'>
+                <small><em><%= at(@changeset.data, id) %></em></small>
+              </td>
+              <td class='text-center'>
+                <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
+              </td>
+              <td class='text-center'>
+                <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
+              </td>
+              <td><%= number_input f, String.to_atom("c#{id}"), class: "border-0 col-sm-2 form-control-sm" %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </form>
+
+    <div class="card">
+      <h5 class='card-header'>Ausrüstung</h5>
+      <div class="card-body">
+        <%= render "armors.html", f: f %>
+        <%= render "mweapons.html", f: f %>
+        <%= render "fweapons.html", f: f %>
+      </div>
+    </div>
+  </div>
+</form>
 <% end %>
