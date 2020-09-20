@@ -13,6 +13,7 @@ defmodule DsaWeb.CharacterHelpers do
     FateTrait,
     KarmalTradition,
     MagicTradition,
+    Prayer,
     Script,
     Spell,
     StaffSpell
@@ -66,8 +67,8 @@ defmodule DsaWeb.CharacterHelpers do
       |> Enum.sum()
 
     prayers =
-      c.character_prayers
-      |> Enum.map(& ap_cost(&1.level, prayer(&1.prayer_id, :sf), true))
+      c.prayers
+      |> Enum.map(& ap_cost(&1.level, Prayer.sf(&1.id), true))
       |> Enum.sum()
 
     le_bonus = ap_cost(Map.get(c, :le_bonus), "D")

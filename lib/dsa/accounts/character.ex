@@ -16,13 +16,14 @@ defmodule Dsa.Accounts.Character do
     Language,
     MagicTradition,
     MagicTrait,
+    Prayer,
     Script,
     Spell,
     SpellTrick,
     StaffSpell
   }
 
-  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterPrayer}
+  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon}
 
   schema "characters" do
 
@@ -99,11 +100,11 @@ defmodule Dsa.Accounts.Character do
     has_many :languages, Language, on_replace: :delete
     has_many :magic_traits, MagicTrait, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
+    has_many :prayers, Prayer, on_replace: :delete
     has_many :spells, Spell, on_replace: :delete
     has_many :spell_tricks, SpellTrick, on_replace: :delete
     has_many :staff_spells, StaffSpell, on_replace: :delete
 
-    has_many :character_prayers, CharacterPrayer, on_replace: :delete
     has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
     has_many :character_fweapons, CharacterFWeapon, on_replace: :delete
     has_many :character_armors, CharacterArmor, on_replace: :delete
@@ -112,7 +113,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id prayer_id advantage_id blessing_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id script_id spell_id spell_trick_id staff_spell_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id advantage_id blessing_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -142,6 +143,7 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:karmal_trait_id, greater_than: 0, less_than_or_equal_to: KarmalTrait.count())
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
     |> validate_number(:magic_trait_id, greater_than: 0, less_than_or_equal_to: MagicTrait.count())
+    |> validate_number(:prayer_id, greater_than: 0, less_than_or_equal_to: Prayer.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
     |> validate_number(:spell_id, greater_than: 0, less_than_or_equal_to: Spell.count())
     |> validate_number(:spell_trick_id, greater_than: 0, less_than_or_equal_to: SpellTrick.count())

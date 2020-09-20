@@ -196,50 +196,6 @@ defmodule Dsa.Data do
     {4, "Zwerg",   8, -4, -4, 6, 61}
   ]
 
-  @prayers [
-    # {id, sf, probe, name, traditions}
-    {1, "B", "MU/KL/IN", "Ackersegen", [7]},
-    {2, "A", "MU/KL/CH", "Bann der Dunkelheit", [9]},
-    {3, "B", "IN/CH/CH", "Bann der Furcht", [5]},
-    {4, "B", "MU/KL/CH", "Bann des Lichts", [5, 8]},
-    {5, "A", "MU/KL/IN", "Blendstrahl", [9]},
-    {6, "B", "MU/IN/CH", "Ehrenhaftigkeit", [10]},
-    {7, "A", "KL/KL/IN", "Entzifferung", [6]},
-    {8, "B", "MU/IN/CH", "Ermutigung", [10]},
-    {9, "B", "MU/IN/CH", "Exorzismus", [1, 5, 9]},
-    {10, "A", "MU/IN/GE", "Fall ins Nichts", [8]},
-    {11, "B", "MU/IN/CH", "Friedvolle Aura", [7, 6]},
-    {12, "B", "MU/IN/CH", "Geweihter Panzer", [10]},
-    {13, "B", "KL/IN/CH", "Giftbann", [7]},
-    {14, "A", "KL/IN/IN", "Göttlicher Fingerzeig", [1]},
-    {15, "A", "IN/IN/CH", "Göttliches Zeichen", [1]},
-    {16, "B", "KL/IN/CH", "Heilsegen", [7]},
-    {17, "B", "MU/MU/CH", "Kleiner Bann wider Untote", [5]},
-    {18, "B", "MU/IN/CH", "Kleiner Bannstrahl", [9]},
-    {19, "B", "KL/IN/CH", "Krankheitsbann", [7]},
-    {20, "B", "IN/IN/GE", "Lautlos", [8]},
-    {21, "B", "MU/KL/IN", "Löwengestalt", [10]},
-    {22, "C", "MU/IN/CH", "Magieschutz", [6, 9]},
-    {23, "A", "KL/IN/IN", "Magiesicht", [6, 9]},
-    {24, "A", "KL/KL/IN", "Mondsicht", [8]},
-    {25, "B", "KL/IN/CH", "Mondsilberzunge", [8]},
-    {26, "B", "KL/IN/CH", "Nebelleib", [8]},
-    {27, "B", "MU/IN/CH", "Objektsegen", [1]},
-    {28, "C", "KL/IN/CH", "Objektweihe", [1]},
-    {29, "A", "MU/KL/IN", "Ort der Ruhe", [5]},
-    {30, "A", "KL/IN/CH", "Pflanzenwuchs", [7]},
-    {31, "A", "MU/KL/IN", "Rabenruf", [5]},
-    {32, "B", "KL/IN/CH", "Schlaf", [5]},
-    {33, "B", "MU/KL/IN", "Schlangenstab", [6]},
-    {34, "A", "MU/KL/IN", "Schlangenzunge", [6]},
-    {35, "C", "MU/IN/KO", "Schmerzresistenz", [10]},
-    {36, "B", "MU/IN/CH", "Schutz der Wehrlosen", [10]},
-    {37, "A", "KL/IN/CH", "Sternenglanz", [8]},
-    {38, "C", "MU/KL/IN", "Wahrheit", [9]},
-    {39, "B", "IN/IN/GE", "Wieselflink", [8]},
-    {40, "B", "KL/KL/IN", "Wundersame Verständigung", [6, 8]}
-  ]
-
   def start_link(_), do: GenServer.start_link(__MODULE__, [], name: @name)
 
   def init(_) do
@@ -255,6 +211,7 @@ defmodule Dsa.Data do
     Dsa.Data.Language.seed()
     Dsa.Data.MagicTradition.seed()
     Dsa.Data.MagicTrait.seed()
+    Dsa.Data.Prayer.seed()
     Dsa.Data.Script.seed()
     Dsa.Data.Spell.seed()
     Dsa.Data.SpellTrick.seed()
@@ -271,9 +228,6 @@ defmodule Dsa.Data do
 
     :ets.new(:skills, [:ordered_set, :protected, :named_table])
     :ets.insert(:skills, @skills)
-
-    :ets.new(:prayers, [:ordered_set, :protected, :named_table])
-    :ets.insert(:prayers, @prayers)
 
     :ets.new(:species, [:ordered_set, :protected, :named_table])
     :ets.insert(:species, @species)
@@ -300,19 +254,6 @@ defmodule Dsa.Data do
   def skill(id, :probe), do: :ets.lookup_element(:skills, id, 4)
   def skill(id, :sf), do: :ets.lookup_element(:skills, id, 2)
   def skill(id, :be), do: :ets.lookup_element(:skills, id, 6)
-
-  # Prayers
-  def prayers, do: :ets.tab2list(:prayers)
-
-  def prayer_options() do
-    Enum.map(prayers(), fn {id, _sf, _probe, name, _traditions} -> {name, id} end)
-  end
-
-  def prayer(id, :name), do: :ets.lookup_element(:prayers, id, 4)
-  def prayer(id, :probe), do: :ets.lookup_element(:prayers, id, 3)
-  def prayer(id, :sf), do: :ets.lookup_element(:prayers, id, 2)
-
-  def valid_prayer?(id), do: :ets.member(:prayers, id)
 
   # Species
   def species, do: :ets.tab2list(:species)

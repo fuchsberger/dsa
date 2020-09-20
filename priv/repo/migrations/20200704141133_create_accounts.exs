@@ -73,14 +73,6 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
 
     create index(:characters, [:group_id, :user_id])
 
-    # character prayers
-    create table(:character_prayers, primary_key: false) do
-      add :level, :integer
-      add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
-      add :prayer_id, :integer, primary_key: true
-    end
-    create index :character_prayers, [:character_id, :prayer_id]
-
     # character armors
     create table(:character_armors, primary_key: false) do
       add :character_id, references(:characters, on_delete: :delete_all), primary_key: true

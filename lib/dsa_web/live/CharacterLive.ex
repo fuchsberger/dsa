@@ -3,7 +3,6 @@ defmodule DsaWeb.CharacterLive do
   require Logger
 
   import Dsa.Data
-  import Ecto.Changeset, only: [get_field: 2]
 
   alias Dsa.{Accounts, Repo}
 
@@ -19,6 +18,7 @@ defmodule DsaWeb.CharacterLive do
     Language,
     MagicTradition,
     MagicTrait,
+    Prayer,
     Script,
     Spell,
     SpellTrick,
@@ -38,7 +38,6 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:user_options, Accounts.list_user_options())
-    |> assign(:prayer_options, prayer_options())
     |> assign(:magic_tradition_options, MagicTradition.options())
     |> assign(:karmal_tradition_options, KarmalTradition.options())
     |> assign(:user_id, user_id)
@@ -199,6 +198,19 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def handle_event("change", %{"character" => %{"prayer_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_prayer(%{id: id, character_id: c.id}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has learned #{Prayer.name(id)} (prayer).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding prayer: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => %{"script_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
     case Accounts.add_script(%{script_id: id, character_id: c.id}) do
@@ -278,22 +290,6 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
-  def handle_event("delete", %{"prayer" => id}, socket) do
-    character = socket.assigns.changeset.data
-    character_prayer = Enum.find(character.character_prayers, & &1.prayer_id == String.to_integer(id))
-
-    case Accounts.remove(character_prayer) do
-      {:ok, _character_prayer} ->
-        character = Accounts.preload(character)
-        Logger.debug("Removed prayer from #{character.name}.")
-        {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
-
-      {:error, reason} ->
-        Logger.error("Error removing prayer: #{inspect(reason)}")
-        {:noreply, socket}
-    end
-  end
-
   def handle_event("remove", %{"id" => id, "type" => type}, socket) do
     id = String.to_integer(id)
     character = socket.assigns.changeset.data
@@ -326,6 +322,9 @@ defmodule DsaWeb.CharacterLive do
 
         "magic_trait" ->
           {Enum.find(character.magic_traits, & &1.magic_trait_id == id), MagicTrait.name(id)}
+
+        "prayer" ->
+          {Enum.find(character.prayers, & &1.id == id), Prayer.name(id)}
 
         "script" ->
           {Enum.find(character.scripts, & &1.script_id == id), Script.name(id)}
