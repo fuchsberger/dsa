@@ -210,11 +210,6 @@ defmodule Dsa.Data do
     {232, -6, "Schnipsen", 1, false, true},
     {233, -6, "Signatur", 1, false, true},
     {234, -6, "Trocken", 1, false, true},
-    # Karmale Sonderfertigkeiten
-    {235, -5, "Aspektkenntnis", 15, true, false},
-    {236, -5, "Fokussierung", 8, false, true},
-    {237, -5, "Stärke des Glaubens", 10, false, true},
-    {238, -5, "Starke Segnungen", 2, false, true},
     # Segnungen
     {239, -7, "Eidsegen", 1, false, true},
     {240, -7, "Feuersegen", 1, false, true},
@@ -228,18 +223,6 @@ defmodule Dsa.Data do
     {248, -7, "Stärkungssegen", 1, false, true},
     {249, -7, "Tranksegen", 1, false, true},
     {250, -7, "Weisheitssegen", 1, false, true},
-    # Stabzauber
-    {251, -8, "Bindung des Stabes", 10, false, false},
-    {252, -8, "Doppeltes Maß", 5, false, true},
-    {253, -8, "Ewige Flamme", 10, false, true},
-    {254, -8, "Flammenschwert", 35, false, true},
-    {255, -8, "Kraftfokus", 30, false, true},
-    {256, -8, "Merkmalsfokus", 35, false, true},
-    {257, -8, "Seil des Adepten", 10, false, true},
-    {258, -8, "Stab-Apport", 15, false, true},
-    # Hexen
-    {260, -9, "Vertrautenbindung", 20, false, true},
-    {261, -9, "Flugsalbe", 15, false, true}
   ]
 
   @spells [
@@ -351,10 +334,12 @@ defmodule Dsa.Data do
     Dsa.Data.FateTrait.seed()
     Dsa.Data.GeneralTrait.seed()
     Dsa.Data.KarmalTradition.seed()
+    Dsa.Data.KarmalTrait.seed()
     Dsa.Data.Language.seed()
     Dsa.Data.MagicTradition.seed()
     Dsa.Data.MagicTrait.seed()
     Dsa.Data.Script.seed()
+    Dsa.Data.StaffSpell.seed()
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])
     :ets.insert(:armors, @armors)
@@ -376,9 +361,6 @@ defmodule Dsa.Data do
 
     :ets.new(:spells, [:ordered_set, :protected, :named_table])
     :ets.insert(:spells, @spells)
-
-    :ets.new(:traits, [:ordered_set, :protected, :named_table])
-    :ets.insert(:traits, @traits)
 
     {:ok, "In-Memory Database created and filled."}
   end
@@ -442,18 +424,4 @@ defmodule Dsa.Data do
   def species(id, :zk), do: :ets.lookup_element(:species, id, 5)
   def species(id, :ge), do: :ets.lookup_element(:species, id, 6)
   def species(id, :ap), do: :ets.lookup_element(:species, id, 7)
-
-  # traits
-  def traits, do: :ets.tab2list(:traits)
-
-  def trait(id) do
-    case :ets.lookup(:traits, id) do
-      [] -> nil
-      [data] -> data
-    end
-  end
-
-  def trait_options do
-    Enum.map(traits(), fn {id, _level, name, _ap, _details, _fixed_ap} -> {name, id} end)
-  end
 end

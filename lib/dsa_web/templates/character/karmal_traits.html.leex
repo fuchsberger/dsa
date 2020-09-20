@@ -1,0 +1,67 @@
+<div class='d-flex justify-content-between'>
+  <h6 class='mb-0'>
+    <button
+      class='btn btn-sm btn-link p-0'
+      phx-click='toggle'
+      phx-value-edit='karmal_traits'
+      type='button'
+    ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
+    Karmale Sonderfertigkeiten
+  </h6>
+  <i><%= @ap %> AP</i>
+</div>
+<hr class='my-1'>
+
+<p class='small<%= if @edit?, do: " d-none" %>'>
+  <%= for %{karmal_trait_id: id, details: details} <- @f.source.data.karmal_traits do %>
+    <span
+      data-html='true'
+      data-toggle='popover'
+      data-trigger='hover'
+      data-placement="left"
+      data-content='<%= KarmalTrait.tooltip(id) %>'
+    ><%= "#{KarmalTrait.name(id)}#{if details, do: ": #{details}"}" %></span>,
+  <% end %>
+</p>
+
+<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th class='text-center' scope='col'>Details</th>
+      <th class='text-center' scope='col'>AP</th>
+      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for fs <- inputs_for(@f, :karmal_traits) do %>
+    <% id = input_value(fs, :karmal_trait_id) %>
+    <tr >
+      <td><%= KarmalTrait.name(id) %></td>
+      <td class='text-center'>
+        <%= if KarmalTrait.details(id), do:
+          text_input fs, :details, class: "small", placeholder: "Details..."
+        %>
+      </td>
+      <td class='text-center' style="width: 55px;">
+        <%= hidden_inputs_for(fs) %>
+        <%= if KarmalTrait.fixed_ap(id), do: KarmalTrait.ap(id), else: number_input(fs, :ap, class: "small") %>
+      </td>
+      <td class='text-center p-0'>
+        <button
+          type='button'
+          class='btn btn-link btn-sm p-0'
+          phx-click='remove'
+          phx-value-id='<%= id %>'
+          phx-value-type='karmal_trait'
+        ><i class='icon-cancel text-danger'></i></button>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='4'>
+      <%= select @f, :karmal_trait_id, KarmalTrait.options(), class: "form-select-sm font-italic", prompt: "hinzufügen..." %>
+    </td>
+  </tr>
+  </tbody>
+</table>

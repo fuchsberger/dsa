@@ -29,7 +29,6 @@ defmodule DsaWeb.ManageLive do
       :armors -> {:noreply, assign(socket, :entries, armors())}
       :combat_skills -> {:noreply, assign(socket, :entries, Dsa.Data.CombatSkill.list())}
       :skills -> {:noreply, assign(socket, :entries, skills())}
-      :traits -> {:noreply, assign(socket, :entries, traits())}
       :mweapons -> {:noreply, assign(socket, :entries, mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, fweapons())}
       :prayers -> {:noreply, assign(socket, :entries, prayers())}

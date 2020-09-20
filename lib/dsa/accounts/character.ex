@@ -11,13 +11,15 @@ defmodule Dsa.Accounts.Character do
     FateTrait,
     GeneralTrait,
     KarmalTradition,
+    KarmalTrait,
     Language,
     MagicTradition,
     MagicTrait,
-    Script
+    Script,
+    StaffSpell
   }
 
-  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterTrait, CharacterSpell, CharacterPrayer}
+  alias Dsa.Accounts.{Group, User, CharacterArmor, CharacterFWeapon, CharacterMWeapon, CharacterSpell, CharacterPrayer}
 
   schema "characters" do
 
@@ -65,22 +67,19 @@ defmodule Dsa.Accounts.Character do
     field :magic_tradition_id, :integer
     field :karmal_tradition_id, :integer
 
-    # virtual fields for adding various information
+    # virtual fields
     field :advantage_id, :integer, virtual: true
     field :combat_trait_id, :integer, virtual: true
     field :disadvantage_id, :integer, virtual: true
     field :fate_trait_id, :integer, virtual: true
     field :general_trait_id, :integer, virtual: true
+    field :karmal_trait_id, :integer, virtual: true
     field :language_id, :integer, virtual: true
     field :magic_trait_id, :integer, virtual: true
-    field :script_id, :integer, virtual: true
-
-    field :trait_id, :integer, virtual: true
-    field :trait_level, :integer, virtual: true
-    field :trait_ap, :integer, virtual: true
-    field :trait_details, :string, virtual: true
-    field :spell_id, :integer, virtual: true
     field :prayer_id, :integer, virtual: true
+    field :script_id, :integer, virtual: true
+    field :spell_id, :integer, virtual: true
+    field :staff_spell_id, :integer, virtual: true
 
     belongs_to :group, Group
     belongs_to :user, User
@@ -90,29 +89,28 @@ defmodule Dsa.Accounts.Character do
     has_many :disadvantages, Advantage, on_replace: :delete
     has_many :general_traits, GeneralTrait, on_replace: :delete
     has_many :fate_traits, FateTrait, on_replace: :delete
+    has_many :karmal_traits, KarmalTrait, on_replace: :delete
     has_many :languages, Language, on_replace: :delete
     has_many :magic_traits, MagicTrait, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
+    has_many :staff_spells, StaffSpell, on_replace: :delete
 
     has_many :character_prayers, CharacterPrayer, on_replace: :delete
     has_many :character_spells, CharacterSpell, on_replace: :delete
     has_many :character_mweapons, CharacterMWeapon, on_replace: :delete
     has_many :character_fweapons, CharacterFWeapon, on_replace: :delete
     has_many :character_armors, CharacterArmor, on_replace: :delete
-    has_many :character_traits, CharacterTrait, on_replace: :delete
-    has_many :traits, through: [:character_traits, :trait]
 
     timestamps()
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id trait_id trait_level trait_ap trait_details spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id language_id magic_trait_id script_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id script_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
     |> validate_required(@required_fields ++ talent_fields() ++ combat_fields())
     |> validate_length(:name, min: 2, max: 10)
-    |> validate_number(:trait_ap, not_equal_to: 0)
     |> validate_base_values()
     |> validate_combat_skills()
     |> validate_talents()
@@ -133,10 +131,11 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:disadvantage_id, greater_than: 0, less_than_or_equal_to: Disadvantage.count())
     |> validate_number(:fate_trait_id, greater_than: 0, less_than_or_equal_to: FateTrait.count())
     |> validate_number(:general_trait_id, greater_than: 0, less_than_or_equal_to: GeneralTrait.count())
+    |> validate_number(:karmal_trait_id, greater_than: 0, less_than_or_equal_to: KarmalTrait.count())
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
     |> validate_number(:magic_trait_id, greater_than: 0, less_than_or_equal_to: MagicTrait.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
-    |> validate_length(:trait_details, max: 50)
+    |> validate_number(:staff_spell_id, greater_than: 0, less_than_or_equal_to: StaffSpell.count())
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)
   end

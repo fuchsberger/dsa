@@ -112,71 +112,6 @@
       </div>
     </div>
 
-    <div class="card mb-3 mt-3 d-none">
-      <div class="card-header py-0 d-flex justify-content-between">
-        <h5 class='my-2'>Charakteristiken</h5>
-        <button class='btn btn-light btn-sm' phx-click='toggle-trait-form' type='button'>
-          <%= unless @show_trait_form?, do: [icon("add"), "hinzufügen"], else: [icon("cancel"), "abbrechen"] %>
-        </button>
-      </div>
-      <div class="card-body">
-        <div class='row mb-1 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
-          <% {dis_details, dis_ap, dis_level, level_options} = disables(@changeset) %>
-          <div class='col-6 '>
-            <%= label f, :trait_id, "SF", class: "" %>
-            <%= select(f, :trait_id, trait_options(), prompt: "hinzufügen...", class: "form-select-sm")
-            %>
-          </div>
-          <div class='col-3'>
-            <%= label f, :trait_level, "Typ / Level", class: "" %>
-            <%= select f, :trait_level, level_options, class: "form-control-sm", prompt: "Level", disabled: dis_level %>
-          </div>
-          <div class='col-3'>
-            <%= label f, :trait_ap, "AP", class: "" %>
-            <%= number_input f, :trait_ap, class: "form-control-sm", placeholder: "AP", disabled: dis_ap %>
-          </div>
-        </div>
-        <div class='row mb-2 g-1<%= unless @show_trait_form?, do: " d-none" %>'>
-          <div class='col-9'>
-            <%= text_input f, :trait_details, class: "form-control-sm", placeholder: "Details...", disabled: dis_details %>
-          </div>
-          <div class='col-3 '>
-            <button
-              class='btn btn-sm btn-secondary w-100'
-              type='button'
-              phx-click='add-trait'
-            >
-              hinzufügen
-            </button>
-          </div>
-        </div>
-
-        <%# Zaubertricks %>
-        <%= if Enum.count(tricks(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Zaubertricks</h6>
-            <i><%= Map.get(ap, :Zaubertricks, 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(tricks(@changeset.data)) %></p>
-        <% end %>
-
-        <%# Segnungen %>
-        <%= if Enum.count(blessings(@changeset.data)) > 0 do %>
-          <div class='d-flex justify-content-between'>
-            <h6 class='mb-0'>Segnungen</h6>
-            <i><%= Map.get(ap, :Segnungen, 0) %> AP</i>
-          </div>
-          <hr class='my-1'>
-          <p><%= badge_list(blessings(@changeset.data)) %></p>
-        <% end %>
-
-        <%= if Enum.count(@changeset.data.character_traits) == 0 do %>
-          <p class='mb-0'>Hier kannst du Vorteile, Nachteile, Sonderfertigkeiten (Allgemein, Magisch, und Kampf), Zaubertricks und Segnungen hinzufügen.</p>
-        <% end %>
-      </div>
-    </div>
-
     <div class="card mb-3">
       <div class="card-header d-flex justify-content-between">
         <h5 class='mb-0'>Kampftalente</h5>
@@ -308,6 +243,8 @@
 
           <%= render "magic_traits.html", ap: Map.get(ap, :"Magische SF"), f: f, edit?: @edit == :magic_traits %>
 
+          <%= if @changeset.data.magic_tradition_id == 1, do: render("staff_spells.html", ap: Map.get(ap, :"Stabzauber"), f: f, edit?: @edit == :staff_spells) %>
+
           <div class='row g-2'>
             <div class='col-4'>
               <% id = @changeset.data.magic_tradition_id %>
@@ -346,8 +283,6 @@
               </div>
             </div>
           </div>
-
-
 
           <% spell_forms = inputs_for(f, :character_spells) %>
           <table class='table table-sm mb-0'>
@@ -408,8 +343,10 @@
           </div>
         </div>
 
-        <div class="card-body tab-content p-0">
-          <div class='row g-2 p-2'>
+        <div class="card-body tab-content">
+          <%= render "karmal_traits.html", ap: Map.get(ap, :"Karmale SF"), f: f, edit?: @edit == :karmal_traits %>
+
+          <div class='row g-2'>
             <div class='col-4'>
               <% id = @changeset.data.karmal_tradition_id %>
               <%= label f, :karmal_tradition_id, "Tradition" %>
@@ -437,7 +374,7 @@
                   </div>
                 </div>
                 <div class='col-4'>
-                  <%= label f, :ke_back, "Zurück gekauft", class: "small" %>
+                  <%= label f, :ke_back, "Zurück gek.", class: "small" %>
                   <div class='input-group input-group-sm value'>
                     <%= label f, :ke_back, "KE", class: "input-group-text px-1" %>
                     <%= number_input f, :ke_back, class: "form-control px-1 text-center" %>

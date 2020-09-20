@@ -7,7 +7,15 @@ defmodule DsaWeb.CharacterHelpers do
   import Dsa.{Lists, Data}
   import DsaWeb.DsaHelpers
 
-  alias Dsa.Data.{CombatSkill, CombatTrait, FateTrait, KarmalTradition, MagicTradition, Script}
+  alias Dsa.Data.{
+    CombatSkill,
+    CombatTrait,
+    FateTrait,
+    KarmalTradition,
+    MagicTradition,
+    Script,
+    StaffSpell
+  }
 
   def staff_spells(c) do
     Enum.filter(c.character_traits, & Enum.member?(251..258, &1.trait_id))
@@ -54,9 +62,11 @@ defmodule DsaWeb.CharacterHelpers do
     disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
     fate_traits = Enum.map(c.fate_traits, & FateTrait.ap(&1.id)) |> Enum.sum()
     general_traits = Enum.map(c.general_traits, & &1.ap) |> Enum.sum()
+    karmal_traits = Enum.map(c.karmal_traits, & &1.ap) |> Enum.sum()
     magic_traits = Enum.map(c.magic_traits, & &1.ap) |> Enum.sum()
     languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
+    staff_spells = Enum.map(c.staff_spells, & StaffSpell.ap(&1.id)) |> Enum.sum()
 
     magic_tradition =
       if c.magic_tradition_id, do: MagicTradition.ap(c.magic_tradition_id), else: 0
@@ -64,11 +74,8 @@ defmodule DsaWeb.CharacterHelpers do
     karmal_tradition =
       if c.karmal_tradition_id, do: KarmalTradition.ap(c.karmal_tradition_id), else: 0
 
-    tricks = Enum.count(tricks(c))
-    blessings = Enum.count(blessings(c))
-
-    staffspells = c |> staff_spells() |> Enum.map(& &1.ap) |> Enum.sum()
-    witchcraft = c |> witchcraft() |> Enum.map(& &1.ap) |> Enum.sum()
+    # tricks = Enum.count(tricks(c))
+    # blessings = Enum.count(blessings(c))
 
     spells =
       c.character_spells
@@ -94,18 +101,18 @@ defmodule DsaWeb.CharacterHelpers do
       "Allgemeine SF": general_traits,
       "Kampf SF": combat_traits,
       "Magische SF": magic_traits,
+      "Karmale SF": karmal_traits,
       "Schicksalspunkte SF": fate_traits,
       "Magische Tradition": magic_tradition,
       "Karmale Tradition": karmal_tradition,
-      Zaubertricks: tricks,
+      # Zaubertricks: tricks,
       "Zaubersprüche / Rituale": spells,
       "Liturgien / Zeremonien": prayers,
       Sprachen: languages,
       Schriften: scripts,
-      Segnungen: blessings,
+      # Segnungen: blessings,
       Spezies: species,
-      Stabzauber: staffspells,
-      Hexentricks: witchcraft,
+      Stabzauber: staff_spells,
       Talente: skills,
       Kampftalente: combat_skills,
       "Gekaufte LE": le_bonus,
@@ -209,18 +216,18 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def ae(c) do
-    case Enum.find(c.character_traits, & &1.trait_id == 47) do
+    case Enum.find(c.advantages, & &1.advantage_id == 47) do
       nil ->
         %{total: 0}
 
       _ctrait ->
-        {name, value} =
+        {le, value} =
           case c.magic_tradition_id do
             nil ->
               {"-", 0}
             id ->
-              name = MagicTradition.le(id)
-              {name, Map.get(c, String.to_atom(name))}
+              le = MagicTradition.le(id)
+              {le, Map.get(c, String.to_atom(String.downcase(le)))}
           end
 
         advantages =
@@ -237,7 +244,7 @@ defmodule DsaWeb.CharacterHelpers do
         lost = c.ae_lost - c.ae_back
         add_total(%{
           Zauberer: 20,
-          "Leiteigenschaft #{name}": value,
+          "Leiteigenschaft #{le}": value,
           "Hohe Astralkraft": advantages,
           "Niedrige Astralkraft": disadvantages,
           "Perm. verloren": -lost,
@@ -247,7 +254,7 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def ke(c) do
-    case Enum.find(c.character_traits, & &1.trait_id == 12) do
+    case Enum.find(c.advantages, & &1.advantage_id == 12) do
       nil ->
         %{ total: 0 }
 

@@ -27,7 +27,7 @@ defmodule Dsa.Data.MagicTrait do
     |> unique_constraint([:character_id, :magic_trait_id])
   end
 
-  def count, do: 5
+  def count, do: 7
   def list, do: :ets.tab2list(@table)
 
   def get(id), do: List.first(:ets.lookup(@table, id))
@@ -66,7 +66,11 @@ defmodule Dsa.Data.MagicTrait do
       für die Zauberkosten aufwenden. Es muss jedoch pro Zauber mindestens 1 AsP aufgewendet werden. Dies ist ausgesprochen schmerzhaft und erfordert daher eine Probe auf das Talent Selbstbeherrschung. Misslingt diese, misslingt auch der Zauber. Der Zauberkundige muss dann wie sonst die Hälfte der Kosten aufbringen, wobei diese zuerst von den AsP und, sollten diese nicht ausreichen, dann von seinen
       LE abgezogen werden.", "MU 12"},
       {5, "Zauberzeichen", 20, true, false, "Um Bann- und Schutzkreise und Zauberglyphen erlernen
-      und korrekt zeichnen zu können, benötigt man diese Sonderfertigkeit.", "Der Held verfügt durch diese Sonderfertigkeit im Talent Malen & Zeichnen über das neue Anwendungsgebiet Zauberzeichen malen.", "FF 12"}
+      und korrekt zeichnen zu können, benötigt man diese Sonderfertigkeit.", "Der Held verfügt durch diese Sonderfertigkeit im Talent Malen & Zeichnen über das neue Anwendungsgebiet Zauberzeichen malen.", "FF 12"},
+      {6, "Vertrautenbindung", 20, true, false, "Mit dieser Sonderfertigkeit ist es der Hexe
+      möglich, mit einem Vertrautentier ein starkes emotionales und magisches Band zu schließen.", "Erwirbt sie diese Sonderfertigkeit bei der Generierung, darf sie mit einem bereits an sie gebundenen Vertrautentier starten. In seltenen Fällen können Zauberer anderer Traditionen Vertrautentiere an sich binden. Das letzte Wort hat hier der Spielleiter.", "Tradition: Hexe (gegebenenfalls andere Tradition)"},
+      {7, "Flugsalbe", 15, true, false, "Damit aus einem Besen oder einem anderen hölzernen Gegenstand ein Fluggerät wird, bestreichen Hexen es mit Hexen- oder Flugsalbe. Diese wird von dem jeweiligen Hexenzirkel während der jährlichen Hexennacht gemeinschaftlich hergestellt und an die Hexen des Zirkels verteilt.", "Durch diese Sonderfertigkeit kann die Hexe Flugsalbe brauen (allerdings nur gemeinsam mit anderen Hexen bei einer Hexennacht) und damit ein bestrichenes Fluggerät nutzen. Die Flugsalbe verwandelt hölzerne Objekte bis zur Größe eines Tisches für ein Jahr lang zum steuerbaren Fluggerät. Form, Stabilität und Gewicht des Objekts ändern sich hierdurch nicht. Nur die Hexe, die das Fluggerät ausgewählt und gesalbt hat, kann es auch fliegen. Die Flugsalbe reicht nur für ein Fluggerät, dass
+      direkt auf dem Hexenfest bestrichen werden muss. Bei Verlust des Fluggeräts muss die Hexe bis zum nächsten Hexenfest auf ihr Fluggerät verzichten.", "Tradition: Hexe"}
     ])
   end
 end

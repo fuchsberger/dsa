@@ -12,10 +12,12 @@ defmodule DsaWeb.CharacterView do
     FateTrait,
     GeneralTrait,
     KarmalTradition,
+    KarmalTrait,
     Language,
     MagicTradition,
     MagicTrait,
-    Script
+    Script,
+    StaffSpell
   }
 
   def base_value_field(form, field) do
@@ -27,55 +29,6 @@ defmodule DsaWeb.CharacterView do
       </div>
     </div>
     """
-  end
-
-  def badge_list(traits), do: Enum.map(traits, & character_trait_badge(&1))
-
-  def character_trait_badge(ctrait) do
-    {_id, level, name, _ap, _details, _fixed_ap} = trait(ctrait.trait_id)
-    text =
-      cond do
-        level > 1 && not is_nil(ctrait.details) ->
-          "#{name} #{roman(ctrait.level)}: #{ctrait.details}"
-
-        level > 1 ->
-          "#{name} #{roman(ctrait.level)}"
-
-        not is_nil(ctrait.details) ->
-          "#{name}: #{ctrait.details}"
-
-        true ->
-          name
-      end
-
-    ~E"""
-    <button class='btn btn-light btn-sm py-0' type='button' phx-click='delete' phx-value-trait='<%= ctrait.id %>'><%= text %> (<%= ctrait.ap %>)</button>
-    """
-  end
-
-  def disables(changeset) do
-    case get_field(changeset, :trait_id) do
-      nil ->
-        {true, true, true, []}
-
-      id ->
-        {_id, level, _name, _ap, details, fixed_ap} = trait(id)
-
-        dis_details = not details
-        dis_level = level < 2
-        dis_ap = fixed_ap
-
-        level_options =
-          cond do
-            level == -9 -> [{"Hexentricks", -9}]
-            level == -8 -> [{"Stabzauber", -8}]
-            level == -7 -> [{"Segnung", -7}]
-            level == -6 -> [{"Zaubertrick", -6}]
-            level == -5 -> [{"Karmale SF", -5}]
-          end
-
-        {dis_details, dis_ap, dis_level, level_options}
-    end
   end
 
   def talent_tab(name, category, active_category) do
