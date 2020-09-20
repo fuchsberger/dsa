@@ -5,13 +5,25 @@ defmodule Dsa.Accounts.User do
   schema "users" do
     field :name, :string
     field :username, :string
+    field :password_old, :string, virtual: true
     field :password, :string, virtual: true
+    field :password_confirm, :string, virtual: true
     field :password_hash, :string
     field :admin, :boolean, default: false
 
     has_many :characters, Dsa.Accounts.Character
 
     timestamps()
+  end
+
+  @fields ~w(password_old password password_confirm)a
+  def password_changeset(user, params) do
+    user
+    |> cast(params, @fields)
+    |> validate_required(@fields)
+    |> validate_length(:password, min: 6, max: 100)
+    |> validate_match(:password, :password_confirm)
+    |> put_pass_hash()
   end
 
   def registration_changeset(user, params) do
@@ -40,5 +52,12 @@ defmodule Dsa.Accounts.User do
     |> validate_required(@fields)
     |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:username, min: 2, max: 15)
+  end
+
+  defp validate_match(changeset, field1, field2) do
+    case get_change(changeset, field1) == get_change(changeset, field2) do
+      true -> changeset
+      false -> add_error(changeset, field2, "Passwords don't match")
+    end
   end
 end

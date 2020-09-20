@@ -3,7 +3,6 @@ defmodule DsaWeb.ManageLive do
   use Phoenix.LiveView
   require Logger
 
-  import Dsa.Data
   alias Dsa.{Accounts, Event, Repo}
 
   @topic "manage"
@@ -11,31 +10,19 @@ defmodule DsaWeb.ManageLive do
   def render(assigns), do: DsaWeb.ManageView.render("manage.html", assigns)
 
   def mount(_params, %{"user_id" => user_id}, socket) do
-
     DsaWeb.Endpoint.subscribe(@topic)
-    users = Accounts.list_users()
-
     {:ok, socket
     |> assign(:changeset, nil)
-    |> assign(:groups, Accounts.list_groups())
-    |> assign(:users, users)
-    |> assign(:admin, Enum.find(users, & &1.id == user_id).admin)}
+    |> assign(:admin, Accounts.admin?(user_id))
+    |> assign(:user_options, Accounts.list_user_options())}
   end
 
   def handle_info(%{event: "update"}, socket), do: handle_params(nil, nil, socket)
 
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
-      :armors -> {:noreply, assign(socket, :entries, Dsa.Data.Armor.list())}
-      :combat_skills -> {:noreply, assign(socket, :entries, Dsa.Data.CombatSkill.list())}
-      :skills -> {:noreply, assign(socket, :entries, skills())}
-      :mweapons -> {:noreply, assign(socket, :entries, Dsa.Data.MWeapon.list())}
-      :fweapons -> {:noreply, assign(socket, :entries, Dsa.Data.FWeapon.list())}
-      :prayers -> {:noreply, assign(socket, :entries, Dsa.Data.Prayer.list())}
-      :spells -> {:noreply, assign(socket, :entries, Dsa.Data.Spell.list())}
-      :magic_traditions -> {:noreply, assign(socket, :entries, Dsa.Data.MagicTradition.list())}
-      :karmal_traditions -> {:noreply, assign(socket, :entries, Dsa.Data.KarmalTradition.list())}
-
+      :groups -> {:noreply, assign(socket, :entries, Accounts.list_groups())}
+      :users -> {:noreply, assign(socket, :entries, Accounts.list_users())}
       _ -> {:noreply, assign(socket, :changeset, nil)}
     end
   end

@@ -10,9 +10,7 @@
 
       <div class='col-5'>
         <%= label f, :master_id, "Meister" %>
-        <%= select f, :master_id, Enum.map(@users, & {&1.name, &1.id}),
-          class: "form-control-sm",
-          prompt: "bitte wählen..."
+        <%= select f, :master_id, @user_options, class: "form-control-sm", prompt: "bitte wählen..."
         %>
         <%= error_tag f, :master_id %>
       </div>
@@ -33,11 +31,11 @@
     </tr>
   </thead>
   <tbody>
-    <%= for group <- @groups do %>
+    <%= for group <- @entries do %>
       <tr>
         <td class='text-center'><%= group.id %></td>
         <th scope='row'><%= group.name %></th>
-        <td><%= Enum.find(@users, & &1.id == group.master_id).name %></td>
+        <td><%= group.master.name %></td>
         <td>
           <button
             type='button'

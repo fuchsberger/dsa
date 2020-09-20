@@ -40,10 +40,6 @@
               <% end %>
             </ul>
           </li>
-
-          <li class='nav-item'>
-            <%= link "Übersicht", to: Routes.manage_path(@conn, :traits), class: "nav-link" %>
-          </li>
         <% end %>
       </ul>
 
@@ -63,11 +59,7 @@
                 %>
                 <div class='dropdown-divider'></div>
               <% end %>
-              <%= link "Passwort ändern",
-                to: Routes.session_path(@conn, :delete, @current_user),
-                class: "dropdown-item",
-                method: "delete"
-              %>
+              <%= link "Passwort ändern", to: Routes.user_path(@conn, :edit_password), class: "dropdown-item" %>
               <%= link "Ausloggen",
                 to: Routes.session_path(@conn, :delete, @current_user),
                 class: "dropdown-item",

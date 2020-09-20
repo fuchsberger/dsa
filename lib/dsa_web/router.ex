@@ -22,16 +22,6 @@ defmodule DsaWeb.Router do
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     delete "/:id", SessionController, :delete
-
-    live "/armors", ManageLive, :armors
-    live "/combat_skills", ManageLive, :combat_skills
-    live "/mweapons", ManageLive, :mweapons
-    live "/fweapons", ManageLive, :fweapons
-    live "/traits", ManageLive, :traits
-    live "/skills", ManageLive, :skills
-    live "/spells", ManageLive, :spells
-    live "/prayers", ManageLive, :prayers
-    live "/traditions", ManageLive, :traditions
   end
 
   scope "/", DsaWeb do
@@ -39,13 +29,16 @@ defmodule DsaWeb.Router do
 
     get "/characters/new", PageController, :create_character
 
+    get "/change_password", UserController, :edit_password
+    put "/change_password", UserController, :change_password
+
     live "/characters", CharacterLive, :index
     live "/characters/:character_id", CharacterLive, :edit
 
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll
 
-    live "/manage/groups", ManageLive, :groups
-    live "/manage/users", ManageLive, :users
+    live "/groups", ManageLive, :groups
+    live "/users", ManageLive, :users
   end
 end
