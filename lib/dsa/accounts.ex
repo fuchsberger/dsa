@@ -11,6 +11,7 @@ defmodule Dsa.Accounts do
 
   alias Dsa.Data.{
     Advantage,
+    Blessing,
     CombatTrait,
     Disadvantage,
     FateTrait,
@@ -27,6 +28,7 @@ defmodule Dsa.Accounts do
     :group,
     :user,
     advantages: from(s in Advantage, order_by: s.advantage_id),
+    blessings: from(s in Blessing, order_by: s.id),
     combat_traits: from(s in CombatTrait, order_by: s.id),
     disadvantages: from(s in Disadvantage, order_by: s.disadvantage_id),
     fate_traits: from(s in FateTrait, order_by: s.id),
@@ -139,6 +141,7 @@ defmodule Dsa.Accounts do
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> cast_assoc(:character_prayers, with: &CharacterPrayer.changeset/2)
     |> cast_assoc(:advantages, with: &Advantage.changeset/2)
+    |> cast_assoc(:blessings, with: &Blessing.changeset/2)
     |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
     |> cast_assoc(:disadvantages, with: &Disadvantage.changeset/2)
     |> cast_assoc(:fate_traits, with: &FateTrait.changeset/2)
@@ -203,6 +206,7 @@ defmodule Dsa.Accounts do
   end
 
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
+  def add_blessing(params), do: Blessing.changeset(%Blessing{}, params) |> Repo.insert()
   def add_combat_trait(params), do: CombatTrait.changeset(%CombatTrait{}, params) |> Repo.insert()
   def add_disadvantage(params), do: Disadvantage.changeset(%Disadvantage{}, params) |> Repo.insert()
   def add_fate_trait(params), do: FateTrait.changeset(%FateTrait{}, params) |> Repo.insert()

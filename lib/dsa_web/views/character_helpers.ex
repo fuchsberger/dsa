@@ -17,24 +17,7 @@ defmodule DsaWeb.CharacterHelpers do
     StaffSpell
   }
 
-  def staff_spells(c) do
-    Enum.filter(c.character_traits, & Enum.member?(251..258, &1.trait_id))
-  end
-
-  def witchcraft(c) do
-    Enum.filter(c.character_traits, & Enum.member?(261..262, &1.trait_id))
-  end
-
-  def blessings(c) do
-    Enum.filter(c.character_traits, & Enum.member?(239..250, &1.trait_id))
-  end
-
-  def tricks(c) do
-    Enum.filter(c.character_traits, & Enum.member?(223..234, &1.trait_id))
-  end
-
   def ap(c) do
-
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
     base_values = base_values - 8 * 8 * 15
 
@@ -58,6 +41,7 @@ defmodule DsaWeb.CharacterHelpers do
     species = species(c.species_id, :ap)
 
     advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
+    blessings = Enum.count(c.blessings)
     combat_traits = Enum.map(c.combat_traits, & CombatTrait.ap(&1.id)) |> Enum.sum()
     disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
     fate_traits = Enum.map(c.fate_traits, & FateTrait.ap(&1.id)) |> Enum.sum()
@@ -74,8 +58,6 @@ defmodule DsaWeb.CharacterHelpers do
 
     karmal_tradition =
       if c.karmal_tradition_id, do: KarmalTradition.ap(c.karmal_tradition_id), else: 0
-
-    # blessings = Enum.count(blessings(c))
 
     spells =
       c.character_spells
@@ -110,7 +92,7 @@ defmodule DsaWeb.CharacterHelpers do
       "Liturgien / Zeremonien": prayers,
       Sprachen: languages,
       Schriften: scripts,
-      # Segnungen: blessings,
+      Segnungen: blessings,
       Spezies: species,
       Stabzauber: staff_spells,
       Talente: skills,

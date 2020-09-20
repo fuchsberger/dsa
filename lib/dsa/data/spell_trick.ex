@@ -68,10 +68,8 @@ defmodule Dsa.Data.SpellTrick do
       {7, "Lockruf", "Ein kleines Tier (Eichhörnchen, Taube) kommt neugierig auf den Zaubernden zu. Die Wirkung hält 5 Minuten an.", "4 Schritt", "5 Minuten", "Tiere", "Einfluss"},
       {8, "Regenbogenaugen", "Die Augenfarbe des Zaubernden ändert sich für 5 Minuten. Es sind unnatürliche Farben möglich.", "selbst", "5 Minuten", "Kulturschaffende", "Illusion"},
       {9, "Schlangenhände", "Die Hand- und Fingerknochen des Zaubernden werden sehr flexibel, sodass sie durch enge Öffnungen gezwängt werden können. Die Wirkung hält 5 Minuten an.", "selbst", "5 Minuten", "Kulturschaffende", "Verwandlung"},
-      {10, "Schnipsen", "Eine kurze telekinetische Entladung mit einer Reichweite von 4 Schritt, die beispielsweise eine Münze von einem Tisch fegen kann. Sie ist nicht stark genug, um eine
-      Glasflasche zu zerbrechen, genügt aber für eine Ohrfeige.", "4 Schritt", "sofort", "Objekt und Wesen", "Telekinese"},
-      {11, "Signatur", "Auf einem leblosen Objekt nach Wahl des Zaubernden erscheint eine Glyphe oder ein Symbol und verbleibt dauerhaft. Der Zaubernde muss das Objekt berühren. Das Symbol wirkt wie gemalt und kann weggeputzt werden. Mittels dieses Tricks kann man jeweils nur
-      eine Art von Zeichen auftauchen lassen (z.B. ein Piktogramm).", "Berührung", "sofort", "Objekt", "Objekt"},
+      {10, "Schnipsen", "Eine kurze telekinetische Entladung mit einer Reichweite von 4 Schritt, die beispielsweise eine Münze von einem Tisch fegen kann. Sie ist nicht stark genug, um eine Glasflasche zu zerbrechen, genügt aber für eine Ohrfeige.", "4 Schritt", "sofort", "Objekt und Wesen", "Telekinese"},
+      {11, "Signatur", "Auf einem leblosen Objekt nach Wahl des Zaubernden erscheint eine Glyphe oder ein Symbol und verbleibt dauerhaft. Der Zaubernde muss das Objekt berühren. Das Symbol wirkt wie gemalt und kann weggeputzt werden. Mittels dieses Tricks kann man jeweils nur eine Art von Zeichen auftauchen lassen (z.B. ein Piktogramm).", "Berührung", "sofort", "Objekt", "Objekt"},
       {12, "Trocken", "Der Zaubernde und seine Kleidung sind etwa 5 Minuten vor Nässe, beispielsweise durch Regen oder Schnee, geschützt. Nasse Kleidung wird durch den Trick nicht wieder trocken.", "selbst", "5 Minuten", "Objekt und Kulturschaffende", "Elementar"}
     ])
   end

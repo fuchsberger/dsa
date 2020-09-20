@@ -6,6 +6,7 @@ defmodule DsaWeb.CharacterView do
 
   alias Dsa.Data.{
     Advantage,
+    Blessing,
     CombatSkill,
     CombatTrait,
     Disadvantage,

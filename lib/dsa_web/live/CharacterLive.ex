@@ -9,6 +9,7 @@ defmodule DsaWeb.CharacterLive do
 
   alias Dsa.Data.{
     Advantage,
+    Blessing,
     CombatTrait,
     Disadvantage,
     FateTrait,
@@ -64,12 +65,6 @@ defmodule DsaWeb.CharacterLive do
     {:noreply, assign(socket, :category, String.to_integer(category))}
   end
 
-  def handle_event("toggle-spell-form", _params, socket) do
-    {:noreply, socket
-    |> assign(:show_spell_form?, !socket.assigns.show_spell_form?)
-    |> assign(:changeset, Ecto.Changeset.put_change(socket.assigns.changeset, :spell_id, nil))}
-  end
-
   def handle_event("change", %{"character" => %{"advantage_id" => id}}, socket) when id != "" do
     id = String.to_integer(id)
     c = socket.assigns.changeset.data
@@ -85,6 +80,19 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding advantage: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("change", %{"character" => %{"blessing_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_blessing(%{id: id, character_id: c.id}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has learned #{Blessing.name(id)} (blessing).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding blessing: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -338,6 +346,9 @@ defmodule DsaWeb.CharacterLive do
       case type do
         "advantage" ->
           {Enum.find(character.advantages, & &1.advantage_id == id), Advantage.name(id)}
+
+        "blessing" ->
+          {Enum.find(character.blessings, & &1.id == id), Blessing.name(id)}
 
         "combat_trait" ->
           {Enum.find(character.combat_traits, & &1.id == id), CombatTrait.name(id)}

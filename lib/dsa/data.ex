@@ -196,22 +196,6 @@ defmodule Dsa.Data do
     {4, "Zwerg",   8, -4, -4, 6, 61}
   ]
 
-  @traits [
-    # Segnungen
-    {239, -7, "Eidsegen", 1, false, true},
-    {240, -7, "Feuersegen", 1, false, true},
-    {241, -7, "Geburtssegen", 1, false, true},
-    {242, -7, "Glückssegen", 1, false, true},
-    {243, -7, "Grabsegen", 1, false, true},
-    {244, -7, "Harmoniesegen", 1, false, true},
-    {245, -7, "Kleiner Heilsegen", 1, false, true},
-    {246, -7, "Kleiner Schutzsegen", 1, false, true},
-    {247, -7, "Speisesegen", 1, false, true},
-    {248, -7, "Stärkungssegen", 1, false, true},
-    {249, -7, "Tranksegen", 1, false, true},
-    {250, -7, "Weisheitssegen", 1, false, true},
-  ]
-
   @spells [
     # {id, sf, probe, name, traditions}
     {1, "B", "KL/IN/FF", "Adlerauge", [3]},
@@ -315,6 +299,7 @@ defmodule Dsa.Data do
 
   def init(_) do
     Dsa.Data.Advantage.seed()
+    Dsa.Data.Blessing.seed()
     Dsa.Data.Disadvantage.seed()
     Dsa.Data.CombatSkill.seed()
     Dsa.Data.CombatTrait.seed()

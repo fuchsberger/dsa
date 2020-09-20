@@ -348,6 +348,8 @@
         <div class="card-body tab-content">
           <%= render "karmal_traits.html", ap: Map.get(ap, :"Karmale SF"), f: f, edit?: @edit == :karmal_traits %>
 
+          <%= render "blessings.html", ap: Map.get(ap, :"Segnungen"), f: f, edit?: @edit == :blessings %>
+
           <div class='row g-2'>
             <div class='col-4'>
               <% id = @changeset.data.karmal_tradition_id %>
