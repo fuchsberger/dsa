@@ -197,19 +197,6 @@ defmodule Dsa.Data do
   ]
 
   @traits [
-    # Zaubertricks
-    {223, -6, "Abkühlung", 1, false, true},
-    {224, -6, "Bauchreden", 1, false, true},
-    {225, -6, "Duft", 1, false, true},
-    {226, -6, "Feuerfinger", 1, false, true},
-    {227, -6, "Glücksgriff", 1, false, true},
-    {228, -6, "Handwärmer", 1, false, true},
-    {229, -6, "Lockruf", 1, false, true},
-    {230, -6, "Regenbogenaugen", 1, false, true},
-    {231, -6, "Schlangenhände", 1, false, true},
-    {232, -6, "Schnipsen", 1, false, true},
-    {233, -6, "Signatur", 1, false, true},
-    {234, -6, "Trocken", 1, false, true},
     # Segnungen
     {239, -7, "Eidsegen", 1, false, true},
     {240, -7, "Feuersegen", 1, false, true},
@@ -339,6 +326,7 @@ defmodule Dsa.Data do
     Dsa.Data.MagicTradition.seed()
     Dsa.Data.MagicTrait.seed()
     Dsa.Data.Script.seed()
+    Dsa.Data.SpellTrick.seed()
     Dsa.Data.StaffSpell.seed()
 
     :ets.new(:armors, [:ordered_set, :protected, :named_table])

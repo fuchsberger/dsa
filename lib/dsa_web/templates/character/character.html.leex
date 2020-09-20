@@ -243,6 +243,8 @@
 
           <%= render "magic_traits.html", ap: Map.get(ap, :"Magische SF"), f: f, edit?: @edit == :magic_traits %>
 
+          <%= render "spell_tricks.html", ap: Map.get(ap, :"Zaubertricks"), f: f, edit?: @edit == :spell_tricks %>
+
           <%= if @changeset.data.magic_tradition_id == 1, do: render("staff_spells.html", ap: Map.get(ap, :"Stabzauber"), f: f, edit?: @edit == :staff_spells) %>
 
           <div class='row g-2'>

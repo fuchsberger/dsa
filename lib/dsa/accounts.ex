@@ -19,6 +19,7 @@ defmodule Dsa.Accounts do
     Language,
     MagicTrait,
     Script,
+    SpellTrick,
     StaffSpell
   }
 
@@ -34,6 +35,7 @@ defmodule Dsa.Accounts do
     languages: from(s in Language, order_by: s.language_id),
     magic_traits: from(s in MagicTrait, order_by: s.magic_trait_id),
     scripts: from(s in Script, order_by: s.script_id),
+    spell_tricks: from(s in SpellTrick, order_by: s.id),
     staff_spells: from(s in StaffSpell, order_by: s.id),
 
     character_armors: from(s in CharacterArmor, order_by: s.armor_id),
@@ -145,6 +147,7 @@ defmodule Dsa.Accounts do
     |> cast_assoc(:languages, with: &Language.changeset/2)
     |> cast_assoc(:magic_traits, with: &MagicTrait.changeset/2)
     |> cast_assoc(:scripts, with: &Script.changeset/2)
+    |> cast_assoc(:spell_tricks, with: &SpellTrick.changeset/2)
     |> cast_assoc(:staff_spells, with: &StaffSpell.changeset/2)
     |> Repo.update()
   end
@@ -208,6 +211,7 @@ defmodule Dsa.Accounts do
   def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
   def add_magic_trait(params), do: MagicTrait.changeset(%MagicTrait{}, params) |> Repo.insert()
   def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
+  def add_spell_trick(params), do: SpellTrick.changeset(%SpellTrick{}, params) |> Repo.insert()
   def add_staff_spell(params), do: StaffSpell.changeset(%StaffSpell{}, params) |> Repo.insert()
   def remove(struct), do: Repo.delete(struct)
 end

@@ -19,6 +19,7 @@ defmodule DsaWeb.CharacterLive do
     MagicTradition,
     MagicTrait,
     Script,
+    SpellTrick,
     StaffSpell
   }
 
@@ -203,6 +204,19 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def handle_event("change", %{"character" => %{"spell_trick_id" => id}}, socket) when id != "" do
+    c = socket.assigns.changeset.data
+    case Accounts.add_spell_trick(%{id: id, character_id: c.id}) do
+      {:ok, %{id: id}} ->
+        Logger.debug("#{c.name} has learned #{StaffSpell.name(id)} (spell trick).")
+        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
+
+      {:error, changeset} ->
+        Logger.error("Error adding spell trick: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"character" => %{"staff_spell_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
     case Accounts.add_staff_spell(%{id: id, character_id: c.id}) do
@@ -348,6 +362,9 @@ defmodule DsaWeb.CharacterLive do
 
         "script" ->
           {Enum.find(character.scripts, & &1.script_id == id), Script.name(id)}
+
+        "spell_trick" ->
+          {Enum.find(character.spell_tricks, & &1.id == id), SpellTrick.name(id)}
 
         "staff_spell" ->
           {Enum.find(character.staff_spells, & &1.id == id), StaffSpell.name(id)}

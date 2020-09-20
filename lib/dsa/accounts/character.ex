@@ -16,6 +16,7 @@ defmodule Dsa.Accounts.Character do
     MagicTradition,
     MagicTrait,
     Script,
+    SpellTrick,
     StaffSpell
   }
 
@@ -79,6 +80,7 @@ defmodule Dsa.Accounts.Character do
     field :prayer_id, :integer, virtual: true
     field :script_id, :integer, virtual: true
     field :spell_id, :integer, virtual: true
+    field :spell_trick_id, :integer, virtual: true
     field :staff_spell_id, :integer, virtual: true
 
     belongs_to :group, Group
@@ -93,6 +95,7 @@ defmodule Dsa.Accounts.Character do
     has_many :languages, Language, on_replace: :delete
     has_many :magic_traits, MagicTrait, on_replace: :delete
     has_many :scripts, Script, on_replace: :delete
+    has_many :spell_tricks, SpellTrick, on_replace: :delete
     has_many :staff_spells, StaffSpell, on_replace: :delete
 
     has_many :character_prayers, CharacterPrayer, on_replace: :delete
@@ -105,7 +108,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(user_id species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id script_id staff_spell_id)a
+  @optional_fields ~w(group_id magic_tradition_id karmal_tradition_id spell_id prayer_id advantage_id combat_trait_id disadvantage_id fate_trait_id general_trait_id karmal_trait_id language_id magic_trait_id script_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -135,6 +138,7 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:language_id, greater_than: 0, less_than_or_equal_to: Language.count())
     |> validate_number(:magic_trait_id, greater_than: 0, less_than_or_equal_to: MagicTrait.count())
     |> validate_number(:script_id, greater_than: 0, less_than_or_equal_to: Script.count())
+    |> validate_number(:spell_trick_id, greater_than: 0, less_than_or_equal_to: SpellTrick.count())
     |> validate_number(:staff_spell_id, greater_than: 0, less_than_or_equal_to: StaffSpell.count())
     |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:user_id)

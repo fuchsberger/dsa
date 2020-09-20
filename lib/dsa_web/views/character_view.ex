@@ -17,6 +17,7 @@ defmodule DsaWeb.CharacterView do
     MagicTradition,
     MagicTrait,
     Script,
+    SpellTrick,
     StaffSpell
   }
 

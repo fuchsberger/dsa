@@ -66,6 +66,7 @@ defmodule DsaWeb.CharacterHelpers do
     magic_traits = Enum.map(c.magic_traits, & &1.ap) |> Enum.sum()
     languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
     scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
+    spell_tricks = Enum.count(c.spell_tricks)
     staff_spells = Enum.map(c.staff_spells, & StaffSpell.ap(&1.id)) |> Enum.sum()
 
     magic_tradition =
@@ -74,7 +75,6 @@ defmodule DsaWeb.CharacterHelpers do
     karmal_tradition =
       if c.karmal_tradition_id, do: KarmalTradition.ap(c.karmal_tradition_id), else: 0
 
-    # tricks = Enum.count(tricks(c))
     # blessings = Enum.count(blessings(c))
 
     spells =
@@ -105,7 +105,7 @@ defmodule DsaWeb.CharacterHelpers do
       "Schicksalspunkte SF": fate_traits,
       "Magische Tradition": magic_tradition,
       "Karmale Tradition": karmal_tradition,
-      # Zaubertricks: tricks,
+      Zaubertricks: spell_tricks,
       "Zaubersprüche / Rituale": spells,
       "Liturgien / Zeremonien": prayers,
       Sprachen: languages,
