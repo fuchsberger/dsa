@@ -29,6 +29,8 @@ defmodule Dsa.Accounts do
     StaffSpell
   }
 
+  alias Dsa.Event.Log
+
   @character_preloads [
     :group,
     :user,
@@ -49,6 +51,11 @@ defmodule Dsa.Accounts do
     spells: from(s in Spell, order_by: s.id),
     spell_tricks: from(s in SpellTrick, order_by: s.id),
     staff_spells: from(s in StaffSpell, order_by: s.id)
+  ]
+
+  @group_preloads [
+    logs: from(l in Log, preload: :character, order_by: {:desc, l.inserted_at}),
+    characters: @character_preloads
   ]
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
@@ -190,15 +197,7 @@ defmodule Dsa.Accounts do
 
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
-  def get_group!(id) do
-    Repo.get!(from(g in Group, preload: [
-      general_rolls: [:character],
-      talent_rolls: [:character],
-      trait_rolls: [:character],
-      routine: [:character],
-      characters: ^@character_preloads
-    ]), id)
-  end
+  def get_group!(id), do: Repo.get!(from(g in Group, preload: ^@group_preloads), id)
 
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
   def add_armor(params), do: Armor.changeset(%Armor{}, params) |> Repo.insert()

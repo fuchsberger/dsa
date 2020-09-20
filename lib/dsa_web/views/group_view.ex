@@ -1,9 +1,10 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
+  import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Event.{GeneralRoll, TraitRoll, TalentRoll, Routine}
+  alias Dsa.Event.{TraitRoll, TalentRoll}
 
   def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
 
@@ -58,24 +59,24 @@ defmodule DsaWeb.GroupView do
     |> options()
   end
 
-  def calculate_result(%TraitRoll{} = r) do
-    res1 = r.level + r.modifier - r.w1
-    res2 = r.level + r.modifier - r.w1b
+  def base_roll_result(log) do
+    res1 = log.x2 + log.x3 - log.x4
+    res2 = log.x2 + log.x3 - log.x5
 
-    case r.w1 do
+    case log.x4 do
       1 -> if res2 >= 0, do: {res1, true, "success"}, else: {res1, nil, "success"}
       20 -> if res2 < 0, do: {res1, false, "danger"}, else: {res1, nil, "danger"}
       _ -> {res1, nil, (if res1 < 0, do: "danger", else: "success")}
     end
   end
 
-  def calculate_result(%TalentRoll{} = r) do
-    m = r.modifier - r.be
-    res = r.level - max(0, r.w1 - r.t1 - m) - max(0, r.w2 - r.t2 - m) - max(0, r.w3 - r.t3 - m)
+  def talent_roll_result(log) do
+    m = log.x4 - log.x9
+    res = log.x5 - max(0, log.x1 - log.x6 - m) - max(0, log.x2 - log.x7 - m) - max(0, log.x3 - log.x8 - m)
 
     cond do
-      Enum.count([r.w1, r.w2, r.w3], & &1 == 1) > 1 -> {res, true, "success"}
-      Enum.count([r.w1, r.w2, r.w3], & &1 == 20) > 1 -> {res, false, "danger"}
+      Enum.count([log.x1, log.x2, log.x3], & &1 == 1) > 1 -> {res, true, "success"}
+      Enum.count([log.x1, log.x2, log.x3], & &1 == 20) > 1 -> {res, false, "danger"}
       true -> {res, nil, (if res < 0, do: "danger", else: "success")}
     end
   end
@@ -119,5 +120,39 @@ defmodule DsaWeb.GroupView do
 
   def talent_group(character, category) do
     Enum.filter(character.character_skills, & &1.skill.category == category)
+  end
+
+  defp roll_count(log) do
+    index =
+      2..10
+      |> Enum.map(& String.to_atom("x#{&1}"))
+      |> Enum.find_index(& is_nil(Map.get(log, &1)))
+
+    index + 1
+  end
+
+  def base_value(index) do
+    base_values()
+    |> Enum.at(index)
+    |> Atom.to_string()
+    |> String.upcase()
+  end
+
+  def base_value(character, index) do
+    Map.get(character, Enum.at(base_values(), index))
+  end
+
+  def base_value_indexes(probe) do
+    [b1, b2, b3] =
+      probe
+      |> String.downcase()
+      |> String.split("/")
+      |> Enum.map(& String.to_atom(&1))
+
+    [
+      Enum.find_index(base_values(), & &1 == b1),
+      Enum.find_index(base_values(), & &1 == b2),
+      Enum.find_index(base_values(), & &1 == b3)
+    ]
   end
 end

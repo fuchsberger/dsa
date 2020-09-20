@@ -42,7 +42,6 @@ defmodule DsaWeb.Router do
     live "/characters", CharacterLive, :index
     live "/characters/:character_id", CharacterLive, :edit
 
-    live "/group/:id", GroupLive, :index
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll
 

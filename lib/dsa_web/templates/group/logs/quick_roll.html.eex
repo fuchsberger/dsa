@@ -1,0 +1,17 @@
+<p class='mb-0'>
+  <span class="badge bg-secondary"><%= @log.character.name %></span>
+  hat <%= roll_count(@log) %> <span class="badge bg-secondary">W<%= @log.x11 %></span> gewürfelt.
+
+<%= if @master? || @owner || is_nil(@log.x12) do %>
+  <span class="badge bg-secondary"><%= @log.x1 %></span>
+  <%= unless is_nil(@log.x2), do: content_tag :span, @log.x2, class: "badge bg-secondary" %>
+  <%= unless is_nil(@log.x3), do: content_tag :span, @log.x3, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x4), do: content_tag :span, @log.x4, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x5), do: content_tag :span, @log.x5, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x6), do: content_tag :span, @log.x6, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x7), do: content_tag :span, @log.x7, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x8), do: content_tag :span, @log.x8, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x9), do: content_tag :span, @log.x9, class: "ml-1 badge bg-secondary" %>
+  <%= unless is_nil(@log.x10), do: content_tag :span, @log.x10, class: "ml-1 badge bg-secondary" %>
+<% end %>
+</p>

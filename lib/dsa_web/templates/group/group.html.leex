@@ -44,12 +44,10 @@
   <div class='col-lg'>
     <%= render DsaWeb.CharacterView, "cstats_card.html", assigns %>
 
-
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <h5 class='my-1'>Aktion</h5>
         <ul class="nav nav-tabs card-header-tabs">
-          <%= tab "Übersicht", Routes.group_path(@socket, :index, @group.id), @live_action == :index %>
           <%= tab "Kampf", Routes.group_path(@socket, :combat, @group.id), @live_action == :combat %>
           <%= tab "Probe", Routes.group_path(@socket, :roll, @group.id), @live_action == :roll %>
         </ul>
@@ -90,7 +88,7 @@
             </div>
 
             <div class='col-lg-2'>
-              <%= select f, :dice_count, [1, 2, 3, 4, 5], class: "form-select-sm" %>
+              <%= select f, :dice_count, 1..10, class: "form-select-sm" %>
             </div>
 
             <div class='col-lg-5'>
@@ -104,7 +102,7 @@
           <div class='row g-2'>
             <div class='col-lg-3'>
               <%= label f, :modifier, [
-                content_tag(:span, "Modifier", class: "pr-1"),
+                content_tag(:span, "Modif.", class: "pr-1"),
                 modifier_badge(get_field(@settings, :modifier))
               ], class: "form-label" %>
             </div>
@@ -137,7 +135,7 @@
                     <td class='text-center'><%= Atom.to_string(short) |> String.upcase() %></td>
                     <td class='text-center'><%= Map.get(@changeset.data, short) %></td>
                     <td class='text-center'>
-                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='trait-roll' type='button' phx-value-trait='<%= short %>'></button>
+                      <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='base-roll' type='button' phx-value-trait='<%= short %>'></button>
                     </td>
                   </tr>
                 <% end %>
@@ -228,31 +226,29 @@
         <% end %>
       </div>
       <ul id='log' class='list-group list-group-flush' phx-update='prepend'>
-        <%= for event <- @logs do
-          owner? = Enum.member?(@user_character_ids, event.character_id)
+        <%= for log <- @logs do %>
+          <% owner? = Enum.member?(@user_character_ids, log.character_id) %>
+          <li id='log-<%= log.id %>' class="list-group-item">
+            <%=
+              template =
+                case log.type do
+                  1 -> "logs/quick_roll.html"
+                  2 -> "logs/base_roll.html"
+                  3 -> "logs/talent_roll.html"
+                end
 
-          case event do
-            %Routine{} ->
-              render "logs/routine_log.html", routine: event
-
-            %GeneralRoll{} ->
-              render "logs/general_roll_log.html",
-                show_details?: owner? || @master?,
-                roll: event
-
-            %TraitRoll{} ->
-              render "logs/trait_roll_log.html",
-                roll: event,
-                show_details?: @show_details && (@master? || owner?)
-
-            %TalentRoll{} ->
-              render "logs/talent_roll_log.html",
-                roll: event,
-                show_details?: @show_details && (@master? || owner?)
-          end
-        end %>
+              render template,
+                log: log,
+                details?: @show_details,
+                owner?: owner?,
+                master?: @master?
+            %>
+          </li>
+        <% end %>
         <%= if Enum.count(@logs) == 0 do %>
-          <li id='empty-log' class='list-group-item'>Bei Phex! Noch sind keine Würfel gerollt!</li>
+          <li id='empty-log' class='list-group-item'>
+            Bei Phex! Noch sind keine Würfel gerollt!
+          </li>
         <% end %>
       </ul>
     </div>
