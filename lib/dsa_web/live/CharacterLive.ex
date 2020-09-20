@@ -317,12 +317,12 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
-  def handle_event("delete", %{"id" => character_id}, socket) do
-    character = Accounts.get_user_character!(socket.assigns.user_id, String.to_integer(character_id))
+  def handle_event("delete", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
 
-    case Repo.delete(character) do
+    case Accounts.remove(character) do
       {:ok, character} ->
-        Logger.debug("Held gelöscht.")
+        Logger.debug("Held #{character.name} gelöscht.")
         characters = Enum.reject(socket.assigns.characters, & &1.id == character.id)
         {:noreply, assign(socket, :characters, characters)}
 
