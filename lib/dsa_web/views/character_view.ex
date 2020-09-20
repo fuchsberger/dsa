@@ -18,6 +18,7 @@ defmodule DsaWeb.CharacterView do
     MagicTradition,
     MagicTrait,
     Script,
+    Spell,
     SpellTrick,
     StaffSpell
   }
@@ -147,10 +148,5 @@ defmodule DsaWeb.CharacterView do
   def character_prayer_options(character) do
     character_prayer_ids = Enum.map(character.character_prayers, & &1.prayer_id)
     Enum.reject(prayer_options(), fn {_name, id} -> Enum.member?(character_prayer_ids, id) end)
-  end
-
-  def character_spell_options(character) do
-    character_spell_ids = Enum.map(character.character_spells, & &1.spell_id)
-    Enum.reject(spell_options(), fn {_name, id} -> Enum.member?(character_spell_ids, id) end)
   end
 end

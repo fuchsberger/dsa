@@ -234,7 +234,7 @@
               <h5 class='my-2'>Zauber / Rituale</h5>
             </div>
             <div class='col-6 pt-1'>
-              <%= select(f, :spell_id, character_spell_options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
+              <%= select(f, :spell_id, Spell.options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
             </div>
           </div>
         </div>
@@ -286,7 +286,7 @@
             </div>
           </div>
 
-          <% spell_forms = inputs_for(f, :character_spells) %>
+          <% spell_forms = inputs_for(f, :spells) %>
           <table class='table table-sm mb-0'>
             <thead>
               <tr>
@@ -302,15 +302,15 @@
               <tr>
                 <td>
                   <%= hidden_inputs_for(fs) %>
-                  <%= label fs, :level, spell(fs.data.spell_id, :name), class: "col-sm-10" %>
+                  <%= label fs, :level, Spell.name(fs.data.id), class: "col-sm-10" %>
                 </td>
                 <td class='text-center'>
-                  <small><%= spell(fs.data.spell_id, :probe) %></small>
+                  <small><%= Spell.probe(fs.data.id) %></small>
                 </td>
-                <td class='text-center'><%= spell(fs.data.spell_id, :sf) %></td>
+                <td class='text-center'><%= Spell.sf(fs.data.id) %></td>
                 <td class='text-center'>
-                  <button type='button' class='btn btn-sm py-0 btn-light' data-confirm='Are you sure?' phx-click='delete' phx-value-spell='<%= fs.data.spell_id %>'
-                  ><i class='icon-remove text-danger'></i></button>
+                  <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='spell'
+                  ><i class='icon-cancel text-danger'></i></button>
                 </td>
                 <td>
                   <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>

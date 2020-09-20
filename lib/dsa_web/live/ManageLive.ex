@@ -32,7 +32,7 @@ defmodule DsaWeb.ManageLive do
       :mweapons -> {:noreply, assign(socket, :entries, mweapons())}
       :fweapons -> {:noreply, assign(socket, :entries, fweapons())}
       :prayers -> {:noreply, assign(socket, :entries, prayers())}
-      :spells -> {:noreply, assign(socket, :entries, spells())}
+      :spells -> {:noreply, assign(socket, :entries, Dsa.Data.Spell.list())}
       :magic_traditions -> {:noreply, assign(socket, :entries, Dsa.Data.MagicTradition.list())}
       :karmal_traditions -> {:noreply, assign(socket, :entries, Dsa.Data.KarmalTradition.list())}
 

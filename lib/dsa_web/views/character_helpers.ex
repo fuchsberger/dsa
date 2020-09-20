@@ -14,6 +14,7 @@ defmodule DsaWeb.CharacterHelpers do
     KarmalTradition,
     MagicTradition,
     Script,
+    Spell,
     StaffSpell
   }
 
@@ -60,8 +61,8 @@ defmodule DsaWeb.CharacterHelpers do
       if c.karmal_tradition_id, do: KarmalTradition.ap(c.karmal_tradition_id), else: 0
 
     spells =
-      c.character_spells
-      |> Enum.map(& ap_cost(&1.level, spell(&1.spell_id, :sf), true))
+      c.spells
+      |> Enum.map(& ap_cost(&1.level, Spell.sf(&1.id), true))
       |> Enum.sum()
 
     prayers =
