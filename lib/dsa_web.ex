@@ -24,7 +24,6 @@ defmodule DsaWeb do
       import Plug.Conn
       import Phoenix.LiveView.Controller
       import DsaWeb.Gettext
-      import DsaWeb.Auth, only: [authenticate_user: 2]
 
       alias DsaWeb.Router.Helpers, as: Routes
     end
@@ -52,7 +51,7 @@ defmodule DsaWeb do
       import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
-      import DsaWeb.Auth, only: [authenticate_user: 2]
+      import DsaWeb.Auth, only: [authenticate_user: 2, admin: 2]
     end
   end
 

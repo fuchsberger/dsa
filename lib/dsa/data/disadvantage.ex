@@ -107,7 +107,7 @@ defmodule Dsa.Data.Disadvantage do
       {44, 1, "Taub", -40, false, true},
       {45, 1, "Unfähig", -1, true, false},
       {46, 1, "Unfrei", -8, false, true},
-      {47, 1, "Verpflichtungen", -10, true, true},
+      {47, 3, "Verpflichtungen", -10, true, true},
       {48, 1, "Verstümmelt", -5, true, false},
       {49, 1, "Wahrer Name", -10, false, true},
       {50, 1, "Wilde Magie", -10, false, true},

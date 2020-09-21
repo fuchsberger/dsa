@@ -1,12 +1,6 @@
 defmodule DsaWeb.ManageView do
   use DsaWeb, :view
 
-  alias Dsa.Data.{
-    CombatSkill,
-    KarmalTradition,
-    MagicTradition,
-  }
-
   import Dsa.Lists
 
   def entries(action, armors, combat_skills, skills, groups, users, weapons) do
@@ -97,57 +91,24 @@ defmodule DsaWeb.ManageView do
 
   defp action_cell(id) do
     ~E"""
-    <td class='text-center py-0'>
-      <button
-        type='button'
-        class='btn btn-sm p-0 btn-link'
-        phx-click='edit'
-        phx-value-id='<%= id %>'
-      ><i class='icon-edit text-primary'></i></button>
-      <button
-        type='button'
-        class='btn btn-sm p-0  btn-link'
-        phx-click='delete'
-        phx-value-id='<%= id %>'
-        data-confirm='Are you absolutely sure?'
-      ><i class='icon-cancel text-danger'></i></button>
+    <td class='py-0 text-center'>
+      <div class='btn-group btn-group-sm' role='group'>
+        <button
+          type='button'
+          class='btn p-0 btn-link'
+          phx-click='edit'
+          phx-value-id='<%= id %>'
+        ><i class='icon-edit text-primary'></i></button>
+        <button
+          type='button'
+          class='btn p-0 btn-link'
+          phx-click='delete'
+          phx-value-id='<%= id %>'
+          data-confirm='Are you absolutely sure?'
+        ><i class='icon-cancel text-danger'></i></button>
+      </div>
     </td>
     """
-  end
-
-  def id_cell(admin) do
-    ~E"""
-    <th scope='col' class='text-center'>
-      <%= if admin do %>
-        <button type='button' class='btn btn-sm p-0 btn-link' phx-click='refresh'>
-          <i class='icon-refresh text-primary'></i>
-        </button>
-      <% else %>
-        ID
-      <% end %>
-    </th>
-    """
-  end
-
-  def header_cell(action) do
-    ~E"""
-    <th scope='col' class='text-center'>
-      <button type='button' class='btn btn-sm p-0 btn-link' phx-click='add'>
-        <i class='icon-add text-primary'></i>
-      </button>
-      <%= if Enum.member?([:armors, :combat_skills], action) do %>
-      <button type='button' class='btn btn-sm p-0 btn-link' phx-click='refresh'>
-        <i class='icon-refresh text-primary'></i>
-      </button>
-      <% end %>
-    </th>
-    """
-  end
-
-  defp check_cell(form, field, value) do
-    content_tag :td,
-      checkbox(form, field, value: value, disabled: true, class: "form-check-input", id: nil),
-      class: "text-center"
   end
 
   def form(changeset) do

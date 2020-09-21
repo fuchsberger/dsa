@@ -14,7 +14,8 @@ defmodule DsaWeb.ManageLive do
     {:ok, socket
     |> assign(:changeset, nil)
     |> assign(:admin, Accounts.admin?(user_id))
-    |> assign(:user_options, Accounts.list_user_options())}
+    |> assign(:user_options, Accounts.list_user_options())
+    |> assign(:user_id, user_id)}
   end
 
   def handle_info(%{event: "update"}, socket), do: handle_params(nil, nil, socket)
@@ -30,7 +31,7 @@ defmodule DsaWeb.ManageLive do
   defp get_changeset(socket, struct, params \\ %{}) do
     case socket.assigns.live_action do
       :groups -> Accounts.change_group(struct, params)
-      :users -> Accounts.change_registration(struct, params)
+      :users -> Accounts.change_user(struct, params)
     end
   end
 
@@ -38,14 +39,42 @@ defmodule DsaWeb.ManageLive do
     changeset =
       case socket.assigns.live_action do
         :groups -> Accounts.change_group(%Accounts.Group{})
-        :users -> Accounts.change_registration(%Accounts.User{})
+        :users -> Accounts.change_user(%Accounts.User{})
       end
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("edit", %{"id" => id}, socket) do
-    entry = Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
-    {:noreply, assign(socket, :changeset, get_changeset(socket, entry))}
+    {:noreply, assign(socket, :changeset, get_changeset(socket, entry(socket, id)))}
+  end
+
+  def handle_event("reset-password", %{"user" => id}, socket) do
+    user = entry(socket, id)
+
+    case Accounts.update_user(user, %{password: "password"}) do
+      {:ok, user} ->
+        Logger.debug("Password of #{user.name} has been reset to \"password\"")
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error(inspect changeset.errors)
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("toggle", %{"admin" => id}, socket) do
+    user = entry(socket, id)
+
+    case Accounts.update_user(user, %{admin: !user.admin}) do
+      {:ok, user} ->
+        DsaWeb.Endpoint.broadcast(@topic, "update", user)
+        Logger.debug("#{user.name} is #{if user.admin, do: "now", else: "no longer"} an admin.")
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error(inspect changeset.errors)
+        {:noreply, socket}
+    end
   end
 
   def handle_event("validate", %{"group" => params}, socket) do
@@ -54,7 +83,7 @@ defmodule DsaWeb.ManageLive do
   end
 
   def handle_event("validate", %{"user" => params}, socket) do
-    changeset = Accounts.change_registration(socket.assigns.changeset.data, params)
+    changeset = Accounts.change_user(socket.assigns.changeset.data, params)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
@@ -76,16 +105,20 @@ defmodule DsaWeb.ManageLive do
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
-    entry =
-      socket.assigns.entries
-      |> Enum.find(& &1.id == String.to_integer(id))
-      |> Repo.delete!()
-
-    DsaWeb.Endpoint.broadcast(@topic, "update", entry)
-    {:noreply, socket}
+    case Accounts.delete(entry(socket, id)) do
+      {:ok, entry} ->
+        DsaWeb.Endpoint.broadcast(@topic, "update", entry)
+        Logger.debug("Entry added: #{entry.name}")
+        {:noreply, socket}
+      {:error, changeset} ->
+        Logger.error("Error deleting entry: #{inspect(changeset.errors)}")
+        {:noreply, socket}
+    end
   end
 
   def handle_event("cancel", _params, socket) do
     {:noreply, assign(socket, :changeset, nil)}
   end
+
+  defp entry(socket, id), do: Enum.find(socket.assigns.entries, & &1.id == String.to_integer(id))
 end

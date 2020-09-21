@@ -92,8 +92,8 @@ defmodule Dsa.Accounts do
     |> Repo.all()
   end
 
-  def change_registration(%User{} = user, params \\ %{}) do
-    User.registration_changeset(user, params)
+  def change_user(%User{} = user, params \\ %{}) do
+    User.changeset(user, params)
   end
 
   def change_password(%User{} = user, params \\ %{}) do
@@ -106,18 +106,18 @@ defmodule Dsa.Accounts do
     |> Repo.insert()
   end
 
-  def update_user(user_changeset), do: Repo.update(user_changeset)
+  def update_user(%User{} = user, params \\ %{}) do
+    user
+    |> User.changeset(params)
+    |> Repo.update()
+  end
+
+  def update_password(user_changeset), do: Repo.update(user_changeset)
 
   def delete_user!(user), do: Repo.delete!(user)
 
   def list_characters() do
     Repo.all(from(c in Character, preload: [:user, :group]))
-  end
-
-  def get_user_character!(%User{} = user, id) do
-    Character
-    |> user_characters_query(user)
-    |> Repo.get!(id)
   end
 
   def get_character!(id) do
@@ -126,14 +126,6 @@ defmodule Dsa.Accounts do
 
   def preload(%Character{} = character) do
     Repo.preload(character, @character_preloads, force: true)
-  end
-
-  defp user_characters_query(query, %User{id: user_id}) do
-    from(v in query, preload: :group, where: v.user_id == ^user_id)
-  end
-
-  defp user_characters_query(query, user_id) do
-    from(v in query, preload: :group, where: v.user_id == ^user_id)
   end
 
   def create_character(%User{} = user) do
@@ -181,8 +173,6 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def delete_character!(character), do: Repo.delete!(character)
-
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
@@ -222,5 +212,6 @@ defmodule Dsa.Accounts do
   def add_spell(params), do: Spell.changeset(%Spell{}, params) |> Repo.insert()
   def add_spell_trick(params), do: SpellTrick.changeset(%SpellTrick{}, params) |> Repo.insert()
   def add_staff_spell(params), do: StaffSpell.changeset(%StaffSpell{}, params) |> Repo.insert()
-  def remove(struct), do: Repo.delete(struct)
+
+  def delete(struct), do: Repo.delete(struct)
 end

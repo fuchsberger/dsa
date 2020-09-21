@@ -4,7 +4,7 @@ defmodule DsaWeb.CharacterLive do
 
   import Dsa.Data
 
-  alias Dsa.{Accounts, Repo}
+  alias Dsa.Accounts
 
   alias Dsa.Data.{
     Advantage,
@@ -35,8 +35,6 @@ defmodule DsaWeb.CharacterLive do
   def mount(_params, %{"user_id" => user_id}, socket) do
     {:ok, socket
     |> assign(:edit, nil)
-    |> assign(:show_trait_form?, false)
-    |> assign(:show_spell_form?, false)
     |> assign(:category, 1)
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
@@ -320,7 +318,7 @@ defmodule DsaWeb.CharacterLive do
   def handle_event("delete", %{"id" => id}, socket) do
     character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
 
-    case Accounts.remove(character) do
+    case Accounts.delete(character) do
       {:ok, character} ->
         Logger.debug("Held #{character.name} gelöscht.")
         characters = Enum.reject(socket.assigns.characters, & &1.id == character.id)
@@ -390,7 +388,7 @@ defmodule DsaWeb.CharacterLive do
           {Enum.find(character.staff_spells, & &1.id == id), StaffSpell.name(id)}
       end
 
-    case Accounts.remove(entry) do
+    case Accounts.delete(entry) do
       {:ok, _entry} ->
         character = Accounts.preload(character)
         Logger.debug("#{character.name} lost #{name} (#{type}).")

@@ -16,6 +16,16 @@ defmodule Dsa.Accounts.User do
     timestamps()
   end
 
+  # used for admin changes
+  def changeset(user, params) do
+    user
+    |> cast(params, [:admin, :password, :name, :username])
+    |> validate_length(:name, min: 2, max: 10)
+    |> validate_length(:username, min: 2, max: 15)
+    |> validate_length(:password, min: 6, max: 100)
+    |> put_pass_hash()
+  end
+
   @fields ~w(password_old password password_confirm)a
   def password_changeset(user, params) do
     user
@@ -45,14 +55,14 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  @fields ~w(admin name username)a
-  def changeset(user, attrs) do
-    user
-    |> cast(attrs, @fields)
-    |> validate_required(@fields)
-    |> validate_length(:name, min: 2, max: 10)
-    |> validate_length(:username, min: 2, max: 15)
-  end
+  # @fields ~w(admin name username)a
+  # def changeset(user, attrs) do
+  #   user
+  #   |> cast(attrs, @fields)
+  #   |> validate_required(@fields)
+  #   |> validate_length(:name, min: 2, max: 10)
+  #   |> validate_length(:username, min: 2, max: 15)
+  # end
 
   defp validate_match(changeset, field1, field2) do
     case get_change(changeset, field1) == get_change(changeset, field2) do

@@ -33,4 +33,15 @@ defmodule DsaWeb.Auth do
       |> halt()
     end
   end
+
+  def admin(conn, _opts) do
+    if conn.assigns.current_user.admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be an administrator to access that page")
+      |> redirect(to: Routes.character_path(conn, :index))
+      |> halt()
+    end
+  end
 end

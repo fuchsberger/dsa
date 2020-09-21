@@ -14,20 +14,7 @@
         <%= error_tag f, :username %>
       </div>
 
-      <div class='col-3'>
-        <%= label f, :password %>
-        <%= password_input f, :password, placeholder: "Passwort", class: "form-control-sm" %>
-        <%= error_tag f, :password %>
-      </div>
-
-      <div class='col-1 pt-3'>
-        <div class='form-check'>
-          <%= checkbox f, :admin, class: "form-check-input" %>
-          <%= label f, :admin, "Admin", class: "form-check-label" %>
-        </div>
-      </div>
-
-      <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
+      <div class='col-3 p-3 text-center'><%= form_buttons() %></div>
     </div>
   </form>
 <% end %>
@@ -36,22 +23,42 @@
   <thead>
     <tr>
       <th scope='col' class='text-center'>ID</th>
-      <th scope='col'><i class='icon-star'></i></th>
+      <th scope='col' class='text-center'>Admin</th>
       <th scope='col'>Name</th>
       <th scope='col'>Benutzername</th>
-      <th scope='col'></th>
-      <%= if @admin, do: header_cell(@live_action) %>
+      <th scope='col'>Aktionen</th>
+      <th scope='col' class='text-center'>
+        <button type='button' class='btn btn-sm p-0 btn-link' phx-click='add'>
+          <i class='icon-add text-primary'></i>
+        </button>
+      </th>
     </tr>
   </thead>
   <tbody>
     <%= for user <- @entries do %>
       <tr>
         <td class='text-center'><%= user.id %></td>
-        <td><%= if user.admin, do: icon("star") %></td>
-        <th scope='row'><%= user.name %></th>
+        <td class='text-center'>
+          <%= checkbox :user, :admin,
+            class: "form-check-input",
+            value: user.admin,
+            phx_click: "toggle",
+            phx_value_admin: user.id,
+            disabled: user.id == @user_id
+          %>
+        </td>
+        <td><%= user.name %></td>
         <td><%= user.username %></td>
-        <td></td>
-        <%= if @admin, do: action_cell(user.id) %>
+        <td>
+          <button
+            class='btn btn-outline-primary btn-sm py-0'
+            <%= if user.id == @user_id, do: "disabled" %>
+            phx-click='reset-password'
+            phx-value-user='<%= user.id %>'
+            type='button'
+          ><i class='icon-refresh'></i> Passwort zurücksetzen</button>
+        </td>
+        <%= action_cell(user.id) %>
       </tr>
     <% end %>
   </tbody>

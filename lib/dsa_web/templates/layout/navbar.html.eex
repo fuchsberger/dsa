@@ -9,37 +9,15 @@
         <li class="nav-item">
           <%= link "Gruppe", to: Routes.group_path(@conn, :roll, 1), class: "nav-link" %>
         </li>
-        <%= if @current_user do %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropHero" role="button" data-toggle="dropdown" aria-expanded="false">
-              Helden
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropHero">
-              <li>
-                <%= link "Übersicht",
-                  to: Routes.character_path(@conn, :index),
-                  class: "dropdown-item"
-                %>
-              </li>
-              <li>
-                <%= link "Held erstellen",
-                  to: Routes.page_path(@conn, :create_character),
-                  class: "dropdown-item"
-                %>
-              </li>
-              <%= if Enum.count(@current_user.characters) > 0 do %>
-                <li><hr class="dropdown-divider"></li>
-              <% end %>
-              <%= for character <- @current_user.characters do %>
-                <li>
-                  <%= link character.name,
-                    to: Routes.character_path(@conn, :edit, character.id),
-                    class: "dropdown-item"
-                  %>
-                </li>
-              <% end %>
-            </ul>
-          </li>
+        <%= if @current_user && Enum.count(@current_user.characters) > 0 do %>
+          <%= for character <- Enum.take(@current_user.characters, 6) do %>
+            <li class="nav-item">
+              <%= link character.name,
+                to: Routes.character_path(@conn, :edit, character.id),
+                class: "nav-link"
+              %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
 
@@ -59,6 +37,19 @@
                 %>
                 <div class='dropdown-divider'></div>
               <% end %>
+              <li>
+                <%= link "Heldenübersicht",
+                  to: Routes.character_path(@conn, :index),
+                  class: "dropdown-item"
+                %>
+              </li>
+              <li>
+                <%= link "Held erstellen",
+                  to: Routes.page_path(@conn, :create_character),
+                  class: "dropdown-item"
+                %>
+              </li>
+              <div class='dropdown-divider'></div>
               <%= link "Passwort ändern", to: Routes.user_path(@conn, :edit_password), class: "dropdown-item" %>
               <%= link "Ausloggen",
                 to: Routes.session_path(@conn, :delete, @current_user),

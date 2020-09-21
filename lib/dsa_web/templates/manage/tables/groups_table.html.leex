@@ -27,7 +27,11 @@
       <th scope='col'>Name</th>
       <th scope='col'>Meister</th>
       <th scope='col'>Manage</th>
-      <%= if @admin, do: header_cell(@live_action) %>
+      <th scope='col' class='text-center'>
+        <button type='button' class='btn btn-sm p-0 btn-link' phx-click='add'>
+          <i class='icon-add text-primary'></i>
+        </button>
+      </th>
     </tr>
   </thead>
   <tbody>

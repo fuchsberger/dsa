@@ -4,8 +4,6 @@ defmodule DsaWeb.GroupView do
   import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
-  alias Dsa.Event.{TraitRoll, TalentRoll}
-
   def badge(:name, name), do: content_tag :span, name, class: "badge bg-secondary"
 
   def badge(:quality, _res, true), do: content_tag :span, "X", class: "badge bg-success"

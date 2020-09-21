@@ -2,7 +2,7 @@
   <span class="badge bg-secondary"><%= @log.character.name %></span>
   hat <%= roll_count(@log) %> <span class="badge bg-secondary">W<%= @log.x11 %></span> gewürfelt.
 
-<%= if @master? || @owner || is_nil(@log.x12) do %>
+<%= if @master? || @owner? || is_nil(@log.x12) do %>
   <span class="badge bg-secondary"><%= @log.x1 %></span>
   <%= unless is_nil(@log.x2), do: content_tag :span, @log.x2, class: "badge bg-secondary" %>
   <%= unless is_nil(@log.x3), do: content_tag :span, @log.x3, class: "ml-1 badge bg-secondary" %>

@@ -37,6 +37,10 @@ defmodule DsaWeb.Router do
 
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll
+  end
+
+  scope "/", DsaWeb do
+    pipe_through [:browser, :authenticate_user, :admin]
 
     live "/groups", ManageLive, :groups
     live "/users", ManageLive, :users

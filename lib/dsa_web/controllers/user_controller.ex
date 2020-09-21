@@ -11,7 +11,7 @@ defmodule DsaWeb.UserController do
   def change_password(conn, %{"user" => params}) do
     changeset = Accounts.change_password(conn.assigns.current_user, params)
 
-    case Accounts.update_user(changeset) do
+    case Accounts.update_password(changeset) do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "Passwort geändert!")
