@@ -31,6 +31,7 @@ defmodule Dsa.Accounts.User do
     user
     |> cast(params, @fields)
     |> validate_required(@fields)
+    |> validate_password(:password_old)
     |> validate_length(:password, min: 6, max: 100)
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
@@ -68,6 +69,21 @@ defmodule Dsa.Accounts.User do
     case get_change(changeset, field1) == get_change(changeset, field2) do
       true -> changeset
       false -> add_error(changeset, field2, "Passwords don't match")
+    end
+  end
+
+  def validate_password(changeset, field) do
+    if Map.has_key?(changeset.changes, field) do
+      case Pbkdf2.verify_pass(Map.get(changeset.changes, field), changeset.data.password_hash) do
+        true ->
+          changeset
+
+        false ->
+          Pbkdf2.no_user_verify()
+          add_error(changeset, field, "Current Password incorrect.")
+      end
+    else
+      changeset
     end
   end
 end
