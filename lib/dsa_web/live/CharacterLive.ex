@@ -1,6 +1,5 @@
 defmodule DsaWeb.CharacterLive do
-  use Phoenix.LiveView
-  require Logger
+  use DsaWeb, :live_view
 
   import Dsa.Data
 
@@ -32,8 +31,8 @@ defmodule DsaWeb.CharacterLive do
 
   def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
 
-  def mount(_params, %{"user_id" => user_id}, socket) do
-    {:ok, socket
+  def mount(_params, %{"user_id" => user_id} = session, socket) do
+    {:ok, assign_defaults(session, socket)
     |> assign(:edit, nil)
     |> assign(:category, 1)
     |> assign(:species_options, species_options())
@@ -53,7 +52,7 @@ defmodule DsaWeb.CharacterLive do
       :edit ->
         case Accounts.get_character!(Map.get(params, "character_id")) do
           nil ->
-            {:noreply, push_redirect(socket, to: Routes.character_path(socket, :index))}
+            {:noreply, push_redirect(socket, to: Routes.manage_path(socket, :characters))}
 
           character ->
             {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
@@ -84,9 +83,9 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
-  def handle_event("change", %{"character" => %{"armor_id" => id}}, socket) when id != "" do
+  def handle_event("change", %{"character" => %{"add_armor_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
-    case Accounts.add_armor(%{id: id, character_id: c.id, dmg: 0}) do
+    case Accounts.add_armor(%{armor_id: String.to_integer(id), character_id: c.id, dmg: 0}) do
       {:ok, %{id: id}} ->
         Logger.debug("#{c.name} has aquired #{Armor.name(id)} (armor).")
         {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}

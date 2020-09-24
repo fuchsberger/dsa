@@ -9,28 +9,23 @@
     </tr>
   </thead>
   <tbody>
-  <%= for fs <- inputs_for(@f, :fweapons) do %>
-    <% id = input_value(fs, :id) %>
-    <tr >
-      <td><%= FWeapon.name(id) %><%= hidden_inputs_for(fs) %></td>
-      <td class='text-center'><%= "#{FWeapon.tp_dice(id)}W+#{FWeapon.tp_bonus(id)}" %></td>
-      <td class='text-center'><%= "#{FWeapon.rw1(id)}/#{FWeapon.rw2(id)}/#{FWeapon.rw3(id)}" %></td>
-      <td class='text-center'><%= FWeapon.lz(id) %></td>
-      <td class='text-center p-0'>
-        <button
-          type='button'
-          class='btn btn-link btn-sm p-0'
-          phx-click='remove'
-          phx-value-id='<%= id %>'
-          phx-value-type='fweapon'
-        ><i class='icon-cancel text-danger'></i></button>
-      </td>
-    </tr>
-  <% end %>
-  <tr>
-    <td colspan='5'>
-      <%= select @f, :fweapon_id, FWeapon.options(@f.data), class: "small py-0", prompt: "Fernkampfwaffe hinzufügen..." %>
-    </td>
-  </tr>
+    <%= for fs <- inputs_for(@f, :fweapons) do %>
+      <% id = input_value(fs, :id) %>
+      <tr >
+        <td><%= FWeapon.name(id) %><%= hidden_inputs_for(fs) %></td>
+        <td class='text-center'><%= "#{FWeapon.tp_dice(id)}W+#{FWeapon.tp_bonus(id)}" %></td>
+        <td class='text-center'><%= "#{FWeapon.rw1(id)}/#{FWeapon.rw2(id)}/#{FWeapon.rw3(id)}" %></td>
+        <td class='text-center'><%= FWeapon.lz(id) %></td>
+        <td class='text-center p-0'>
+          <button
+            type='button'
+            class='btn btn-link btn-sm p-0'
+            phx-click='remove'
+            phx-value-id='<%= id %>'
+            phx-value-type='fweapon'
+          ><i class='icon-cancel text-danger'></i></button>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>

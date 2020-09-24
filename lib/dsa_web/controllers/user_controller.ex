@@ -15,7 +15,7 @@ defmodule DsaWeb.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "Passwort geändert!")
-        |> redirect(to: Routes.character_path(conn, :index))
+        |> redirect(to: Routes.manage_path(conn, :characters))
 
       {:error, changeset} ->
         conn

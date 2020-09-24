@@ -1,69 +1,49 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">DSA Tool</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="menu">
-      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <%= link "Gruppe", to: Routes.group_path(@conn, :roll, 1), class: "nav-link" %>
-        </li>
-        <%= if @current_user && Enum.count(@current_user.characters) > 0 do %>
-          <%= for character <- Enum.take(@current_user.characters, 6) do %>
-            <li class="nav-item">
-              <%= link character.name,
-                to: Routes.character_path(@conn, :edit, character.id),
-                class: "nav-link"
-              %>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
+<nav class='navbar is-light' role='navigation' aria-label='main navigation'>
+  <div class="navbar-brand">
+    <%= menu_link @conn, content_tag(:strong, "DSA Gruppe"), Routes.group_path(@conn, :roll, 1), class: "is-tab" %>
 
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <%= if @current_user do %>
-          <li class='nav-item dropdown'>
-            <a href='#' id='user_dropdown' class='nav-link dropdown-toggle' role='button' data-toggle='dropdown' area-expanded='false'><strong><%= @current_user.username %></strong></a>
-            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user_dropdown">
-              <%= if @current_user.admin do %>
-                <%= link "Benützer",
-                  to: Routes.manage_path(@conn, :users),
-                  class: "dropdown-item"
-                %>
-                <%= link "Gruppen",
-                  to: Routes.manage_path(@conn, :groups),
-                  class: "dropdown-item"
-                %>
-                <div class='dropdown-divider'></div>
-              <% end %>
-              <li>
-                <%= link "Heldenübersicht",
-                  to: Routes.character_path(@conn, :index),
-                  class: "dropdown-item"
-                %>
-              </li>
-              <li>
-                <%= link "Held erstellen",
-                  to: Routes.page_path(@conn, :create_character),
-                  class: "dropdown-item"
-                %>
-              </li>
-              <div class='dropdown-divider'></div>
-              <%= link "Passwort ändern", to: Routes.user_path(@conn, :edit_password), class: "dropdown-item" %>
-              <%= link "Ausloggen",
-                to: Routes.session_path(@conn, :delete, @current_user),
-                class: "dropdown-item",
-                method: "delete"
-              %>
-            </ul>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link "Log in", to: Routes.session_path(@conn, :new), class: "nav-link" %>
-          </li>
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="menu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="menu" class="navbar-menu">
+    <div class="navbar-start">
+      <%= if @current_user && Enum.count(@current_user.characters) > 0 do %>
+        <%= for character <- Enum.take(@current_user.characters, 8) do %>
+          <%= menu_link @conn, character.name, Routes.character_path(@conn, :edit, character.id),
+            class: "is-tab"
+          %>
         <% end %>
-      </ul>
+      <% end %>
     </div>
+    <div class="navbar-end">
+      <%= if @current_user do %>
+        <div class='navbar-item has-dropdown is-hoverable'>
+          <%= menu_link @conn, content_tag(:strong, @current_user.username), "#" %>
+
+          <div class="navbar-dropdown is-right">
+            <%= if @current_user.admin do %>
+              <%= menu_link @conn, "Benützer", Routes.manage_path(@conn, :users) %>
+              <%= menu_link @conn, "Gruppen", Routes.manage_path(@conn, :groups) %>
+              <hr class="navbar-divider">
+            <% end %>
+
+            <%= menu_link @conn, "Heldenübersicht", Routes.manage_path(@conn, :characters) %>
+
+            <hr class="navbar-divider">
+            <%= menu_link @conn, "Passwort ändern", Routes.user_path(@conn, :edit_password) %>
+
+            <%= menu_link @conn, "Ausloggen", Routes.session_path(@conn, :delete, @current_user), method: "delete" %>
+          </div>
+        </div>
+      <% else %>
+        <li class="nav-item">
+          <%= link "Log in", to: Routes.session_path(@conn, :new), class: "nav-link" %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </nav>

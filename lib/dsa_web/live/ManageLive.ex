@@ -22,6 +22,7 @@ defmodule DsaWeb.ManageLive do
 
   def handle_params(_params, _session, socket) do
     case socket.assigns.live_action do
+      :characters -> {:noreply, assign(socket, :entries, Accounts.list_characters())}
       :groups -> {:noreply, assign(socket, :entries, Accounts.list_groups())}
       :users -> {:noreply, assign(socket, :entries, Accounts.list_users())}
       _ -> {:noreply, assign(socket, :changeset, nil)}

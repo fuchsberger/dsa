@@ -8,22 +8,21 @@ defmodule Dsa.Data.Armor do
 
   @table :armors
 
-  @primary_key false
   schema "armors" do
     field :dmg, :integer, default: 0
-    field :id, :integer, default: 1, primary_key: true
-    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+    field :armor_id, :integer
+    belongs_to :character, Dsa.Accounts.Character
   end
 
-  @fields ~w(id character_id dmg)a
+  @fields ~w(armor_id character_id dmg)a
   def changeset(armor, params) do
+    IO.inspect params
     armor
     |> cast(params, @fields)
     |> validate_required(@fields)
     |> validate_number(:dmg, greater_than_or_equal_to: 0, less_than_or_equal_to: 4)
-    |> validate_number(:id, greater_than: 0, less_than_or_equal_to: count())
+    |> validate_number(:armor_id, greater_than: 0, less_than_or_equal_to: count())
     |> foreign_key_constraint(:character_id)
-    |> unique_constraint([:character_id, :id])
   end
 
   def count, do: 10
@@ -54,8 +53,8 @@ defmodule Dsa.Data.Armor do
     :ets.new(@table , [:ordered_set, :protected, :named_table])
     :ets.insert(@table, [
       # {id, name, rs, be, stability, penalties}
-      {1, "Normale Kleidung / Nackt", 0, 0, 4, false},
-      {2, "Schwere Kleidung / Winter", 1, 0, 5, true },
+      {1, "Normale Kleidung", 0, 0, 4, false},
+      {2, "Winter Kleidung", 1, 0, 5, true },
       {3, "Iryanrüstung", 3, 1, 8, true },
       {4, "Kettenhemd", 4, 2, 13, false },
       {5, "Krötenhaut", 3, 1, 8, true },

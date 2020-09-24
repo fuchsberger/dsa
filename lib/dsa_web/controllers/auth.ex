@@ -40,7 +40,7 @@ defmodule DsaWeb.Auth do
     else
       conn
       |> put_flash(:error, "You must be an administrator to access that page")
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> redirect(to: Routes.manage_path(conn, :characters))
       |> halt()
     end
   end

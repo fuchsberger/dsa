@@ -1,36 +1,51 @@
 <table class='table table-xs'>
   <thead>
     <tr>
+      <th></th>
       <th scope='col'>Rüstung</th>
       <th class='text-center' scope='col'>RS</th>
       <th class='text-center' scope='col'>BE</th>
-      <th class='text-center' scope='col'></th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='text-center' scope='col'>Verschl.</th>
+      <th class='text-center p-0' scope='col'></th>
     </tr>
   </thead>
   <tbody>
-  <%= for fs <- inputs_for(@f, :armors) do %>
-    <% id = input_value(fs, :id) %>
-    <tr >
-      <td><%= Armor.name(id) %><%= hidden_inputs_for(fs) %></td>
-      <td class='text-center'><%= Armor.rs(id) %></td>
-      <td class='text-center'><%= Armor.be(id) %></td>
-      <td class='text-center'><%= if Armor.penalties(id), do: "-1 INI, -1 GS" %></td>
-      <td class='text-center p-0'>
-        <button
-          type='button'
-          class='btn btn-link btn-sm p-0'
-          phx-click='remove'
-          phx-value-id='<%= id %>'
-          phx-value-type='armor'
-        ><i class='icon-cancel text-danger'></i></button>
-      </td>
-    </tr>
-  <% end %>
-  <tr>
-    <td colspan='5'>
-      <%= select @f, :armor_id, Armor.options(@f.data), class: "small py-0", prompt: "Rüstung hinzufügen..." %>
-    </td>
-  </tr>
+    <%= if Enum.count(@f.source.data.armors) == 0 do %>
+      <tr>
+        <td><%= radio_button @f, :current_armor_id, nil, disabled: true, class: "form-check-input" %></td>
+        <td>Nackt</td>
+        <td class='text-center'>0</td>
+        <td class='text-center'>0</td>
+        <td class='text-center'></td>
+        <td class='text-center p-0'></td>
+      </tr>
+    <% end %>
+    <%= for fs <- inputs_for(@f, :armors) do %>
+      <% id = input_value(fs, :id) %>
+      <tr>
+        <td><%= radio_button @f, :current_armor_id, id, class: "form-check-input" %></td>
+        <td><%= Armor.name(id) %><%= hidden_inputs_for(fs) %></td>
+        <td class='text-center'><%= Armor.rs(id) %></td>
+        <td class='text-center'>
+          <%= if Armor.penalties(id) do %>
+            <span class='badge bg-warning text-dark' data-toggle='tooltip' title='zusätzlich -1 INI / -1 GS'><%= Armor.be(id) %></span>
+          <% else %>
+            <span class='badge bg-light text-dark'><%= Armor.be(id) %></span>
+          <% end %>
+        </td>
+        <td class='text-center'>
+          <%= select fs, :dmg, 0..4, class: "small py-0" %>
+        </td>
+        <td class='text-center p-0'>
+          <button
+            type='button'
+            class='btn btn-link btn-sm p-0'
+            phx-click='remove'
+            phx-value-id='<%= id %>'
+            phx-value-type='armor'
+          ><i class='icon-cancel text-danger'></i></button>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>

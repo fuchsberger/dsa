@@ -60,6 +60,8 @@ defmodule Dsa.Accounts do
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
+  def get_user!(id), do:  Repo.get(from(u in User, preload: :characters), id)
+
   def get_user(id), do:  Repo.get(user_query(), id)
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)

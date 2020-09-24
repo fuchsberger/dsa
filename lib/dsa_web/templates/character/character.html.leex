@@ -1,44 +1,3 @@
-<%= if @live_action == :index do %>
-  <div class='d-flex my-3'>
-    <h3 class="flex-grow-1">Heldenübersicht</h3>
-    <%= live_patch "Neu erstellen", to: Routes.page_path(@socket, :create_character), class: "btn btn-primary" %>
-  </div>
-
-  <table class='table table-sm['>
-    <thead>
-      <tr>
-        <th scope='col'>Held</th>
-        <th scope='col'>Spieler</th>
-        <th scope='col'>Gruppe</th>
-        <th scope='col' class='text-center'>Aktionen</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for character <- @characters do %>
-        <tr>
-          <th scope='row'><%= character.name %></th>
-          <td><%= character.user.name %></td>
-          <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
-          <td class='text-center'>
-            <%= live_patch icon("edit"), to: Routes.character_path(@socket, :edit, character.id) %>
-
-            <%= link icon("cancel text-danger", class: "text-danger"),
-              to: "#",
-              phx_click: "delete",
-              phx_value_id: character.id,
-              data_confirm: "Bist du sicher?"
-            %>
-          </td>
-        </tr>
-      <% end %>
-      <%= if Enum.count(@characters) == 0 do %>
-        <tr><td colspan='5'><em>Du hast noch keine Helden erstellt.</em></td></tr>
-      <% end %>
-    </tbody>
-  </table>
-
-<% else %>
-
 <%= f = form_for @changeset, "#", [
     id: "character-form",
     phx_hook: "tooltip",
@@ -50,17 +9,24 @@
 
 <% ap = ap(@changeset.data) %>
 <div id='base-values' class='row g-1'>
-  <div class='col-3'>
+  <div class='col-1'>
     <h3><%= get_field @changeset, :name, "Heldenübersicht" %></h3>
   </div>
-  <div class='col-9'>
+  <div class='col-7'>
     <div class='row g-2'>
-      <%= Enum.map(base_values(), & base_value_field(f, &1)) %>
+      <%= for field <- base_values() do %>
+        <div class='col'>
+          <div class="input-group input-group-sm">
+            <%= label f, field, String.upcase(Atom.to_string(field)), class: "input-group-text px-1" %>
+            <%= number_input f, field, class: "form-control px-1 text-center" %>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
 
-<div class='row g-3'>
+<div class='row g-2'>
   <div class='col-lg'>
 
     <%# CARD GENERELL ----------------------------------------------------------------------- %>
@@ -124,13 +90,13 @@
       </div>
 
       <div class="card-body p-0">
-        <table class='table table-sm mb-0'>
+        <table class='table table-xs mb-0'>
           <thead>
             <tr>
               <th scope='col'>Name</th>
               <th scope='col' class='text-center'>Probe</th>
               <th scope='col' class='text-center'>BE</th>
-              <th scope='col' class='text-center'>ST</th>
+              <th scope='col' class='text-center number-col'>ST</th>
             </tr>
           </thead>
           <tbody>
@@ -140,7 +106,7 @@
                 <td class='text-center small'><%= skill(id, :probe) %></td>
                 <td class='text-center'><%= be(skill(id, :be)) %></td>
                 <td>
-                  <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm" %>
+                  <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm text-right" %>
                 </td>
               </tr>
             <% end %>
@@ -210,14 +176,14 @@
           </div>
 
           <% spell_forms = inputs_for(f, :spells) %>
-          <table class='table table-sm mb-0'>
+          <table class='table table-xs mb-0'>
             <thead>
               <tr>
                 <th scope='col'>Name</th>
                 <th scope='col' class='text-center'>Probe</th>
                 <th scope='col' class='text-center'>SF</th>
                 <th scope='col' class='text-center'><i class='icon-remove'></i></th>
-                <th scope='col' class='text-center'>ST</th>
+                <th scope='col' class='text-center number-col'>ST</th>
               </tr>
             </thead>
             <tbody>
@@ -236,7 +202,7 @@
                   ><i class='icon-cancel text-danger'></i></button>
                 </td>
                 <td>
-                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
                 </td>
               </tr>
             <% end %>
@@ -311,14 +277,14 @@
           </div>
 
           <% prayer_forms = inputs_for(f, :prayers) %>
-          <table class='table table-sm mb-0'>
+          <table class='table table-xs mb-0'>
             <thead>
               <tr>
                 <th scope='col'>Name</th>
                 <th scope='col' class='text-center'>Probe</th>
                 <th scope='col' class='text-center'>SF</th>
                 <th scope='col' class='text-center'><i class='icon-remove'></i></th>
-                <th scope='col' class='text-center'>ST</th>
+                <th scope='col' class='text-center number-col'>ST</th>
               </tr>
             </thead>
             <tbody>
@@ -337,7 +303,7 @@
                   ><i class='icon-cancel text-danger'></i></button>
                 </td>
                 <td>
-                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm" %>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
                 </td>
               </tr>
             <% end %>
@@ -394,7 +360,7 @@
           </div>
         </div>
 
-        <table class='table table-sm mb-0'>
+        <table class='table table-xs mb-0'>
           <thead>
             <tr>
               <th scope='col'>Kampftechnik</th>
@@ -402,7 +368,7 @@
               <th scope='col' class='text-center'>AT</th>
               <th scope='col' class='text-center'>PA</th>
               <th scope='col' class='text-center'>Max</th>
-              <th scope='col' class='text-center'>ST</th>
+              <th scope='col' class='text-center number-col'>ST</th>
             </tr>
           </thead>
           <tbody>
@@ -421,7 +387,9 @@
               <td class='text-center'>
                 <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
               </td>
-              <td><%= number_input f, String.to_atom("c#{id}"), class: "border-0 col-sm-2 form-control-sm" %></td>
+              <td><%= number_input f, String.to_atom("c#{id}"),
+                class: "border-0 col-sm-2 form-control-sm text-right" %>
+              </td>
             </tr>
           <% end %>
           </tbody>
@@ -430,13 +398,23 @@
     </div>
 
     <div class="card">
-      <h5 class='card-header'>Ausrüstung</h5>
+      <div class="card-header d-flex justify-content-between">
+        <h5 class='mb-0'>Ausrüstung</h5>
+        <button type='button' class='btn btn-sm btn-outline-primary' phx-click='toggle' phx-value-edit='equipment'><i class='icon-add'></i> hinzufügen</button>
+      </div>
+
       <div class="card-body">
+        <%= if @edit == :equipment do %>
+          <%= select f, :add_armor_id, Armor.options(f.data), class: "mb-2", prompt: "Rüstung hinzufügen..." %>
+          <%= select f, :mweapon_id, MWeapon.options(f.data), class: "mb-2", prompt: "Nahkampfwaffe hinzufügen..." %>
+          <%= select f, :fweapon_id, FWeapon.options(f.data), class: "mb-2", prompt: "Fernkampfwaffe hinzufügen..." %>
+        <% end %>
+
         <%= render "armors.html", f: f %>
-        <%= render "mweapons.html", f: f %>
-        <%= render "fweapons.html", f: f %>
+        <%= if Enum.count(f.source.data.mweapons) > 0, do: render "mweapons.html", f: f %>
+        <%= if Enum.count(f.source.data.fweapons) > 0, do: render "fweapons.html", f: f %>
       </div>
     </div>
   </div>
+  <div class='col-lg'></div>
 </form>
-<% end %>

@@ -1,11 +1,14 @@
 /* This file is for your main application css. */
-@import "./bootstrap";
+@import "./bulma";
 @import "./icons";
 
 
-.table-xs > :not(caption) > * > * {
-  padding: 0rem 0.25rem;
-}
+
+table.table-xs td,
+table.table-xs th { padding: 0!important; }
+table.table-xs input { padding: 0.1rem;  min-height: 0; }
+
+th.number-col { width: 40px; }
 
 .input-group.value label ,
 #base-values label,
@@ -15,9 +18,6 @@
 
 #trait-card label { width: 40px; }
 #trait-card input { text-align: center; }
-
-.table-sm td { padding: 1px 3px;}
-.table-sm td:last-of-type,
 
 input.small {  padding: 0rem 0.25rem; min-height: 0;}
 

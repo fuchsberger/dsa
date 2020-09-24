@@ -27,17 +27,6 @@ defmodule DsaWeb.CharacterView do
     StaffSpell
   }
 
-  def base_value_field(form, field) do
-    ~E"""
-    <div class='col'>
-      <div class="input-group input-group-sm">
-        <%= label form, field, String.upcase(Atom.to_string(field)), class: "input-group-text px-1" %>
-        <%= number_input form, field, class: "form-control px-1 text-center" %>
-      </div>
-    </div>
-    """
-  end
-
   def talent_tab(name, category, active_category) do
     active = category == active_category
 

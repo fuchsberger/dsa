@@ -1,41 +1,33 @@
 import "../css/app.scss"
 import "phoenix_html"
 
-import "popper.js"
-import { Alert, Dropdown, Tab, Tooltip, Popover } from 'bootstrap';
-
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
-let tooltipTriggerList, tooltipList = []
-let popoverTriggerList, popoverList = []
-
-const enableTooltips = () => {
-  tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
-  tooltipList = tooltipTriggerList.map(el => new Tooltip(el))
-
-  // also enable popovers
-  popoverTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="popover"]'))
-  popoverList = popoverTriggerList.map(el => new Popover(el))
-}
-
-const hooks = {}
-
-hooks.tooltip = {
-  mounted() {
-    enableTooltips()
-  },
-
-  updated() {
-    enableTooltips()
-  }
-}
-
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {hooks, params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
 
 // Connect if there are any LiveViews on the page
 liveSocket.connect()
 
-// enable tooltips
-enableTooltips()
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Check if there are any navbar burgers
+if ($navbarBurgers.length > 0) {
+
+  // Add a click event on each of them
+  $navbarBurgers.forEach( el => {
+    el.addEventListener('click', () => {
+
+      // Get the target from the "data-target" attribute
+      const target = el.dataset.target;
+      const $target = document.getElementById(target);
+
+      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+      el.classList.toggle('is-active');
+      $target.classList.toggle('is-active');
+
+    });
+  });
+}
