@@ -31,3 +31,8 @@ if ($navbarBurgers.length > 0) {
     });
   });
 }
+
+// Enable Notification dismissal
+(document.querySelectorAll('.notification .delete') || []).forEach(elm =>
+  elm.addEventListener('click', () => elm.parentNode.parentNode.removeChild(elm.parentNode))
+);

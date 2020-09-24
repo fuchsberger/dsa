@@ -40,9 +40,7 @@
           </div>
         </div>
       <% else %>
-        <li class="nav-item">
-          <%= link "Log in", to: Routes.session_path(@conn, :new), class: "nav-link" %>
-        </li>
+        <%= menu_link @conn, "Log in", Routes.session_path(@conn, :new), class: "is-tab" %>
       <% end %>
     </ul>
   </div>

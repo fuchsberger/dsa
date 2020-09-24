@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <%= csrf_meta_tag() %>
     <title>DSA Tool</title>
@@ -13,9 +12,15 @@
     <%= render "navbar.html", conn: @conn, current_user: @current_user %>
 
     <main role="main">
-      <%= flash @conn, :info %>
-      <%= flash @conn, :error %>
-      <%= @inner_content %>
+      <div class='container'>
+        <%= for {t, msg} <- get_flash(@conn) do %>
+          <div class='notification is-<%= if t == "error", do: "danger", else: t %> is-light mt-2'>
+            <button class="delete"></button>
+            <%= msg %>
+          </div>
+        <% end %>
+        <%= @inner_content %>
+      </div>
     </main>
   </body>
 </html>
