@@ -32,7 +32,6 @@ defmodule Dsa.Accounts do
   alias Dsa.Event.Log
 
   @character_preloads [
-    :group,
     :user,
     advantages: from(s in Advantage, order_by: s.advantage_id),
     armors: from(s in Armor, order_by: s.id),
@@ -66,9 +65,7 @@ defmodule Dsa.Accounts do
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)
 
-  defp user_query() do
-    from(u in User, preload: [characters: :group])
-  end
+  defp user_query, do: from(u in User, preload: :characters)
 
   def authenticate_by_username_and_pass(username, given_pass) do
     user = get_user_by(username: username)
@@ -133,7 +130,8 @@ defmodule Dsa.Accounts do
   def create_character(%User{} = user) do
     case (
       %Character{}
-      |> Character.changeset(%{name: "Held", species_id: 1, user_id: user.id, group_id: 1})
+      |> Character.changeset(%{name: "Held", species_id: 1})
+      |> put_assoc(:user, user)
       |> Repo.insert()
     ) do
       {:ok, %Character{id: id}} ->

@@ -37,7 +37,6 @@ defmodule DsaWeb.CharacterLive do
     |> assign(:category, 1)
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
-    |> assign(:user_options, Accounts.list_user_options())
     |> assign(:magic_tradition_options, MagicTradition.options())
     |> assign(:karmal_tradition_options, KarmalTradition.options())
     |> assign(:user_id, user_id)

@@ -11,6 +11,7 @@ defmodule Dsa.Accounts.User do
     field :password_hash, :string
     field :admin, :boolean, default: false
 
+    belongs_to :group, Dsa.Accounts.Group
     has_many :characters, Dsa.Accounts.Character
 
     timestamps()
@@ -19,11 +20,12 @@ defmodule Dsa.Accounts.User do
   # used for admin changes
   def changeset(user, params) do
     user
-    |> cast(params, [:admin, :password, :name, :username])
+    |> cast(params, [:admin, :password, :name, :username, :group_id])
     |> validate_length(:name, min: 2, max: 10)
     |> validate_length(:username, min: 2, max: 15)
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash()
+    |> foreign_key_constraint(:group_id)
   end
 
   @fields ~w(password_old password password_confirm)a

@@ -9,6 +9,7 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :username, :string
       add :password_hash, :string
       add :admin, :boolean
+
       timestamps()
     end
     create unique_index(:users, :username)
@@ -19,6 +20,11 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       timestamps()
     end
     create index(:groups, :master_id)
+
+    alter table(:users) do
+      add :group_id, references(:groups, on_delete: :nilify_all)
+    end
+    create index(:users, [:group_id])
 
     create table(:characters) do
       add :name, :string
@@ -65,12 +71,11 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :karmal_tradition_id, :integer
 
       # talents
-      add :group_id, references(:groups, on_delete: :nilify_all)
+
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps()
     end
-
-    create index(:characters, [:group_id, :user_id])
+    create index(:characters, [:user_id])
   end
 end
