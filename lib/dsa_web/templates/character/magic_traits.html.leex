@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='small<%= if @edit?, do: " d-none" %>'>
+<p class='small<%= if @edit?, do: " is-hidden" %>'>
   <%= for %{magic_trait_id: id, details: details} <- @f.source.data.magic_traits do %>
     <span
       data-html='true'
@@ -24,13 +24,13 @@
   <% end %>
 </p>
 
-<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-xs<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th class='text-center' scope='col'>Details</th>
-      <th class='text-center' scope='col'>AP</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>Details</th>
+      <th class='has-text-centered' scope='col'>AP</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -38,16 +38,16 @@
     <% id = input_value(fs, :magic_trait_id) %>
     <tr >
       <td><%= MagicTrait.name(id) %></td>
-      <td class='text-center'>
+      <td class='has-text-centered'>
         <%= if MagicTrait.details(id), do:
           text_input fs, :details, class: "small", placeholder: "Details..."
         %>
       </td>
-      <td class='text-center' style="width: 55px;">
+      <td class='has-text-centered' style="width: 55px;">
         <%= hidden_inputs_for(fs) %>
         <%= if MagicTrait.fixed_ap(id), do: MagicTrait.ap(id), else: number_input(fs, :ap, class: "small") %>
       </td>
-      <td class='text-center p-0'>
+      <td class='has-text-centered p-0'>
         <button
           type='button'
           class='btn btn-link btn-sm p-0'

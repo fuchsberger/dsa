@@ -49,10 +49,21 @@
                   <%= label f, :name, "Name", class: "label" %>
                 </div>
               </div>
-              <div class='column is-10'>
+              <div class='column is-4'>
                 <div class="field-body">
                   <%= text_input f, :name, class: "input is-small" %>
                   <%= error_tag f, :name %>
+                </div>
+              </div>
+              <div class='column is-2'>
+                <div class='field-label is-small'>
+                  <%= label f, :title, "Titel", class: "label" %>
+                </div>
+              </div>
+              <div class='column is-4'>
+                <div class="field-body">
+                  <%= text_input f, :title, class: "input is-small" %>
+                  <%= error_tag f, :title %>
                 </div>
               </div>
             </div>
@@ -60,15 +71,29 @@
             <div class='columns mb-0'>
               <div class='column is-2'>
                 <div class='field-label is-small'>
-                  <%= label f, :family, "Familie", class: "label" %>
+                  <%= label f, :height, "Größe", class: "label" %>
                 </div>
               </div>
               <div class='column is-4'>
                 <div class="field-body">
-                  <%= text_input f, :family, class: "input is-small" %>
-                  <%= error_tag f, :family %>
+                  <%= text_input f, :height, class: "input is-small" %>
+                  <%= error_tag f, :height %>
                 </div>
               </div>
+              <div class='column is-2'>
+                <div class='field-label is-small'>
+                  <%= label f, :weight, "Gewicht", class: "label" %>
+                </div>
+              </div>
+              <div class='column is-4'>
+                <div class="field-body">
+                  <%= text_input f, :weight, class: "input is-small" %>
+                  <%= error_tag f, :weight %>
+                </div>
+              </div>
+            </div>
+
+            <div class='columns mb-0'>
               <div class='column is-2'>
                 <div class='field-label is-small'>
                   <%= label f, :origin, "Herkunft", class: "label" %>
@@ -80,9 +105,20 @@
                   <%= error_tag f, :origin %>
                 </div>
               </div>
+              <div class='column is-2'>
+                <div class='field-label is-small'>
+                  <%= label f, :birthday, "Geboren", class: "label" %>
+                </div>
+              </div>
+              <div class='column is-4'>
+                <div class="field-body">
+                  <%= text_input f, :birthday, class: "input is-small" %>
+                  <%= error_tag f, :birthday %>
+                </div>
+              </div>
             </div>
 
-            <div class='columns'>
+            <div class='columns mb-0'>
               <div class='column is-2'>
                 <div class='field-label is-small'>
                   <%= label f, :species_id, "Spezies", class: "label" %>
@@ -109,26 +145,52 @@
               </div>
             </div>
 
-            <%= render "advantages.html",
-              ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
-
-            <%= render "disadvantages.html",
-              ap: Map.get(ap, :"Nachteile"), f: f, edit?: @edit == :disadvantages %>
-
-            <%= render "general_traits.html",
-              ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
-
-            <%= render "fate_traits.html",
-              ap: Map.get(ap, :"Schicksalspunkte SF"), f: f, edit?: @edit == :fate_traits
-            %>
-
-            <%= render "languages.html",
-              ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
-
-            <%= render "scripts.html",
-              ap: Map.get(ap, :"Schriften"), f: f, edit?: @edit == :scripts %>
+            <div class='columns mb-0'>
+              <div class='column is-2'>
+                <div class='field-label is-small'>
+                  <%= label f, :culture, "Kultur", class: "label" %>
+                </div>
+              </div>
+              <div class='column is-4'>
+                <div class="field-body">
+                  <%= text_input f, :culture, class: "input is-small" %>
+                  <%= error_tag f, :culture %>
+                </div>
+              </div>
+              <div class='column is-2'>
+                <div class='field-label is-small'>
+                  <%= label f, :profession, "Profession", class: "label" %>
+                </div>
+              </div>
+              <div class='column is-4'>
+                <div class="field-body">
+                  <%= text_input f, :profession, class: "input is-small" %>
+                  <%= error_tag f, :profession %>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <%= render "advantages.html",
+          ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
+
+        <%= render "disadvantages.html",
+          ap: Map.get(ap, :"Nachteile"), f: f, edit?: @edit == :disadvantages %>
+
+        <%= render "general_traits.html",
+          ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
+
+        <%= render "fate_traits.html",
+          ap: Map.get(ap, :"Schicksalspunkte SF"), f: f, edit?: @edit == :fate_traits
+        %>
+
+        <%= render "languages.html",
+          ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
+
+        <%= render "scripts.html",
+          ap: Map.get(ap, :"Schriften"), f: f, edit?: @edit == :scripts %>
+
 
         <div id='talente' class="card mb-3">
           <div class="card-header">
@@ -146,17 +208,17 @@
               <thead>
                 <tr>
                   <th scope='col'>Name</th>
-                  <th scope='col' class='text-center'>Probe</th>
-                  <th scope='col' class='text-center'>BE</th>
-                  <th scope='col' class='text-center number-col'>ST</th>
+                  <th scope='col' class='has-text-centered'>Probe</th>
+                  <th scope='col' class='has-text-centered'>BE</th>
+                  <th scope='col' class='has-text-centered number-col'>ST</th>
                 </tr>
               </thead>
               <tbody>
                 <%= for id <- 1..58 do %>
-                  <tr class='<%= if skill(id, :category) != @category, do: "d-none" %>'>
+                  <tr class='<%= if skill(id, :category) != @category, do: "is-hidden" %>'>
                     <td><%= label f, String.to_atom("t#{id}"), skill(id, :name) %></td>
-                    <td class='text-center small'><%= skill(id, :probe) %></td>
-                    <td class='text-center'><%= be(skill(id, :be)) %></td>
+                    <td class='has-text-centered small'><%= skill(id, :probe) %></td>
+                    <td class='has-text-centered'><%= be(skill(id, :be)) %></td>
                     <td>
                       <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm text-right" %>
                     </td>
@@ -198,13 +260,13 @@
                   <% end %>
                 </div>
 
-                <div class='col-8 text-center'>
+                <div class='col-8 has-text-centered'>
                   <div class='row g-1'>
                     <div class='col-4'>
                       <%= label f, :ae_bonus, "Zukauf" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_bonus, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ae_bonus, class: "form-control px-1 has-text-centered" %>
                       </div>
                       <small><%= Map.get(ap, :"Gekaufte AE") %> AP</small>
                     </div>
@@ -212,14 +274,14 @@
                       <%= label f, :ae_lost, "Perm. Verloren", class: "small" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ae_lost, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_lost, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ae_lost, class: "form-control px-1 has-text-centered" %>
                       </div>
                     </div>
                     <div class='col-4'>
                       <%= label f, :ae_back, "Zurück gek.", class: "small" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_back, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ae_back, class: "form-control px-1 has-text-centered" %>
                       </div>
                       <small><%= Map.get(ap, :"Zurückgekaufte AE") %> AP</small>
                     </div>
@@ -232,10 +294,10 @@
                 <thead>
                   <tr>
                     <th scope='col'>Name</th>
-                    <th scope='col' class='text-center'>Probe</th>
-                    <th scope='col' class='text-center'>SF</th>
-                    <th scope='col' class='text-center'><i class='icon-remove'></i></th>
-                    <th scope='col' class='text-center number-col'>ST</th>
+                    <th scope='col' class='has-text-centered'>Probe</th>
+                    <th scope='col' class='has-text-centered'>SF</th>
+                    <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
+                    <th scope='col' class='has-text-centered number-col'>ST</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -245,11 +307,11 @@
                       <%= hidden_inputs_for(fs) %>
                       <%= label fs, :level, Spell.name(fs.data.id), class: "col-sm-10" %>
                     </td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'>
                       <small><%= Spell.probe(fs.data.id) %></small>
                     </td>
-                    <td class='text-center'><%= Spell.sf(fs.data.id) %></td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'><%= Spell.sf(fs.data.id) %></td>
+                    <td class='has-text-centered'>
                       <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='spell'
                       ><i class='icon-cancel text-danger'></i></button>
                     </td>
@@ -260,7 +322,7 @@
                 <% end %>
                 <%= if Enum.count(spell_forms) == 0 do %>
                   <tr>
-                    <td class='text-center text-secondary' colspan='5'>
+                    <td class='has-text-centered text-secondary' colspan='5'>
                       <i>noch keine Zaubersprüche oder Rituale erlernt...</i>
                     </td>
                   </tr>
@@ -299,13 +361,13 @@
                   <% end %>
                 </div>
 
-                <div class='col-8 text-center'>
+                <div class='col-8 has-text-centered'>
                   <div class='row g-1'>
                     <div class='col-4'>
                       <%= label f, :ke_bonus, "Zukauf" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_bonus, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ke_bonus, class: "form-control px-1 has-text-centered" %>
                       </div>
                       <small><%= Map.get(ap, :"Gekaufte KE") %> AP</small>
                     </div>
@@ -313,14 +375,14 @@
                       <%= label f, :ke_lost, "Perm. Verloren", class: "small" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ke_lost, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_lost, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ke_lost, class: "form-control px-1 has-text-centered" %>
                       </div>
                     </div>
                     <div class='col-4'>
                       <%= label f, :ke_back, "Zurück gek.", class: "small" %>
                       <div class='input-group input-group-sm value'>
                         <%= label f, :ke_back, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_back, class: "form-control px-1 text-center" %>
+                        <%= number_input f, :ke_back, class: "form-control px-1 has-text-centered" %>
                       </div>
                       <small><%= Map.get(ap, :"Zurückgekaufte KE") %> AP</small>
                     </div>
@@ -333,10 +395,10 @@
                 <thead>
                   <tr>
                     <th scope='col'>Name</th>
-                    <th scope='col' class='text-center'>Probe</th>
-                    <th scope='col' class='text-center'>SF</th>
-                    <th scope='col' class='text-center'><i class='icon-remove'></i></th>
-                    <th scope='col' class='text-center number-col'>ST</th>
+                    <th scope='col' class='has-text-centered'>Probe</th>
+                    <th scope='col' class='has-text-centered'>SF</th>
+                    <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
+                    <th scope='col' class='has-text-centered number-col'>ST</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -346,11 +408,11 @@
                       <%= hidden_inputs_for(fs) %>
                       <%= label fs, :level, Prayer.name(fs.data.id), class: "col-sm-10" %>
                     </td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'>
                       <small><%= Prayer.probe(fs.data.id) %></small>
                     </td>
-                    <td class='text-center'><%= Prayer.sf(fs.data.id) %></td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'><%= Prayer.sf(fs.data.id) %></td>
+                    <td class='has-text-centered'>
                       <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='prayer'
                       ><i class='icon-cancel text-danger'></i></button>
                     </td>
@@ -361,7 +423,7 @@
                 <% end %>
                 <%= if Enum.count(prayer_forms) == 0 do %>
                   <tr>
-                    <td class='text-center text-secondary' colspan='5'>
+                    <td class='has-text-centered text-secondary' colspan='5'>
                       <i>noch keine Liturgien oder Zeremonien erlernt...</i>
                     </td>
                   </tr>
@@ -396,7 +458,7 @@
                   <div class='col'>
                     <div class='input-group input-group-sm value'>
                       <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
-                      <%= number_input f, :le_bonus, class: "form-control px-1 text-center" %>
+                      <%= number_input f, :le_bonus, class: "form-control px-1 has-text-centered" %>
                     </div>
                   </div>
                   <div class='col pt-1 small text-right'>
@@ -405,7 +467,7 @@
                   <div class='col'>
                     <div class='input-group input-group-sm value'>
                       <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
-                      <%= number_input f, :le_lost, class: "form-control px-1 text-center" %>
+                      <%= number_input f, :le_lost, class: "form-control px-1 has-text-centered" %>
                     </div>
                   </div>
                 </div>
@@ -416,11 +478,11 @@
               <thead>
                 <tr>
                   <th scope='col'>Kampftechnik</th>
-                  <th scope='col' class='text-center'></th>
-                  <th scope='col' class='text-center'>AT</th>
-                  <th scope='col' class='text-center'>PA</th>
-                  <th scope='col' class='text-center'>Max</th>
-                  <th scope='col' class='text-center number-col'>ST</th>
+                  <th scope='col' class='has-text-centered'></th>
+                  <th scope='col' class='has-text-centered'>AT</th>
+                  <th scope='col' class='has-text-centered'>PA</th>
+                  <th scope='col' class='has-text-centered'>Max</th>
+                  <th scope='col' class='has-text-centered number-col'>ST</th>
                 </tr>
               </thead>
               <tbody>
@@ -429,14 +491,14 @@
                   <td>
                     <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
                   </td>
-                  <td class='text-center'></td>
-                  <td class='text-center'>
+                  <td class='has-text-centered'></td>
+                  <td class='has-text-centered'>
                     <small><em><%= at(@changeset.data, id) %></em></small>
                   </td>
-                  <td class='text-center'>
+                  <td class='has-text-centered'>
                     <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
                   </td>
-                  <td class='text-center'>
+                  <td class='has-text-centered'>
                     <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
                   </td>
                   <td><%= number_input f, String.to_atom("c#{id}"),

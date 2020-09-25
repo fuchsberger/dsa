@@ -2,10 +2,10 @@
   <thead>
     <tr>
       <th scope='col'>Fernkampfwaffe</th>
-      <th class='text-center' scope='col'>TP</th>
-      <th class='text-center' scope='col'>RW</th>
-      <th class='text-center' scope='col'>LZ</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>TP</th>
+      <th class='has-text-centered' scope='col'>RW</th>
+      <th class='has-text-centered' scope='col'>LZ</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -13,10 +13,10 @@
       <% id = input_value(fs, :id) %>
       <tr >
         <td><%= FWeapon.name(id) %><%= hidden_inputs_for(fs) %></td>
-        <td class='text-center'><%= "#{FWeapon.tp_dice(id)}W+#{FWeapon.tp_bonus(id)}" %></td>
-        <td class='text-center'><%= "#{FWeapon.rw1(id)}/#{FWeapon.rw2(id)}/#{FWeapon.rw3(id)}" %></td>
-        <td class='text-center'><%= FWeapon.lz(id) %></td>
-        <td class='text-center p-0'>
+        <td class='has-text-centered'><%= "#{FWeapon.tp_dice(id)}W+#{FWeapon.tp_bonus(id)}" %></td>
+        <td class='has-text-centered'><%= "#{FWeapon.rw1(id)}/#{FWeapon.rw2(id)}/#{FWeapon.rw3(id)}" %></td>
+        <td class='has-text-centered'><%= FWeapon.lz(id) %></td>
+        <td class='has-text-centered p-0'>
           <button
             type='button'
             class='btn btn-link btn-sm p-0'

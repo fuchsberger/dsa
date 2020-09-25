@@ -15,7 +15,7 @@
         <%= error_tag f, :master_id %>
       </div>
 
-      <div class='col-2 p-3 text-center'><%= form_buttons() %></div>
+      <div class='col-2 p-3 has-text-centered'><%= form_buttons() %></div>
     </div>
   </form>
 <% end %>
@@ -23,11 +23,11 @@
 <table class='table table-sm'>
   <thead>
     <tr>
-      <th scope='col' class='text-center'>ID</th>
+      <th scope='col' class='has-text-centered'>ID</th>
       <th scope='col'>Name</th>
       <th scope='col'>Meister</th>
       <th scope='col'>Manage</th>
-      <th scope='col' class='text-center'>
+      <th scope='col' class='has-text-centered'>
         <button type='button' class='btn btn-sm p-0 btn-link' phx-click='add'>
           <i class='icon-add text-primary'></i>
         </button>
@@ -37,7 +37,7 @@
   <tbody>
     <%= for group <- @entries do %>
       <tr>
-        <td class='text-center'><%= group.id %></td>
+        <td class='has-text-centered'><%= group.id %></td>
         <th scope='row'><%= group.name %></th>
         <td><%= group.master.name %></td>
         <td>

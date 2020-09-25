@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='<%= if @edit?, do: " d-none" %>'>
+<p class='<%= if @edit?, do: " is-hidden" %>'>
   <%= for fs <- inputs_for(@f, :scripts) do %>
     <% id = input_value(fs, :script_id) %>
     <span
@@ -26,11 +26,11 @@
   <% end %>
 </p>
 
-<table class='table table-sm<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-sm<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th class='text-center' scope='col'>AP</th>
+      <th class='has-text-centered' scope='col'>AP</th>
     </tr>
   </thead>
   <tbody>
@@ -53,7 +53,7 @@
           phx-value-type='script'
         ><i class='icon-cancel text-danger'></i></button>
       </th>
-      <td class='text-center'>
+      <td class='has-text-centered'>
         <%= hidden_inputs_for(fs) %>
         <%= Script.ap(id) %>
       </td>

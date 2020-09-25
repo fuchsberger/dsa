@@ -124,17 +124,17 @@
                 <tr>
                   <th scope='col'>Eigenschaft</th>
                   <th scope='col'></th>
-                  <th scope='col' class='text-center'>EW</th>
-                  <th scope='col' class='text-center'>Probe</th>
+                  <th scope='col' class='has-text-centered'>EW</th>
+                  <th scope='col' class='has-text-centered'>Probe</th>
                 </tr>
               </thead>
               <tbody>
                 <%= for {short, name} <- [{:mu, "Mut"}, {:kl, "Klugheit"}, {:in, "Intuition"}, {:ch, "Charisma"}, {:ff, "Fingerfertigkeit"}, {:ge, "Gewandheit"}, {:ko, "Konstitution"}, {:kk, "Körperkraft"}] do %>
                   <tr>
                     <th scope='row'><%= name %></th>
-                    <td class='text-center'><%= Atom.to_string(short) |> String.upcase() %></td>
-                    <td class='text-center'><%= Map.get(@changeset.data, short) %></td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'><%= Atom.to_string(short) |> String.upcase() %></td>
+                    <td class='has-text-centered'><%= Map.get(@changeset.data, short) %></td>
+                    <td class='has-text-centered'>
                       <button class='btn btn-light text-primary btn-sm icon-roll py-0' phx-click='base-roll' type='button' phx-value-trait='<%= short %>'></button>
                     </td>
                   </tr>
@@ -146,24 +146,24 @@
               <thead>
                 <tr>
                   <th scope='col'>Talent</th>
-                  <th scope='col' class='text-center'>Probe</th>
-                  <th scope='col' class='text-center'>FW</th>
-                  <th scope='col' class='text-center'>R</th>
-                  <th scope='col' class='text-center'><s>BE</s></th>
-                  <th scope='col' class='text-center'>BE</th>
+                  <th scope='col' class='has-text-centered'>Probe</th>
+                  <th scope='col' class='has-text-centered'>FW</th>
+                  <th scope='col' class='has-text-centered'>R</th>
+                  <th scope='col' class='has-text-centered'><s>BE</s></th>
+                  <th scope='col' class='has-text-centered'>BE</th>
                 </tr>
               </thead>
               <tbody>
                 <%= for {id, _sf, category, probe, name, _be} <- skills() do %>
-                  <tr class='<%= if category != get_field(@settings, :type), do: "d-none" %>'>
+                  <tr class='<%= if category != get_field(@settings, :type), do: "is-hidden" %>'>
                     <th scope='row'><%= name %></th>
-                    <td class='text-center'><small><%= probe %></small></td>
-                    <td class='text-center'>
+                    <td class='has-text-centered'><small><%= probe %></small></td>
+                    <td class='has-text-centered'>
                       <%= Map.get(@changeset.data, String.to_atom("t#{id}")) %>
                     </td>
 
                     <%# Routine %>
-                    <td class='text-center'>
+                    <td class='has-text-centered'>
                       <% {allowed?, val} = routine_possible?(@changeset.data, id, get_field(@settings, :modifier)) %>
                       <%= if allowed? do %>
                         <button class='btn btn-light text-success btn-sm py-0' type='button' phx-click='routine' phx-value-talent='<%= id %>'><strong> <%= "Q#{val}" %></strong></button>
@@ -173,7 +173,7 @@
                     </td>
 
                     <%# Roll without BE %>
-                    <td class='text-center'>
+                    <td class='has-text-centered'>
                       <%= unless skill(id, :be) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
@@ -186,7 +186,7 @@
                     </td>
 
                     <%# Roll with BE %>
-                    <td class='text-center'>
+                    <td class='has-text-centered'>
                       <%= if skill(id, :be) || is_nil(skill(id, :be)) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'

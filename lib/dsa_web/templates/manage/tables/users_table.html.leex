@@ -14,7 +14,7 @@
         <%= error_tag f, :username %>
       </div>
 
-      <div class='col-3 p-3 text-center'><%= form_buttons() %></div>
+      <div class='col-3 p-3 has-text-centered'><%= form_buttons() %></div>
     </div>
   </form>
 <% end %>
@@ -22,12 +22,12 @@
 <table class='table table-sm'>
   <thead>
     <tr>
-      <th scope='col' class='text-center'>ID</th>
-      <th scope='col' class='text-center'>Admin</th>
+      <th scope='col' class='has-text-centered'>ID</th>
+      <th scope='col' class='has-text-centered'>Admin</th>
       <th scope='col'>Name</th>
       <th scope='col'>Benutzername</th>
       <th scope='col'>Aktionen</th>
-      <th scope='col' class='text-center'>
+      <th scope='col' class='has-text-centered'>
         <button type='button' class='btn btn-sm p-0 btn-link' phx-click='add'>
           <i class='icon-add text-primary'></i>
         </button>
@@ -37,8 +37,8 @@
   <tbody>
     <%= for user <- @entries do %>
       <tr>
-        <td class='text-center'><%= user.id %></td>
-        <td class='text-center'>
+        <td class='has-text-centered'><%= user.id %></td>
+        <td class='has-text-centered'>
           <%= checkbox :user, :admin,
             class: "form-check-input",
             value: user.admin,

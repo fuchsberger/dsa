@@ -33,7 +33,7 @@ defmodule DsaWeb.CharacterLive do
 
   def mount(_params, %{"user_id" => user_id} = session, socket) do
     {:ok, assign_defaults(session, socket)
-    |> assign(:edit, nil)
+    |> assign(:edit, :advantages)
     |> assign(:category, 1)
     |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())

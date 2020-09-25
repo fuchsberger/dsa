@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='small<%= if @edit?, do: " d-none" %>'>
+<p class='small<%= if @edit?, do: " is-hidden" %>'>
   <%= for %{id: id} <- @f.source.data.fate_traits do %>
     <span
       data-html='true'
@@ -24,12 +24,12 @@
   <% end %>
 </p>
 
-<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-xs<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th class='text-center' scope='col'>AP</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>AP</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -45,11 +45,11 @@
           data-content='<%= FateTrait.tooltip(id) %>'
         ><%= FateTrait.name(id) %></span>
       </td>
-      <td class='text-center'>
+      <td class='has-text-centered'>
         <%= hidden_inputs_for(fs) %>
         <%= FateTrait.ap(id) %>
       </td>
-      <td class='text-center p-0'>
+      <td class='has-text-centered p-0'>
         <button
           type='button'
           class='btn btn-link btn-sm p-0'

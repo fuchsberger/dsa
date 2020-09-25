@@ -91,7 +91,7 @@ defmodule DsaWeb.ManageView do
 
   defp action_cell(id) do
     ~E"""
-    <td class='py-0 text-center'>
+    <td class='py-0 has-text-centered'>
       <div class='btn-group btn-group-sm' role='group'>
         <button
           type='button'

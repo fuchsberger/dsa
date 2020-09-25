@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='<%= if @edit?, do: " d-none" %>'>
+<p class='<%= if @edit?, do: " is-hidden" %>'>
   <%= for fs <- inputs_for(@f, :languages) do %>
     <% id = input_value(fs, :language_id) %>
     <span
@@ -26,7 +26,7 @@
   <% end %>
 </p>
 
-<table class='table table-sm<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-sm<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>

@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='small<%= if @edit?, do: " d-none" %>'>
+<p class='small<%= if @edit?, do: " is-hidden" %>'>
   <%=
     @f.source.data.combat_traits
     |> Enum.map(fn %{id: id} -> "#{CombatTrait.name(id)}" end)
@@ -20,12 +20,12 @@
   %>
 </p>
 
-<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-xs<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th class='text-center' scope='col'>AP</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>AP</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -33,8 +33,8 @@
     <% id = input_value(fs, :id) %>
     <tr >
       <td><%= CombatTrait.name(id) %></td>
-      <td class='text-center'><%= CombatTrait.ap(id) %></td>
-      <td class='text-center p-0'>
+      <td class='has-text-centered'><%= CombatTrait.ap(id) %></td>
+      <td class='has-text-centered p-0'>
         <button
           type='button'
           class='btn btn-link btn-sm p-0'

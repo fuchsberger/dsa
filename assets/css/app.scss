@@ -2,3 +2,8 @@
 @import "./layout_changes";
 @import "./bulma";
 @import "./icons";
+
+
+.h-auto { height: auto!important; }
+
+input.is-small.number-input { width: 30px!important; }

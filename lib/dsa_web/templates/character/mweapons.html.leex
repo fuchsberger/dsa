@@ -2,11 +2,11 @@
   <thead>
     <tr>
       <th scope='col'>Nahkampfwaffe</th>
-      <th class='text-center' scope='col'>TP</th>
-      <th class='text-center' scope='col'>AT/PA</th>
-      <th class='text-center' scope='col'>LS</th>
-      <th class='text-center' scope='col'>RW</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>TP</th>
+      <th class='has-text-centered' scope='col'>AT/PA</th>
+      <th class='has-text-centered' scope='col'>LS</th>
+      <th class='has-text-centered' scope='col'>RW</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -14,9 +14,9 @@
       <% id = input_value(fs, :id) %>
       <tr >
         <td><%= MWeapon.name(id) %><%= hidden_inputs_for(fs) %></td>
-        <td class='text-center'><%= "#{MWeapon.tp_dice(id)}W+#{MWeapon.tp_bonus(id)}" %></td>
-        <td class='text-center'><%= "#{MWeapon.at_mod(id)}/#{MWeapon.pa_mod(id)}" %></td>
-        <td class='text-center'>
+        <td class='has-text-centered'><%= "#{MWeapon.tp_dice(id)}W+#{MWeapon.tp_bonus(id)}" %></td>
+        <td class='has-text-centered'><%= "#{MWeapon.at_mod(id)}/#{MWeapon.pa_mod(id)}" %></td>
+        <td class='has-text-centered'>
           <%= case {MWeapon.ge(id), MWeapon.kk(id)} do
             {true, true} -> "GE/KK #{MWeapon.ls(id)}"
             {true, false} -> "GE #{MWeapon.ls(id)}"
@@ -24,14 +24,14 @@
             {false, false} -> "FF #{MWeapon.ls(id)}"
           end %>
         </td>
-        <td class='text-center'>
+        <td class='has-text-centered'>
           <%= case MWeapon.rw(id) do
             1 -> "K"
             2 -> "M"
             3 -> "L"
           end %>
         </td>
-        <td class='text-center p-0'>
+        <td class='has-text-centered p-0'>
           <button
             type='button'
             class='btn btn-link btn-sm p-0'

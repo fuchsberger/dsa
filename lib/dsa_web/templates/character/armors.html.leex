@@ -3,10 +3,10 @@
     <tr>
       <th></th>
       <th scope='col'>Rüstung</th>
-      <th class='text-center' scope='col'>RS</th>
-      <th class='text-center' scope='col'>BE</th>
-      <th class='text-center' scope='col'>Verschl.</th>
-      <th class='text-center p-0' scope='col'></th>
+      <th class='has-text-centered' scope='col'>RS</th>
+      <th class='has-text-centered' scope='col'>BE</th>
+      <th class='has-text-centered' scope='col'>Verschl.</th>
+      <th class='has-text-centered p-0' scope='col'></th>
     </tr>
   </thead>
   <tbody>
@@ -14,10 +14,10 @@
       <tr>
         <td><%= radio_button @f, :current_armor_id, nil, disabled: true, class: "form-check-input" %></td>
         <td>Nackt</td>
-        <td class='text-center'>0</td>
-        <td class='text-center'>0</td>
-        <td class='text-center'></td>
-        <td class='text-center p-0'></td>
+        <td class='has-text-centered'>0</td>
+        <td class='has-text-centered'>0</td>
+        <td class='has-text-centered'></td>
+        <td class='has-text-centered p-0'></td>
       </tr>
     <% end %>
     <%= for fs <- inputs_for(@f, :armors) do %>
@@ -25,18 +25,18 @@
       <tr>
         <td><%= radio_button @f, :current_armor_id, id, class: "form-check-input" %></td>
         <td><%= Armor.name(id) %><%= hidden_inputs_for(fs) %></td>
-        <td class='text-center'><%= Armor.rs(id) %></td>
-        <td class='text-center'>
+        <td class='has-text-centered'><%= Armor.rs(id) %></td>
+        <td class='has-text-centered'>
           <%= if Armor.penalties(id) do %>
             <span class='badge bg-warning text-dark' data-toggle='tooltip' title='zusätzlich -1 INI / -1 GS'><%= Armor.be(id) %></span>
           <% else %>
             <span class='badge bg-light text-dark'><%= Armor.be(id) %></span>
           <% end %>
         </td>
-        <td class='text-center'>
+        <td class='has-text-centered'>
           <%= select fs, :dmg, 0..4, class: "small py-0" %>
         </td>
-        <td class='text-center p-0'>
+        <td class='has-text-centered p-0'>
           <button
             type='button'
             class='btn btn-link btn-sm p-0'

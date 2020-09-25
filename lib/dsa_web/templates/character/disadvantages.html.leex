@@ -12,7 +12,7 @@
 </div>
 <hr class='my-1'>
 
-<p class='small<%= if @edit?, do: " d-none" %>'>
+<p class='small<%= if @edit?, do: " is-hidden" %>'>
   <%=
     @f.source.data.disadvantages
     |> Enum.map(fn %{disadvantage_id: id, details: details, level: level} ->
@@ -22,13 +22,13 @@
   %>
 </p>
 
-<table class='table table-xs<%= unless @edit?, do: " d-none" %>'>
+<table class='table table-xs<%= unless @edit?, do: " is-hidden" %>'>
   <thead>
     <tr>
       <th scope='col'>Name</th>
-      <th class='text-center' scope='col'>LVL</th>
-      <th class='text-center' scope='col'>AP</th>
-      <th class='text-center p-0' scope='col'><i class='icon-remove'></i></th>
+      <th class='has-text-centered' scope='col'>LVL</th>
+      <th class='has-text-centered' scope='col'>AP</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
     </tr>
   </thead>
   <tbody>
@@ -41,12 +41,12 @@
           text_input fs, :details, class: "small", placeholder: "Details..."
         %>
       </td>
-      <td class='text-center p-0' style="width: 50px;">
+      <td class='has-text-centered p-0' style="width: 50px;">
         <%= if Disadvantage.level(id) > 1, do:
           select fs, :level, Disadvantage.level_options(id), class: "small py-0"
         %>
       </td>
-      <td class='text-center' style="width: 55px;">
+      <td class='has-text-centered' style="width: 55px;">
         <%= hidden_inputs_for(fs) %>
         <%= if Disadvantage.fixed_ap(id) do %>
           <%= input_value(fs, :level) * Disadvantage.ap(id) %>
@@ -54,7 +54,7 @@
           <%= number_input fs, :ap, class: "small" %>
         <% end %>
       </td>
-      <td class='text-center p-0'>
+      <td class='has-text-centered p-0'>
         <button
           type='button'
           class='btn btn-link btn-sm p-0'
