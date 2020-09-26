@@ -34,12 +34,12 @@ defmodule AdvantagesComponent do
   end
 
   def handle_event("edit", _params, socket) do
-    changeset = Accounts.change_character(socket.assigns.character, %{}, @changeset_type)
+    changeset = Accounts.change_character_assoc(socket.assigns.character, %{}, @changeset_type)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("validate", %{"character" => params}, socket) do
-    changeset = Accounts.change_character(socket.assigns.character, params, @changeset_type)
+    changeset = Accounts.change_character_assoc(socket.assigns.character, params, @changeset_type)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 

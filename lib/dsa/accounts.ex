@@ -137,6 +137,10 @@ defmodule Dsa.Accounts do
   end
 
   def change_character(%Character{} = character, attrs, type) do
+    Character.changeset(character, attrs, type)
+  end
+
+  def change_character_assoc(%Character{} = character, attrs, type) do
     character
     |> cast(attrs, [])
     |> cast_assoc(type)
