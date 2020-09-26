@@ -31,6 +31,9 @@ defmodule Dsa.Accounts.Character do
 
   schema "characters" do
 
+    # base values
+    Enum.each(base_values(), & field(&1, :integer, default: 8))
+
     # general
     field :name, :string, default: "Held"
     field :title, :string
@@ -41,9 +44,6 @@ defmodule Dsa.Accounts.Character do
     field :age, :integer
     field :culture, :string
     field :profession, :string
-
-    # base traits
-    Enum.each(base_values(), & field(&1, :integer, default: 8))
 
     # talents
     Enum.each(combat_fields(), & field(&1, :integer, default: 6))
@@ -126,14 +126,13 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @required_fields ~w(mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
+  @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
   @optional_fields ~w(add_armor_id advantage_id armor_id blessing_id combat_trait_id disadvantage_id fate_trait_id fweapon_id general_trait_id karmal_tradition_id karmal_trait_id language_id magic_tradition_id magic_trait_id mweapon_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
     |> validate_required(@required_fields ++ talent_fields() ++ combat_fields())
     |> validate_length(:name, min: 2, max: 10)
-    |> validate_base_values()
     |> validate_combat_skills()
     |> validate_talents()
     |> validate_number(:le_bonus, greater_than_or_equal_to: 0, less_than_or_equal_to: 25)
@@ -165,6 +164,13 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:spell_trick_id, greater_than: 0, less_than_or_equal_to: SpellTrick.count())
     |> validate_number(:staff_spell_id, greater_than: 0, less_than_or_equal_to: StaffSpell.count())
     |> foreign_key_constraint(:armor_id)
+  end
+
+  def changeset(character, attrs, :base_values) do
+    character
+    |> cast(attrs, base_values())
+    |> validate_required(base_values())
+    |> validate_base_values()
   end
 
   def changeset(character, attrs, :general) do

@@ -3,7 +3,7 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   import Ecto.Changeset, only: [get_field: 2]
-  import Dsa.Data
+  import Dsa.Data.Skill
   import DsaWeb.CharacterHelpers
   import DsaWeb.GroupView
   import Dsa.Lists
@@ -190,7 +190,7 @@ defmodule DsaWeb.GroupLive do
   def handle_event("talent-roll", %{"be" => be, "talent" => id}, socket) do
     id = String.to_integer(id)
     c = active_character(socket)
-    [b1, b2, b3] = base_value_indexes(skill(id, :probe))
+    [b1, b2, b3] = base_value_indexes(Skill.probe(id))
 
     params = %{
       type: 3,

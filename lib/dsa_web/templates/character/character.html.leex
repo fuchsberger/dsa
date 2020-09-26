@@ -1,7 +1,6 @@
 <div class="columns">
   <div class='column is-8'>
     <section class='section px-0 py-0'>
-
       <div class="tabs is-centered">
         <ul>
           <li class="is-active"><a>Generell</a></li>
@@ -12,9 +11,7 @@
         </ul>
       </div>
 
-      <div class='columns is-variable is-1 mb-2'>
-
-      </div>
+      <%= live_component @socket, BaseValuesComponent, id: :base_values, character: @character %>
 
       <div class='columns'>
         <div class='column is-7'>

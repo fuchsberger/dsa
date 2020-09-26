@@ -45,7 +45,6 @@ defmodule DsaWeb do
     quote do
       use Phoenix.LiveView
 
-      import Dsa.Data
       import DsaWeb.LiveHelpers
 
       require Logger
@@ -60,7 +59,6 @@ defmodule DsaWeb do
 
       import Phoenix.LiveView.Helpers
       import Ecto.Changeset, only: [get_field: 2, get_field: 3]
-      import Dsa.Data
 
       # Include shared imports and aliases for views
       unquote(view_helpers())

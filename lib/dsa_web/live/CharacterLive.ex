@@ -1,8 +1,6 @@
 defmodule DsaWeb.CharacterLive do
   use DsaWeb, :live_view
 
-  import Dsa.Data
-
   alias Dsa.Accounts
 
   alias Dsa.Data.{
@@ -22,6 +20,7 @@ defmodule DsaWeb.CharacterLive do
     MWeapon,
     Prayer,
     Script,
+    Skill,
     Spell,
     SpellTrick,
     StaffSpell

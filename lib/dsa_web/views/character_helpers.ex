@@ -15,14 +15,14 @@ defmodule DsaWeb.CharacterHelpers do
     MagicTradition,
     Prayer,
     Script,
+    Skills,
     Species,
     Spell,
     StaffSpell
   }
 
   def ap(c) do
-    base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
-    base_values = base_values - 8 * 8 * 15
+
 
     combat_skills =
       combat_fields()
@@ -37,7 +37,7 @@ defmodule DsaWeb.CharacterHelpers do
       talent_fields()
       |> Enum.map(fn field ->
           id = Atom.to_string(field) |> String.slice(1, 2) |> String.to_integer()
-          ap_cost(Map.get(c, field), skill(id, :sf))
+          ap_cost(Map.get(c, field), Skill.sf(id))
         end)
       |> Enum.sum()
 
@@ -78,7 +78,7 @@ defmodule DsaWeb.CharacterHelpers do
     ke_back = ap_cost(Map.get(c, :ke_back), "D")
 
     add_total(%{
-      Eigenschaften: base_values,
+      Eigenschaften: ap(c, :base_values),
       Vorteile: advantages,
       Nachteile: disadvantages,
       "Allgemeine SF": general_traits,
@@ -104,6 +104,11 @@ defmodule DsaWeb.CharacterHelpers do
       "Zurückgekaufte AE": ae_back,
       "Zurückgekaufte KE": ke_back
     })
+  end
+
+  def ap(c, :base_values) do
+    base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
+    base_values - 8 * 8 * 15
   end
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))

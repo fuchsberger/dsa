@@ -89,7 +89,7 @@ defmodule DsaWeb.GroupView do
   end
 
   def routine_possible?(character, skill_id, modifier) do
-    probe = skill(skill_id, :probe)
+    probe = Skill.probe(skill_id)
     [t1, t2, t3] = probe_values(probe, character)
     fw = Map.get(character, String.to_atom("t#{skill_id}"))
 
@@ -136,9 +136,7 @@ defmodule DsaWeb.GroupView do
     |> String.upcase()
   end
 
-  def base_value(character, index) do
-    Map.get(character, Enum.at(base_values(), index))
-  end
+  def base_value(character, index), do: Map.get(character, Enum.at(base_values(), index))
 
   def base_value_indexes(probe) do
     [b1, b2, b3] =

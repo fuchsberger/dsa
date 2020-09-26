@@ -2,7 +2,7 @@
 
 <p class='mb-0'>
   <%= badge(:name, @log.character.name) %> hat eine
-  <span class="badge bg-secondary<%= if @log.x4 != 0, do: " rounded-0 rounded-left" %>"><%= skill(@log.x10, :name) %></span><%= modifier_badge(@log.x4) %>
+  <span class="badge bg-secondary<%= if @log.x4 != 0, do: " rounded-0 rounded-left" %>"><%= Skill.name(@log.x10) %></span><%= modifier_badge(@log.x4) %>
   Probe <%= result_text(res, critical) %> <%= badge(:quality, res, critical) %>
 </p>
 <%= if @details? && (@owner? || @master?) do %>
@@ -11,7 +11,7 @@
     <%= if @log.x9 > 0 do %>
       BE: <span class="badge bg-warning"><%= @log.x9 %></span>
     <% end %>
-    Probe: <span class="badge bg-light text-dark"><%= skill(@log.x10, :probe) %></span>
+    Probe: <span class="badge bg-light text-dark"><%= Skill.probe(@log.x10) %></span>
     Würfel: <span class="badge bg-primary"><%= "#{@log.x1}|#{@log.x2}|#{@log.x3}" %></span>
     EFF: <span class="badge bg-<%= color %>"><%= res %></span>
   </small>

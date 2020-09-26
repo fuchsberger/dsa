@@ -1,17 +1,4 @@
-<%= for field <- base_values() do %>
-            <div class='column py-0'>
-              <div class="field is-expanded">
-                <div class="field has-addons">
-                  <p class='control'>
-                    <%= label f, field, String.upcase(Atom.to_string(field)), class: "button is-small is-static has-text-weight-bold px-1" %>
-                  </p>
-                  <p class="control">
-                    <%= text_input f, field, class: "input is-small has-text-centered" %>
-                  </p>
-                </div>
-              </div>
-            </div>
-          <% end %>
+
 
         <%# render "advantages.html",
           ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>

@@ -1,14 +1,15 @@
 defmodule Dsa.Data.Species do
   @moduledoc """
-  CharacterScript module
+  CharacterSpecies module
   """
-
   @table :species
 
   def count, do: 4
   def list, do: :ets.tab2list(@table)
 
-  def options(), do: Enum.map(list(), fn {id, name, _le, _sk, _zk, _gs, _ap} -> {name, id} end)
+  def options do
+    Enum.map(list(), fn {id, name, _le, _sk, _zk, _gs, ap} -> {"#{name} (#{ap})", id} end)
+  end
 
   def name(id), do: :ets.lookup_element(@table, id, 2)
   def le(id), do: :ets.lookup_element(@table, id, 3)

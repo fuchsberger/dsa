@@ -154,7 +154,7 @@
                 </tr>
               </thead>
               <tbody>
-                <%= for {id, _sf, category, probe, name, _be} <- skills() do %>
+                <%= for {id, _sf, category, probe, name, _be} <- Skills.list() do %>
                   <tr class='<%= if category != get_field(@settings, :type), do: "is-hidden" %>'>
                     <th scope='row'><%= name %></th>
                     <td class='has-text-centered'><small><%= probe %></small></td>
@@ -174,7 +174,7 @@
 
                     <%# Roll without BE %>
                     <td class='has-text-centered'>
-                      <%= unless skill(id, :be) do %>
+                      <%= unless Skill.be(id) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
                           type='button'
@@ -187,7 +187,7 @@
 
                     <%# Roll with BE %>
                     <td class='has-text-centered'>
-                      <%= if skill(id, :be) || is_nil(skill(id, :be)) do %>
+                      <%= if Skill.be(id) || is_nil(Skill.be(id)) do %>
                         <button
                           class='btn btn-light text-primary btn-sm icon-roll py-0'
                           type='button'
