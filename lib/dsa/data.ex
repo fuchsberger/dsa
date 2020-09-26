@@ -70,13 +70,6 @@ defmodule Dsa.Data do
     {58, "A", 5, "FF/FF/KK", "Steinbearbeitung", true }
   ]
 
-  @species [
-    # {id, name, le, sk, zk, gs, ap}
-    {1, "Mensch",  5, -5, -5, 8, 0},
-    {2, "Elf",     2, -4, -6, 8, 18},
-    {3, "Halbelf", 5, -4, -6, 8, 0},
-    {4, "Zwerg",   8, -4, -4, 6, 61}
-  ]
 
   def start_link(_), do: GenServer.start_link(__MODULE__, [], name: @name)
 
@@ -98,15 +91,13 @@ defmodule Dsa.Data do
     Dsa.Data.MWeapon.seed()
     Dsa.Data.Prayer.seed()
     Dsa.Data.Script.seed()
+    Dsa.Data.Species.seed()
     Dsa.Data.Spell.seed()
     Dsa.Data.SpellTrick.seed()
     Dsa.Data.StaffSpell.seed()
 
     :ets.new(:skills, [:ordered_set, :protected, :named_table])
     :ets.insert(:skills, @skills)
-
-    :ets.new(:species, [:ordered_set, :protected, :named_table])
-    :ets.insert(:species, @species)
 
     {:ok, "In-Memory Database created and filled."}
   end
@@ -119,18 +110,4 @@ defmodule Dsa.Data do
   def skill(id, :probe), do: :ets.lookup_element(:skills, id, 4)
   def skill(id, :sf), do: :ets.lookup_element(:skills, id, 2)
   def skill(id, :be), do: :ets.lookup_element(:skills, id, 6)
-
-  # Species
-  def species, do: :ets.tab2list(:species)
-
-  def species_options do
-    Enum.map(species(), fn {id, name, _le, _sk, _zk, _gs, _ap} -> {name, id} end)
-  end
-
-  def species(id, :name), do: :ets.lookup_element(:species, id, 2)
-  def species(id, :le), do: :ets.lookup_element(:species, id, 3)
-  def species(id, :sk), do: :ets.lookup_element(:species, id, 4)
-  def species(id, :zk), do: :ets.lookup_element(:species, id, 5)
-  def species(id, :ge), do: :ets.lookup_element(:species, id, 6)
-  def species(id, :ap), do: :ets.lookup_element(:species, id, 7)
 end

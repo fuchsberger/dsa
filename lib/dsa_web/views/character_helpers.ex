@@ -15,6 +15,7 @@ defmodule DsaWeb.CharacterHelpers do
     MagicTradition,
     Prayer,
     Script,
+    Species,
     Spell,
     StaffSpell
   }
@@ -39,8 +40,6 @@ defmodule DsaWeb.CharacterHelpers do
           ap_cost(Map.get(c, field), skill(id, :sf))
         end)
       |> Enum.sum()
-
-    species = species(c.species_id, :ap)
 
     advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
     blessings = Enum.count(c.blessings)
@@ -95,7 +94,7 @@ defmodule DsaWeb.CharacterHelpers do
       Sprachen: languages,
       Schriften: scripts,
       Segnungen: blessings,
-      Spezies: species,
+      Spezies: Species.ap(c.species_id),
       Stabzauber: staff_spells,
       Talente: skills,
       Kampftalente: combat_skills,
@@ -110,50 +109,57 @@ defmodule DsaWeb.CharacterHelpers do
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 
   def ini(c) do
-    basis = round((c.mu + c.ge) / 2)
     r1 = if Enum.find(c.combat_traits, & &1.id == 22), do: 1, else: 0
     r2 = if Enum.find(c.combat_traits, & &1.id == 23), do: 1, else: 0
     r3 = if Enum.find(c.combat_traits, & &1.id == 24), do: 1, else: 0
-    add_total(%{"(MU+GE)/2": basis, Kampfreflexe: r1 + r2 + r3})
+
+    add_total(%{
+      "(MU+GE)/2": round((c.mu + c.ge) / 2),
+      Kampfreflexe: r1 + r2 + r3
+    })
   end
 
   def aw(c) do
-    basis = round(c.ge / 2)
     r1 = if Enum.find(c.combat_traits, & &1.id == 51), do: 1, else: 0
     r2 = if Enum.find(c.combat_traits, & &1.id == 52), do: 1, else: 0
     r3 = if Enum.find(c.combat_traits, & &1.id == 53), do: 1, else: 0
-    add_total(%{"GE/2": basis, "Verbessertes Ausweichen": r1 + r2 + r3})
+
+    add_total(%{
+      "GE/2": round(c.ge / 2),
+      "Verbessertes Ausweichen": r1 + r2 + r3
+    })
   end
 
   def gs(c) do
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 9), do: 1, else: 0
     disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 4), do: -1, else: 0
-    species = species(c.species_id, :ge)
-    add_total(%{Spezies: species, Flink: advantages, Behäbig: disadvantages})
+
+    add_total(%{
+      Spezies: Species.gs(c.species_id),
+      Flink: advantages,
+      Behäbig: disadvantages
+    })
   end
 
   def zk(c) do
-    species = species(c.species_id, :zk)
-    basis = round((c.ko * 2 + c.kk) / 6)
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 24), do: 1, else: 0
     disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 27), do: -1, else: 0
 
     add_total(%{
-      Spezies: species,
-      "(KO+KO+KK)/6": basis,
+      Spezies: Species.zk(c.species_id),
+      "(KO+KO+KK)/6": round((c.ko * 2 + c.kk) / 6),
       "Hohe Zähigkeit": advantages,
       "Niedrige Zähigkeit": disadvantages
     })
   end
 
   def sk(c) do
-    species = species(c.species_id, :sk)
-    basis = round((c.mu + c.kl + c.in) / 6)
     advantages = if Enum.find(c.advantages, & &1.advantage_id == 23), do: 1, else: 0
     disadvantages = if Enum.find(c.disadvantages, & &1.disadvantage_id == 26), do: -1, else: 0
+
     add_total(%{
-      Spezies: species,
-      "(MU+KL+IN)/6": basis,
+      Spezies: Species.sk(c.species_id),
+      "(MU+KL+IN)/6": round((c.mu + c.kl + c.in) / 6),
       "Hohe Seelenkraft": advantages,
       "Niedrige Seelenkraft": disadvantages
     })
@@ -175,8 +181,6 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def le(c) do
-    species = species(c.species_id, :le)
-
     advantages =
       case Enum.find(c.advantages, & &1.advantage_id == 22) do
         nil -> 0
@@ -190,7 +194,7 @@ defmodule DsaWeb.CharacterHelpers do
       end
 
     add_total(%{
-      Spezies: species,
+      Spezies: Species.le(c.species_id),
       "2 x KO": 2 * c.ko,
       "Hohe Lebenskraft": advantages,
       "Perm. verloren": -c.le_lost,

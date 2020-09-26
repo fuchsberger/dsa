@@ -27,7 +27,17 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
     create index(:users, [:group_id])
 
     create table(:characters) do
+
+      # general
       add :name, :string
+      add :title, :string
+      add :height, :float
+      add :weight, :integer
+      add :origin, :string
+      add :birthday, :string
+      add :age, :integer
+      add :culture, :string
+      add :profession, :string
 
       # base values
       Enum.each(base_values(), & add(&1, :integer))

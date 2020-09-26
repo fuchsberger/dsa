@@ -33,9 +33,8 @@ defmodule DsaWeb.CharacterLive do
 
   def mount(_params, %{"user_id" => user_id} = session, socket) do
     {:ok, assign_defaults(session, socket)
-    |> assign(:edit, :advantages)
+    |> assign(:edit, :disadvantages)
     |> assign(:category, 1)
-    |> assign(:species_options, species_options())
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:magic_tradition_options, MagicTradition.options())
     |> assign(:karmal_tradition_options, KarmalTradition.options())
@@ -54,9 +53,15 @@ defmodule DsaWeb.CharacterLive do
             {:noreply, push_redirect(socket, to: Routes.manage_path(socket, :characters))}
 
           character ->
-            {:noreply, assign(socket, :changeset, Accounts.change_character(character))}
+            {:noreply, socket
+            |> assign(:character, character)
+            |> assign(:changeset, Accounts.change_character(character))}
         end
     end
+  end
+
+  def handle_info({:updated_character, character}, socket) do
+    {:noreply, assign(socket, :character, character)}
   end
 
   def handle_event("select", %{"category" => category}, socket) do

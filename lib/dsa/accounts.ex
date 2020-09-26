@@ -127,6 +127,18 @@ defmodule Dsa.Accounts do
     Repo.preload(character, @character_preloads, force: true)
   end
 
+  def change_character(%Character{} = character, attrs \\ %{}) do
+    Character.changeset(character, attrs)
+  end
+
+  def change_character(%Character{} = character, attrs, :combat) do
+    Character.combat_changeset(character, attrs)
+  end
+
+  def change_character(%Character{} = character, attrs, type) do
+    Character.changeset(character, attrs, type)
+  end
+
   def create_character(%User{} = user) do
     case (
       %Character{}
@@ -173,12 +185,10 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def change_character(%Character{} = character, attrs \\ %{}) do
-    Character.changeset(character, attrs)
-  end
-
-  def change_character(%Character{} = character, attrs, :combat) do
-    Character.combat_changeset(character, attrs)
+  def update_character(%Character{} = character, attrs, type) do
+    character
+    |> Character.changeset(attrs, type)
+    |> Repo.update()
   end
 
   def list_groups, do: Repo.all(from(g in Group, preload: :master))

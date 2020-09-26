@@ -21,17 +21,26 @@ defmodule Dsa.Accounts.Character do
     MWeapon,
     Prayer,
     Script,
+    Species,
     Spell,
     SpellTrick,
     StaffSpell
   }
 
-  alias Dsa.Accounts.{Group, User}
+  alias Dsa.Accounts.User
 
   schema "characters" do
 
     # general
     field :name, :string, default: "Held"
+    field :title, :string
+    field :height, :float
+    field :weight, :integer
+    field :origin, :string
+    field :birthday, :string
+    field :age, :integer
+    field :culture, :string
+    field :profession, :string
 
     # base traits
     Enum.each(base_values(), & field(&1, :integer, default: 8))
@@ -117,7 +126,7 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-  @required_fields ~w(species_id name mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
+  @required_fields ~w(mu kl in ch ff ge ko kk le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
   @optional_fields ~w(add_armor_id advantage_id armor_id blessing_id combat_trait_id disadvantage_id fate_trait_id fweapon_id general_trait_id karmal_tradition_id karmal_trait_id language_id magic_tradition_id magic_trait_id mweapon_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
@@ -156,6 +165,22 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:spell_trick_id, greater_than: 0, less_than_or_equal_to: SpellTrick.count())
     |> validate_number(:staff_spell_id, greater_than: 0, less_than_or_equal_to: StaffSpell.count())
     |> foreign_key_constraint(:armor_id)
+  end
+
+  def changeset(character, attrs, :general) do
+    character
+    |> cast(attrs, [:name, :title, :height, :weight, :origin, :birthday, :age, :culture, :profession, :species_id])
+    |> validate_required([:name, :species_id])
+    |> validate_length(:name, min: 2, max: 12)
+    |> validate_length(:title, min: 3, max: 20)
+    |> validate_length(:origin, min: 3, max: 20)
+    |> validate_length(:birthday, min: 3, max: 20)
+    |> validate_length(:culture, min: 3, max: 20)
+    |> validate_length(:profession, min: 3, max: 20)
+    |> validate_number(:age, greater_than: 10)
+    |> validate_number(:height, greater_than: 1.0, less_than: 2.5)
+    |> validate_number(:weight, greater_than: 30)
+    |> validate_number(:species_id, greater_than: 0, less_than_or_equal_to: Species.count())
   end
 
   defp validate_base_values(changeset) do
