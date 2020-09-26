@@ -11,20 +11,19 @@
         </ul>
       </div>
 
-      <%= live_component @socket, BaseValuesComponent, id: :base_values, character: @character %>
+      <%= live_component @socket, BaseValuesComponent, id: :char1, character: @character %>
 
       <div class='columns'>
         <div class='column is-7'>
-          <%= live_component @socket, GeneralComponent, id: :general, character: @character %>
+          <%= live_component @socket, GeneralComponent, id: :char2, character: @character %>
+          <%= live_component @socket, AdvantagesComponent, id: :char3, character: @character %>
         </div>
       </div>
     </section>
   </div>
   <div class='column'>
     <section class='section px-0 py-3'>
-      <div class="card">
-      Log goes here...
-      </div>
+      <div class="card">Log goes here...</div>
     </section>
   </div>
 </div>

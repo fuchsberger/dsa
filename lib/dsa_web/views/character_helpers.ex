@@ -22,8 +22,6 @@ defmodule DsaWeb.CharacterHelpers do
   }
 
   def ap(c) do
-
-
     combat_skills =
       combat_fields()
       |> Enum.map(fn field ->
@@ -41,7 +39,6 @@ defmodule DsaWeb.CharacterHelpers do
         end)
       |> Enum.sum()
 
-    advantages = Enum.map(c.advantages, & &1.ap) |> Enum.sum()
     blessings = Enum.count(c.blessings)
     combat_traits = Enum.map(c.combat_traits, & CombatTrait.ap(&1.id)) |> Enum.sum()
     disadvantages = Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
@@ -79,7 +76,7 @@ defmodule DsaWeb.CharacterHelpers do
 
     add_total(%{
       Eigenschaften: ap(c, :base_values),
-      Vorteile: advantages,
+      Vorteile: ap(c, :advantages),
       Nachteile: disadvantages,
       "Allgemeine SF": general_traits,
       "Kampf SF": combat_traits,
@@ -110,6 +107,8 @@ defmodule DsaWeb.CharacterHelpers do
     base_values = Enum.map(base_values(), & ap_cost(Map.get(c, &1), "E")) |> Enum.sum()
     base_values - 8 * 8 * 15
   end
+
+  def ap(c, :advantages), do: Enum.map(c.advantages, & &1.ap) |> Enum.sum()
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 

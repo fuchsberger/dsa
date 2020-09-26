@@ -10,19 +10,6 @@
   </header>
 
   <div class='card-content px-0 pt-2 pb-2'>
-    <p class='px-2 small<%= if @edit?, do: " is-hidden" %>'>
-      <%=
-        @f.source.data.advantages
-        |> Enum.map(fn %{advantage_id: id, details: details, level: level} ->
-            "#{Advantage.name(id)}#{if Advantage.level(id) > 1, do: " #{roman(level)}"}#{details && ": #{details}"}"
-          end)
-        |> Enum.join(", ")
-      %>
-      <%= if Enum.count(@f.source.data.advantages) == 0 do %>
-        <%= @f.source.data.name %> keine besonderen Vorteile.
-      <% end %>
-    </p>
-
     <table class='table is-size-7 is-fullwidth<%= unless @edit?, do: " is-hidden" %>'>
       <thead>
         <tr>

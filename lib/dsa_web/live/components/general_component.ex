@@ -40,7 +40,7 @@ defmodule GeneralComponent do
 
   def render(%{changeset: nil} = assigns), do:
   ~L"""
-    <div class="card px-0 py-0">
+    <div class="card px-0 my-1">
       <header class="card-header">
         <button class='button is-white px-3 py-0 h-auto' phx-target="<%= @myself %>" phx-click='edit' phx-value-edit='advantages' type='button'>
           <span class='icon has-text-link'><i class='icon-edit'></i></span>
@@ -102,7 +102,7 @@ defmodule GeneralComponent do
         novalidate: true
       ]
     %>
-    <div class="card px-0 py-0">
+    <div class="card px-0 my-2">
       <header class="card-header">
         <button class='button is-white px-3 py-0 h-auto' type='submit'>
           <span class='icon has-text-link'>

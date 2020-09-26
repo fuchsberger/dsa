@@ -127,6 +127,7 @@ defmodule Dsa.Accounts do
     Repo.preload(character, @character_preloads, force: true)
   end
 
+
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
@@ -136,7 +137,9 @@ defmodule Dsa.Accounts do
   end
 
   def change_character(%Character{} = character, attrs, type) do
-    Character.changeset(character, attrs, type)
+    character
+    |> cast(attrs, [])
+    |> cast_assoc(type)
   end
 
   def create_character(%User{} = user) do
@@ -159,7 +162,6 @@ defmodule Dsa.Accounts do
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
-    |> cast_assoc(:advantages, with: &Advantage.changeset/2)
     |> cast_assoc(:armors, with: &Armor.changeset/2)
     |> cast_assoc(:blessings, with: &Blessing.changeset/2)
     |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
@@ -179,15 +181,16 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def update_character(%Character{} = character, attrs, :combat) do
-    character
-    |> Character.combat_changeset(attrs)
-    |> Repo.update()
-  end
-
   def update_character(%Character{} = character, attrs, type) do
     character
     |> Character.changeset(attrs, type)
+    |> Repo.update()
+  end
+
+  def update_character_advantages(%Character{} = character, attrs) do
+    character
+    |> cast(attrs, [])
+    |> cast_assoc(:advantages)
     |> Repo.update()
   end
 

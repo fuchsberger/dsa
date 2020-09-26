@@ -84,7 +84,6 @@ defmodule Dsa.Accounts.Character do
     field :karmal_tradition_id, :integer
 
     # virtual fields
-    field :advantage_id, :integer, virtual: true
     field :add_armor_id, :integer, virtual: true
     field :blessing_id, :integer, virtual: true
     field :combat_trait_id, :integer, virtual: true
@@ -127,7 +126,7 @@ defmodule Dsa.Accounts.Character do
   end
 
   @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
-  @optional_fields ~w(add_armor_id advantage_id armor_id blessing_id combat_trait_id disadvantage_id fate_trait_id fweapon_id general_trait_id karmal_tradition_id karmal_trait_id language_id magic_tradition_id magic_trait_id mweapon_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
+  @optional_fields ~w(add_armor_id armor_id blessing_id combat_trait_id disadvantage_id fate_trait_id fweapon_id general_trait_id karmal_tradition_id karmal_trait_id language_id magic_tradition_id magic_trait_id mweapon_id prayer_id script_id spell_id spell_trick_id staff_spell_id)a
   def changeset(character, attrs) do
     character
     |> cast(attrs, @required_fields ++ @optional_fields ++ talent_fields() ++ combat_fields())
@@ -143,8 +142,6 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_bonus, greater_than_or_equal_to: 0, less_than_or_equal_to: 25)
     |> validate_number(:ke_lost, greater_than_or_equal_to: 0)
     |> validate_number(:ke_back, greater_than_or_equal_to: 0)
-
-    |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: Advantage.count())
     |> validate_number(:add_armor_id, greater_than: 0, less_than_or_equal_to: Armor.count())
     |> validate_number(:blessing_id, greater_than: 0, less_than_or_equal_to: Blessing.count())
     |> validate_number(:combat_trait_id, greater_than: 0, less_than_or_equal_to: CombatTrait.count())

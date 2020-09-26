@@ -67,25 +67,6 @@ defmodule DsaWeb.CharacterLive do
     {:noreply, assign(socket, :category, String.to_integer(category))}
   end
 
-  def handle_event("change", %{"character" => %{"advantage_id" => id}}, socket) when id != "" do
-    id = String.to_integer(id)
-    c = socket.assigns.changeset.data
-    case Accounts.add_advantage(%{
-      advantage_id: id,
-      character_id: c.id,
-      level: Advantage.level(id),
-      ap: Advantage.ap(id) * Advantage.level(id)
-    }) do
-      {:ok, %{advantage_id: id}} ->
-        Logger.debug("#{c.name} has learned #{Advantage.name(id)} (advantage).")
-        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
-
-      {:error, changeset} ->
-        Logger.error("Error adding advantage: #{inspect(changeset.errors)}")
-        {:noreply, socket}
-    end
-  end
-
   def handle_event("change", %{"character" => %{"add_armor_id" => id}}, socket) when id != "" do
     c = socket.assigns.changeset.data
     case Accounts.add_armor(%{armor_id: String.to_integer(id), character_id: c.id, dmg: 0}) do

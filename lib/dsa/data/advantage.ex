@@ -11,16 +11,15 @@ defmodule Dsa.Data.Advantage do
   schema "advantages" do
     field :advantage_id, :integer
     field :details, :string
-    field :level, :integer
+    field :level, :integer, default: 1
     field :ap, :integer
     belongs_to :character, Dsa.Accounts.Character
   end
 
-  @fields ~w(advantage_id character_id level ap)a
   def changeset(advantage, params \\ %{}) do
     advantage
-    |> cast(params, [:details | @fields])
-    |> validate_required(@fields)
+    |> cast(params, [:advantage_id, :character_id, :details, :level, :ap])
+    |> validate_required([:advantage_id, :character_id, :ap])
     |> validate_length(:details, max: 50)
     |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: count())
     |> validate_ap()
@@ -41,12 +40,12 @@ defmodule Dsa.Data.Advantage do
 
   def get(id), do: List.first(:ets.lookup(@table, id))
 
-  def options(cadvantages) do
+  def options() do
     list()
     |> Enum.map(fn {id, _level, name, _ap, _details, _fixed_ap} -> {name, id} end)
-    |> Enum.reject(fn {_name, id} ->
-        Enum.member?(Enum.map(cadvantages, & &1.advantage_id), id)
-      end)
+    # |> Enum.reject(fn {_name, id} ->
+    #     Enum.member?(Enum.map(cadvantages, & &1.advantage_id), id)
+    #   end)
   end
 
   def level_options(id), do: Enum.map(1..level(id), & {roman(&1), &1})
