@@ -127,7 +127,6 @@ defmodule Dsa.Accounts do
     Repo.preload(character, @character_preloads, force: true)
   end
 
-
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
@@ -138,6 +137,12 @@ defmodule Dsa.Accounts do
 
   def change_character(%Character{} = character, attrs, type) do
     Character.changeset(character, attrs, type)
+  end
+
+  def change_character_assoc(%Character{} = character, nil, type) do
+    character
+    |> cast(%{}, [])
+    |> put_assoc(type, [])
   end
 
   def change_character_assoc(%Character{} = character, attrs, type) do
@@ -191,10 +196,9 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def update_character_advantages(%Character{} = character, attrs) do
+  def update_character_assocs(%Character{} = character, attrs, type) do
     character
-    |> cast(attrs, [])
-    |> cast_assoc(:advantages)
+    |> change_character_assoc(attrs, type)
     |> Repo.update()
   end
 

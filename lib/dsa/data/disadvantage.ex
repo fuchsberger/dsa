@@ -1,6 +1,6 @@
 defmodule Dsa.Data.Disadvantage do
   @moduledoc """
-  CharacterScript module
+  CharacterDisadvantage module
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -11,16 +11,15 @@ defmodule Dsa.Data.Disadvantage do
   schema "disadvantages" do
     field :disadvantage_id, :integer
     field :details, :string
-    field :level, :integer
+    field :level, :integer, default: 1
     field :ap, :integer
     belongs_to :character, Dsa.Accounts.Character
   end
 
-  @fields ~w(disadvantage_id character_id level ap)a
   def changeset(disadvantage, params \\ %{}) do
     disadvantage
-    |> cast(params, [:details | @fields])
-    |> validate_required(@fields)
+    |> cast(params, [:disadvantage_id, :character_id, :details, :level, :ap])
+    |> validate_required([:disadvantage_id, :character_id, :ap])
     |> validate_length(:details, max: 50)
     |> validate_number(:disadvantage_id, greater_than: 0, less_than_or_equal_to: count())
     |> validate_ap()
@@ -39,14 +38,12 @@ defmodule Dsa.Data.Disadvantage do
   def count, do: 52
   def list, do: :ets.tab2list(@table)
 
-  def get(id), do: List.first(:ets.lookup(@table, id))
-
-  def options(cdisadvantages) do
+  def options do
     list()
     |> Enum.map(fn {id, _level, name, _ap, _details, _fixed_ap} -> {name, id} end)
-    |> Enum.reject(fn {_name, id} ->
-        Enum.member?(Enum.map(cdisadvantages, & &1.disadvantage_id), id)
-      end)
+    # |> Enum.reject(fn {_name, id} ->
+    #     Enum.member?(Enum.map(cdisadvantages, & &1.disadvantage_id), id)
+    #   end)
   end
 
   def level_options(id), do: Enum.map(1..level(id), & {roman(&1), &1})

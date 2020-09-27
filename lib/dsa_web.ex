@@ -36,6 +36,7 @@ defmodule DsaWeb do
 
       import Phoenix.HTML.Form, except: [number_input: 2, number_input: 3, range_input: 3, select: 3, select: 4, text_input: 2, text_input: 3, password_input: 2, password_input: 3]
       import DsaWeb.FormHelpers
+      import DsaWeb.LiveHelpers
 
       require Logger
     end

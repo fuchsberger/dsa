@@ -1,35 +1,37 @@
-defmodule AdvantagesComponent do
+defmodule DisadvantagesComponent do
   use DsaWeb, :live_component
 
   import DsaWeb.CharacterHelpers, only: [ap: 2]
   import DsaWeb.DsaHelpers, only: [roman: 1]
 
   alias Dsa.Accounts
-  alias Dsa.Data.Advantage
+  alias Dsa.Data.Disadvantage
 
-  @changeset_type :advantages
+  @changeset_type :disadvantages
 
   def mount(socket) do
     {:ok, socket
     |> assign(:changeset, nil)
-    |> assign(:options, Advantage.options())}
+    |> assign(:options, Disadvantage.options())}
   end
 
-  def handle_event("add", %{"advantage" => %{"id" => id}}, socket) do
+  def handle_event("add", %{"disadvantage" => %{"id" => id}}, socket) do
     id = String.to_integer(id)
     %{character: c, changeset: changeset} = socket.assigns
 
-    new_advantage = Ecto.build_assoc(c, :advantages, advantage_id: id, ap: Advantage.ap(id))
+    new_disadvantage = Ecto.build_assoc(c, :disadvantages, disadvantage_id: id, ap: Disadvantage.ap(id))
 
     changeset =
       changeset
-      |> Ecto.Changeset.put_assoc(:advantages, [
-        new_advantage | Ecto.Changeset.get_field(changeset, :advantages)
+      |> Ecto.Changeset.put_assoc(:disadvantages, [
+        new_disadvantage | Ecto.Changeset.get_field(changeset, :disadvantages)
       ])
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("cancel", _params, socket), do: {:noreply, assign(socket, :changeset, nil)}
+  def handle_event("cancel", _params, socket) do
+    {:noreply, assign(socket, :changeset, nil)}
+  end
 
   def handle_event("edit", _params, socket) do
     changeset = Accounts.change_character_assoc(socket.assigns.character, %{}, @changeset_type)
@@ -43,12 +45,12 @@ defmodule AdvantagesComponent do
 
   def handle_event("remove", %{"id" => id}, socket) do
     id = String.to_integer(id)
-    advantages =
+    disadvantages =
       socket.assigns.changeset
-      |> Ecto.Changeset.get_field(:advantages)
-      |> Enum.reject(& &1.advantage_id == id)
+      |> Ecto.Changeset.get_field(:disadvantages)
+      |> Enum.reject(& &1.disadvantage_id == id)
 
-    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :advantages, advantages)
+    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :disadvantages, disadvantages)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
@@ -61,22 +63,22 @@ defmodule AdvantagesComponent do
         <button class='button is-white px-3 py-0 h-auto' phx-target="<%= @myself %>" phx-click='edit' type='button'>
           <span class='icon has-text-link'><i class='icon-edit'></i></span>
         </button>
-        <p class='card-header-title pl-0 py-0'>Vorteile</p>
+        <p class='card-header-title pl-0 py-0'>Nachteile</p>
         <span class='tag is-light my-1 mr-1'>
-          <strong><%= ap(@character, :advantages) %></strong>
+          <strong><%= ap(@character, :disadvantages) %></strong>
           &nbsp;AP
         </span>
       </header>
       <div class="card-content px-1 py-2">
         <%=
-          @character.advantages
-          |> Enum.map(& "#{Advantage.name(&1.advantage_id)}
-            #{if Advantage.level(&1.advantage_id) > 1, do: " #{roman(&1.level)}"}
+          @character.disadvantages
+          |> Enum.map(& "#{Disadvantage.name(&1.disadvantage_id)}
+            #{if Disadvantage.level(&1.disadvantage_id) > 1, do: " #{roman(&1.level)}"}
             #{&1.details && ": #{&1.details}"}")
           |> Enum.join(", ")
         %>
-        <%= if Enum.count(@character.advantages) == 0 do %>
-          <%= @character.name %> hat keine besonderen Vorteile.
+        <%= if Enum.count(@character.disadvantages) == 0 do %>
+          <%= @character.name %> hat keine besonderen Nachteile.
         <% end %>
       </div>
     </div>
@@ -87,9 +89,9 @@ defmodule AdvantagesComponent do
     ~L"""
       <div class="card px-0 my-2">
         <header class="card-header">
-          <p class='card-header-title pl-2 py-0'>Vorteile</p>
+          <p class='card-header-title pl-2 py-0'>Nachteile</p>
           <form phx-change='add' phx-target='<%= @myself %>'>
-            <%= Phoenix.HTML.Form.select :advantage, :id, @options,
+            <%= Phoenix.HTML.Form.select :disadvantage, :id, @options,
               class: "select is-small py-1 h-auto is-fullwidth",
               prompt: "hinzufügen..."
             %>
@@ -99,7 +101,7 @@ defmodule AdvantagesComponent do
         <div class='card-content px-0 pt-2 pb-0'>
           <%=
             f = form_for @changeset, "#", [
-              id: "advantages-form",
+              id: "disadvantages-form",
               phx_change: :validate,
               phx_submit: :save,
               phx_target: @myself,
@@ -120,22 +122,22 @@ defmodule AdvantagesComponent do
               </thead>
               <tbody>
 
-              <%= for fs <- inputs_for(f, :advantages) do %>
+              <%= for fs <- inputs_for(f, :disadvantages) do %>
                 <%
-                  id = input_value(fs, :advantage_id)
+                  id = input_value(fs, :disadvantage_id)
                   id = if is_integer(id), do: id, else: String.to_integer(id)
                 %>
                   <tr>
                     <%= hidden_inputs_for(fs) %>
-                    <%= hidden_input(fs, :advantage_id) %>
+                    <%= hidden_input(fs, :disadvantage_id) %>
                     <%= hidden_input(fs, :character_id) %>
-                    <td><%= Advantage.name(id) %></td>
+                    <td><%= Disadvantage.name(id) %></td>
                     <td>
                       <%=
                         cond do
-                          Advantage.level(id) > 1 ->
-                            select fs, :level, Advantage.level_options(id), class: "select is-fullwidth is-small py-0 h-auto"
-                          Advantage.details(id) ->
+                          Disadvantage.level(id) > 1 ->
+                            select fs, :level, Disadvantage.level_options(id), class: "select is-fullwidth is-small py-0 h-auto"
+                          Disadvantage.details(id) ->
                             text_input fs, :details, class: "input is-small py-0 h-auto", placeholder: "Details..."
 
                           true ->
@@ -144,10 +146,10 @@ defmodule AdvantagesComponent do
                       %>
                     </td>
                     <td class='has-text-centered'>
-                      <%= if Advantage.fixed_ap(id) do %>
+                      <%= if Disadvantage.fixed_ap(id) do %>
                         <%= hidden_input fs, :ap %><%= input_value(fs, :ap) %>
                       <% else %>
-                        <%= text_input fs, :ap, class: "input is-small px-0 py-0 h-auto number-input has-text-centered", disabled: Advantage.fixed_ap(id) %>
+                        <%= text_input fs, :ap, class: "input is-small px-0 py-0 h-auto number-input has-text-centered", disabled: Disadvantage.fixed_ap(id) %>
                       <% end %>
                     </td>
                     <td class='has-text-centered py-0'>

@@ -19,4 +19,19 @@ defmodule DsaWeb.LiveHelpers do
       redirect(socket, to: "/login")
     end
   end
+
+  def save(type, %{"character" => params}, socket) do
+    params = if Map.has_key?(params, Atom.to_string(type)), do: params, else: nil
+
+    case Accounts.update_character_assocs(socket.assigns.character, params, type) do
+      {:ok, character} ->
+        Logger.debug("#{String.capitalize(Atom.to_string(type))} updated.")
+        send self(), {:updated_character, Accounts.preload(character)}
+        {:noreply, assign(socket, changeset: nil)}
+
+      {:error, changeset} ->
+        Logger.debug("#{String.capitalize(Atom.to_string(type))} error: #{inspect(changeset)}")
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
 end

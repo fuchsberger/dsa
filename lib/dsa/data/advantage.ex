@@ -1,6 +1,6 @@
 defmodule Dsa.Data.Advantage do
   @moduledoc """
-  CharacterScript module
+  CharacterAdvantage module
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -37,8 +37,6 @@ defmodule Dsa.Data.Advantage do
 
   def count, do: 50
   def list, do: :ets.tab2list(@table)
-
-  def get(id), do: List.first(:ets.lookup(@table, id))
 
   def options() do
     list()

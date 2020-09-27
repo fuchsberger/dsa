@@ -1,11 +1,4 @@
 
-
-        <%# render "advantages.html",
-          ap: Map.get(ap, :"Vorteile"), f: f, edit?: @edit == :advantages %>
-
-        <%# render "disadvantages.html",
-          ap: Map.get(ap, :"Nachteile"), f: f, edit?: @edit == :disadvantages %>
-
         <%# render "general_traits.html",
           ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
 
