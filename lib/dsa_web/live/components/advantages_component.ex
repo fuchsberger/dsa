@@ -11,21 +11,10 @@ defmodule AdvantagesComponent do
   def mount(socket) do
     {:ok, socket
     |> assign(:changeset, nil)
-    |> assign(:options, Advantage.options([]))}
+    |> assign(:options, Advantage.options())}
   end
 
-  def handle_event("add", %{"entry" => %{"id" => id}}, socket) do
-    id = String.to_integer(id)
-    %{character: c, changeset: changeset} = socket.assigns
-
-    advantages = [
-      Ecto.build_assoc(c, @changeset_type, id: id) | Ecto.Changeset.get_field(changeset, :advantages)
-    ]
-
-    {:noreply, socket
-    |> assign(:changeset, Ecto.Changeset.put_assoc(changeset, :advantages, advantages))
-    |> assign(:options, Advantage.options(advantages))}
-  end
+  def handle_event("add", params, socket), do: add(@changeset_type, params, socket)
 
   def handle_event("cancel", _params, socket), do: {:noreply, assign(socket, :changeset, nil)}
 
@@ -44,7 +33,7 @@ defmodule AdvantagesComponent do
     advantages =
       socket.assigns.changeset
       |> Ecto.Changeset.get_field(:advantages)
-      |> Enum.reject(& &1.id == id)
+      |> Enum.reject(& &1.advantage_id == id)
 
     changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :advantages, advantages)
     {:noreply, assign(socket, :changeset, changeset)}
@@ -66,7 +55,11 @@ defmodule AdvantagesComponent do
         </span>
       </header>
       <div class="card-content px-1 py-2">
-        <%= Enum.map(@character.advantages, & Advantage.name(&1.id)) |> Enum.join(", ") %>
+        <%=
+          @character.advantages
+          |> Enum.map(& "#{Advantage.name(&1.advantage_id)}#{&1.details && ": #{&1.details}"}")
+          |> Enum.join(", ")
+        %>
         <%= if Enum.count(@character.advantages) == 0 do %>
           <%= @character.name %> hat keine besonderen Vorteile.
         <% end %>
@@ -103,6 +96,7 @@ defmodule AdvantagesComponent do
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th></th>
                   <th class='has-text-centered'>AP</th>
                   <th class='has-text-centered'>
                     <div class='icon is-small'><i class='icon-remove'></i></div>
@@ -111,9 +105,22 @@ defmodule AdvantagesComponent do
               </thead>
               <tbody>
                 <%= for fs <- inputs_for(f, :advantages) do %>
-                  <% id = input_value(fs, :id) %>
+                  <% id = input_value(fs, :advantage_id) %>
                   <tr>
-                    <td><%= Advantage.name(id) %><%= hidden_inputs_for(fs) %></td>
+                    <%= hidden_inputs_for(fs) %>
+                    <%= hidden_input(fs, :advantage_id) %>
+                    <%= hidden_input(fs, :character_id) %>
+                    <td><%= Advantage.name(id) %></td>
+                    <td>
+                      <%=
+                        case Advantage.details(id) do
+                          true ->
+                            text_input fs, :details, class: "input is-small py-0 h-auto", placeholder: "Details..."
+
+                          false -> nil
+                        end
+                      %>
+                    </td>
                     <td class='has-text-centered'><%= Advantage.ap(id) %></td>
                     <td class='has-text-centered py-0'>
                       <button

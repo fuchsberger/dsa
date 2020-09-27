@@ -20,6 +20,25 @@ defmodule DsaWeb.LiveHelpers do
     end
   end
 
+  def add(type, %{"entry" => %{"id" => id}}, socket) do
+    %{character: character, changeset: changeset} = socket.assigns
+
+    id_field =
+      type
+      |> Atom.to_string()
+      |> String.slice(0..-2)
+      |> Kernel.<>("_id")
+      |> String.to_atom()
+
+    new_entry = character |> Ecto.build_assoc(type) |> Map.put(id_field, String.to_integer(id))
+
+    changeset = Ecto.Changeset.put_assoc(changeset, type, [
+      new_entry | Ecto.Changeset.get_field(changeset, type)
+    ])
+
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
   def save(type, %{"character" => params}, socket) do
     params = if Map.has_key?(params, Atom.to_string(type)), do: params, else: nil
 

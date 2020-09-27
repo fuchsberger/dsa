@@ -5,9 +5,7 @@ defmodule Dsa.Repo.Migrations.Disadvantages do
     create table(:disadvantages) do
       add :disadvantage_id, :integer
       add :character_id, references(:characters, on_delete: :delete_all)
-      add :level, :integer
       add :details, :string
-      add :ap, :integer
     end
     create index :disadvantages, [:character_id]
   end

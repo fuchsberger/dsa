@@ -11,6 +11,7 @@ defmodule DsaWeb.CharacterHelpers do
     Advantage,
     CombatSkill,
     CombatTrait,
+    Disadvantage,
     FateTrait,
     KarmalTradition,
     MagicTradition,
@@ -109,7 +110,7 @@ defmodule DsaWeb.CharacterHelpers do
   end
 
   def ap(c, :advantages), do: Enum.map(c.advantages, & Advantage.ap(&1.id)) |> Enum.sum()
-  def ap(c, :disadvantages), do: Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
+  def ap(c, :disadvantages), do: Enum.map(c.disadvantages, & Disadvantage.ap(&1.id)) |> Enum.sum()
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 
