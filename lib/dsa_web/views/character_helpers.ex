@@ -4,10 +4,11 @@ defmodule DsaWeb.CharacterHelpers do
   """
   use Phoenix.HTML
 
-  import Dsa.{Lists, Data}
+  import Dsa.Lists
   import DsaWeb.DsaHelpers
 
   alias Dsa.Data.{
+    Advantage,
     CombatSkill,
     CombatTrait,
     FateTrait,
@@ -15,7 +16,7 @@ defmodule DsaWeb.CharacterHelpers do
     MagicTradition,
     Prayer,
     Script,
-    Skills,
+    Skill,
     Species,
     Spell,
     StaffSpell
@@ -107,7 +108,7 @@ defmodule DsaWeb.CharacterHelpers do
     base_values - 8 * 8 * 15
   end
 
-  def ap(c, :advantages), do: Enum.map(c.advantages, & &1.ap) |> Enum.sum()
+  def ap(c, :advantages), do: Enum.map(c.advantages, & Advantage.ap(&1.id)) |> Enum.sum()
   def ap(c, :disadvantages), do: Enum.map(c.disadvantages, & &1.ap) |> Enum.sum()
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))

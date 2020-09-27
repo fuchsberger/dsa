@@ -5,24 +5,17 @@ defmodule DsaWeb.CharacterView do
   import DsaWeb.CharacterHelpers
 
   alias Dsa.Data.{
-    Advantage,
     Armor,
     Blessing,
-    CombatSkill,
     CombatTrait,
-    Disadvantage,
     FateTrait,
     FWeapon,
     GeneralTrait,
-    KarmalTradition,
     KarmalTrait,
     Language,
-    MagicTradition,
     MagicTrait,
     MWeapon,
-    Prayer,
     Script,
-    Spell,
     SpellTrick,
     StaffSpell
   }

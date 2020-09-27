@@ -33,7 +33,7 @@ defmodule Dsa.Accounts do
 
   @character_preloads [
     :user,
-    advantages: from(s in Advantage, order_by: s.advantage_id),
+    advantages: from(a in Advantage, order_by: a.id),
     armors: from(s in Armor, order_by: s.id),
     blessings: from(s in Blessing, order_by: s.id),
     combat_traits: from(s in CombatTrait, order_by: s.id),

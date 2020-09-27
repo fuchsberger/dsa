@@ -20,7 +20,6 @@ defmodule DsaWeb.CharacterLive do
     MWeapon,
     Prayer,
     Script,
-    Skill,
     Spell,
     SpellTrick,
     StaffSpell
@@ -32,7 +31,7 @@ defmodule DsaWeb.CharacterLive do
 
   def mount(_params, %{"user_id" => user_id} = session, socket) do
     {:ok, assign_defaults(session, socket)
-    |> assign(:edit, :disadvantages)
+    |> assign(:edit, nil)
     |> assign(:category, 1)
     |> assign(:group_options, Accounts.list_group_options())
     |> assign(:magic_tradition_options, MagicTradition.options())
@@ -103,25 +102,6 @@ defmodule DsaWeb.CharacterLive do
 
       {:error, changeset} ->
         Logger.error("Error adding combat trait: #{inspect(changeset.errors)}")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("change", %{"character" => %{"disadvantage_id" => id}}, socket) when id != "" do
-    id = String.to_integer(id)
-    c = socket.assigns.changeset.data
-    case Accounts.add_disadvantage(%{
-      disadvantage_id: id,
-      character_id: c.id,
-      level: Disadvantage.level(id),
-      ap: Disadvantage.ap(id) * Disadvantage.level(id)
-    }) do
-      {:ok, %{disadvantage_id: id}} ->
-        Logger.debug("#{c.name} has learned #{Disadvantage.name(id)} (disadvantage).")
-        {:noreply, assign(socket, :changeset, Accounts.change_character(Accounts.preload(c)))}
-
-      {:error, changeset} ->
-        Logger.error("Error adding disadvantage: #{inspect(changeset.errors)}")
         {:noreply, socket}
     end
   end
@@ -319,9 +299,6 @@ defmodule DsaWeb.CharacterLive do
 
     {entry, name} =
       case type do
-        "advantage" ->
-          {Enum.find(character.advantages, & &1.advantage_id == id), Advantage.name(id)}
-
         "armor" ->
           {Enum.find(character.armors, & &1.id == id), Armor.name(id)}
 
@@ -330,9 +307,6 @@ defmodule DsaWeb.CharacterLive do
 
         "combat_trait" ->
           {Enum.find(character.combat_traits, & &1.id == id), CombatTrait.name(id)}
-
-        "disadvantage" ->
-          {Enum.find(character.disadvantages, & &1.disadvantage_id == id), Disadvantage.name(id)}
 
         "fate_trait" ->
           {Enum.find(character.fate_traits, & &1.id == id), FateTrait.name(id)}

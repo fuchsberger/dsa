@@ -3,7 +3,6 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   import Ecto.Changeset, only: [get_field: 2]
-  import Dsa.Data.Skill
   import DsaWeb.CharacterHelpers
   import DsaWeb.GroupView
   import Dsa.Lists

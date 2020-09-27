@@ -4,110 +4,302 @@ defmodule Dsa.Data.Advantage do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  import DsaWeb.DsaHelpers, only: [roman: 1]
+
+  require Logger
 
   @table :advantages
 
+  @primary_key false
   schema "advantages" do
-    field :advantage_id, :integer
-    field :details, :string
-    field :level, :integer, default: 1
-    field :ap, :integer
-    belongs_to :character, Dsa.Accounts.Character
+    field :id, :integer, primary_key: true
+    belongs_to :character, Dsa.Accounts.Character, primary_key: true
   end
 
+  @fields [:id, :character_id]
   def changeset(advantage, params \\ %{}) do
     advantage
-    |> cast(params, [:advantage_id, :character_id, :details, :level, :ap])
-    |> validate_required([:advantage_id, :character_id, :ap])
-    |> validate_length(:details, max: 50)
-    |> validate_number(:advantage_id, greater_than: 0, less_than_or_equal_to: count())
-    |> validate_ap()
-    |> validate_number(:ap, greater_than: 0)
+    |> cast(params, @fields)
+    |> validate_required(@fields)
+    |> validate_number(:id, greater_than: 0, less_than_or_equal_to: count())
     |> foreign_key_constraint(:character_id)
+    |> unique_constraint([:id, :character_id])
   end
 
-  def validate_ap(changeset) do
-    id = get_field(changeset, :advantage_id)
-    case fixed_ap(id) do
-      true -> put_change(changeset, :ap, get_field(changeset, :level) * ap(id))
-      false -> changeset
-    end
-  end
-
-  def count, do: 50
+  def count, do: :ets.info(@table, :size)
   def list, do: :ets.tab2list(@table)
 
-  def options() do
+  def options(cadvantages) do
+    cadvantage_ids = Enum.map(cadvantages, & &1.id)
+
     list()
-    |> Enum.map(fn {id, _level, name, _ap, _details, _fixed_ap} -> {name, id} end)
-    # |> Enum.reject(fn {_name, id} ->
-    #     Enum.member?(Enum.map(cadvantages, & &1.advantage_id), id)
-    #   end)
+    |> Enum.map(fn {id, name, ap} -> {"#{name} (#{ap})", id} end)
+    |> Enum.reject(fn {_name, id} -> Enum.member?(cadvantage_ids, id) end)
   end
 
-  def level_options(id), do: Enum.map(1..level(id), & {roman(&1), &1})
-
-  def level(id), do: :ets.lookup_element(@table, id, 2)
-  def name(id), do: :ets.lookup_element(@table, id, 3)
-  def ap(id), do: :ets.lookup_element(@table, id, 4)
-  def details(id), do: :ets.lookup_element(@table, id, 5)
-  def fixed_ap(id), do: :ets.lookup_element(@table, id, 6)
+  def name(id), do: :ets.lookup_element(@table, id, 2)
+  def ap(id), do: :ets.lookup_element(@table, id, 3)
 
   def seed do
+    entries = [
+      {"Adel I", 5},
+      {"Adel II", 10},
+      {"Adel III", 15},
+      {"Altersresistenz", 5},
+      {"Angenehmer Geruch", 6},
+      {"Begabung: Alchimie", 18},
+      {"Begabung: Bekehren & Überzeugen", 12},
+      {"Begabung: Betören", 12},
+      {"Begabung: Boote & Schiffe", 12},
+      {"Begabung: Brett & Glücksspiel", 6},
+      {"Begabung: Einschüchtern", 12},
+      {"Begabung: Etikette", 12},
+      {"Begabung: Fährtensuchen", 18},
+      {"Begabung: Fahrzeuge", 6},
+      {"Begabung: Fesseln", 6},
+      {"Begabung: Fischen & Angeln", 6},
+      {"Begabung: Fliegen", 12},
+      {"Begabung: Gassenwissen", 18},
+      {"Begabung: Gaukeleien", 6},
+      {"Begabung: Geographie", 12},
+      {"Begabung: Geschichtswissen", 12},
+      {"Begabung: Götter & Kulte", 12},
+      {"Begabung: Handel", 12},
+      {"Begabung: Heilkunde Gift", 12},
+      {"Begabung: Heilkunde Krankheiten", 12},
+      {"Begabung: Heilkunde Seele", 12},
+      {"Begabung: Heilkunde Wunden", 24},
+      {"Begabung: Holzbearbeitung", 12},
+      {"Begabung: Klettern", 12},
+      {"Begabung: Körperbeherrschung", 24},
+      {"Begabung: Kraftakt", 12},
+      {"Begabung: Kriegskunst", 12},
+      {"Begabung: Lebensmittelbearbeitung", 6},
+      {"Begabung: Lederbearbeitung", 12},
+      {"Begabung: Magiekunde", 18},
+      {"Begabung: Malen & Zeichnen", 6},
+      {"Begabung: Mechanik", 12},
+      {"Begabung: Menschenkenntnis", 18},
+      {"Begabung: Metallbearbeitung", 18},
+      {"Begabung: Musizieren", 6},
+      {"Begabung: Orientierung", 12},
+      {"Begabung: Pflanzenkunde", 18},
+      {"Begabung: Rechnen", 6},
+      {"Begabung: Rechtskunde", 6},
+      {"Begabung: Reiten", 12},
+      {"Begabung: Sagen & Legenden", 12},
+      {"Begabung: Schlösserknacken", 18},
+      {"Begabung: Schwimmen", 12},
+      {"Begabung: Selbstbeherrschung", 24},
+      {"Begabung: Singen", 6},
+      {"Begabung: Sinnesschärfe", 24},
+      {"Begabung: Spärenkunde", 12},
+      {"Begabung: Steinbearbeitung", 6},
+      {"Begabung: Sternkunde", 6},
+      {"Begabung: Stoffbearbeitung", 6},
+      {"Begabung: Tanzen", 6},
+      {"Begabung: Taschendiebstahl", 12},
+      {"Begabung: Tierkunde", 18},
+      {"Begabung: Überreden", 18},
+      {"Begabung: Verbergen", 18},
+      {"Begabung: Verkleiden", 12},
+      {"Begabung: Wildnisleben", 18},
+      {"Begabung: Willenskraft", 24},
+      {"Begabung: Zechen", 6},
+      {"Beidhändig", 15},
+      {"Dunkelsicht I", 10},
+      {"Dunkelsicht II", 20},
+      {"Eisenaffine Aura", 15},
+      {"Entfernungssinn", 10},
+      {"Flink", 8},
+      {"Fuchssinn", 15},
+      {"Geborener Redner", 4},
+      {"Geweihter", 25},
+      {"Giftresistenz I", 10},
+      {"Giftresistenz II", 20},
+      {"Glück I", 30},
+      {"Glück II", 60},
+      {"Glück III", 90},
+      {"Gutaussehend I", 20},
+      {"Gutaussehend II", 40},
+      {"Herausragende Fertigkeit: Alchimie", 6},
+      {"Herausragende Fertigkeit: Bekehren & Überzeugen", 4},
+      {"Herausragende Fertigkeit: Betören", 4},
+      {"Herausragende Fertigkeit: Boote & Schiffe", 4},
+      {"Herausragende Fertigkeit: Brett & Glücksspiel", 2},
+      {"Herausragende Fertigkeit: Einschüchtern", 4},
+      {"Herausragende Fertigkeit: Etikette", 4},
+      {"Herausragende Fertigkeit: Fährtensuchen", 6},
+      {"Herausragende Fertigkeit: Fahrzeuge", 2},
+      {"Herausragende Fertigkeit: Fesseln", 2},
+      {"Herausragende Fertigkeit: Fischen & Angeln", 2},
+      {"Herausragende Fertigkeit: Fliegen", 4},
+      {"Herausragende Fertigkeit: Gassenwissen", 6},
+      {"Herausragende Fertigkeit: Gaukeleien", 2},
+      {"Herausragende Fertigkeit: Geographie", 4},
+      {"Herausragende Fertigkeit: Geschichtswissen", 4},
+      {"Herausragende Fertigkeit: Götter & Kulte", 4},
+      {"Herausragende Fertigkeit: Handel", 4},
+      {"Herausragende Fertigkeit: Heilkunde Gift", 4},
+      {"Herausragende Fertigkeit: Heilkunde Krankheiten", 4},
+      {"Herausragende Fertigkeit: Heilkunde Seele", 4},
+      {"Herausragende Fertigkeit: Heilkunde Wunden", 8},
+      {"Herausragende Fertigkeit: Holzbearbeitung", 4},
+      {"Herausragende Fertigkeit: Klettern", 4},
+      {"Herausragende Fertigkeit: Körperbeherrschung", 8},
+      {"Herausragende Fertigkeit: Kraftakt", 4},
+      {"Herausragende Fertigkeit: Kriegskunst", 4},
+      {"Herausragende Fertigkeit: Lebensmittelbearbeitung", 2},
+      {"Herausragende Fertigkeit: Lederbearbeitung", 4},
+      {"Herausragende Fertigkeit: Magiekunde", 6},
+      {"Herausragende Fertigkeit: Malen & Zeichnen", 2},
+      {"Herausragende Fertigkeit: Mechanik", 4},
+      {"Herausragende Fertigkeit: Menschenkenntnis", 6},
+      {"Herausragende Fertigkeit: Metallbearbeitung", 6},
+      {"Herausragende Fertigkeit: Musizieren", 2},
+      {"Herausragende Fertigkeit: Orientierung", 4},
+      {"Herausragende Fertigkeit: Pflanzenkunde", 6},
+      {"Herausragende Fertigkeit: Rechnen", 2},
+      {"Herausragende Fertigkeit: Rechtskunde", 2},
+      {"Herausragende Fertigkeit: Reiten", 4},
+      {"Herausragende Fertigkeit: Sagen & Legenden", 4},
+      {"Herausragende Fertigkeit: Schlösserknacken", 6},
+      {"Herausragende Fertigkeit: Schwimmen", 4},
+      {"Herausragende Fertigkeit: Selbstbeherrschung", 8},
+      {"Herausragende Fertigkeit: Singen", 2},
+      {"Herausragende Fertigkeit: Sinnesschärfe", 8},
+      {"Herausragende Fertigkeit: Spärenkunde", 4},
+      {"Herausragende Fertigkeit: Steinbearbeitung", 2},
+      {"Herausragende Fertigkeit: Sternkunde", 2},
+      {"Herausragende Fertigkeit: Stoffbearbeitung", 2},
+      {"Herausragende Fertigkeit: Tanzen", 2},
+      {"Herausragende Fertigkeit: Taschendiebstahl", 4},
+      {"Herausragende Fertigkeit: Tierkunde", 6},
+      {"Herausragende Fertigkeit: Überreden", 6},
+      {"Herausragende Fertigkeit: Verbergen", 6},
+      {"Herausragende Fertigkeit: Verkleiden", 4},
+      {"Herausragende Fertigkeit: Wildnisleben", 6},
+      {"Herausragende Fertigkeit: Willenskraft", 8},
+      {"Herausragende Fertigkeit: Zechen", 2},
+      {"Herausragende Kampftechnik: Armbrüste", 12},
+      {"Herausragende Kampftechnik: Blasrohre", 12},
+      {"Herausragende Kampftechnik: Bögen", 16},
+      {"Herausragende Kampftechnik: Diskusse", 16},
+      {"Herausragende Kampftechnik: Dolche", 12},
+      {"Herausragende Kampftechnik: Fächer", 16},
+      {"Herausragende Kampftechnik: Fechtwaffen", 16},
+      {"Herausragende Kampftechnik: Feuerspeien", 12},
+      {"Herausragende Kampftechnik: Hiebwaffen", 16},
+      {"Herausragende Kampftechnik: Kettenwaffen", 16},
+      {"Herausragende Kampftechnik: Lanzen", 12},
+      {"Herausragende Kampftechnik: Peitschen", 12},
+      {"Herausragende Kampftechnik: Raufen", 12},
+      {"Herausragende Kampftechnik: Schilde", 16},
+      {"Herausragende Kampftechnik: Schleudern", 12},
+      {"Herausragende Kampftechnik: Schwerter", 16},
+      {"Herausragende Kampftechnik: Spießwaffen", 16},
+      {"Herausragende Kampftechnik: Stangenwaffen", 16},
+      {"Herausragende Kampftechnik: Wurfwaffen", 12},
+      {"Herausragende Kampftechnik: Zweihandhiebwaffen", 16},
+      {"Herausragende Kampftechnik: Zweihandschwerter", 16},
+      {"Herausragender Sinn: Gehör", 12},
+      {"Herausragender Sinn: Geruch & Geschmack", 6},
+      {"Herausragender Sinn: Sicht", 12},
+      {"Herausragender Sinn: Tastsinn", 2},
+      {"Hitzeresistenz", 5},
+      {"Hohe Astralkraft I", 6},
+      {"Hohe Astralkraft II", 12},
+      {"Hohe Astralkraft III", 18},
+      {"Hohe Astralkraft IV", 24},
+      {"Hohe Astralkraft V", 30},
+      {"Hohe Astralkraft VI", 36},
+      {"Hohe Astralkraft VII", 42},
+      {"Hohe Karmalkraft I", 6},
+      {"Hohe Karmalkraft II", 12},
+      {"Hohe Karmalkraft III", 18},
+      {"Hohe Karmalkraft IV", 24},
+      {"Hohe Karmalkraft V", 30},
+      {"Hohe Karmalkraft VI", 36},
+      {"Hohe Karmalkraft VII", 42},
+      {"Hohe Lebenskraft I", 6},
+      {"Hohe Lebenskraft II", 12},
+      {"Hohe Lebenskraft III", 18},
+      {"Hohe Lebenskraft IV", 24},
+      {"Hohe Lebenskraft V", 30},
+      {"Hohe Lebenskraft VI", 36},
+      {"Hohe Lebenskraft VII", 42},
+      {"Hohe Seelenkraft", 25},
+      {"Hohe Zähigkeit", 25},
+      {"Immunität gegen (Gift)", 1},
+      {"Immunität gegen (Gift)", 2},
+      {"Immunität gegen (Gift)", 3},
+      {"Immunität gegen (Krankheit)", 1},
+      {"Immunität gegen (Krankheit)", 2},
+      {"Immunität gegen (Krankheit)", 3},
+      {"Kälteresistenz", 5},
+      {"Krankheitsresistenz I", 10},
+      {"Krankheitsresistenz II", 10},
+      {"Magische Einstimmung", 40},
+      {"Mystiker", 20},
+      {"Nichtschläfer", 8},
+      {"Pragmatiker", 10},
+      {"Reich I", 1},
+      {"Reich II", 2},
+      {"Reich III", 3},
+      {"Reich IV", 4},
+      {"Reich V", 5},
+      {"Reich VI", 6},
+      {"Reich VII", 7},
+      {"Reich VIII", 8},
+      {"Reich IX", 9},
+      {"Reich X", 10},
+      {"Richtungssinn", 10},
+      {"Schlangenmensch", 6},
+      {"Schwer zu verzaubern", 15},
+      {"Soziale Anpassungsfähigkeit", 10},
+      {"Unscheinbar", 4},
+      {"Verbesserte Regeneration (Astralenergie) I", 10},
+      {"Verbesserte Regeneration (Astralenergie) II", 20},
+      {"Verbesserte Regeneration (Astralenergie) III", 30},
+      {"Verbesserte Regeneration (Karmaenergie) I", 10},
+      {"Verbesserte Regeneration (Karmaenergie) II", 20},
+      {"Verbesserte Regeneration (Karmaenergie) III", 30},
+      {"Verbesserte Regeneration (Lebensenergie) I", 10},
+      {"Verbesserte Regeneration (Lebensenergie) II", 20},
+      {"Verbesserte Regeneration (Lebensenergie) III", 30},
+      {"Verhüllte Aura", 20},
+      {"Vertrauenerweckend", 25},
+      {"Waffenbegabung: Armbrüste", 10},
+      {"Waffenbegabung: Blasrohre", 10},
+      {"Waffenbegabung: Bögen", 15},
+      {"Waffenbegabung: Diskusse", 15},
+      {"Waffenbegabung: Dolche", 10},
+      {"Waffenbegabung: Fächer", 15},
+      {"Waffenbegabung: Fechtwaffen", 15},
+      {"Waffenbegabung: Feuerspeien", 10},
+      {"Waffenbegabung: Hiebwaffen", 15},
+      {"Waffenbegabung: Kettenwaffen", 15},
+      {"Waffenbegabung: Lanzen", 10},
+      {"Waffenbegabung: Peitschen", 10},
+      {"Waffenbegabung: Raufen", 10},
+      {"Waffenbegabung: Schilde", 15},
+      {"Waffenbegabung: Schleudern", 10},
+      {"Waffenbegabung: Schwerter", 15},
+      {"Waffenbegabung: Spießwaffen", 15},
+      {"Waffenbegabung: Stangenwaffen", 15},
+      {"Waffenbegabung: Wurfwaffen", 10},
+      {"Waffenbegabung: Zweihandhiebwaffen", 15},
+      {"Waffenbegabung: Zweihandschwerter", 15},
+      {"Wohlklang", 5},
+      {"Zäher Hund", 20},
+      {"Zauberer", 25},
+      {"Zeitgefühl", 2},
+      {"Zweistimmiger Gesang", 5},
+      {"Zwergennase", 8}
+    ]
+    |> Enum.with_index()
+    |> Enum.map(fn {data, idx} -> Tuple.insert_at(data, 0, idx) end)
+
     :ets.new(@table , [:ordered_set, :protected, :named_table])
-    :ets.insert(@table, [
-      # {id, level, name, ap, details, fixed_ap}
-      {1, 3, "Adel", 5, true, true},
-      {2, 1, "Altersresistenz", 5, false, true},
-      {3, 1, "Angenehmer Geruch", 6, false, true},
-      {4, 1, "Begabung", 6, true, false},
-      {5, 1, "Beidhändig", 15, false, true},
-      {6, 2, "Dunkelsicht", 10, false, true},
-      {7, 1, "Eisenaffine Aura", 15, false, true},
-      {8, 1, "Entfernungssinn", 10, false, true},
-      {9, 1, "Flink", 8, false, true},
-      {10, 1, "Fuchssinn", 15, false, true},
-      {11, 1, "Geborener Redner", 4, false, true},
-      {12, 1, "Geweihter", 25, false, true},
-      {13, 2, "Giftresistenz", 10, false, true},
-      {14, 3, "Glück", 30, false, true},
-      {15, 2, "Gutaussehend", 20, false, true},
-      {16, 1, "Herausragende Fertigkeit", 2, true, false},
-      {17, 1, "Herausragende Kampftechnik", 8, true, false},
-      {18, 1, "Herausragender Sinn", 2, true, false},
-      {19, 1, "Hitzeresistenz", 5, false, true},
-      {20, 7, "Hohe Astralkraft", 6, false, true},
-      {21, 7, "Hohe Karmalkraft", 6, false, true},
-      {22, 7, "Hohe Lebenskraft", 6, false, true},
-      {23, 1, "Hohe Seelenkraft", 25, false, true},
-      {24, 1, "Hohe Zähigkeit", 25, false, true},
-      {25, 1, "Immunität gegen (Gift)", 25, true, false},
-      {26, 1, "Immunität gegen (Krankheit)", 25, true, false},
-      {27, 1, "Kälteresistenz", 5, false, true},
-      {28, 2, "Krankheitsresistenz", 10, false, true},
-      {29, 1, "Magische Einstimmung", 40, true, false},
-      {30, 1, "Mystiker", 20, false, true},
-      {31, 1, "Nichtschläfer", 8, false, true},
-      {32, 1, "Pragmatiker", 10, false, true},
-      {33, 10, "Reich", 1, false, true},
-      {34, 1, "Richtungssinn", 10, false, true},
-      {35, 1, "Schlangenmensch", 6, false, true},
-      {36, 1, "Schwer zu verzaubern", 15, false, true},
-      {37, 1, "Soziale Anpassungsfähigkeit", 10, false, true},
-      {38, 1, "Unscheinbar", 4, false, true},
-      {39, 3, "Verbesserte Regeneration (Astralenergie)", 10, false, true},
-      {40, 3, "Verbesserte Regeneration (Karmaenergie)", 10, false, true},
-      {41, 3, "Verbesserte Regeneration (Lebensenergie)", 10, false, true},
-      {42, 1, "Verhüllte Aura", 20, false, true},
-      {43, 1, "Vertrauenerweckend", 25, false, true},
-      {44, 1, "Waffenbegabung", 5, true, false},
-      {45, 1, "Wohlklang", 5, false, true},
-      {46, 1, "Zäher Hund", 20, false, true},
-      {47, 1, "Zauberer", 25, false, true},
-      {48, 1, "Zeitgefühl", 2, false, true},
-      {49, 1, "Zweistimmiger Gesang", 5, false, true},
-      {50, 1, "Zwergennase", 8, false, true}
-    ])
+    :ets.insert(@table, entries)
   end
 end
