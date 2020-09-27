@@ -48,6 +48,8 @@ defmodule DsaWeb do
 
       import DsaWeb.LiveHelpers
 
+      alias DsaWeb.Router.Helpers, as: Routes
+
       require Logger
     end
   end

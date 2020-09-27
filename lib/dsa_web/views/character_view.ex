@@ -10,7 +10,6 @@ defmodule DsaWeb.CharacterView do
     CombatTrait,
     FateTrait,
     FWeapon,
-    GeneralTrait,
     KarmalTrait,
     Language,
     MagicTrait,

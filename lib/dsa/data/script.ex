@@ -1,6 +1,4 @@
 defmodule Dsa.Data.Script do
-
-  use Phoenix.HTML
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -22,12 +20,11 @@ defmodule Dsa.Data.Script do
     |> unique_constraint([:character_id, :script_id])
   end
 
-  def count, do: 16
+  def count, do: :ets.info(@table, :size)
   def list, do: :ets.tab2list(@table)
 
-  def get(id), do: List.first(:ets.lookup(@table, id))
-
-  def options(cscripts) do
+  def options(changeset) do
+    cscripts = get_field(changeset, :scripts)
     list()
     |> Enum.map(fn {id, name, _ap, _alphabet, _languages} -> {name, id} end)
     |> Enum.reject(fn {_name, id} -> Enum.member?(Enum.map(cscripts, & &1.script_id), id) end)
@@ -35,15 +32,6 @@ defmodule Dsa.Data.Script do
 
   def name(id), do: :ets.lookup_element(@table, id, 2)
   def ap(id), do: :ets.lookup_element(@table, id, 3)
-
-  def tooltip(id) do
-    {_id, _name, _ap, alphabet, languages} = get(id)
-
-    ~E"""
-    <p class="small mb-1"><strong>Alphabet:</strong> <%= alphabet %></p>
-    <p class="small mb-0"><strong>Zugeh. Sprachen:</strong> <%= languages %></p>
-    """
-  end
 
   def seed do
     :ets.new(@table , [:ordered_set, :protected, :named_table])

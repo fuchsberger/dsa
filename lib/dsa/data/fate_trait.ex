@@ -3,45 +3,40 @@ defmodule Dsa.Data.FateTrait do
   CharacterScript module
   """
   use Ecto.Schema
-  use Phoenix.HTML
   import Ecto.Changeset
 
   @table :fait_traits
 
   @primary_key false
   schema "fate_traits" do
-    field :id, :integer, primary_key: true
+    field :fate_trait_id, :integer, primary_key: true
     belongs_to :character, Dsa.Accounts.Character, primary_key: true
   end
 
-  @fields ~w(id character_id)a
+  @fields ~w(fate_trait_id character_id)a
   def changeset(fate_trait, params \\ %{}) do
     fate_trait
     |> cast(params, @fields)
     |> validate_required(@fields)
-    |> validate_number(:id, greater_than: 0, less_than_or_equal_to: count())
+    |> validate_number(:fate_trait_id, greater_than: 0, less_than_or_equal_to: count())
     |> foreign_key_constraint(:character_id)
-    |> unique_constraint([:character_id, :id])
+    |> unique_constraint([:character_id, :fate_trait_id])
   end
 
-  def count, do: 6
+  def count, do: :ets.info(@table, :size)
   def list, do: :ets.tab2list(@table)
 
-  def get(id), do: List.first(:ets.lookup(@table, id))
-
-  def options(), do: Enum.map(list(), fn {id, name, _ap, _desc, _rule} -> {name, id} end)
+  def options(changeset) do
+    traits = get_field(changeset, :fate_traits)
+    list()
+    |> Enum.map(fn {id, name, _ap, _desc, _rule} -> {name, id} end)
+    |> Enum.reject(fn {_name, id} -> Enum.member?(Enum.map(traits, & &1.fate_trait_id), id) end)
+  end
 
   def name(id), do: :ets.lookup_element(@table, id, 2)
   def ap(id), do: :ets.lookup_element(@table, id, 3)
   def desc(id), do: :ets.lookup_element(@table, id, 4)
   def rule(id), do: :ets.lookup_element(@table, id, 5)
-
-  def tooltip(id) do
-    ~E"""
-    <p class="small mb-1"><%= desc(id) %></p>
-    <p class="small mb-0"><strong>Regel:</strong> <%= rule(id) %></p>
-    """
-  end
 
   def seed do
     :ets.new(@table , [:ordered_set, :protected, :named_table])

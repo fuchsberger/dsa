@@ -4,11 +4,9 @@ defmodule DsaWeb.CharacterLive do
   alias Dsa.Accounts
 
   alias Dsa.Data.{
-    Advantage,
     Armor,
     Blessing,
     CombatTrait,
-    Disadvantage,
     FateTrait,
     FWeapon,
     GeneralTrait,
@@ -25,36 +23,20 @@ defmodule DsaWeb.CharacterLive do
     StaffSpell
   }
 
-  alias DsaWeb.Router.Helpers, as: Routes
+  def mount(%{"character_id" => character_id}, %{"user_id" => user_id}, socket) do
+    case Accounts.get_character!(character_id) do
+      nil ->
+        {:noreply, push_redirect(socket, to: Routes.manage_path(socket, :characters))}
 
-  def render(assigns), do: DsaWeb.CharacterView.render("character.html", assigns)
-
-  def mount(_params, %{"user_id" => user_id} = session, socket) do
-    {:ok, assign_defaults(session, socket)
-    |> assign(:edit, nil)
-    |> assign(:category, 1)
-    |> assign(:group_options, Accounts.list_group_options())
-    |> assign(:magic_tradition_options, MagicTradition.options())
-    |> assign(:karmal_tradition_options, KarmalTradition.options())
-    |> assign(:user_id, user_id)
-    |> assign(:admin?, Accounts.admin?(user_id))}
-  end
-
-  def handle_params(params, _session, socket) do
-    case socket.assigns.live_action do
-      :index ->
-        {:noreply, assign(socket, :characters, Accounts.list_characters())}
-
-      :edit ->
-        case Accounts.get_character!(Map.get(params, "character_id")) do
-          nil ->
-            {:noreply, push_redirect(socket, to: Routes.manage_path(socket, :characters))}
-
-          character ->
-            {:noreply, socket
-            |> assign(:character, character)
-            |> assign(:changeset, Accounts.change_character(character))}
-        end
+      character ->
+        {:ok, socket
+        |> assign(:category, 1)
+        |> assign(:character, character)
+        |> assign(:group_options, Accounts.list_group_options())
+        |> assign(:magic_tradition_options, MagicTradition.options())
+        |> assign(:karmal_tradition_options, KarmalTradition.options())
+        |> assign(:user_id, user_id)
+        |> assign(:admin?, Accounts.admin?(user_id))}
     end
   end
 

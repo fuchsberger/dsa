@@ -38,7 +38,7 @@ defmodule Dsa.Accounts do
     blessings: from(s in Blessing, order_by: s.id),
     combat_traits: from(s in CombatTrait, order_by: s.id),
     disadvantages: from(s in Disadvantage, order_by: s.disadvantage_id),
-    fate_traits: from(s in FateTrait, order_by: s.id),
+    fate_traits: from(s in FateTrait, order_by: s.fate_trait_id),
     fweapons: from(s in FWeapon, order_by: s.id),
     general_traits: from(s in GeneralTrait, order_by: s.id),
     karmal_traits: from(s in KarmalTrait, order_by: s.karmal_trait_id),

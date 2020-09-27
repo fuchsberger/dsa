@@ -1,8 +1,5 @@
 defmodule Dsa.Data.Language do
-
   use Ecto.Schema
-  use Phoenix.HTML
-
   import Ecto.Changeset
 
   @table :languages
@@ -25,12 +22,11 @@ defmodule Dsa.Data.Language do
     |> unique_constraint([:character_id, :language_id])
   end
 
-  def count, do: 27
+  def count, do: :ets.info(@table, :size)
   def list, do: :ets.tab2list(@table)
 
-  def get(id), do: List.first(:ets.lookup(@table, id))
-
-  def options(clanguages) do
+  def options(changeset) do
+    clanguages = get_field(changeset, :languages)
     list()
     |> Enum.map(fn {id, name, _dialects, _writings, _description} -> {name, id} end)
     |> Enum.reject(fn {_name, id} -> Enum.member?(Enum.map(clanguages, & &1.language_id), id) end)
@@ -48,16 +44,6 @@ defmodule Dsa.Data.Language do
   def level_options, do: [{"MS", 0}, {"III", 3}, {"II", 2}, {"I", 1}]
 
   def name(id), do: :ets.lookup_element(@table, id, 2)
-
-  def tooltip(id) do
-    {_id, _name, dialects, writings, description} = get(id)
-
-    ~E"""
-    <p class="small mb-1"><%= description %></p>
-    <p class="small mb-1"><strong>Dialekte:</strong> <%= dialects || "keine" %></p>
-    <p class="small mb-0"><strong>Schriften:</strong> <%= writings || "schriftlos" %></p>
-    """
-  end
 
   def seed do
     :ets.new(@table , [:ordered_set, :protected, :named_table])

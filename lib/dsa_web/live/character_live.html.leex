@@ -5,9 +5,10 @@
         <ul>
           <li class="is-active"><a>Generell</a></li>
           <li><a>Talente</a></li>
-          <li><a>Kampf</a></li>
           <li><a>Zauber</a></li>
           <li><a>Liturgien</a></li>
+          <li><a>Ausrüstung</a></li>
+          <li><a>Kampf</a></li>
         </ul>
       </div>
 
@@ -18,6 +19,10 @@
           <%= live_component @socket, GeneralComponent, id: :char2, character: @character %>
           <%= live_component @socket, AdvantagesComponent, id: :char3, character: @character %>
           <%= live_component @socket, DisadvantagesComponent, id: :char4, character: @character %>
+          <%= live_component @socket, GeneralTraitsComponent, id: :char5, character: @character %>
+          <%= live_component @socket, LanguagesComponent, id: :char6, character: @character %>
+          <%= live_component @socket, ScriptComponent, id: :char7, character: @character %>
+          <%= live_component @socket, FateTraitComponent, id: :char8, character: @character %>
         </div>
       </div>
     </section>

@@ -3,9 +3,9 @@ defmodule Dsa.Repo.Migrations.FateTraits do
 
   def change do
     create table(:fate_traits, primary_key: false) do
-      add :id, :integer, primary_key: true
+      add :fate_trait_id, :integer, primary_key: true
       add :character_id, references(:characters, on_delete: :delete_all), primary_key: true
     end
-    create index :fate_traits, [:id, :character_id]
+    create index :fate_traits, [:fate_trait_id, :character_id]
   end
 end

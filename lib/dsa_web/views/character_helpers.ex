@@ -13,6 +13,7 @@ defmodule DsaWeb.CharacterHelpers do
     CombatTrait,
     Disadvantage,
     FateTrait,
+    GeneralTrait,
     KarmalTradition,
     MagicTradition,
     Prayer,
@@ -43,12 +44,8 @@ defmodule DsaWeb.CharacterHelpers do
 
     blessings = Enum.count(c.blessings)
     combat_traits = Enum.map(c.combat_traits, & CombatTrait.ap(&1.id)) |> Enum.sum()
-    fate_traits = Enum.map(c.fate_traits, & FateTrait.ap(&1.id)) |> Enum.sum()
-    general_traits = Enum.map(c.general_traits, & &1.ap) |> Enum.sum()
     karmal_traits = Enum.map(c.karmal_traits, & &1.ap) |> Enum.sum()
     magic_traits = Enum.map(c.magic_traits, & &1.ap) |> Enum.sum()
-    languages = Enum.map(c.languages, & &1.level * 2) |> Enum.sum()
-    scripts = Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
     spell_tricks = Enum.count(c.spell_tricks)
     staff_spells = Enum.map(c.staff_spells, & StaffSpell.ap(&1.id)) |> Enum.sum()
 
@@ -79,18 +76,18 @@ defmodule DsaWeb.CharacterHelpers do
       Eigenschaften: ap(c, :base_values),
       Vorteile: ap(c, :advantages),
       Nachteile: ap(c, :disadvantages),
-      "Allgemeine SF": general_traits,
+      "Allgemeine SF": ap(c, :general_traits),
       "Kampf SF": combat_traits,
       "Magische SF": magic_traits,
       "Karmale SF": karmal_traits,
-      "Schicksalspunkte SF": fate_traits,
+      "Schicksalspunkte SF": ap(c, :fate_traits),
       "Magische Tradition": magic_tradition,
       "Karmale Tradition": karmal_tradition,
       Zaubertricks: spell_tricks,
       "Zaubersprüche / Rituale": spells,
       "Liturgien / Zeremonien": prayers,
-      Sprachen: languages,
-      Schriften: scripts,
+      Sprachen: ap(c, :languages),
+      Schriften: ap(c, :scripts),
       Segnungen: blessings,
       Spezies: Species.ap(c.species_id),
       Stabzauber: staff_spells,
@@ -114,6 +111,16 @@ defmodule DsaWeb.CharacterHelpers do
 
   def ap(c, :disadvantages),
     do: Enum.map(c.disadvantages, & Disadvantage.ap(&1.disadvantage_id)) |> Enum.sum()
+
+  def ap(c, :fate_traits),
+    do: Enum.map(c.fate_traits, & FateTrait.ap(&1.fate_trait_id)) |> Enum.sum()
+
+  def ap(c, :general_traits),
+    do: Enum.map(c.general_traits, & GeneralTrait.ap(&1.general_trait_id)) |> Enum.sum()
+
+  def ap(c, :languages), do: Enum.map(c.languages, & &1.level  * 2) |> Enum.sum()
+
+  def ap(c, :scripts), do: Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 

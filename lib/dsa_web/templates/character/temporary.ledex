@@ -1,354 +1,339 @@
+    <div id='talente' class="card mb-3">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs d-flex justify-content-between">
+          <%= talent_tab "Körper", 1, @category %>
+          <%= talent_tab "Gesellschaft", 2, @category %>
+          <%= talent_tab "Natur", 3, @category %>
+          <%= talent_tab "Wissen", 4, @category %>
+          <%= talent_tab "Handwerk", 5, @category %>
+        </ul>
+      </div>
 
-        <%# render "general_traits.html",
-          ap: Map.get(ap, :"Allgemeine SF"), f: f, edit?: @edit == :general_traits %>
+      <div class="card-body p-0">
+        <table class='table table-xs mb-0'>
+          <thead>
+            <tr>
+              <th scope='col'>Name</th>
+              <th scope='col' class='has-text-centered'>Probe</th>
+              <th scope='col' class='has-text-centered'>BE</th>
+              <th scope='col' class='has-text-centered number-col'>ST</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for id <- 1..58 do %>
+              <tr class='<%= if skill(id, :category) != @category, do: "is-hidden" %>'>
+                <td><%= label f, String.to_atom("t#{id}"), skill(id, :name) %></td>
+                <td class='has-text-centered small'><%= skill(id, :probe) %></td>
+                <td class='has-text-centered'><%= be(skill(id, :be)) %></td>
+                <td>
+                  <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm text-right" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-        <%# render "fate_traits.html",
-          ap: Map.get(ap, :"Schicksalspunkte SF"), f: f, edit?: @edit == :fate_traits
+    <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 47) do %>
+      <div class="card mb-3">
+        <div class="card-header py-0">
+          <div class='row'>
+            <div class='col-6 '>
+              <h5 class='my-2'>Zauber / Rituale</h5>
+            </div>
+            <div class='col-6 pt-1'>
+              <%= select(f, :spell_id, Spell.options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body tab-content">
+
+          <%= render "magic_traits.html", ap: Map.get(ap, :"Magische SF"), f: f, edit?: @edit == :magic_traits %>
+
+          <%= render "spell_tricks.html", ap: Map.get(ap, :"Zaubertricks"), f: f, edit?: @edit == :spell_tricks %>
+
+          <%= if @changeset.data.magic_tradition_id == 1, do: render("staff_spells.html", ap: Map.get(ap, :"Stabzauber"), f: f, edit?: @edit == :staff_spells) %>
+
+          <div class='row g-2'>
+            <div class='col-4'>
+              <% id = @changeset.data.magic_tradition_id %>
+              <%= label f, :magic_tradition_id, "Tradition" %>
+              <%= select f, :magic_tradition_id, @magic_tradition_options, class: "form-select-sm", prompt: "keine" %>
+              <%= if id do %>
+                <small>Leiteig: <%= MagicTradition.le(id) %>, <%= MagicTradition.ap(id) %> AP</small>
+              <% end %>
+            </div>
+
+            <div class='col-8 has-text-centered'>
+              <div class='row g-1'>
+                <div class='col-4'>
+                  <%= label f, :ae_bonus, "Zukauf" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_bonus, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                  <small><%= Map.get(ap, :"Gekaufte AE") %> AP</small>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ae_lost, "Perm. Verloren", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_lost, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_lost, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ae_back, "Zurück gek.", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ae_back, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                  <small><%= Map.get(ap, :"Zurückgekaufte AE") %> AP</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <% spell_forms = inputs_for(f, :spells) %>
+          <table class='table table-xs mb-0'>
+            <thead>
+              <tr>
+                <th scope='col'>Name</th>
+                <th scope='col' class='has-text-centered'>Probe</th>
+                <th scope='col' class='has-text-centered'>SF</th>
+                <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
+                <th scope='col' class='has-text-centered number-col'>ST</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%= for fs <- spell_forms do %>
+              <tr>
+                <td>
+                  <%= hidden_inputs_for(fs) %>
+                  <%= label fs, :level, Spell.name(fs.data.id), class: "col-sm-10" %>
+                </td>
+                <td class='has-text-centered'>
+                  <small><%= Spell.probe(fs.data.id) %></small>
+                </td>
+                <td class='has-text-centered'><%= Spell.sf(fs.data.id) %></td>
+                <td class='has-text-centered'>
+                  <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='spell'
+                  ><i class='icon-cancel text-danger'></i></button>
+                </td>
+                <td>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
+                </td>
+              </tr>
+            <% end %>
+            <%= if Enum.count(spell_forms) == 0 do %>
+              <tr>
+                <td class='has-text-centered text-secondary' colspan='5'>
+                  <i>noch keine Zaubersprüche oder Rituale erlernt...</i>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 12) do %>
+      <div class="card mb-3">
+        <div class="card-header py-0">
+          <div class='row'>
+            <div class='col-6 '>
+              <h5 class='my-2'>Liturgien / Zerem.</h5>
+            </div>
+            <div class='col-6 pt-1'>
+              <%= select(f, :prayer_id, Prayer.options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body tab-content">
+          <%= render "karmal_traits.html", ap: Map.get(ap, :"Karmale SF"), f: f, edit?: @edit == :karmal_traits %>
+
+          <%= render "blessings.html", ap: Map.get(ap, :"Segnungen"), f: f, edit?: @edit == :blessings %>
+
+          <div class='row g-2'>
+            <div class='col-4'>
+              <% id = @changeset.data.karmal_tradition_id %>
+              <%= label f, :karmal_tradition_id, "Tradition" %>
+              <%= select f, :karmal_tradition_id, @karmal_tradition_options, class: "form-select-sm", prompt: "keine" %>
+              <%= if id do %>
+                <small>Leiteig: <%= KarmalTradition.le(id) %>, <%= KarmalTradition.ap(id) %> AP</small>
+              <% end %>
+            </div>
+
+            <div class='col-8 has-text-centered'>
+              <div class='row g-1'>
+                <div class='col-4'>
+                  <%= label f, :ke_bonus, "Zukauf" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ke_bonus, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                  <small><%= Map.get(ap, :"Gekaufte KE") %> AP</small>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ke_lost, "Perm. Verloren", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ke_lost, "KE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ke_lost, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <%= label f, :ke_back, "Zurück gek.", class: "small" %>
+                  <div class='input-group input-group-sm value'>
+                    <%= label f, :ke_back, "KE", class: "input-group-text px-1" %>
+                    <%= number_input f, :ke_back, class: "form-control px-1 has-text-centered" %>
+                  </div>
+                  <small><%= Map.get(ap, :"Zurückgekaufte KE") %> AP</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <% prayer_forms = inputs_for(f, :prayers) %>
+          <table class='table table-xs mb-0'>
+            <thead>
+              <tr>
+                <th scope='col'>Name</th>
+                <th scope='col' class='has-text-centered'>Probe</th>
+                <th scope='col' class='has-text-centered'>SF</th>
+                <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
+                <th scope='col' class='has-text-centered number-col'>ST</th>
+              </tr>
+            </thead>
+            <tbody>
+            <%= for fs <- prayer_forms do %>
+              <tr>
+                <td>
+                  <%= hidden_inputs_for(fs) %>
+                  <%= label fs, :level, Prayer.name(fs.data.id), class: "col-sm-10" %>
+                </td>
+                <td class='has-text-centered'>
+                  <small><%= Prayer.probe(fs.data.id) %></small>
+                </td>
+                <td class='has-text-centered'><%= Prayer.sf(fs.data.id) %></td>
+                <td class='has-text-centered'>
+                  <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='prayer'
+                  ><i class='icon-cancel text-danger'></i></button>
+                </td>
+                <td>
+                  <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
+                </td>
+              </tr>
+            <% end %>
+            <%= if Enum.count(prayer_forms) == 0 do %>
+              <tr>
+                <td class='has-text-centered text-secondary' colspan='5'>
+                  <i>noch keine Liturgien oder Zeremonien erlernt...</i>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class='column is-5'>
+
+    <%# Computed Values %>
+    <%= render "stats_card.html", assigns %>
+
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between">
+        <h5 class='mb-0'>Kampftalente</h5>
+        <i><%= Map.get(ap, :Kampftalente) %> AP</i>
+      </div>
+      <div class="card-body">
+        <%= render "combat_traits.html",
+          ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
         %>
 
-        <%# render "languages.html",
-          ap: Map.get(ap, :"Sprachen"), f: f, edit?: @edit == :languages %>
+        <div class='row g-2 mb-3'>
+          <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
 
-        <%# render "scripts.html",
-          ap: Map.get(ap, :"Schriften"), f: f, edit?: @edit == :scripts %>
-
-
-        <div id='talente' class="card mb-3">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs d-flex justify-content-between">
-              <%= talent_tab "Körper", 1, @category %>
-              <%= talent_tab "Gesellschaft", 2, @category %>
-              <%= talent_tab "Natur", 3, @category %>
-              <%= talent_tab "Wissen", 4, @category %>
-              <%= talent_tab "Handwerk", 5, @category %>
-            </ul>
-          </div>
-
-          <div class="card-body p-0">
-            <table class='table table-xs mb-0'>
-              <thead>
-                <tr>
-                  <th scope='col'>Name</th>
-                  <th scope='col' class='has-text-centered'>Probe</th>
-                  <th scope='col' class='has-text-centered'>BE</th>
-                  <th scope='col' class='has-text-centered number-col'>ST</th>
-                </tr>
-              </thead>
-              <tbody>
-                <%= for id <- 1..58 do %>
-                  <tr class='<%= if skill(id, :category) != @category, do: "is-hidden" %>'>
-                    <td><%= label f, String.to_atom("t#{id}"), skill(id, :name) %></td>
-                    <td class='has-text-centered small'><%= skill(id, :probe) %></td>
-                    <td class='has-text-centered'><%= be(skill(id, :be)) %></td>
-                    <td>
-                      <%= number_input f, String.to_atom("t#{id}"), class: "border-0 col-sm-2 form-control-sm text-right" %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
+          <div class="col-sm-8">
+            <div class='row g-2'>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_bonus, class: "form-control px-1 has-text-centered" %>
+                </div>
+              </div>
+              <div class='col pt-1 small text-right'>
+                p. verloren:
+              </div>
+              <div class='col'>
+                <div class='input-group input-group-sm value'>
+                  <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
+                  <%= number_input f, :le_lost, class: "form-control px-1 has-text-centered" %>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 47) do %>
-          <div class="card mb-3">
-            <div class="card-header py-0">
-              <div class='row'>
-                <div class='col-6 '>
-                  <h5 class='my-2'>Zauber / Rituale</h5>
-                </div>
-                <div class='col-6 pt-1'>
-                  <%= select(f, :spell_id, Spell.options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
-                </div>
-              </div>
-            </div>
+        <table class='table table-xs mb-0'>
+          <thead>
+            <tr>
+              <th scope='col'>Kampftechnik</th>
+              <th scope='col' class='has-text-centered'></th>
+              <th scope='col' class='has-text-centered'>AT</th>
+              <th scope='col' class='has-text-centered'>PA</th>
+              <th scope='col' class='has-text-centered'>Max</th>
+              <th scope='col' class='has-text-centered number-col'>ST</th>
+            </tr>
+          </thead>
+          <tbody>
+          <%= for id <- 1..CombatSkill.count() do %>
+            <tr>
+              <td>
+                <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
+              </td>
+              <td class='has-text-centered'></td>
+              <td class='has-text-centered'>
+                <small><em><%= at(@changeset.data, id) %></em></small>
+              </td>
+              <td class='has-text-centered'>
+                <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
+              </td>
+              <td class='has-text-centered'>
+                <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
+              </td>
+              <td><%= number_input f, String.to_atom("c#{id}"),
+                class: "border-0 col-sm-2 form-control-sm text-right" %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <div class="card-body tab-content">
-
-              <%= render "magic_traits.html", ap: Map.get(ap, :"Magische SF"), f: f, edit?: @edit == :magic_traits %>
-
-              <%= render "spell_tricks.html", ap: Map.get(ap, :"Zaubertricks"), f: f, edit?: @edit == :spell_tricks %>
-
-              <%= if @changeset.data.magic_tradition_id == 1, do: render("staff_spells.html", ap: Map.get(ap, :"Stabzauber"), f: f, edit?: @edit == :staff_spells) %>
-
-              <div class='row g-2'>
-                <div class='col-4'>
-                  <% id = @changeset.data.magic_tradition_id %>
-                  <%= label f, :magic_tradition_id, "Tradition" %>
-                  <%= select f, :magic_tradition_id, @magic_tradition_options, class: "form-select-sm", prompt: "keine" %>
-                  <%= if id do %>
-                    <small>Leiteig: <%= MagicTradition.le(id) %>, <%= MagicTradition.ap(id) %> AP</small>
-                  <% end %>
-                </div>
-
-                <div class='col-8 has-text-centered'>
-                  <div class='row g-1'>
-                    <div class='col-4'>
-                      <%= label f, :ae_bonus, "Zukauf" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ae_bonus, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_bonus, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                      <small><%= Map.get(ap, :"Gekaufte AE") %> AP</small>
-                    </div>
-                    <div class='col-4'>
-                      <%= label f, :ae_lost, "Perm. Verloren", class: "small" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ae_lost, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_lost, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                    </div>
-                    <div class='col-4'>
-                      <%= label f, :ae_back, "Zurück gek.", class: "small" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ae_back, "AE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ae_back, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                      <small><%= Map.get(ap, :"Zurückgekaufte AE") %> AP</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <% spell_forms = inputs_for(f, :spells) %>
-              <table class='table table-xs mb-0'>
-                <thead>
-                  <tr>
-                    <th scope='col'>Name</th>
-                    <th scope='col' class='has-text-centered'>Probe</th>
-                    <th scope='col' class='has-text-centered'>SF</th>
-                    <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
-                    <th scope='col' class='has-text-centered number-col'>ST</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <%= for fs <- spell_forms do %>
-                  <tr>
-                    <td>
-                      <%= hidden_inputs_for(fs) %>
-                      <%= label fs, :level, Spell.name(fs.data.id), class: "col-sm-10" %>
-                    </td>
-                    <td class='has-text-centered'>
-                      <small><%= Spell.probe(fs.data.id) %></small>
-                    </td>
-                    <td class='has-text-centered'><%= Spell.sf(fs.data.id) %></td>
-                    <td class='has-text-centered'>
-                      <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='spell'
-                      ><i class='icon-cancel text-danger'></i></button>
-                    </td>
-                    <td>
-                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
-                    </td>
-                  </tr>
-                <% end %>
-                <%= if Enum.count(spell_forms) == 0 do %>
-                  <tr>
-                    <td class='has-text-centered text-secondary' colspan='5'>
-                      <i>noch keine Zaubersprüche oder Rituale erlernt...</i>
-                    </td>
-                  </tr>
-                <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        <% end %>
-
-        <%= if Enum.find(@changeset.data.advantages, & &1.advantage_id == 12) do %>
-          <div class="card mb-3">
-            <div class="card-header py-0">
-              <div class='row'>
-                <div class='col-6 '>
-                  <h5 class='my-2'>Liturgien / Zerem.</h5>
-                </div>
-                <div class='col-6 pt-1'>
-                  <%= select(f, :prayer_id, Prayer.options(@changeset.data), prompt: "hinzufügen...", class: "form-select-sm") %>
-                </div>
-              </div>
-            </div>
-
-            <div class="card-body tab-content">
-              <%= render "karmal_traits.html", ap: Map.get(ap, :"Karmale SF"), f: f, edit?: @edit == :karmal_traits %>
-
-              <%= render "blessings.html", ap: Map.get(ap, :"Segnungen"), f: f, edit?: @edit == :blessings %>
-
-              <div class='row g-2'>
-                <div class='col-4'>
-                  <% id = @changeset.data.karmal_tradition_id %>
-                  <%= label f, :karmal_tradition_id, "Tradition" %>
-                  <%= select f, :karmal_tradition_id, @karmal_tradition_options, class: "form-select-sm", prompt: "keine" %>
-                  <%= if id do %>
-                    <small>Leiteig: <%= KarmalTradition.le(id) %>, <%= KarmalTradition.ap(id) %> AP</small>
-                  <% end %>
-                </div>
-
-                <div class='col-8 has-text-centered'>
-                  <div class='row g-1'>
-                    <div class='col-4'>
-                      <%= label f, :ke_bonus, "Zukauf" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ke_bonus, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_bonus, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                      <small><%= Map.get(ap, :"Gekaufte KE") %> AP</small>
-                    </div>
-                    <div class='col-4'>
-                      <%= label f, :ke_lost, "Perm. Verloren", class: "small" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ke_lost, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_lost, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                    </div>
-                    <div class='col-4'>
-                      <%= label f, :ke_back, "Zurück gek.", class: "small" %>
-                      <div class='input-group input-group-sm value'>
-                        <%= label f, :ke_back, "KE", class: "input-group-text px-1" %>
-                        <%= number_input f, :ke_back, class: "form-control px-1 has-text-centered" %>
-                      </div>
-                      <small><%= Map.get(ap, :"Zurückgekaufte KE") %> AP</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <% prayer_forms = inputs_for(f, :prayers) %>
-              <table class='table table-xs mb-0'>
-                <thead>
-                  <tr>
-                    <th scope='col'>Name</th>
-                    <th scope='col' class='has-text-centered'>Probe</th>
-                    <th scope='col' class='has-text-centered'>SF</th>
-                    <th scope='col' class='has-text-centered'><i class='icon-remove'></i></th>
-                    <th scope='col' class='has-text-centered number-col'>ST</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <%= for fs <- prayer_forms do %>
-                  <tr>
-                    <td>
-                      <%= hidden_inputs_for(fs) %>
-                      <%= label fs, :level, Prayer.name(fs.data.id), class: "col-sm-10" %>
-                    </td>
-                    <td class='has-text-centered'>
-                      <small><%= Prayer.probe(fs.data.id) %></small>
-                    </td>
-                    <td class='has-text-centered'><%= Prayer.sf(fs.data.id) %></td>
-                    <td class='has-text-centered'>
-                      <button type='button' class='btn btn-sm py-0 btn-link' phx-click='remove' phx-value-id='<%= fs.data.id %>' phx-value-type='prayer'
-                      ><i class='icon-cancel text-danger'></i></button>
-                    </td>
-                    <td>
-                      <%= number_input fs, :level, class: "border-0 col-sm-2 form-control-sm text-right" %>
-                    </td>
-                  </tr>
-                <% end %>
-                <%= if Enum.count(prayer_forms) == 0 do %>
-                  <tr>
-                    <td class='has-text-centered text-secondary' colspan='5'>
-                      <i>noch keine Liturgien oder Zeremonien erlernt...</i>
-                    </td>
-                  </tr>
-                <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        <% end %>
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h5 class='mb-0'>Ausrüstung</h5>
+        <button type='button' class='btn btn-sm btn-outline-primary' phx-click='toggle' phx-value-edit='equipment'><i class='icon-add'></i> hinzufügen</button>
       </div>
 
-      <div class='column is-5'>
+      <div class="card-body">
+        <%= if @edit == :equipment do %>
+          <%= select f, :add_armor_id, Armor.options(f.data), class: "mb-2", prompt: "Rüstung hinzufügen..." %>
+          <%= select f, :mweapon_id, MWeapon.options(f.data), class: "mb-2", prompt: "Nahkampfwaffe hinzufügen..." %>
+          <%= select f, :fweapon_id, FWeapon.options(f.data), class: "mb-2", prompt: "Fernkampfwaffe hinzufügen..." %>
+        <% end %>
 
-        <%# Computed Values %>
-        <%= render "stats_card.html", assigns %>
-
-        <div class="card mb-3">
-          <div class="card-header d-flex justify-content-between">
-            <h5 class='mb-0'>Kampftalente</h5>
-            <i><%= Map.get(ap, :Kampftalente) %> AP</i>
-          </div>
-          <div class="card-body">
-            <%= render "combat_traits.html",
-              ap: Map.get(ap, :"Kampf SF"), f: f, edit?: @edit == :combat_traits
-            %>
-
-            <div class='row g-2 mb-3'>
-              <div class="col-sm-4 pt-1">Zukauf (<%= Map.get(ap, :"Gekaufte LE") %> AP)</div>
-
-              <div class="col-sm-8">
-                <div class='row g-2'>
-                  <div class='col'>
-                    <div class='input-group input-group-sm value'>
-                      <%= label f, :le_bonus, "LE", class: "input-group-text px-1" %>
-                      <%= number_input f, :le_bonus, class: "form-control px-1 has-text-centered" %>
-                    </div>
-                  </div>
-                  <div class='col pt-1 small text-right'>
-                    p. verloren:
-                  </div>
-                  <div class='col'>
-                    <div class='input-group input-group-sm value'>
-                      <%= label f, :le_lost, "LE", class: "input-group-text px-1" %>
-                      <%= number_input f, :le_lost, class: "form-control px-1 has-text-centered" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <table class='table table-xs mb-0'>
-              <thead>
-                <tr>
-                  <th scope='col'>Kampftechnik</th>
-                  <th scope='col' class='has-text-centered'></th>
-                  <th scope='col' class='has-text-centered'>AT</th>
-                  <th scope='col' class='has-text-centered'>PA</th>
-                  <th scope='col' class='has-text-centered'>Max</th>
-                  <th scope='col' class='has-text-centered number-col'>ST</th>
-                </tr>
-              </thead>
-              <tbody>
-              <%= for id <- 1..CombatSkill.count() do %>
-                <tr>
-                  <td>
-                    <%= label f, String.to_atom("c#{id}"), CombatSkill.name(id), class: "col-sm-10" %>
-                  </td>
-                  <td class='has-text-centered'></td>
-                  <td class='has-text-centered'>
-                    <small><em><%= at(@changeset.data, id) %></em></small>
-                  </td>
-                  <td class='has-text-centered'>
-                    <small><em><%= pa(@changeset.data, id) || "-" %></em></small>
-                  </td>
-                  <td class='has-text-centered'>
-                    <small><em><%= combat_skill_max(@changeset.data, id) %></em></small>
-                  </td>
-                  <td><%= number_input f, String.to_atom("c#{id}"),
-                    class: "border-0 col-sm-2 form-control-sm text-right" %>
-                  </td>
-                </tr>
-              <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header d-flex justify-content-between">
-            <h5 class='mb-0'>Ausrüstung</h5>
-            <button type='button' class='btn btn-sm btn-outline-primary' phx-click='toggle' phx-value-edit='equipment'><i class='icon-add'></i> hinzufügen</button>
-          </div>
-
-          <div class="card-body">
-            <%= if @edit == :equipment do %>
-              <%= select f, :add_armor_id, Armor.options(f.data), class: "mb-2", prompt: "Rüstung hinzufügen..." %>
-              <%= select f, :mweapon_id, MWeapon.options(f.data), class: "mb-2", prompt: "Nahkampfwaffe hinzufügen..." %>
-              <%= select f, :fweapon_id, FWeapon.options(f.data), class: "mb-2", prompt: "Fernkampfwaffe hinzufügen..." %>
-            <% end %>
-
-            <%= render "armors.html", f: f %>
-            <%= if Enum.count(f.source.data.mweapons) > 0, do: render "mweapons.html", f: f %>
-            <%= if Enum.count(f.source.data.fweapons) > 0, do: render "fweapons.html", f: f %>
-          </div>
-        </div>
+        <%= render "armors.html", f: f %>
+        <%= if Enum.count(f.source.data.mweapons) > 0, do: render "mweapons.html", f: f %>
+        <%= if Enum.count(f.source.data.fweapons) > 0, do: render "fweapons.html", f: f %>
       </div>
-    </form>
+    </div>
+  </div>
+</form>
