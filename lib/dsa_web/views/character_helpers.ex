@@ -109,8 +109,11 @@ defmodule DsaWeb.CharacterHelpers do
     base_values - 8 * 8 * 15
   end
 
-  def ap(c, :advantages), do: Enum.map(c.advantages, & Advantage.ap(&1.id)) |> Enum.sum()
-  def ap(c, :disadvantages), do: Enum.map(c.disadvantages, & Disadvantage.ap(&1.id)) |> Enum.sum()
+  def ap(c, :advantages),
+    do: Enum.map(c.advantages, & Advantage.ap(&1.advantage_id)) |> Enum.sum()
+
+  def ap(c, :disadvantages),
+    do: Enum.map(c.disadvantages, & Disadvantage.ap(&1.disadvantage_id)) |> Enum.sum()
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 

@@ -23,19 +23,37 @@ defmodule DsaWeb.LiveHelpers do
   def add(type, %{"entry" => %{"id" => id}}, socket) do
     %{character: character, changeset: changeset} = socket.assigns
 
-    id_field =
-      type
-      |> Atom.to_string()
-      |> String.slice(0..-2)
-      |> Kernel.<>("_id")
-      |> String.to_atom()
-
-    new_entry = character |> Ecto.build_assoc(type) |> Map.put(id_field, String.to_integer(id))
+    new_entry =
+      character
+      |> Ecto.build_assoc(type)
+      |> Map.put(id_field(type), String.to_integer(id))
 
     changeset = Ecto.Changeset.put_assoc(changeset, type, [
       new_entry | Ecto.Changeset.get_field(changeset, type)
     ])
 
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def edit(type, socket) do
+    changeset = Accounts.change_character_assoc(socket.assigns.character, %{}, type)
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def cancel(socket), do: {:noreply, assign(socket, :changeset, nil)}
+
+  def remove(type, %{"id" => id}, socket) do
+    entries =
+      socket.assigns.changeset
+      |> Ecto.Changeset.get_field(type)
+      |> Enum.reject(& Map.get(&1, id_field(type)) == String.to_integer(id))
+
+    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, type, entries)
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def validate(type, %{"character" => params}, socket) do
+    changeset = Accounts.change_character_assoc(socket.assigns.character, params, type)
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
@@ -52,5 +70,13 @@ defmodule DsaWeb.LiveHelpers do
         Logger.debug("#{String.capitalize(Atom.to_string(type))} error: #{inspect(changeset)}")
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  def id_field(type) do
+    type
+    |> Atom.to_string()
+    |> String.slice(0..-2)
+    |> Kernel.<>("_id")
+    |> String.to_atom()
   end
 end

@@ -3,7 +3,6 @@ defmodule AdvantagesComponent do
 
   import DsaWeb.CharacterHelpers, only: [ap: 2]
 
-  alias Dsa.Accounts
   alias Dsa.Data.Advantage
 
   @changeset_type :advantages
@@ -16,28 +15,13 @@ defmodule AdvantagesComponent do
 
   def handle_event("add", params, socket), do: add(@changeset_type, params, socket)
 
-  def handle_event("cancel", _params, socket), do: {:noreply, assign(socket, :changeset, nil)}
+  def handle_event("cancel", _params, socket), do: cancel(socket)
 
-  def handle_event("edit", _params, socket) do
-    changeset = Accounts.change_character_assoc(socket.assigns.character, %{}, @changeset_type)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
+  def handle_event("edit", _params, socket), do: edit(@changeset_type, socket)
 
-  def handle_event("validate", %{"character" => params}, socket) do
-    changeset = Accounts.change_character_assoc(socket.assigns.character, params, @changeset_type)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
+  def handle_event("validate", params, socket), do: validate(@changeset_type, params, socket)
 
-  def handle_event("remove", %{"id" => id}, socket) do
-    id = String.to_integer(id)
-    advantages =
-      socket.assigns.changeset
-      |> Ecto.Changeset.get_field(:advantages)
-      |> Enum.reject(& &1.advantage_id == id)
-
-    changeset = Ecto.Changeset.put_assoc(socket.assigns.changeset, :advantages, advantages)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
+  def handle_event("remove", params, socket), do: remove(@changeset_type, params, socket)
 
   def handle_event("save", params, socket), do: save(@changeset_type, params, socket)
 
@@ -105,7 +89,10 @@ defmodule AdvantagesComponent do
               </thead>
               <tbody>
                 <%= for fs <- inputs_for(f, :advantages) do %>
-                  <% id = input_value(fs, :advantage_id) %>
+                <%
+                  id = input_value(fs, :advantage_id)
+                  id = if is_integer(id), do: id, else: String.to_integer(id)
+                %>
                   <tr>
                     <%= hidden_inputs_for(fs) %>
                     <%= hidden_input(fs, :advantage_id) %>
