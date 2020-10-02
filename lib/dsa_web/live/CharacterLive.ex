@@ -1,4 +1,5 @@
 defmodule DsaWeb.CharacterLive do
+  use Phoenix.HTML
   use DsaWeb, :live_view
 
   alias Dsa.Accounts
@@ -342,5 +343,13 @@ defmodule DsaWeb.CharacterLive do
   def handle_event("toggle", %{"edit" => type}, socket) do
     edit = String.to_atom(type)
     {:noreply, assign(socket, :edit, (unless edit == socket.assigns.edit, do: edit, else: nil))}
+  end
+
+  def tab(socket, action, character_id, target, name) do
+    ~E"""
+      <li class="<%= if action == target, do: "is-active" %>">
+        <%= live_patch name, to: Routes.character_path(socket, target, character_id) %>
+      </li>
+    """
   end
 end

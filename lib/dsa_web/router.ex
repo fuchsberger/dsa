@@ -33,7 +33,13 @@ defmodule DsaWeb.Router do
     put "/change_password", UserController, :change_password
 
     live "/characters", ManageLive, :characters
-    live "/character/:character_id", CharacterLive
+
+    live "/character/:character_id/combat", CharacterLive, :combat
+    live "/character/:character_id/gear", CharacterLive, :gear
+    live "/character/:character_id/skills", CharacterLive, :skills
+    live "/character/:character_id/magic", CharacterLive, :magic
+    live "/character/:character_id/wonders", CharacterLive, :wonders
+    live "/character/:character_id", CharacterLive, :index
 
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll

@@ -3,12 +3,12 @@
     <section class='section px-0 py-0'>
       <div class="tabs is-centered">
         <ul>
-          <li class="is-active"><a>Generell</a></li>
-          <li><a>Talente</a></li>
-          <li><a>Zauber</a></li>
-          <li><a>Liturgien</a></li>
-          <li><a>Ausrüstung</a></li>
-          <li><a>Kampf</a></li>
+          <%= tab(@socket, @live_action, @character.id, :index, "Generell") %>
+          <%= tab(@socket, @live_action, @character.id, :gear, "Ausrüstung") %>
+          <%= tab(@socket, @live_action, @character.id, :skills, "Talente") %>
+          <%= tab(@socket, @live_action, @character.id, :combat, "Kampf") %>
+          <%= tab(@socket, @live_action, @character.id, :magic, "Zauber") %>
+          <%= tab(@socket, @live_action, @character.id, :wonders, "Liturgien") %>
         </ul>
       </div>
 

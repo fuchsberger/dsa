@@ -115,9 +115,7 @@ defmodule Dsa.Accounts do
 
   def delete_user!(user), do: Repo.delete!(user)
 
-  def list_characters() do
-    Repo.all(from(c in Character, preload: [:user, :group]))
-  end
+  def list_characters, do: Repo.all(from(c in Character, preload: :user))
 
   def get_character!(id) do
     Repo.get!(from(c in Character, preload: ^@character_preloads), id)

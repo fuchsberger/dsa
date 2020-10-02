@@ -8,13 +8,10 @@ defmodule DsaWeb.CharacterView do
     Armor,
     Blessing,
     CombatTrait,
-    FateTrait,
     FWeapon,
     KarmalTrait,
-    Language,
     MagicTrait,
     MWeapon,
-    Script,
     SpellTrick,
     StaffSpell
   }

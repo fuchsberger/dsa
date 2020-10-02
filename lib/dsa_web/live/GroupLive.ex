@@ -189,7 +189,7 @@ defmodule DsaWeb.GroupLive do
   def handle_event("talent-roll", %{"be" => be, "talent" => id}, socket) do
     id = String.to_integer(id)
     c = active_character(socket)
-    [b1, b2, b3] = base_value_indexes(Skill.probe(id))
+    [b1, b2, b3] = base_value_indexes(Dsa.Data.Skill.probe(id))
 
     params = %{
       type: 3,

@@ -13,9 +13,7 @@
       <%= if @current_user && Enum.count(@current_user.characters) > 0 do %>
         <%= for character <- Enum.take(@current_user.characters, 8) do %>
           <%= menu_link @conn, character.name,
-            Routes.live_path(@conn, DsaWeb.CharacterLive, character.id),
-            class: "is-tab"
-          %>
+            Routes.character_path(@conn, :index, character.id), class: "is-tab", character_id: character.id %>
         <% end %>
       <% end %>
     </div>

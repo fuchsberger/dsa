@@ -8,7 +8,6 @@
     <tr>
       <th scope='col'>Held</th>
       <th scope='col'>Spieler</th>
-      <th scope='col'>Gruppe</th>
       <th scope='col' class='has-text-centered'>Aktionen</th>
     </tr>
   </thead>
@@ -17,10 +16,9 @@
       <tr>
         <th scope='row'><%= character.name %></th>
         <td><%= character.user.name %></td>
-        <td><%= if is_nil(character.group), do: "-", else: character.group.name %></td>
         <td class='has-text-centered'>
           <%= if @admin || character.user_id == @user_id do %>
-            <%= live_patch icon("edit"), to: Routes.live_path(@socket, DsaWeb.CharacterLive, character.id) %>
+            <%= live_patch icon("edit"), to: Routes.character_path(@socket, :general, character.id) %>
 
             <%= link icon("cancel text-danger", class: "text-danger"),
               to: "#",

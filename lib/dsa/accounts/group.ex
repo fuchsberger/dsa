@@ -4,12 +4,8 @@ defmodule Dsa.Accounts.Group do
 
   schema "groups" do
     field :name, :string
-
     belongs_to :master, Dsa.Accounts.User
-
-    has_many :characters, Dsa.Accounts.Character
     has_many :logs, Dsa.Event.Log
-
     timestamps()
   end
 
