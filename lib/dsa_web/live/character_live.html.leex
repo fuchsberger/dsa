@@ -1,31 +1,43 @@
-<div class="columns">
+<div class="columns is-fullheight">
   <div class='column is-8'>
-    <section class='section px-0 py-0'>
-      <div class="tabs is-centered">
-        <ul>
-          <%= tab(@socket, @live_action, @character.id, :index, "Generell") %>
-          <%= tab(@socket, @live_action, @character.id, :gear, "Ausrüstung") %>
-          <%= tab(@socket, @live_action, @character.id, :skills, "Talente") %>
-          <%= tab(@socket, @live_action, @character.id, :combat, "Kampf") %>
-          <%= tab(@socket, @live_action, @character.id, :magic, "Zauber") %>
-          <%= tab(@socket, @live_action, @character.id, :wonders, "Liturgien") %>
-        </ul>
-      </div>
-
-      <%= live_component @socket, BaseValuesComponent, id: :char1, character: @character %>
-
-      <div class='columns'>
-        <div class='column is-7'>
-          <%= live_component @socket, GeneralComponent, id: :char2, character: @character %>
-          <%= live_component @socket, AdvantagesComponent, id: :char3, character: @character %>
-          <%= live_component @socket, DisadvantagesComponent, id: :char4, character: @character %>
-          <%= live_component @socket, GeneralTraitsComponent, id: :char5, character: @character %>
-          <%= live_component @socket, LanguagesComponent, id: :char6, character: @character %>
-          <%= live_component @socket, ScriptComponent, id: :char7, character: @character %>
-          <%= live_component @socket, FateTraitComponent, id: :char8, character: @character %>
+    <%= unless is_nil(@login_changeset) do %>
+      <section class="section">
+        <div class="container">
+          <div class="columns is-centered mt-6">
+            <%= render DsaWeb.LayoutView, "login_form.html", assigns %>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    <% else %>
+      <section class='section px-0 py-0'>
+
+        <div class="tabs is-centered">
+          <ul>
+            <%= tab(@socket, @live_action, @character.id, :index, "Generell") %>
+            <%= tab(@socket, @live_action, @character.id, :gear, "Ausrüstung") %>
+            <%= tab(@socket, @live_action, @character.id, :skills, "Talente") %>
+            <%= tab(@socket, @live_action, @character.id, :combat, "Kampf") %>
+            <%= tab(@socket, @live_action, @character.id, :magic, "Zauber") %>
+            <%= tab(@socket, @live_action, @character.id, :wonders, "Liturgien") %>
+          </ul>
+        </div>
+
+        <%= live_component @socket, BaseValuesComponent, id: :char1, character: @character %>
+
+        <div class='columns'>
+          <div class='column is-7'>
+            <%= live_component @socket, GeneralComponent, id: :char2, character: @character %>
+            <%= live_component @socket, AdvantagesComponent, id: :char3, character: @character %>
+            <%= live_component @socket, DisadvantagesComponent, id: :char4, character: @character %>
+            <%= live_component @socket, GeneralTraitsComponent, id: :char5, character: @character %>
+            <%= live_component @socket, LanguagesComponent, id: :char6, character: @character %>
+            <%= live_component @socket, ScriptComponent, id: :char7, character: @character %>
+            <%= live_component @socket, FateTraitComponent, id: :char8, character: @character %>
+          </div>
+        </div>
+      </section>
+    <% end %>
+
   </div>
   <div class='column'>
     <section class='section px-0 py-3'>

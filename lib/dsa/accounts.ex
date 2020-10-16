@@ -53,8 +53,7 @@ defmodule Dsa.Accounts do
   ]
 
   @group_preloads [
-    logs: from(l in Log, preload: :character, order_by: {:desc, l.inserted_at}),
-    characters: @character_preloads
+    logs: from(l in Log, preload: :character, order_by: {:desc, l.inserted_at})
   ]
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
@@ -90,6 +89,8 @@ defmodule Dsa.Accounts do
     from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
     |> Repo.all()
   end
+
+  def change_login(params), do: User.login_changeset(%User{}, params)
 
   def change_user(%User{} = user, params \\ %{}) do
     User.changeset(user, params)

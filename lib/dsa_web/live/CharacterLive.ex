@@ -41,6 +41,14 @@ defmodule DsaWeb.CharacterLive do
     end
   end
 
+  def mount(_params, _session, socket) do
+    {:ok, socket
+    |> assign(:character, nil)
+    |> assign(:admin?, false)
+    |> assign(:login_changeset, Accounts.change_login(%{}))
+    |> assign(:submit?, false)}
+  end
+
   def handle_info({:updated_character, character}, socket) do
     {:noreply, assign(socket, :character, character)}
   end
@@ -258,6 +266,21 @@ defmodule DsaWeb.CharacterLive do
       {:error, changeset} ->
         Logger.error(inspect(changeset.errors))
         {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  # Login Form
+  def handle_event("change", %{"user" => params}, socket) do
+    {:noreply, assign(socket, :login_changeset, Accounts.change_login(params))}
+  end
+
+  def handle_event("login", %{"user" => params}, socket) do
+    case Accounts.change_login(params) do
+      {:ok, changeset} ->
+        {:noreply, assign(socket, login_changeset: changeset, submit?: true)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, login_changeset: changeset)}
     end
   end
 

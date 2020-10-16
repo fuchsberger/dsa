@@ -1,17 +1,17 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = (env, options) => {
-  const devMode = options.mode !== 'production';
+  const devMode = options.mode == 'development'
 
   return {
-    stats: 'minimal',
+    // stats: 'minimal',
     optimization: {
       minimizer: [
-        new TerserPlugin({ cache: true, parallel: true, sourceMap: devMode }),
+        new TerserPlugin({ sourceMap: devMode }),
         new OptimizeCSSAssetsPlugin({})
       ]
     },
@@ -32,10 +32,13 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.scss$/,
+          test: /\.s[ac]ss$/i,
           use: [
+            // extract CSS into separate file
             MiniCssExtractPlugin.loader,
+            // translates CSS into CommonJS
             'css-loader',
+            // compiles Sass to CSS
             {
               loader: 'sass-loader',
               options: {
@@ -51,10 +54,11 @@ module.exports = (env, options) => {
           ]
         },
         {
-          test: /\.(eot|png|svg|ttf|woff|woff2)$/i,
+          test: /\.(woff2)$/i,
           use: {
+            // handles icons font
             loader: 'url-loader',
-            options: { limit: 8192 }
+            options: { limit: 8192 } // 8 Kb
           }
         }
       ]

@@ -18,7 +18,7 @@
         <td><%= character.user.name %></td>
         <td class='has-text-centered'>
           <%= if @admin || character.user_id == @user_id do %>
-            <%= live_patch icon("edit"), to: Routes.character_path(@socket, :general, character.id) %>
+            <%= live_patch icon("edit"), to: Routes.character_path(@socket, :index, character.id) %>
 
             <%= link icon("cancel text-danger", class: "text-danger"),
               to: "#",

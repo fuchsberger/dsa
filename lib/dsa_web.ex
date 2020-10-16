@@ -47,6 +47,7 @@ defmodule DsaWeb do
       use Phoenix.LiveView
 
       import DsaWeb.LiveHelpers
+      import Phoenix.View, only: [render: 3]
 
       alias DsaWeb.Router.Helpers, as: Routes
 

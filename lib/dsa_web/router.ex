@@ -18,9 +18,8 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    get "/", SessionController, :index
-    get "/login", SessionController, :new
-    post "/login", SessionController, :create
+    live "/", CharacterLive, :index
+    post "/", SessionController, :create
     delete "/:id", SessionController, :delete
   end
 
@@ -34,12 +33,14 @@ defmodule DsaWeb.Router do
 
     live "/characters", ManageLive, :characters
 
+
     live "/character/:character_id/combat", CharacterLive, :combat
     live "/character/:character_id/gear", CharacterLive, :gear
     live "/character/:character_id/skills", CharacterLive, :skills
     live "/character/:character_id/magic", CharacterLive, :magic
     live "/character/:character_id/wonders", CharacterLive, :wonders
     live "/character/:character_id", CharacterLive, :index
+
 
     live "/group/:id/combat", GroupLive, :combat
     live "/group/:id/roll", GroupLive, :roll

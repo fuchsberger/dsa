@@ -28,6 +28,12 @@ defmodule Dsa.Accounts.User do
     |> foreign_key_constraint(:group_id)
   end
 
+  def login_changeset(user, params) do
+    user
+    |> cast(params, [:username, :password])
+    |> validate_required([:username, :password])
+  end
+
   @fields ~w(password_old password password_confirm)a
   def password_changeset(user, params) do
     user
