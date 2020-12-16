@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <%= csrf_meta_tag() %>
-    <title>DSA Tool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="author" content="Alexander Fuchsberger">
+    <meta name="description" content="A character sheet and dice tool for DSA.">
+    <%= live_title_tag @page_title, suffix: " | DSA Tool" %>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
-    <%= render "navbar.html", conn: @conn, current_user: @current_user %>
-
-    <main class='container' role="main">
-      <%= for {t, msg} <- get_flash(@conn) do %>
-        <div class='notification is-<%= if t == "error", do: "danger", else: t %> is-light mt-2'>
-          <button class="delete"></button>
-          <%= msg %>
-        </div>
-      <% end %>
-      <%= @inner_content %>
-    </main>
+    <%= @inner_content %>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

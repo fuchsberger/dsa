@@ -11,8 +11,8 @@ defmodule DsaWeb.SessionController do
     render(conn, "new.html")
   end
 
-  def create(conn, %{"session" => %{"username" => username, "password" => pass}}) do
-    case Dsa.Accounts.authenticate_by_username_and_pass(username, pass) do
+  def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
+    case Dsa.Accounts.authenticate_by_email_and_pass(email, pass) do
       {:ok, user} ->
         conn
         |> DsaWeb.Auth.login(user)
@@ -21,7 +21,7 @@ defmodule DsaWeb.SessionController do
 
       {:error, _reason} ->
         conn
-        |> put_flash(:error, "Invalid username/password combination")
+        |> put_flash(:error, "Invalid email/password combination")
         |> render("new.html")
     end
   end

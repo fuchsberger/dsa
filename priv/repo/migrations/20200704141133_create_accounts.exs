@@ -5,13 +5,14 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
 
   def change do
     create table(:users) do
-      add :name, :string
+      add :email, :string
       add :username, :string
       add :password_hash, :string
       add :admin, :boolean
 
       timestamps()
     end
+    create unique_index(:users, :email)
     create unique_index(:users, :username)
 
     create table(:groups) do

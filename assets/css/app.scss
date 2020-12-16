@@ -1,9 +1,9 @@
-/* This file is for your main application css. */
-@import "./layout_changes";
-@import "./bulma";
-@import "./icons";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
+// @import "./icons";
 
-.h-auto { height: auto!important; }
+// .h-auto { height: auto!important; }
 
-input.is-small.number-input { width: 30px!important; }
+// input.is-small.number-input { width: 30px!important; }

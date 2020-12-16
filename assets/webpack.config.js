@@ -4,68 +4,57 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
-module.exports = (env, options) => {
-  const devMode = options.mode == 'development'
+module.exports = (env, options) => ({
 
-  return {
-    // stats: 'minimal',
-    optimization: {
-      minimizer: [
-        new TerserPlugin({ sourceMap: devMode }),
-        new OptimizeCSSAssetsPlugin({})
-      ]
-    },
-    entry: './js/app.js',
-    output: {
-      filename: 'app.js',
-      path: path.resolve(__dirname, '../priv/static/js'),
-      publicPath: '/js/'
-    },
-    devtool: devMode ? 'source-map' : undefined,
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader'
-          }
-        },
-        {
-          test: /\.s[ac]ss$/i,
-          use: [
-            // extract CSS into separate file
-            MiniCssExtractPlugin.loader,
-            // translates CSS into CommonJS
-            'css-loader',
-            // compiles Sass to CSS
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: devMode,
-                sassOptions: {
-                  includePaths: [
-                    'node_modules/bulma/sass/',
-                  ]
-                },
+  devtool: options.mode == 'development' ? 'source-map' : undefined,
 
-              }
-            }
-          ]
-        },
-        {
-          test: /\.(woff2)$/i,
-          use: {
-            // handles icons font
-            loader: 'url-loader',
-            options: { limit: 8192 } // 8 Kb
-          }
-        }
-      ]
-    },
-    plugins: [
-      new MiniCssExtractPlugin({ filename: '../css/app.css' }),
-      new CopyWebpackPlugin({ patterns: [{ from: 'static/', to: '../' }]})
+  // stats: 'minimal',
+
+  entry: './js/app.js',
+
+  // stats: 'minimal',
+
+  optimization: {
+    minimizer: [
+      new TerserPlugin({ test: /\.js(\?.*)?$/i }),
+      new OptimizeCSSAssetsPlugin({})
     ]
-  }
-};
+  },
+
+  output: {
+    filename: 'app.js',
+    path: path.resolve(__dirname, '../priv/static/js'),
+    publicPath: '/js/'
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: { loader: 'babel-loader' }
+      },
+      {
+        test: /\.[s]?css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,  // extract CSS into separate file
+          'css-loader',                 // translates CSS into CommonJS
+          'postcss-loader',             // CSS postprocessing
+          'sass-loader'                 // compiles Sass to CSS
+        ]
+      },
+      {
+        test: /\.(png|woff2)$/i,
+        use: {
+          // handles icons font
+          loader: 'url-loader',
+          options: { limit: 8192 } // 8 Kb
+        }
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({ filename: '../css/app.css' }),
+    new CopyWebpackPlugin({ patterns: [{ from: 'static/', to: '../' }]})
+  ]
+});

@@ -6,14 +6,14 @@ alias Dsa.Accounts
 # Create Admin User
 {:ok, admin} = Accounts.register_user(%{
   admin: true,
-  name: "Alex",
-  username: "admin",
+  email: "admin@fuchsberger.us",
+  username: "Alex",
   password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
 })
 
 # Create Test User
 {:ok, user} = Accounts.register_user(%{
-  name: "Test",
+  email: "test@fuchsberger.us",
   username: "test",
   password: "testtest"
 })

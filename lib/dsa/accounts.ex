@@ -66,8 +66,8 @@ defmodule Dsa.Accounts do
 
   defp user_query, do: from(u in User, preload: :characters)
 
-  def authenticate_by_username_and_pass(username, given_pass) do
-    user = get_user_by(username: username)
+  def authenticate_by_email_and_pass(email, given_pass) do
+    user = get_user_by(email: email)
 
     cond do
       user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
@@ -158,7 +158,7 @@ defmodule Dsa.Accounts do
       |> Repo.insert()
     ) do
       {:ok, %Character{id: id}} ->
-        Logger.info("#{user.name} successfully created a character.")
+        Logger.info("#{user.username} successfully created a character.")
         id
 
       {:error, changeset} ->

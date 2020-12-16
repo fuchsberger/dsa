@@ -6,7 +6,7 @@ config :dsa, Dsa.Repo,
   password: "postgres",
   database: "dsa_dev",
   hostname: "localhost",
-  log: false,
+  # log: false,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -26,7 +26,8 @@ config :dsa, DsaWeb.Endpoint,
       "node_modules/webpack/bin/webpack.js",
       "--mode",
       "development",
-      "--watch-stdin",
+      "--color",
+      "--watch",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]

@@ -4,7 +4,7 @@ defmodule Dsa.MixProject do
   def project do
     [
       app: :dsa,
-      version: "0.1.8",
+      version: "0.1.9",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -33,16 +33,16 @@ defmodule Dsa.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.6"},
+      {:phoenix, "~> 1.5.7"},
       {:phoenix_ecto, "~> 4.2.1"},
-      {:ecto_sql, "~> 3.5.1"},
+      {:ecto_sql, "~> 3.5.3"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_view, "~> 0.14.7"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_html, "~> 2.14.2"},
+      {:phoenix_live_view, "~> 0.15.0"},
+      {:phoenix_live_reload, "~> 1.3.0", only: :dev},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.4.0"},
+      {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
       {:floki, ">= 0.0.0", only: :test}
     ]

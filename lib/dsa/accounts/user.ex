@@ -1,9 +1,11 @@
 defmodule Dsa.Accounts.User do
   use Ecto.Schema
+
   import Ecto.Changeset
+  import Dsa.Repo, only: [validate_email: 2]
 
   schema "users" do
-    field :name, :string
+    field :email, :string
     field :username, :string
     field :password_old, :string, virtual: true
     field :password, :string, virtual: true
@@ -20,8 +22,8 @@ defmodule Dsa.Accounts.User do
   # used for admin changes
   def changeset(user, params) do
     user
-    |> cast(params, [:admin, :password, :name, :username, :group_id])
-    |> validate_length(:name, min: 2, max: 10)
+    |> cast(params, [:admin, :password, :email, :username, :group_id])
+    |> validate_email(:email)
     |> validate_length(:username, min: 2, max: 15)
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash()
@@ -30,8 +32,8 @@ defmodule Dsa.Accounts.User do
 
   def login_changeset(user, params) do
     user
-    |> cast(params, [:username, :password])
-    |> validate_required([:username, :password])
+    |> cast(params, [:email, :password])
+    |> validate_required([:email, :password])
   end
 
   @fields ~w(password_old password password_confirm)a
@@ -52,6 +54,8 @@ defmodule Dsa.Accounts.User do
     |> validate_required([:password])
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash()
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
   end
 
   defp put_pass_hash(changeset) do
