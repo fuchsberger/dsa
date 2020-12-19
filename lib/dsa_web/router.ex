@@ -21,6 +21,8 @@ defmodule DsaWeb.Router do
     live "/", DsaLive, :index
     post "/", SessionController, :create
     delete "/:id", SessionController, :delete
+
+    live "/login", DsaLive, :login
   end
 
   # scope "/", DsaWeb do

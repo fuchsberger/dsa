@@ -1,9 +1,16 @@
 defmodule DsaWeb.DsaLive do
   use Phoenix.LiveView, layout: {DsaWeb.LayoutView, "live.html"}
 
-  alias Dsa.Accounts
+  import Phoenix.View, only: [render: 3]
 
-  def render(assigns), do: Phoenix.View.render(DsaWeb.DsaView, "index.html", assigns)
+  alias Dsa.Accounts
+  alias DsaWeb.PageView
+
+  def render(assigns) do
+    ~L"""
+    <%= render PageView, "login.html", assigns %>
+    """
+  end
 
   def mount(_params, session, socket) do
 
@@ -23,10 +30,22 @@ defmodule DsaWeb.DsaLive do
       end
 
     {:ok, socket
-    |> assign(:page_title, "Home")
+    |> assign(:user, user)}
+  end
+
+  def handle_params(_params, _uri, socket) do
+    # handle page title
+    socket =
+      case socket.assigns.live_action do
+        :login -> assign(socket, :page_title, "Login")
+        _ -> assign socket, :page_title, "Home"
+      end
+
+    {:noreply, socket
     |> assign(:account_dropdown_open?, false)
     |> assign(:menu_open?, false)
-    |> assign(:user, user)}
+    |> assign(:login_changeset, Accounts.change_login())
+    |> assign(:trigger_submit_login?, false)}
   end
 
   def handle_event("close-account-dropdown", %{"key" => "Esc"}, socket) do
