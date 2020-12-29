@@ -30,12 +30,6 @@ defmodule Dsa.Accounts.User do
     |> foreign_key_constraint(:group_id)
   end
 
-  def login_changeset(user, params) do
-    user
-    |> cast(params, [:email, :password])
-    |> validate_required([:email, :password])
-  end
-
   @fields ~w(password_old password password_confirm)a
   def password_changeset(user, params) do
     user
@@ -45,6 +39,12 @@ defmodule Dsa.Accounts.User do
     |> validate_length(:password, min: 6, max: 100)
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
+  end
+
+  def session_changeset(user, params) do
+    user
+    |> cast(params, [:email, :password])
+    |> validate_required([:email, :password])
   end
 
   def registration_changeset(user, params) do

@@ -18,10 +18,10 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    live "/", DsaLive, :index
-    post "/", SessionController, :create
-    delete "/:id", SessionController, :delete
+    resources "/", SessionController, only: [:create, :delete]
 
+    live "/", DsaLive, :index
+    live "/character", DsaLive, :character
     live "/login", DsaLive, :login
   end
 

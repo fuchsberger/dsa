@@ -90,7 +90,7 @@ defmodule Dsa.Accounts do
     |> Repo.all()
   end
 
-  def change_login(params \\ %{}), do: User.login_changeset(%User{}, params)
+  def change_session(params \\ %{}), do: User.session_changeset(%User{}, params)
 
   def change_user(%User{} = user, params \\ %{}) do
     User.changeset(user, params)

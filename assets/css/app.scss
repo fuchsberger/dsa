@@ -2,8 +2,5 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-// @import "./icons";
-
-// .h-auto { height: auto!important; }
-
-// input.is-small.number-input { width: 30px!important; }
+// hide live-refresh iframe (dev only)
+iframe { display: none; }
