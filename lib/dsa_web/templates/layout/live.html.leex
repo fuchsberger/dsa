@@ -15,10 +15,13 @@
         </button>
       </div>
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+
+        <%# Profilbild / Logo %>
         <div class="flex-shrink-0 flex items-center">
-          <img class="block lg:hidden h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
-          <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow">
+          <img class="h-8 w-auto rounded-full" src="<%= gravatar_url(@user) %>" alt="Profil">
+          <span class='ml-2 hidden lg:block w-auto font-sans font-bold text-2xl text-gray-200'>DSA Tool</span>
         </div>
+
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
@@ -35,37 +38,6 @@
           <!-- Heroicon name: bell -->
           <%= icon :clipboard_list %>
         </button>
-
-        <!-- Profile dropdown -->
-        <div class="ml-3 relative">
-          <div>
-            <%= live_patch class: "#{if is_nil(@user), do: "block", else: "hidden"} flex text-sm text-gray-400 hover:text-white rounded-full focus:outline-none", to: Routes.dsa_path(@socket, :login) do %>
-              <span class="sr-only">Login</span>
-              <%= icon :login %>
-            <% end %>
-            <button class="<%= if is_nil(@user), do: "hidden", else: "block" %> relative z-10 bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true" phx-click='toggle-account-dropdown'>
-              <span class="sr-only">Open user menu</span>
-              <img class="h-8 w-8 rounded-full" src="https://s.gravatar.com/avatar/<%= :erlang.md5("alex.fuchsberger@gmail.com") |> Base.encode16(case: :lower) %>?s=32" alt="">
-            </button>
-          </div>
-
-          <button class='<%= if @account_dropdown_open?, do: "block", else: "hidden" %> fixed inset-0 h-full w-full bg-black opacity-50 cursor-default' phx-click='toggle-account-dropdown' tabindex='-1' phx-window-keyup="close-account-dropdown"></button>
-          <!--
-            Profile dropdown panel, show/hide based on dropdown state.
-
-            Entering: "transition ease-out duration-100"
-              From: "transform opacity-0 scale-95"
-              To: "transform opacity-100 scale-100"
-            Leaving: "transition ease-in duration-75"
-              From: "transform opacity-100 scale-100"
-              To: "transform opacity-0 scale-95"
-          -->
-          <div class="<%= if @account_dropdown_open?, do: "block", else: "hidden" %> origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -78,6 +50,7 @@
       <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
       <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
       <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+      <%= link "Ausloggen", to: Routes.session_path(@socket, :delete), class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
     </div>
   </div>
 </nav>

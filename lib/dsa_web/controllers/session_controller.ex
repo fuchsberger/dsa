@@ -18,6 +18,6 @@ defmodule DsaWeb.SessionController do
   def delete(conn, _) do
     conn
     |> DsaWeb.Auth.logout()
-    |> redirect(to: Routes.dsa_path(conn, :login))
+    |> redirect(to: Routes.dsa_path(conn, :index))
   end
 end

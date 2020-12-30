@@ -3,6 +3,11 @@ defmodule DsaWeb.LayoutView do
 
   import Phoenix.Controller, only: [current_path: 1, get_flash: 1]
 
+  def gravatar_url(user) do
+    email = if is_nil(user), do: "unknown", else: user.email
+    "https://s.gravatar.com/avatar/#{:erlang.md5(email) |> Base.encode16(case: :lower)}?s=32"
+  end
+
   def menu_link(conn, name, target, opts \\ []) do
     {class, opts} = Keyword.pop(opts, :class)
     {character_id, opts} = Keyword.pop(opts, :character_id)
