@@ -1,4 +1,4 @@
-<nav class="bg-gray-800 ">
+<nav class="fixed inset-x-0 top-0 bg-gray-800 z-10">
   <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex items-center justify-between h-16">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -17,18 +17,16 @@
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
 
         <%# Profilbild / Logo %>
-        <div class="flex-shrink-0 flex items-center">
+        <%= live_patch class: "flex-shrink-0 flex items-center", to: Routes.dsa_path(@socket, :dashboard) do %>
           <img class="h-8 w-auto rounded-full" src="<%= gravatar_url(@user) %>" alt="Profil">
           <span class='ml-2 hidden lg:block w-auto font-sans font-bold text-2xl text-gray-200'>DSA Tool</span>
-        </div>
+        <% end %>
 
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Team</a>
-            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
-            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
+            <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
+        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} block px-3 py-2 rounded-md text-sm font-medium" %>
           </div>
         </div>
       </div>
@@ -38,6 +36,10 @@
           <!-- Heroicon name: bell -->
           <%= icon :clipboard_list %>
         </button>
+        <%= link icon(:logout),
+          title: "Logout",
+          to: Routes.session_path(@socket, :delete),
+          class: "hidden #{unless is_nil(@user), do: "lg:block"} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
       </div>
     </div>
   </div>
@@ -46,20 +48,76 @@
   <div class="<%= if @menu_open?, do: "block", else: "hidden" %> sm:hidden">
     <div class="px-2 pt-2 pb-3 space-y-1">
       <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-      <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
-      <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+      <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
+        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} block px-3 py-2 rounded-md text-base font-medium" %>
       <%= link "Ausloggen", to: Routes.session_path(@socket, :delete), class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
     </div>
   </div>
 </nav>
 
-<div class='container mx-auto max-w-screen-xl flex h-screen'>
-  <%# On left side show variable page content %>
-  <div class='<%= if @log_open?, do: "hidden", else: "block" %> lg:block flex-none w-full lg:max-w-screen-md'><%= @inner_content %></div>
+<div class='fixed top-16 inset-x-0 bottom-0'>
+  <div class='container mx-auto max-w-screen-xl flex h-full'>
+    <%# On left side show variable page content %>
+    <div class='relative <%= if @log_open?, do: "hidden", else: "block" %> lg:block flex-none w-full lg:max-w-screen-md'><%= @inner_content %></div>
 
-  <%# On right side always show log / group stuff %>
+    <%# On right side always show log / group stuff %>
+    <div id='log-entries' class='<%= if @log_open?, do: "block", else: "hidden" %> lg:block flex-auto px-2 lg:px-3' phx-update='prepend'>
+      <%= for entry <- @logs do %>
+        <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 p-1 flex justify-between'>
+          <%= case entry.type do %>
+            <% 1 -> %>
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= entry.character.name %></span> würfelt <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W20</span>
+              </div>
+              <div>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x1 %></span>
+              </div>
 
-  <div class='<%= if @log_open?, do: "block", else: "hidden" %> lg:block bg-gray-400 flex-auto'>Rechte Seite</div>
+            <% 2 -> %>
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= entry.character.name %></span> würfelt <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W6</span>
+              </div>
+              <div>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x1 %></span>
+              </div>
+
+            <% 3 -> %>
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= entry.character.name %></span> würfelt 2 <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W6</span>
+              </div>
+              <div>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x1 %></span>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x2 %></span> »
+                <span class="font-extrabold text-gray-900 mr-1"><%= entry.x1 + entry.x2 %></span>
+              </div>
+
+            <% 4 -> %>
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= entry.character.name %></span> würfelt 3 <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W6</span>
+              </div>
+              <div>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x1 %></span>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x2 %></span>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x3 %></span> »
+                <span class="font-extrabold text-gray-900 mr-1"><%= entry.x1 + entry.x2 + entry.x3 %></span>
+              </div>
+
+            <% 5 -> %>
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= entry.character.name %></span> würfelt 3 <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W20</span>
+              </div>
+              <div>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x1 %></span>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x2 %></span>
+                <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= entry.x3 %></span>
+              </div>
+
+
+            <% _ -> %>
+              Unbekannter Logeintrag
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

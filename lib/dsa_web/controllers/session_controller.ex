@@ -6,7 +6,7 @@ defmodule DsaWeb.SessionController do
       {:ok, user} ->
         conn
         |> DsaWeb.Auth.login(user)
-        |> redirect(to: Routes.dsa_path(conn, :character))
+        |> redirect(to: Routes.dsa_path(conn, :dashboard))
 
       {:error, _reason} ->
         conn
@@ -18,6 +18,6 @@ defmodule DsaWeb.SessionController do
   def delete(conn, _) do
     conn
     |> DsaWeb.Auth.logout()
-    |> redirect(to: Routes.dsa_path(conn, :index))
+    |> redirect(to: Routes.dsa_path(conn, :login))
   end
 end

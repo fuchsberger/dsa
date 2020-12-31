@@ -3,17 +3,28 @@ defmodule DsaWeb.DsaLive do
 
   import Phoenix.View, only: [render: 3]
 
-  alias Dsa.Accounts
+  alias Dsa.{Accounts, Event, Repo}
   alias DsaWeb.PageView
   alias DsaWeb.Router.Helpers, as: Routes
 
+  require Logger
+
+  @group_id 1 # TODO: Group 1 is hardcoded. Make dynamic.
+
+  defp topic(group_id), do: "group:#{group_id}"
+
   def render(assigns) do
     ~L"""
-    <%= render PageView, "login.html", assigns %>
+      <%= render PageView, "login.html", assigns %>
+      <%= render PageView, "dashboard.html", assigns %>
+      <%= render PageView, "roll.html", assigns %>
     """
   end
 
   def mount(params, session, socket) do
+
+    group = Accounts.get_group!(@group_id)
+
     user =
       case Map.get(session, "user_id") do
         nil ->
@@ -29,10 +40,20 @@ defmodule DsaWeb.DsaLive do
           Map.put(user, :gravatar, gravatar)
       end
 
+    DsaWeb.Endpoint.subscribe(topic(@group_id))
+
     {:ok, socket
     |> assign(:user, user)
+    |> assign(:event_changeset, Event.change_log())
+    |> assign(:logs, group.logs)
     |> assign(:show_log?, false)
-    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))}
+    |> assign(:character_id, 1) # TODO: set to active character
+    |> assign(:group_id, group.id) # TODO: hard-coded for now
+    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login")), temporary_assigns: [logs: []]}
+  end
+
+  def handle_info(%{event: "log", payload: log}, socket) do
+    {:noreply, assign(socket, :logs, [log | socket.assigns.logs])}
   end
 
   def handle_params(params, _uri, socket) do
@@ -78,6 +99,67 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("login", %{"session" => %{"email" => email, "password" => pass}}, socket) do
     {:noreply, assign(socket, :trigger_submit_login?, true)}
+  end
+
+  def handle_event("quickroll", %{"type" => type}, socket) do
+
+    params =
+      case type do
+        "w20" ->
+          %{
+            type: 1,
+            x1: Enum.random(1..20),
+            character_id: socket.assigns.character_id,
+            group_id: socket.assigns.group_id
+          }
+
+        "w6" ->
+          %{
+            type: 2,
+            x1: Enum.random(1..6),
+            character_id: socket.assigns.character_id,
+            group_id: socket.assigns.group_id
+          }
+
+        "2w6" ->
+          %{
+            type: 3,
+            x1: Enum.random(1..6),
+            x2: Enum.random(1..6),
+            character_id: socket.assigns.character_id,
+            group_id: socket.assigns.group_id
+          }
+
+        "3w6" ->
+          %{
+            type: 4,
+            x1: Enum.random(1..6),
+            x2: Enum.random(1..6),
+            x3: Enum.random(1..6),
+            character_id: socket.assigns.character_id,
+            group_id: socket.assigns.group_id
+          }
+
+        "3w20" ->
+          %{
+            type: 5,
+            x1: Enum.random(1..20),
+            x2: Enum.random(1..20),
+            x3: Enum.random(1..20),
+            character_id: socket.assigns.character_id,
+            group_id: socket.assigns.group_id
+          }
+      end
+
+    case Event.create_log(params) do
+      {:ok, log} ->
+        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
+        {:noreply, assign(socket, :log_open?, true)}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
   end
 
   def handle_event("toggle-account-dropdown", _params, socket) do
