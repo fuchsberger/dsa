@@ -7,15 +7,6 @@ defmodule DsaWeb.GroupLive do
   import DsaWeb.GroupView
   import Dsa.Lists
 
-  require Logger
-
-  alias Dsa.{Event, Accounts, Repo}
-
-  defp topic(group_id), do: "group:#{group_id}"
-
-  def handle_info(%{event: "log", payload: log}, socket) do
-    {:noreply, assign(socket, :logs, [log | socket.assigns.logs])}
-  end
 
   def handle_info(%{event: "update-character", payload: character}, socket) do
     idx = Enum.find_index(socket.assigns.group.characters, & &1.id == character.id)
@@ -87,42 +78,6 @@ defmodule DsaWeb.GroupLive do
   def handle_event("validate", %{"setting" => setting}, socket) do
     Logger.debug("Changing Settings: #{inspect(setting)}")
     {:noreply, assign(socket, :settings, Event.change_settings(setting))}
-  end
-
-  def handle_event("quick-roll", _params, socket) do
-
-    c = active_character(socket)
-    count = get_field(socket.assigns.settings, :dice_count)
-    max = get_field(socket.assigns.settings, :dice_type)
-
-    params = %{
-      type: 1,
-      x1: Enum.random(1..max),
-      x2: (if count >= 2, do: Enum.random(1..max), else: nil),
-      x3: (if count >= 3, do: Enum.random(1..max), else: nil),
-      x4: (if count >= 4, do: Enum.random(1..max), else: nil),
-      x5: (if count >= 5, do: Enum.random(1..max), else: nil),
-      x6: (if count >= 6, do: Enum.random(1..max), else: nil),
-      x7: (if count >= 7, do: Enum.random(1..max), else: nil),
-      x8: (if count >= 8, do: Enum.random(1..max), else: nil),
-      x9: (if count >= 9, do: Enum.random(1..max), else: nil),
-      x10: (if count >= 10, do: Enum.random(1..max), else: nil),
-      x11: max,
-      x12: (if get_field(socket.assigns.settings, :hidden), do: 1, else: nil),
-      character_id: c.id,
-      group_id: c.group_id,
-    }
-
-    case Event.create_log(params) do
-      {:ok, log} ->
-        Logger.debug("Quickroll created.")
-        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
-        {:noreply, socket}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while creating quick-roll: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
   end
 
   def handle_event("routine", %{"talent" => id}, socket) do

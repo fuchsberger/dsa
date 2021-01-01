@@ -7,6 +7,15 @@ defmodule Dsa.Event do
   alias Dsa.Repo
   alias Dsa.Event.{Setting, Log}
 
+  def list_logs(group_id) do
+    from(l in Log,
+      where: l.group_id == ^group_id,
+      preload: :character,
+      order_by: l.inserted_at,
+      limit: 200
+    ) |> Repo.all()
+  end
+
   def change_log(attrs \\ %{}), do: Log.changeset(%Log{}, attrs)
 
   def create_log(attrs), do: Repo.insert(Log.changeset(%Log{}, attrs))

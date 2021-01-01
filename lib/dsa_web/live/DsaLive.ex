@@ -3,7 +3,7 @@ defmodule DsaWeb.DsaLive do
 
   import Phoenix.View, only: [render: 3]
 
-  alias Dsa.{Accounts, Event, Repo}
+  alias Dsa.{Accounts, Event, Repo, UI}
   alias DsaWeb.PageView
   alias DsaWeb.Router.Helpers, as: Routes
 
@@ -23,8 +23,6 @@ defmodule DsaWeb.DsaLive do
 
   def mount(params, session, socket) do
 
-    group = Accounts.get_group!(@group_id)
-
     user =
       case Map.get(session, "user_id") do
         nil ->
@@ -42,18 +40,35 @@ defmodule DsaWeb.DsaLive do
 
     DsaWeb.Endpoint.subscribe(topic(@group_id))
 
+    logsetting_changeset = UI.change_logsetting()
+
+
     {:ok, socket
+    |> assign(:dice, Ecto.Changeset.get_field(logsetting_changeset, :dice))
+    |> assign(:result, Ecto.Changeset.get_field(logsetting_changeset, :result))
     |> assign(:user, user)
+    |> assign(:log_action, "prepend")
+    |> assign(:log_changeset, logsetting_changeset)
     |> assign(:event_changeset, Event.change_log())
-    |> assign(:logs, group.logs)
+    |> assign(:logs, Event.list_logs(@group_id)) # TODO: hard-coded for now
     |> assign(:show_log?, false)
     |> assign(:character_id, 1) # TODO: set to active character
-    |> assign(:group_id, group.id) # TODO: hard-coded for now
-    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login")), temporary_assigns: [logs: []]}
+    |> assign(:group_id, @group_id) # TODO: hard-coded for now
+    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login")),
+    temporary_assigns: [logs: []]}
+  end
+
+  def handle_info(%{event: "clear-logs"}, socket) do
+    Logger.warn("CLEAR EVENT")
+    {:noreply, socket
+    |> assign(:log_action, "replace")
+    |> assign(:logs, [])}
   end
 
   def handle_info(%{event: "log", payload: log}, socket) do
-    {:noreply, assign(socket, :logs, [log | socket.assigns.logs])}
+    {:noreply, socket
+    |> assign(:log_action, "prepend")
+    |> assign(:logs, [log])}
   end
 
   def handle_params(params, _uri, socket) do
@@ -83,6 +98,31 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket
     |> assign(:session_changeset, Accounts.change_session(params))
     |> assign(:invalid_login?, false)}
+  end
+
+  def handle_event("change", %{"log_setting" => params}, socket) do
+    changeset = UI.change_logsetting(params)
+
+    Logger.warn "Logs reloaded"
+
+    {:noreply, socket
+    |> assign(:dice, Ecto.Changeset.get_field(changeset, :dice))
+    |> assign(:result, Ecto.Changeset.get_field(changeset, :result))
+    |> assign(:log_changeset, changeset)
+    |> assign(:logs, Event.list_logs(@group_id))} # TODO: hard-coded for now
+  end
+
+  def handle_event("clear-log", _params, socket) do
+    case Event.delete_logs(socket.assigns.group_id) do
+      {0, _} ->
+        Logger.warn("No log entries exist for deleting.")
+        {:noreply, socket}
+
+      {count, _} ->
+        Logger.warn("#{count} log entries deleted")
+        DsaWeb.Endpoint.broadcast(topic(socket.assigns.group_id), "clear-logs", %{})
+        {:noreply, socket}
+    end
   end
 
   def handle_event("close-account-dropdown", %{"key" => "Esc"}, socket) do
