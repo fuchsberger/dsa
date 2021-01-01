@@ -40,17 +40,22 @@ defmodule DsaWeb.DsaLive do
 
     DsaWeb.Endpoint.subscribe(topic(@group_id))
 
+    logs = Event.list_logs(@group_id) # TODO: hard-coded for now
     logsetting_changeset = UI.change_logsetting()
 
-
     {:ok, socket
+
+    # log related
+    |> assign(:log_changeset, logsetting_changeset)
+    |> assign(:log_empty?, Enum.count(logs) == 0)
+    |> assign(:log_resetcount, 0)
+    |> assign(:logs, logs)
     |> assign(:dice, Ecto.Changeset.get_field(logsetting_changeset, :dice))
     |> assign(:result, Ecto.Changeset.get_field(logsetting_changeset, :result))
+
+    # other
     |> assign(:user, user)
-    |> assign(:log_action, "prepend")
-    |> assign(:log_changeset, logsetting_changeset)
     |> assign(:event_changeset, Event.change_log())
-    |> assign(:logs, Event.list_logs(@group_id)) # TODO: hard-coded for now
     |> assign(:show_log?, false)
     |> assign(:character_id, 1) # TODO: set to active character
     |> assign(:group_id, @group_id) # TODO: hard-coded for now
@@ -59,15 +64,16 @@ defmodule DsaWeb.DsaLive do
   end
 
   def handle_info(%{event: "clear-logs"}, socket) do
-    Logger.warn("CLEAR EVENT")
     {:noreply, socket
-    |> assign(:log_action, "replace")
-    |> assign(:logs, [])}
+    |> assign(:log_empty?, true)
+    |> assign(:logs, [false]) # forces temporary assign to be treated as updated
+    |> assign(:logs, [])
+    |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
   end
 
   def handle_info(%{event: "log", payload: log}, socket) do
     {:noreply, socket
-    |> assign(:log_action, "prepend")
+    |> assign(:log_empty?, false)
     |> assign(:logs, [log])}
   end
 
@@ -103,13 +109,12 @@ defmodule DsaWeb.DsaLive do
   def handle_event("change", %{"log_setting" => params}, socket) do
     changeset = UI.change_logsetting(params)
 
-    Logger.warn "Logs reloaded"
-
     {:noreply, socket
     |> assign(:dice, Ecto.Changeset.get_field(changeset, :dice))
     |> assign(:result, Ecto.Changeset.get_field(changeset, :result))
     |> assign(:log_changeset, changeset)
-    |> assign(:logs, Event.list_logs(@group_id))} # TODO: hard-coded for now
+    |> assign(:logs, Event.list_logs(@group_id)) # TODO: hard-coded for now
+    |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
   end
 
   def handle_event("clear-log", _params, socket) do
@@ -119,7 +124,7 @@ defmodule DsaWeb.DsaLive do
         {:noreply, socket}
 
       {count, _} ->
-        Logger.warn("#{count} log entries deleted")
+        Logger.warn("#{count} log entries deleted.")
         DsaWeb.Endpoint.broadcast(topic(socket.assigns.group_id), "clear-logs", %{})
         {:noreply, socket}
     end

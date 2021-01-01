@@ -78,17 +78,17 @@
         </div>
       </div>
 
-      <div id='log-entries' phx-update='<%= @log_action %>'>
+      <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
+        <% require Logger %>
+        <% Logger.warn(inspect(Enum.count(@logs))) %>
         <%= for entry <- @logs do %>
           <%= live_component(@socket, LogComponent, entry: entry, dice: @dice, result: @result) %>
         <% end %>
       </div>
 
-      <%= if Enum.count(@logs) == 0 do %>
-        <div class='rounded-md bg-white shadow-md my-2 p-1 text-center'>
-          Bei Phex! Noch sind keine Würfel gerollt!
-        </div>
-      <% end %>
+      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
+        Bei Phex! Noch sind keine Würfel gerollt!
+      </div>
     </div>
   </div>
 </div>
