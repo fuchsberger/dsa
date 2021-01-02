@@ -79,8 +79,6 @@
       </div>
 
       <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
-        <% require Logger %>
-        <% Logger.warn(inspect(Enum.count(@logs))) %>
         <%= for entry <- @logs do %>
           <%= live_component(@socket, LogComponent, entry: entry, dice: @dice, result: @result) %>
         <% end %>

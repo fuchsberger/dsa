@@ -16,26 +16,26 @@
     </div>
   </div>
 
-  <div class='grid grid-cols-1 md:grid-cols-2 py-2'>
-    <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Modifikator</h4>
+  <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_submit: nil %>
 
-    <div class="flex justify-center -space-x-px">
-      <button phx-click='modifier' phx-value-value='-6' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 rounded-l-md text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-6</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-5</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-4</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-3</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-2</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-red-50 py-1 w-9 border border-gray-300 text-sm font-medium text-red-800 hover:bg-red-100 focus:outline-none">-1</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-gray-50 py-1 w-9 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none">0</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none">1</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none">2</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none">3</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none">4</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none">5</button>
-      <button phx-click='modifier' phx-value-value='-5' type="button" class="bg-green-50 py-1 w-9 border border-gray-300 text-sm font-medium text-green-800 rounded-r-md hover:bg-green-100 focus:outline-none">6</button>
+    <div class='grid grid-cols-1 md:grid-cols-2 py-2'>
+      <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Modifikator</h4>
+
+      <div class="flex justify-center -space-x-px text-sm font-medium">
+        <%= modifier_field f, -6 %>
+        <%= modifier_field f, -5 %>
+        <%= modifier_field f, -4 %>
+        <%= modifier_field f, -3 %>
+        <%= modifier_field f, -2 %>
+        <%= modifier_field f, -1 %>
+        <%= modifier_field f, 0 %>
+        <%= modifier_field f, 1 %>
+        <%= modifier_field f, 2 %>
+        <%= modifier_field f, 3 %>
+        <%= modifier_field f, 4 %>
+        <%= modifier_field f, 5 %>
+        <%= modifier_field f, 6 %>
+      </div>
     </div>
   </div>
-  <%= f = form_for @event_changeset, "#", [] %>
-
-  </form>
-</div>
+</form>

@@ -53,6 +53,9 @@ defmodule DsaWeb.DsaLive do
     |> assign(:dice, Ecto.Changeset.get_field(logsetting_changeset, :dice))
     |> assign(:result, Ecto.Changeset.get_field(logsetting_changeset, :result))
 
+    # roll related
+    |> assign(:roll_changeset, UI.change_roll())
+
     # other
     |> assign(:user, user)
     |> assign(:event_changeset, Event.change_log())
@@ -104,6 +107,11 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket
     |> assign(:session_changeset, Accounts.change_session(params))
     |> assign(:invalid_login?, false)}
+  end
+
+  def handle_event("change", %{"roll" => params}, socket) do
+    {:noreply, socket
+    |> assign(:roll_changeset, UI.change_roll(params))}
   end
 
   def handle_event("change", %{"log_setting" => params}, socket) do
