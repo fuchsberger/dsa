@@ -4,20 +4,14 @@
 alias Dsa.Accounts
 
 # Create Admin User
-{:ok, admin} = Accounts.register_user(%{
+{:ok, alex} = Accounts.register_user(%{
   admin: true,
   email: "admin@fuchsberger.us",
   username: "Alex",
   password: "p#7NDQ2y@0^f#WS3$j3u5@jPUjWcRlws"
 })
 
-# Create Test User
-{:ok, user} = Accounts.register_user(%{
-  email: "test@fuchsberger.us",
-  username: "test",
-  password: "testtest"
-})
+{:ok, group} = Accounts.create_group(%{ name: "Völs", master_id: alex.id })
 
-Accounts.create_group(%{ name: "DSA", master_id: admin.id })
-Accounts.create_character(admin)
-Accounts.create_character(user)
+Accounts.create_character(alex, %{name: "Andrej", profession: "Raubritter"})
+Accounts.create_character(alex, %{name: "Ethric", profession: "Elementarmagier"})

@@ -14,19 +14,20 @@ defmodule Dsa.Accounts.User do
     field :admin, :boolean, default: false
 
     belongs_to :group, Dsa.Accounts.Group
+    belongs_to :active_character, Dsa.Accounts.Character
     has_many :characters, Dsa.Accounts.Character
 
     timestamps()
   end
 
-  # used for admin changes
   def changeset(user, params) do
     user
-    |> cast(params, [:admin, :password, :email, :username, :group_id])
+    |> cast(params, [:admin, :password, :email, :username, :active_character_id, :group_id])
     |> validate_email(:email)
     |> validate_length(:username, min: 2, max: 15)
     |> validate_length(:password, min: 6, max: 100)
     |> put_pass_hash()
+    |> foreign_key_constraint(:active_character_id)
     |> foreign_key_constraint(:group_id)
   end
 

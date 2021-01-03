@@ -58,7 +58,7 @@ defmodule Dsa.Accounts do
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
-  def get_user!(id), do:  Repo.get(from(u in User, preload: :characters), id)
+  def get_user!(id), do:  Repo.get(from(u in User, preload: [:characters, :active_character]), id)
 
   def get_user(id), do:  Repo.get(user_query(), id)
 
@@ -150,21 +150,11 @@ defmodule Dsa.Accounts do
     |> cast_assoc(type)
   end
 
-  def create_character(%User{} = user) do
-    case (
-      %Character{}
-      |> Character.changeset(%{name: "Held", species_id: 1})
-      |> put_assoc(:user, user)
-      |> Repo.insert()
-    ) do
-      {:ok, %Character{id: id}} ->
-        Logger.info("#{user.username} successfully created a character.")
-        id
-
-      {:error, changeset} ->
-        Logger.error("Error adding character: #{inspect(changeset.errors)}")
-        :error
-    end
+  def create_character(%User{} = user, attrs) do
+    %Character{}
+    |> Character.changeset(attrs)
+    |> put_assoc(:user, user)
+    |> Repo.insert()
   end
 
   def update_character(%Character{} = character, attrs) do

@@ -35,9 +35,9 @@
                     1200
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      Aktiv
-                    </span>
+                    <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @user.active_character_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-value-character='<%= character.id %>'>
+                      <%= if character.id == @user.active_character_id, do: "A", else: "Ina" %>ktiv
+                    </button>
                   </td>
                 </tr>
               <% end %>

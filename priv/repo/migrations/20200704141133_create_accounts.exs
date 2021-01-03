@@ -22,11 +22,6 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
     end
     create index(:groups, :master_id)
 
-    alter table(:users) do
-      add :group_id, references(:groups, on_delete: :nilify_all)
-    end
-    create index(:users, [:group_id])
-
     create table(:characters) do
 
       # general
@@ -88,5 +83,13 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       timestamps()
     end
     create index(:characters, [:user_id])
+
+    alter table(:users) do
+      add :active_character_id, references(:characters, on_delete: :nilify_all)
+      add :group_id, references(:groups, on_delete: :nilify_all)
+    end
+
+    create index(:users, [:active_character_id])
+    create index(:users, [:group_id])
   end
 end

@@ -106,6 +106,20 @@ defmodule DsaWeb.DsaLive do
     end
   end
 
+  def handle_event("activate", %{"character" => id}, socket) do
+    id = String.to_integer(id)
+    id = if id == socket.assigns.user.active_character_id, do: nil, else: id
+
+    case Accounts.update_user(socket.assigns.user, %{active_character_id: id}) do
+      {:ok, character} ->
+        {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
+
+      {:error, changeset} ->
+        Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("change", %{"session" => params}, socket) do
     {:noreply, socket
     |> assign(:session_changeset, Accounts.change_session(params))
