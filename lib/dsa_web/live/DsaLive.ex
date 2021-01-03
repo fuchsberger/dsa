@@ -45,6 +45,9 @@ defmodule DsaWeb.DsaLive do
 
     {:ok, socket
 
+    # dashboard
+    |> assign(:characters, (if is_nil(user), do: [], else: user.characters))
+
     # log related
     |> assign(:log_changeset, logsetting_changeset)
     |> assign(:log_empty?, Enum.count(logs) == 0)
