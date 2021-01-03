@@ -34,7 +34,13 @@ defmodule DsaWeb do
       use Phoenix.View, root: "lib/dsa_web/templates", namespace: DsaWeb
       use Phoenix.HTML
 
-      import Phoenix.HTML.Form, except: [ email_input: 3, password_input: 3, text_input: 3 ]
+      import Phoenix.HTML.Form, except: [
+        email_input: 3,
+        number_input: 3,
+        password_input: 3,
+        text_input: 3
+      ]
+
       import DsaWeb.FormHelpers
 
       import DsaWeb.Icons

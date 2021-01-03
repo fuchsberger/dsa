@@ -17,6 +17,7 @@ defmodule DsaWeb.DsaLive do
     ~L"""
       <%= render PageView, "login.html", assigns %>
       <%= render PageView, "dashboard.html", assigns %>
+      <%= render PageView, "character.html", assigns %>
       <%= render PageView, "roll.html", assigns %>
     """
   end
@@ -84,25 +85,58 @@ defmodule DsaWeb.DsaLive do
   end
 
   def handle_params(params, _uri, socket) do
-    # if user is not authenticated and action is not login page, redirect to login page
-    if socket.assigns.live_action != :login && is_nil(socket.assigns.user) do
-      {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
-    else
-      # handle page title
-      socket =
-        case socket.assigns.live_action do
-          :login ->
-            assign(socket, :page_title, "Login")
-          _ ->
-            assign(socket, :page_title, "Home")
-        end
 
-      {:noreply, socket
-      |> assign(:session_changeset, Accounts.change_session())
-      |> assign(:log_open?, false)
-      |> assign(:account_dropdown_open?, false)
-      |> assign(:menu_open?, false)
-      |> assign(:trigger_submit_login?, false)}
+    user = socket.assigns.user
+
+    cond do
+      # if user is not authenticated and action is not login page, redirect to login page
+      socket.assigns.live_action != :login && is_nil(user) ->
+        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
+
+      # if no active character and page is not dashboard redirect to dashboard
+      not is_nil(user) && socket.assigns.live_action != :dashboard && is_nil(user.active_character_id) ->
+        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
+
+      # all went well, proceed
+      true ->
+
+        # reset some general assigns
+        socket =
+          socket
+          |> assign(:character_changeset, nil)
+          |> assign(:session_changeset, Accounts.change_session())
+          |> assign(:log_open?, false)
+          |> assign(:account_dropdown_open?, false)
+          |> assign(:menu_open?, false)
+          |> assign(:trigger_submit_login?, false)
+
+        # handle page title
+        socket =
+          case socket.assigns.live_action do
+            :login ->
+              assign(socket, :page_title, "Login")
+
+            :character ->
+              socket
+              |> assign(:page_title, "Held")
+              |> assign(:character_changeset, Accounts.change_character(socket.assigns.user.active_character))
+
+            :dashboard ->
+              assign(socket, :page_title, "Übersicht")
+
+            :roll ->
+              assign(socket, :page_title, "Probe")
+
+            _ ->
+              socket
+          end
+
+        {:noreply, socket
+        |> assign(:session_changeset, Accounts.change_session())
+        |> assign(:log_open?, false)
+        |> assign(:account_dropdown_open?, false)
+        |> assign(:menu_open?, false)
+        |> assign(:trigger_submit_login?, false)}
     end
   end
 
@@ -129,6 +163,13 @@ defmodule DsaWeb.DsaLive do
   def handle_event("change", %{"roll" => params}, socket) do
     {:noreply, socket
     |> assign(:roll_changeset, UI.change_roll(params))}
+  end
+
+  def handle_event("change", %{"character" => params}, socket) do
+    changeset = Accounts.change_character(socket.assigns.user.active_character, params)
+
+    {:noreply, socket
+    |> assign(:character_changeset, changeset)}
   end
 
   def handle_event("change", %{"log_setting" => params}, socket) do
@@ -242,5 +283,21 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
+  end
+
+  def handle_event("update", %{"character" => params}, socket) do
+    case Accounts.update_character(socket.assigns.user.active_character, params) do
+      {:ok, character} ->
+        user = Accounts.get_user!(socket.assigns.user.id)
+
+        {:noreply, socket
+        |> assign(:user, user)
+        |> assign(:characters, user.characters)
+        |> assign(:character_changeset, Accounts.change_character(character))}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while updating character: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
   end
 end

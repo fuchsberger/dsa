@@ -58,7 +58,16 @@ defmodule Dsa.Accounts do
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
-  def get_user!(id), do:  Repo.get(from(u in User, preload: [:characters, :active_character]), id)
+  def get_user!(id) do
+    characters_query =
+      from(c in Character,
+        select: map(c, [:id, :name, :profession]),
+        order_by: c.name
+      )
+
+    from(u in User, preload: [:active_character, characters: ^characters_query])
+    |> Repo.get(id)
+  end
 
   def get_user(id), do:  Repo.get(user_query(), id)
 
@@ -160,22 +169,22 @@ defmodule Dsa.Accounts do
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
-    |> cast_assoc(:armors, with: &Armor.changeset/2)
-    |> cast_assoc(:blessings, with: &Blessing.changeset/2)
-    |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
-    |> cast_assoc(:disadvantages, with: &Disadvantage.changeset/2)
-    |> cast_assoc(:fate_traits, with: &FateTrait.changeset/2)
-    |> cast_assoc(:fweapons, with: &FWeapon.changeset/2)
-    |> cast_assoc(:general_traits, with: &GeneralTrait.changeset/2)
-    |> cast_assoc(:karmal_traits, with: &KarmalTrait.changeset/2)
-    |> cast_assoc(:languages, with: &Language.changeset/2)
-    |> cast_assoc(:magic_traits, with: &MagicTrait.changeset/2)
-    |> cast_assoc(:mweapons, with: &MWeapon.changeset/2)
-    |> cast_assoc(:prayers, with: &Prayer.changeset/2)
-    |> cast_assoc(:scripts, with: &Script.changeset/2)
-    |> cast_assoc(:spells, with: &Spell.changeset/2)
-    |> cast_assoc(:spell_tricks, with: &SpellTrick.changeset/2)
-    |> cast_assoc(:staff_spells, with: &StaffSpell.changeset/2)
+    # |> cast_assoc(:armors, with: &Armor.changeset/2)
+    # |> cast_assoc(:blessings, with: &Blessing.changeset/2)
+    # |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
+    # |> cast_assoc(:disadvantages, with: &Disadvantage.changeset/2)
+    # |> cast_assoc(:fate_traits, with: &FateTrait.changeset/2)
+    # |> cast_assoc(:fweapons, with: &FWeapon.changeset/2)
+    # |> cast_assoc(:general_traits, with: &GeneralTrait.changeset/2)
+    # |> cast_assoc(:karmal_traits, with: &KarmalTrait.changeset/2)
+    # |> cast_assoc(:languages, with: &Language.changeset/2)
+    # |> cast_assoc(:magic_traits, with: &MagicTrait.changeset/2)
+    # |> cast_assoc(:mweapons, with: &MWeapon.changeset/2)
+    # |> cast_assoc(:prayers, with: &Prayer.changeset/2)
+    # |> cast_assoc(:scripts, with: &Script.changeset/2)
+    # |> cast_assoc(:spells, with: &Spell.changeset/2)
+    # |> cast_assoc(:spell_tricks, with: &SpellTrick.changeset/2)
+    # |> cast_assoc(:staff_spells, with: &StaffSpell.changeset/2)
     |> Repo.update()
   end
 

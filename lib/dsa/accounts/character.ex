@@ -124,10 +124,18 @@ defmodule Dsa.Accounts.Character do
 
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :profession])
-    |> validate_required([:name, :profession])
+    |> cast(attrs, [:name, :profession, :mu, :kl, :in, :ch, :ge, :ff, :ko, :kk])
+    |> validate_required([:name, :profession, :mu, :kl, :in, :ch, :ge, :ff, :ko, :kk])
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
+    |> validate_number(:mu, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:kl, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:in, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:ch, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:ge, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:ff, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:ko, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_number(:kk, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a

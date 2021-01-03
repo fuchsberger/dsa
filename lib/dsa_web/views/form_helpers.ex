@@ -12,6 +12,10 @@ defmodule DsaWeb.FormHelpers do
     Form.email_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
   end
 
+  def number_input(form, field, opts \\ []) do
+    Form.number_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
+  end
+
   def password_input(form, field, opts \\ []) do
     Form.password_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
   end

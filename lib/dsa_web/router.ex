@@ -22,6 +22,7 @@ defmodule DsaWeb.Router do
     get "/logout", SessionController, :delete
 
     live "/", DsaLive, :index
+    live "/character", DsaLive, :character
     live "/dashboard", DsaLive, :dashboard
     live "/roll", DsaLive, :roll
     live "/login", DsaLive, :login
