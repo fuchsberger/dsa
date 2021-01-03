@@ -220,7 +220,7 @@ defmodule DsaWeb.DsaLive do
           %{
             type: 1,
             x1: Enum.random(1..20),
-            character_id: socket.assigns.character_id,
+            character_id: socket.assigns.user.active_character_id,
             group_id: socket.assigns.group_id
           }
 
@@ -228,7 +228,7 @@ defmodule DsaWeb.DsaLive do
           %{
             type: 2,
             x1: Enum.random(1..6),
-            character_id: socket.assigns.character_id,
+            character_id: socket.assigns.user.active_character_id,
             group_id: socket.assigns.group_id
           }
 
@@ -237,7 +237,7 @@ defmodule DsaWeb.DsaLive do
             type: 3,
             x1: Enum.random(1..6),
             x2: Enum.random(1..6),
-            character_id: socket.assigns.character_id,
+            character_id: socket.assigns.user.active_character_id,
             group_id: socket.assigns.group_id
           }
 
@@ -247,7 +247,7 @@ defmodule DsaWeb.DsaLive do
             x1: Enum.random(1..6),
             x2: Enum.random(1..6),
             x3: Enum.random(1..6),
-            character_id: socket.assigns.character_id,
+            character_id: socket.assigns.user.active_character_id,
             group_id: socket.assigns.group_id
           }
 
@@ -257,10 +257,37 @@ defmodule DsaWeb.DsaLive do
             x1: Enum.random(1..20),
             x2: Enum.random(1..20),
             x3: Enum.random(1..20),
-            character_id: socket.assigns.character_id,
+            character_id: socket.assigns.user.active_character_id,
             group_id: socket.assigns.group_id
           }
       end
+
+    case Event.create_log(params) do
+      {:ok, log} ->
+        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
+        {:noreply, assign(socket, :log_open?, true)}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("roll", %{"trait" => trait}, socket) do
+
+    trait = String.to_atom(trait)
+
+    params =
+      %{
+        type: 6,
+        x1: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait), # trait
+        x2: Map.get(socket.assigns.user.active_character, trait), # trait value
+        x3: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier), # modifier
+        x4: Enum.random(1..20), # result
+        x5: Enum.random(1..20), # result confirmation
+        character_id: socket.assigns.user.active_character_id,
+        group_id: socket.assigns.group_id
+      }
 
     case Event.create_log(params) do
       {:ok, log} ->

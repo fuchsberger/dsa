@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_submit: nil %>
+  <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_submit: "roll" %>
 
     <div class='grid grid-cols-1 md:grid-cols-2 py-2'>
       <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Modifikator</h4>
@@ -36,6 +36,26 @@
         <%= modifier_field f, 5 %>
         <%= modifier_field f, 6 %>
       </div>
+    </div>
+
+    <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Eigenschaftsprobe</h4>
+    <div class='grid grid-cols-4 lg:grid-cols-8 gap-3 px-2 lg:px-3 lg:gap-4'>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='mu'>Mu: <%= @user.active_character.mu %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='kl'>KL: <%= @user.active_character.kl %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='in'>IN: <%= @user.active_character.in %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ch'>CH: <%= @user.active_character.ch %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ge'>GE: <%= @user.active_character.ge %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ff'>FF: <%= @user.active_character.ff %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ko'>KO: <%= @user.active_character.ko %></button>
+
+      <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='kk'>KK: <%= @user.active_character.kk %></button>
     </div>
   </div>
 </form>
