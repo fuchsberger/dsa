@@ -11,11 +11,6 @@ defmodule DsaWeb.ViewHelpers do
     String.to_atom("#{action}_#{struct_name(changeset.data)}")
   end
 
-
-  def select(form, field, options, opts \\ []) do
-    Form.select(form, field, options, opts ++ Form.input_validations(form, field))
-  end
-
   def select_options(collection),
     do: [{"Please select...", nil} | Enum.map(collection, &{&1.name, &1.id})]
 

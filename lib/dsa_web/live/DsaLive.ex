@@ -300,6 +300,45 @@ defmodule DsaWeb.DsaLive do
     end
   end
 
+  def handle_event("talent-roll", _params, socket) do
+
+    trait_1 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e1)
+    trait_2 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e2)
+    trait_3 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e3)
+
+    trait_value_1 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_1)
+    trait_value_2 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_2)
+    trait_value_3 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_3)
+
+    params =
+      %{
+        type: 7,
+        x1: trait_1,
+        x2: trait_2,
+        x3: trait_3,
+        x4: Map.get(socket.assigns.user.active_character, trait_value_1),
+        x5: Map.get(socket.assigns.user.active_character, trait_value_2),
+        x6: Map.get(socket.assigns.user.active_character, trait_value_3),
+        x7: Enum.random(1..20),
+        x8: Enum.random(1..20),
+        x9: Enum.random(1..20),
+        x10: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier),
+        x11: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw),
+        character_id: socket.assigns.user.active_character_id,
+        group_id: socket.assigns.group_id
+      }
+
+    case Event.create_log(params) do
+      {:ok, log} ->
+        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
+        {:noreply, assign(socket, :log_open?, true)}
+
+      {:error, changeset} ->
+        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
   def handle_event("toggle-account-dropdown", _params, socket) do
     {:noreply, assign(socket, :account_dropdown_open?, !socket.assigns.account_dropdown_open?)}
   end

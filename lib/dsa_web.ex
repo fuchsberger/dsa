@@ -38,7 +38,8 @@ defmodule DsaWeb do
         email_input: 3,
         number_input: 3,
         password_input: 3,
-        text_input: 3
+        text_input: 3,
+        select: 4
       ]
 
       import DsaWeb.FormHelpers

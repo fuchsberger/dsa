@@ -23,4 +23,8 @@ defmodule DsaWeb.FormHelpers do
   def text_input(form, field, opts \\ []) do
     Form.text_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
   end
+
+  def select(form, field, options, opts \\ []) do
+    Form.select(form, field, options, Keyword.merge(Form.input_validations(form, field), opts))
+  end
 end

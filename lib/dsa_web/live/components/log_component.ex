@@ -51,6 +51,9 @@ defmodule LogComponent do
         <% 6 -> %>
           <%= trait_roll(assigns) %>
 
+        <% 7 -> %>
+          <%= talent_roll(assigns) %>
+
         <% _ -> %>
           Unbekannter Logeintrag
       <% end %>
@@ -96,6 +99,33 @@ defmodule LogComponent do
 
         <%= true -> %>
           <%= label(:red, "✗") %>
+      <% end %>
+    </div>
+    """
+  end
+
+  defp talent_roll(assigns) do
+
+    ~L"""
+    <div class='mr-1'>
+      <%= label(:blue, @entry.character.name) %> Talentprobe <%= label(:yellow, "#{trait(@entry.x1)}/#{trait(@entry.x2)}/#{trait(@entry.x3)}") %><%= modifier(@entry.x10) %>
+    </div>
+    <div class='mx-1 <%= unless @dice, do: "hidden" %>'>
+      <%= label(:gray, @entry.x7) %>
+      <%= label(:gray, @entry.x8) %>
+      <%= label(:gray, @entry.x9) %>
+    </div>
+    <div class='ml-1 <%= unless @result, do: "hidden" %>'>
+      <%= cond do %>
+        <%= Enum.count([@entry.x4, @entry.x5, @entry.x6], & &1 == 1) >= 2 -> %>
+          <%= label(:green, "✓ K!") %>
+
+          <%= Enum.count([@entry.x4, @entry.x5, @entry.x6], & &1 == 20) >= 2 -> %>
+          <%= label(:green, "✗ K!") %>
+
+        <%= true -> %>
+          <%= label(:bold, "TW: #{@entry.x11}") %>
+
       <% end %>
     </div>
     """
