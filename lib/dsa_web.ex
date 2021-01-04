@@ -29,6 +29,29 @@ defmodule DsaWeb do
     end
   end
 
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+      use Phoenix.HTML
+
+      import Phoenix.HTML.Form, except: [
+        email_input: 3,
+        number_input: 3,
+        password_input: 3,
+        text_input: 3,
+        select: 4
+      ]
+
+      import DsaWeb.FormHelpers
+      import DsaWeb.Gettext
+      import DsaWeb.Icons
+      import DsaWeb.ViewHelpers
+      import Phoenix.LiveView.Helpers
+
+      alias DsaWeb.Router.Helpers, as: Routes
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View, root: "lib/dsa_web/templates", namespace: DsaWeb

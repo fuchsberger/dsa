@@ -15,10 +15,14 @@ defmodule DsaWeb.DsaLive do
 
   def render(assigns) do
     ~L"""
-      <%= render PageView, "login.html", assigns %>
-      <%= render PageView, "dashboard.html", assigns %>
-      <%= render PageView, "character.html", assigns %>
-      <%= render PageView, "roll.html", assigns %>
+    <%= case @live_action do %>
+      <% :login -> %>
+        <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
+
+      <% :dashboard -> %><%= render PageView, "dashboard.html", assigns %>
+      <% :character -> %><%= render PageView, "character.html", assigns %>
+      <% :roll -> %><%= render PageView, "roll.html", assigns %>
+    <% end %>
     """
   end
 
@@ -104,11 +108,9 @@ defmodule DsaWeb.DsaLive do
         socket =
           socket
           |> assign(:character_changeset, nil)
-          |> assign(:session_changeset, Accounts.change_session())
           |> assign(:log_open?, false)
           |> assign(:account_dropdown_open?, false)
           |> assign(:menu_open?, false)
-          |> assign(:trigger_submit_login?, false)
 
         # handle page title
         socket =
@@ -132,11 +134,9 @@ defmodule DsaWeb.DsaLive do
           end
 
         {:noreply, socket
-        |> assign(:session_changeset, Accounts.change_session())
         |> assign(:log_open?, false)
         |> assign(:account_dropdown_open?, false)
-        |> assign(:menu_open?, false)
-        |> assign(:trigger_submit_login?, false)}
+        |> assign(:menu_open?, false)}
     end
   end
 
@@ -152,12 +152,6 @@ defmodule DsaWeb.DsaLive do
         Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
         {:noreply, socket}
     end
-  end
-
-  def handle_event("change", %{"session" => params}, socket) do
-    {:noreply, socket
-    |> assign(:session_changeset, Accounts.change_session(params))
-    |> assign(:invalid_login?, false)}
   end
 
   def handle_event("change", %{"roll" => params}, socket) do
@@ -206,10 +200,6 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("close-account-dropdown", _params, socket) do
     {:noreply, socket}
-  end
-
-  def handle_event("login", %{"session" => %{"email" => email, "password" => pass}}, socket) do
-    {:noreply, assign(socket, :trigger_submit_login?, true)}
   end
 
   def handle_event("quickroll", %{"type" => type}, socket) do

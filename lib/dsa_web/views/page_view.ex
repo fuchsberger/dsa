@@ -27,4 +27,24 @@ defmodule DsaWeb.PageView do
       ]
     end
   end
+
+  defp trait_roll_button(trait, user) do
+
+    trait_name =
+      trait
+      |> Atom.to_string()
+      |> String.upcase()
+
+    case user && user.active_character do
+      true ->
+        content_tag :button, "#{trait_name}: #{Map.get(user.active_character, trait)}",
+          type: "button",
+          class: "bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+          phx_click: "roll",
+          phx_value_trait: trait
+
+      nil ->
+        nil
+    end
+  end
 end
