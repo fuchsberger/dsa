@@ -84,7 +84,26 @@
 
       <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
         <%= for entry <- @logs do %>
-          <%= live_component(@socket, LogComponent, entry: entry, dice: @dice, result: @result) %>
+          <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
+            <%= case entry.type do %>
+              <% 1 -> %>
+                <%= render LogView, "1w.html",
+                title: "W20", entry: entry, dice: @dice, result: @result %>
+
+              <% 2 -> %>
+                <%= render LogView, "1w.html",
+                title: "W6", entry: entry, dice: @dice, result: @result %>
+
+              <%# 1 -> %><%# quickroll_1w20(assigns) %>
+              <%# 2 -> %><%# quickroll_w6(assigns) %>
+              <%# 3 -> %><%# quickroll_2w6(assigns) %>
+              <%# 4 -> %><%# quickroll_3w6(assigns) %>
+              <%# 5 -> %><%# quickroll_3w20(assigns) %>
+              <%# 6 -> %><%# trait_roll(assigns) %>
+              <%# 7 -> %><%# talent_roll(assigns) %>
+              <% _ -> %> Unbekannter Logeintrag
+            <% end %>
+          </div>
         <% end %>
       </div>
 

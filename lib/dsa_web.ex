@@ -43,14 +43,13 @@ defmodule DsaWeb do
       ]
 
       import DsaWeb.FormHelpers
-
+      import DsaWeb.Gettext
       import DsaWeb.Icons
       import DsaWeb.ViewHelpers
       import Phoenix.LiveView.Helpers
 
-      import DsaWeb.Gettext
-
       alias DsaWeb.Router.Helpers, as: Routes
+      alias DsaWeb.LogView
     end
   end
 

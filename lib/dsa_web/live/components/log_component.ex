@@ -1,73 +1,66 @@
 defmodule LogComponent do
 
   use Phoenix.LiveComponent
+
   import Phoenix.HTML.Tag, only: [content_tag: 3]
+  import Phoenix.View, only: [render: 3]
+
+  alias DsaWeb.LogView
 
   def render(assigns) do
     ~L"""
     <div id='log-<%= @entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
       <%= case @entry.type do %>
-        <% 1 -> %>
-          <%= quickroll_1w20(assigns) %>
 
-        <% 2 -> %>
-          <div>
-            <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= @entry.character.name %></span> würfelt <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W6</span>
-          </div>
-          <div>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x1 %></span>
-          </div>
-
-        <% 3 -> %>
-          <div>
-            <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= @entry.character.name %></span> würfelt <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">2W6</span>
-          </div>
-          <div>
-            <span class="text-xs font-bold inline-block rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-5 h-5 mr-1"><%= @entry.x1 %></span><span class="text-xs font-bold inline-block rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-5 h-5"><%= @entry.x2 %></span> »
-            <span class="font-extrabold text-gray-900 mr-1"><%= @entry.x1 + @entry.x2 %></span>
-          </div>
-
-        <% 4 -> %>
-          <div>
-            <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= @entry.character.name %></span> würfelt 3 <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W6</span>
-          </div>
-          <div>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x1 %></span>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x2 %></span>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x3 %></span> »
-            <span class="font-extrabold text-gray-900 mr-1"><%= @entry.x1 + @entry.x2 + @entry.x3 %></span>
-          </div>
-
-        <% 5 -> %>
-          <div>
-            <span class="text-xs font-semibold inline-block py-1 px-2 rounded text-blue-500 bg-blue-50"><%= @entry.character.name %></span> würfelt 3 <span class="text-xs font-semibold inline-block p-1 rounded border border-gray-300 bg-gray-50 text-gray-500">W20</span>
-          </div>
-          <div>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x1 %></span>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x2 %></span>
-            <span class="text-xs font-bold inline-block py-1 rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-6"><%= @entry.x3 %></span>
-          </div>
-
-        <% 6 -> %>
-          <%= trait_roll(assigns) %>
-
-        <% 7 -> %>
-          <%= talent_roll(assigns) %>
-
-        <% _ -> %>
-          Unbekannter Logeintrag
+        <% 2 -> %><%= quickroll_w6(assigns) %>
+        <% 3 -> %><%= quickroll_2w6(assigns) %>
+        <% 4 -> %><%= quickroll_3w6(assigns) %>
+        <% 5 -> %><%= quickroll_3w20(assigns) %>
+        <% 6 -> %><%= trait_roll(assigns) %>
+        <% 7 -> %><%= talent_roll(assigns) %>
+        <% _ -> %> Unbekannter Logeintrag
       <% end %>
     </div>
     """
   end
 
-  defp quickroll_1w20(assigns) do
+  defp quickroll_w6(assigns) do
     ~L"""
     <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "W20") %>
+      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "W6") %>
     </div>
     <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %></div>
     <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1) %></div>
+    """
+  end
+
+  defp quickroll_2w6(assigns) do
+    ~L"""
+    <div class='mr-1'>
+      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "2 W6") %>
+    </div>
+    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %></div>
+    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2) %></div>
+    """
+  end
+
+  defp quickroll_3w6(assigns) do
+    ~L"""
+    <div class='mr-1'>
+      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "3 W6") %>
+    </div>
+    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %> <%= label(:gray, @entry.x3) %></div>
+    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2 + @entry.x3) %></div>
+    """
+  end
+
+  defp quickroll_3w20(assigns) do
+    ~L"""
+    <div class='mr-1'>
+      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "3 W20") %>
+    </div>
+    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %> <%= label(:gray, @entry.x3) %></div>
+    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2 + @entry.x3) %></div>
     """
   end
 
