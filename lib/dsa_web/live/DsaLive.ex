@@ -19,7 +19,9 @@ defmodule DsaWeb.DsaLive do
       <% :login -> %>
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
 
-      <% :dashboard -> %><%= render PageView, "dashboard.html", assigns %>
+      <% :dashboard -> %>
+        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
+
       <% :character -> %><%= render PageView, "character.html", assigns %>
       <% :roll -> %><%= render PageView, "roll.html", assigns %>
     <% end %>
@@ -49,10 +51,6 @@ defmodule DsaWeb.DsaLive do
     logsetting_changeset = UI.change_logsetting()
 
     {:ok, socket
-
-    # dashboard
-    |> assign(:characters, (if is_nil(user), do: [], else: user.characters))
-
     # log related
     |> assign(:log_changeset, logsetting_changeset)
     |> assign(:log_empty?, Enum.count(logs) == 0)
@@ -88,7 +86,12 @@ defmodule DsaWeb.DsaLive do
     |> assign(:logs, [log])}
   end
 
-  def handle_params(params, _uri, socket) do
+  def handle_info({ :update_user, _ }, socket) do
+    {:noreply, socket
+    |> assign(:user, Dsa.Accounts.get_user!(socket.assigns.user.id))}
+  end
+
+  def handle_params(_params, _uri, socket) do
 
     user = socket.assigns.user
 
@@ -137,20 +140,6 @@ defmodule DsaWeb.DsaLive do
         |> assign(:log_open?, false)
         |> assign(:account_dropdown_open?, false)
         |> assign(:menu_open?, false)}
-    end
-  end
-
-  def handle_event("activate", %{"character" => id}, socket) do
-    id = String.to_integer(id)
-    id = if id == socket.assigns.user.active_character_id, do: nil, else: id
-
-    case Accounts.update_user(socket.assigns.user, %{active_character_id: id}) do
-      {:ok, character} ->
-        {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
-
-      {:error, changeset} ->
-        Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
-        {:noreply, socket}
     end
   end
 

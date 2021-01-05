@@ -49,6 +49,8 @@ defmodule DsaWeb do
       import Phoenix.LiveView.Helpers
 
       alias DsaWeb.Router.Helpers, as: Routes
+
+      require Logger
     end
   end
 
