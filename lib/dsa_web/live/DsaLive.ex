@@ -22,7 +22,10 @@ defmodule DsaWeb.DsaLive do
       <% :dashboard -> %>
         <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
 
-      <% :character -> %><%= render PageView, "character.html", assigns %>
+      <% :character -> %>
+        <%= live_component @socket, DsaWeb.CharacterComponent,
+          id: :character, character_id: @user.active_character_id %>
+
       <% :roll -> %><%= render PageView, "roll.html", assigns %>
     <% end %>
     """
@@ -110,7 +113,6 @@ defmodule DsaWeb.DsaLive do
         # reset some general assigns
         socket =
           socket
-          |> assign(:character_changeset, nil)
           |> assign(:log_open?, false)
           |> assign(:account_dropdown_open?, false)
           |> assign(:menu_open?, false)
@@ -118,19 +120,10 @@ defmodule DsaWeb.DsaLive do
         # handle page title
         socket =
           case socket.assigns.live_action do
-            :login ->
-              assign(socket, :page_title, "Login")
-
-            :character ->
-              socket
-              |> assign(:page_title, "Held")
-              |> assign(:character_changeset, Accounts.change_character(socket.assigns.user.active_character))
-
-            :dashboard ->
-              assign(socket, :page_title, "Übersicht")
-
-            :roll ->
-              assign(socket, :page_title, "Probe")
+            :login -> assign(socket, :page_title, "Login")
+            :character -> assign(socket, :page_title, "Held")
+            :dashboard -> assign(socket, :page_title, "Übersicht")
+            :roll -> assign(socket, :page_title, "Probe")
 
             _ ->
               socket
@@ -146,13 +139,6 @@ defmodule DsaWeb.DsaLive do
   def handle_event("change", %{"roll" => params}, socket) do
     {:noreply, socket
     |> assign(:roll_changeset, UI.change_roll(params))}
-  end
-
-  def handle_event("change", %{"character" => params}, socket) do
-    changeset = Accounts.change_character(socket.assigns.user.active_character, params)
-
-    {:noreply, socket
-    |> assign(:character_changeset, changeset)}
   end
 
   def handle_event("change", %{"log_setting" => params}, socket) do
@@ -328,21 +314,5 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
-  end
-
-  def handle_event("update", %{"character" => params}, socket) do
-    case Accounts.update_character(socket.assigns.user.active_character, params) do
-      {:ok, character} ->
-        user = Accounts.get_user!(socket.assigns.user.id)
-
-        {:noreply, socket
-        |> assign(:user, user)
-        |> assign(:characters, user.characters)
-        |> assign(:character_changeset, Accounts.change_character(character))}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while updating character: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
   end
 end
