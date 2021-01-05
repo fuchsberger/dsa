@@ -1,17 +1,14 @@
 defmodule DsaWeb.DsaLive do
   use Phoenix.LiveView, layout: {DsaWeb.LayoutView, "live.html"}
 
-  import Phoenix.View, only: [render: 3]
-
-  alias Dsa.{Accounts, Event, Repo, UI}
-  alias DsaWeb.PageView
+  alias Dsa.{Accounts, Event, UI}
   alias DsaWeb.Router.Helpers, as: Routes
 
   require Logger
 
   @group_id 1 # TODO: Group 1 is hardcoded. Make dynamic.
 
-  defp topic(group_id), do: "group:#{group_id}"
+  def topic, do: "group:#{@group_id}"
 
   def render(assigns) do
     ~L"""
@@ -20,35 +17,28 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
 
       <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
+        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard,
+          character_id: @character_id,
+          user_id: @user_id
+        %>
 
       <% :character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent,
-          id: :character, character_id: @user.active_character_id %>
+        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, character_id: @character_id %>
 
-      <% :roll -> %><%= render PageView, "roll.html", assigns %>
+      <% :roll -> %>
+        <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @character_id %>
     <% end %>
     """
   end
 
   def mount(params, session, socket) do
 
-    user =
-      case Map.get(session, "user_id") do
-        nil ->
-          nil
+    {user_id, username, email, active_character_id} =
+      session
+      |> Map.get("user_id")
+      |> Accounts.get_user_base_data!()
 
-        user_id ->
-          user = Accounts.get_user!(user_id)
-
-          gravatar = "https://s.gravatar.com/avatar/"
-            <> Base.encode16(:erlang.md5("alex.fuchsberger@gmail.com"), case: :lower)
-            <> "?s=24"
-
-          Map.put(user, :gravatar, gravatar)
-      end
-
-    DsaWeb.Endpoint.subscribe(topic(@group_id))
+    DsaWeb.Endpoint.subscribe(topic())
 
     logs = Event.list_logs(@group_id) # TODO: hard-coded for now
     logsetting_changeset = UI.change_logsetting()
@@ -62,14 +52,15 @@ defmodule DsaWeb.DsaLive do
     |> assign(:dice, Ecto.Changeset.get_field(logsetting_changeset, :dice))
     |> assign(:result, Ecto.Changeset.get_field(logsetting_changeset, :result))
 
-    # roll related
-    |> assign(:roll_changeset, UI.change_roll())
+    # userdata
+    |> assign(:username, username)
+    |> assign(:email, email)
+    |> assign(:character_id, active_character_id)
+    |> assign(:user_id, user_id)
+    |> assign(:gravatar_url, gravatar_url(email))
 
-    # other
-    |> assign(:user, user)
     |> assign(:event_changeset, Event.change_log())
     |> assign(:show_log?, false)
-    |> assign(:character_id, 1) # TODO: set to active character
     |> assign(:group_id, @group_id) # TODO: hard-coded for now
     |> assign(:invalid_login?, Map.has_key?(params, "invalid_login")),
     temporary_assigns: [logs: []]}
@@ -89,22 +80,20 @@ defmodule DsaWeb.DsaLive do
     |> assign(:logs, [log])}
   end
 
-  def handle_info({ :update_user, _ }, socket) do
-    {:noreply, socket
-    |> assign(:user, Dsa.Accounts.get_user!(socket.assigns.user.id))}
+  def handle_info({:update, %{character_id: id}}, socket) do
+    {:noreply, assign(socket, :character_id, id)}
   end
 
   def handle_params(_params, _uri, socket) do
-
-    user = socket.assigns.user
+    authenticated? = not is_nil(socket.assigns.user_id)
 
     cond do
       # if user is not authenticated and action is not login page, redirect to login page
-      socket.assigns.live_action != :login && is_nil(user) ->
+      socket.assigns.live_action != :login && not authenticated? ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
 
       # if no active character and page is not dashboard redirect to dashboard
-      not is_nil(user) && socket.assigns.live_action != :dashboard && is_nil(user.active_character_id) ->
+      authenticated? && socket.assigns.live_action != :dashboard && is_nil(socket.assigns.character_id) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
 
       # all went well, proceed
@@ -136,11 +125,6 @@ defmodule DsaWeb.DsaLive do
     end
   end
 
-  def handle_event("change", %{"roll" => params}, socket) do
-    {:noreply, socket
-    |> assign(:roll_changeset, UI.change_roll(params))}
-  end
-
   def handle_event("change", %{"log_setting" => params}, socket) do
     changeset = UI.change_logsetting(params)
 
@@ -160,7 +144,7 @@ defmodule DsaWeb.DsaLive do
 
       {count, _} ->
         Logger.warn("#{count} log entries deleted.")
-        DsaWeb.Endpoint.broadcast(topic(socket.assigns.group_id), "clear-logs", %{})
+        DsaWeb.Endpoint.broadcast(topic(), "clear-logs", %{})
         {:noreply, socket}
     end
   end
@@ -177,133 +161,6 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket}
   end
 
-  def handle_event("quickroll", %{"type" => type}, socket) do
-
-    params =
-      case type do
-        "w20" ->
-          %{
-            type: 1,
-            x1: Enum.random(1..20),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "w6" ->
-          %{
-            type: 2,
-            x1: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "2w6" ->
-          %{
-            type: 3,
-            x1: Enum.random(1..6),
-            x2: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "3w6" ->
-          %{
-            type: 4,
-            x1: Enum.random(1..6),
-            x2: Enum.random(1..6),
-            x3: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "3w20" ->
-          %{
-            type: 5,
-            x1: Enum.random(1..20),
-            x2: Enum.random(1..20),
-            x3: Enum.random(1..20),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-      end
-
-    case Event.create_log(params) do
-      {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
-        {:noreply, assign(socket, :log_open?, true)}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("roll", %{"trait" => trait}, socket) do
-
-    trait = String.to_atom(trait)
-
-    params =
-      %{
-        type: 6,
-        x1: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait), # trait
-        x2: Map.get(socket.assigns.user.active_character, trait), # trait value
-        x3: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier), # modifier
-        x4: Enum.random(1..20), # result
-        x5: Enum.random(1..20), # result confirmation
-        character_id: socket.assigns.user.active_character_id,
-        group_id: socket.assigns.group_id
-      }
-
-    case Event.create_log(params) do
-      {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
-        {:noreply, assign(socket, :log_open?, true)}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("talent-roll", _params, socket) do
-
-    trait_1 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e1)
-    trait_2 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e2)
-    trait_3 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e3)
-
-    trait_value_1 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_1)
-    trait_value_2 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_2)
-    trait_value_3 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_3)
-
-    params =
-      %{
-        type: 7,
-        x1: trait_1,
-        x2: trait_2,
-        x3: trait_3,
-        x4: Map.get(socket.assigns.user.active_character, trait_value_1),
-        x5: Map.get(socket.assigns.user.active_character, trait_value_2),
-        x6: Map.get(socket.assigns.user.active_character, trait_value_3),
-        x7: Enum.random(1..20),
-        x8: Enum.random(1..20),
-        x9: Enum.random(1..20),
-        x10: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier),
-        x11: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw),
-        character_id: socket.assigns.user.active_character_id,
-        group_id: socket.assigns.group_id
-      }
-
-    case Event.create_log(params) do
-      {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(topic(log.group_id), "log", Repo.preload(log, :character))
-        {:noreply, assign(socket, :log_open?, true)}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
-  end
-
   def handle_event("toggle-account-dropdown", _params, socket) do
     {:noreply, assign(socket, :account_dropdown_open?, !socket.assigns.account_dropdown_open?)}
   end
@@ -314,5 +171,13 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
+  end
+
+  defp gravatar_url(email, size \\ 24)
+
+  defp gravatar_url(nil, size), do: "https://s.gravatar.com/avatar/invalid?s=#{size}"
+
+  defp gravatar_url(email, size) do
+    "https://s.gravatar.com/avatar/#{Base.encode16(:erlang.md5(email), case: :lower)}?s=#{size}"
   end
 end

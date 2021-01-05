@@ -134,7 +134,7 @@ defmodule LogComponent do
 
   defp trait(index), do: Enum.at(~w(MU KL IN CH GE FF KO KK), index)
 
-  defp separator, do: content_tag(:span, "»", class: "inline-block align-middle")
+  defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
 
   defp label(type, content) do
     class =

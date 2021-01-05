@@ -20,5 +20,5 @@ defmodule DsaWeb.LogView do
 
   defp tag(:text, c), do: content_tag :span, c, class: "inline-block font-semibold font-bold text-gray-900"
 
-  defp separator, do: content_tag(:span, "»", class: "mx-2")
+  defp separator, do: content_tag(:span, "»", class: "mx-1 lg:mx-2")
 end

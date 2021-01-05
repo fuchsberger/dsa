@@ -1,6 +1,8 @@
 defmodule DsaWeb.DashboardComponent do
   use DsaWeb, :live_component
 
+  alias Dsa.Accounts
+
   def render(assigns) do
     ~L"""
     <div class="absolute inset-0">
@@ -24,7 +26,7 @@ defmodule DsaWeb.DashboardComponent do
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <%= for character <- @user.characters do %>
+                  <%= for character <- @characters do %>
                     <tr>
                       <td class="px-3 py-2 whitespace-nowrap">
                         <div class="ml-4">
@@ -40,8 +42,8 @@ defmodule DsaWeb.DashboardComponent do
                         1200
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @user.active_character_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
-                          <%= if character.id == @user.active_character_id, do: "A", else: "Ina" %>ktiv
+                        <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @active_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
+                          <%= if character.id == @active_id, do: "A", else: "Ina" %>ktiv
                         </button>
                       </td>
                     </tr>
@@ -56,13 +58,29 @@ defmodule DsaWeb.DashboardComponent do
     """
   end
 
-  def handle_event("activate", %{"character" => id}, socket) do
-    id = String.to_integer(id)
-    id = if id == socket.assigns.user.active_character_id, do: nil, else: id
+  def preload([%{character_id: character_id, user_id: user_id}]) do
+    [%{
+      active_id: character_id,
+      characters: Accounts.get_user_characters(user_id),
+      user_id: user_id
+    }]
+  end
 
-    case Dsa.Accounts.update_user(socket.assigns.user, %{active_character_id: id}) do
-      {:ok, _character} ->
-        send self(), {:update_user, %{}}
+  def update(%{active_id: active_id, characters: characters, user_id: user_id}, socket) do
+    {:ok, socket
+    |> assign(:active_id, active_id)
+    |> assign(:characters, characters)
+    |> assign(:user_id, user_id)}
+  end
+
+  def handle_event("activate", %{"character" => id}, socket) do
+
+    id = if String.to_integer(id) == socket.assigns.active_id, do: nil, else: id
+    user = Accounts.get_user!(socket.assigns.user_id)
+
+    case Accounts.update_user(user, %{active_character_id: id}) do
+      {:ok, %Accounts.User{active_character_id: id}} ->
+        send self(), {:update, %{character_id: id}}
         {:noreply, socket}
 
       {:error, changeset} ->
