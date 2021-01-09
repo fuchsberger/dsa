@@ -137,9 +137,11 @@ defmodule Dsa.Accounts do
 
   def list_characters, do: Repo.all(from(c in Character, preload: :user))
 
-  # def get_character!(id) do
-  #   Repo.get!(from(c in Character, preload: ^@character_preloads), id)
-  # end
+  def list_characters(list_of_ids) do
+    from(c in Character, where: c.id in ^list_of_ids, select: {c.id, c})
+    |> Repo.all()
+    |> Map.new()
+  end
 
   def get_character!(id), do: Repo.get!(Character, id)
 

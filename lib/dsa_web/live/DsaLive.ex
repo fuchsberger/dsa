@@ -1,14 +1,14 @@
 defmodule DsaWeb.DsaLive do
   use Phoenix.LiveView, layout: {DsaWeb.LayoutView, "live.html"}
 
-  alias Dsa.{Accounts, Event, UI}
+  alias Dsa.Accounts
   alias DsaWeb.Router.Helpers, as: Routes
 
   require Logger
 
-  @group_id 1 # TODO: Group 1 is hardcoded. Make dynamic.
+  @group_id 1
 
-  def topic, do: "group:#{@group_id}"
+  def topic, do: "log:#{@group_id}"
 
   def render(assigns) do
     ~L"""
@@ -40,48 +40,33 @@ defmodule DsaWeb.DsaLive do
 
     DsaWeb.Endpoint.subscribe(topic())
 
-    logs = Event.list_logs(@group_id) # TODO: hard-coded for now
-    logsetting_changeset = UI.change_logsetting()
-
     {:ok, socket
-    # log related
-    |> assign(:log_changeset, logsetting_changeset)
-    |> assign(:log_empty?, Enum.count(logs) == 0)
-    |> assign(:log_resetcount, 0)
-    |> assign(:logs, logs)
-    |> assign(:dice, Ecto.Changeset.get_field(logsetting_changeset, :dice))
-    |> assign(:result, Ecto.Changeset.get_field(logsetting_changeset, :result))
-
-    # userdata
     |> assign(:username, username)
     |> assign(:email, email)
     |> assign(:character_id, active_character_id)
     |> assign(:user_id, user_id)
     |> assign(:gravatar_url, gravatar_url(email))
-
-    |> assign(:event_changeset, Event.change_log())
     |> assign(:show_log?, false)
-    |> assign(:group_id, @group_id) # TODO: hard-coded for now
-    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login")),
-    temporary_assigns: [logs: []]}
+    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))}
   end
 
-  def handle_info(%{event: "clear-logs"}, socket) do
-    {:noreply, socket
-    |> assign(:log_empty?, true)
-    |> assign(:logs, [false]) # forces temporary assign to be treated as updated
-    |> assign(:logs, [])
-    |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
+  def handle_info({:log, entry}, socket) do
+    send_update(DsaWeb.LogComponent, id: :log, action: :add, entry: entry)
+    {:noreply, assign(socket, :log_open?, true)}
   end
 
-  def handle_info(%{event: "log", payload: log}, socket) do
-    {:noreply, socket
-    |> assign(:log_empty?, false)
-    |> assign(:logs, [log])}
+  def handle_info(:clear_logs, socket) do
+    send_update(DsaWeb.LogComponent, id: :log, action: :clear)
+    {:noreply, socket}
   end
 
   def handle_info({:update, %{character_id: id}}, socket) do
     {:noreply, assign(socket, :character_id, id)}
+  end
+
+  def handle_info(unknown, socket) do
+    Logger.warn(inspect(unknown))
+    {:noreply, socket}
   end
 
   def handle_params(_params, _uri, socket) do
@@ -98,14 +83,6 @@ defmodule DsaWeb.DsaLive do
 
       # all went well, proceed
       true ->
-
-        # reset some general assigns
-        socket =
-          socket
-          |> assign(:log_open?, false)
-          |> assign(:account_dropdown_open?, false)
-          |> assign(:menu_open?, false)
-
         # handle page title
         socket =
           case socket.assigns.live_action do
@@ -113,39 +90,13 @@ defmodule DsaWeb.DsaLive do
             :character -> assign(socket, :page_title, "Held")
             :dashboard -> assign(socket, :page_title, "Übersicht")
             :roll -> assign(socket, :page_title, "Probe")
-
-            _ ->
-              socket
+            _ -> assign(socket, :page_title, "404 Error")
           end
 
         {:noreply, socket
         |> assign(:log_open?, false)
         |> assign(:account_dropdown_open?, false)
         |> assign(:menu_open?, false)}
-    end
-  end
-
-  def handle_event("change", %{"log_setting" => params}, socket) do
-    changeset = UI.change_logsetting(params)
-
-    {:noreply, socket
-    |> assign(:dice, Ecto.Changeset.get_field(changeset, :dice))
-    |> assign(:result, Ecto.Changeset.get_field(changeset, :result))
-    |> assign(:log_changeset, changeset)
-    |> assign(:logs, Event.list_logs(@group_id)) # TODO: hard-coded for now
-    |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
-  end
-
-  def handle_event("clear-log", _params, socket) do
-    case Event.delete_logs(socket.assigns.group_id) do
-      {0, _} ->
-        Logger.warn("No log entries exist for deleting.")
-        {:noreply, socket}
-
-      {count, _} ->
-        Logger.warn("#{count} log entries deleted.")
-        DsaWeb.Endpoint.broadcast(topic(), "clear-logs", %{})
-        {:noreply, socket}
     end
   end
 

@@ -1,26 +1,32 @@
 defmodule DsaWeb.RollComponent do
   use DsaWeb, :live_component
 
+  import DsaWeb.DsaLive, only: [topic: 0]
+
+  alias Dsa.{Accounts, Event}
+
+  @group_id 1
+
   def render(assigns) do
     ~L"""
     <div class="absolute inset-0">
-      <div class='grid grid-cols-1 md:grid-cols-2 border-solid border-gray-300 border-b py-2'>
-        <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Schnellwurf</h4>
+      <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_target: @myself, phx_submit: "roll" %>
+        <div class='lg:grid lg:grid-cols-12 border-solid border-gray-300 border-b py-2'>
+          <h4 class='lg:col-span-4 px-3 py-1 text-center lg:text-left font-bold text-gray-700'>Schnellwurf / Schaden</h4>
 
-        <div class="flex justify-center">
-          <button phx-click='quickroll' phx-value-type='w20' type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">W20</button>
+          <div class="lg:col-span-6 flex justify-evenly">
+            <%= quickroll_button %{target: @myself, max: 20, count: 1} %>
+            <%= quickroll_button %{target: @myself, max: 6, count: 1} %>
+            <%= quickroll_button %{target: @myself, max: 6, count: 2} %>
+            <%= quickroll_button %{target: @myself, max: 6, count: 3} %>
+            <%= quickroll_button %{target: @myself, max: 20, count: 3} %>
+          </div>
 
-          <button phx-click='quickroll' phx-value-type='w6' type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">W6</button>
-
-          <button phx-click='quickroll' phx-value-type='2w6' type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">2W6</button>
-
-          <button phx-click='quickroll' phx-value-type='3w6' type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">3W6</button>
-
-          <button phx-click='quickroll' phx-value-type='3w20' type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">3W20</button>
+          <div class="lg:col-span-2 mt-3 lg:mt-0 flex justify-center">
+            <%= label f, :bonus, "Bonus", class: " leading-8 mr-3" %>
+            <%= number_input f, :bonus, placeholder: 0, class: "w-16 h-8 block py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+          </div>
         </div>
-      </div>
-
-      <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_submit: "roll" %>
 
         <div class='grid grid-cols-1 md:grid-cols-2 py-2'>
           <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Modifikator</h4>
@@ -58,22 +64,14 @@ defmodule DsaWeb.RollComponent do
 
         <h4 class='mb-0 py-1 text-center font-bold text-gray-700'>Eigenschaftsprobe</h4>
         <div class='grid grid-cols-4 lg:grid-cols-8 gap-3 px-2 lg:px-3 lg:gap-4'>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='mu'>Mu: <%= @character.mu %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='kl'>KL: <%= @character.kl %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='in'>IN: <%= @character.in %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ch'>CH: <%= @character.ch %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ge'>GE: <%= @character.ge %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ff'>FF: <%= @character.ff %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='ko'>KO: <%= @character.ko %></button>
-
-          <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-value-trait='kk'>KK: <%= @character.kk %></button>
+          <%= trait_button("MU", @mu, @myself) %>
+          <%= trait_button("KL", @kl, @myself) %>
+          <%= trait_button("IN", @int, @myself) %>
+          <%= trait_button("CH", @ch, @myself) %>
+          <%= trait_button("GE", @ge, @myself) %>
+          <%= trait_button("FF", @ff, @myself) %>
+          <%= trait_button("KO", @ko, @myself) %>
+          <%= trait_button("KK", @kk, @myself) %>
         </div>
       </form>
     </div>
@@ -84,74 +82,65 @@ defmodule DsaWeb.RollComponent do
     {:ok, assign(socket, :roll_changeset, Dsa.UI.change_roll())}
   end
 
-  def preload([%{character_id: character_id}]) do
-    [%{character: Dsa.Accounts.get_character!(character_id)}]
+  def preload(list_of_assigns) do
+    list_of_ids = Enum.map(list_of_assigns, & &1.character_id)
+
+    characters = Accounts.list_characters(list_of_ids)
+
+    Enum.map(list_of_assigns, fn assigns ->
+      Map.put(assigns, :character, characters[assigns.character_id])
+    end)
   end
 
-  def update(%{character: character}, socket) do
+  def update(assigns, socket) do
+    character = Map.get(assigns, :character)
+
     {:ok, socket
-    |> assign(:character, character)}
+    |> assign(:character_id, character.id)
+    |> assign(:mu, character.mu)
+    |> assign(:kl, character.kl)
+    |> assign(:int, character.in)
+    |> assign(:ch, character.ch)
+    |> assign(:ge, character.ge)
+    |> assign(:ff, character.ff)
+    |> assign(:ko, character.ko)
+    |> assign(:kk, character.kk)}
   end
 
   def handle_event("change", %{"roll" => params}, socket) do
-    {:noreply, socket
-    |> assign(:roll_changeset, Dsa.UI.change_roll(params))}
+    {:noreply, assign(socket, :roll_changeset, Dsa.UI.change_roll(params))}
   end
 
-  def handle_event("quickroll", %{"type" => type}, socket) do
+  def handle_event("quickroll", %{"max" => max, "count" => count}, socket) do
 
-    params =
-      case type do
-        "w20" ->
-          %{
-            type: 1,
-            x1: Enum.random(1..20),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
+    count = String.to_integer(count)
+    max = String.to_integer(max)
+    bonus = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :bonus)
+    rolls = Enum.map(1..8, & (if count >= &1, do: Enum.random(1..max), else: nil))
+    result = Enum.reduce(rolls, bonus, fn x, sum -> if is_nil(x), do: sum, else: sum + x end)
 
-        "w6" ->
-          %{
-            type: 2,
-            x1: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "2w6" ->
-          %{
-            type: 3,
-            x1: Enum.random(1..6),
-            x2: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "3w6" ->
-          %{
-            type: 4,
-            x1: Enum.random(1..6),
-            x2: Enum.random(1..6),
-            x3: Enum.random(1..6),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-
-        "3w20" ->
-          %{
-            type: 5,
-            x1: Enum.random(1..20),
-            x2: Enum.random(1..20),
-            x3: Enum.random(1..20),
-            character_id: socket.assigns.user.active_character_id,
-            group_id: socket.assigns.group_id
-          }
-      end
+    params = %{
+      type: 1,
+      x1: Enum.at(rolls, 0),
+      x2: Enum.at(rolls, 1),
+      x3: Enum.at(rolls, 2),
+      x4: Enum.at(rolls, 3),
+      x5: Enum.at(rolls, 4),
+      x6: Enum.at(rolls, 5),
+      x7: Enum.at(rolls, 6),
+      x8: Enum.at(rolls, 7),
+      x9: bonus,
+      x10: max, # dice type
+      x11: count, # dice count
+      x12: result, # sum + bonus
+      character_id: socket.assigns.character_id,
+      group_id: @group_id
+    }
 
     case Event.create_log(params) do
       {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(DsaWeb.DsaLive.topic(), "log", Repo.preload(log, :character))
-        {:noreply, assign(socket, :log_open?, true)}
+        broadcast_log!(log)
+        {:noreply, socket}
 
       {:error, changeset} ->
         Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
@@ -161,23 +150,23 @@ defmodule DsaWeb.RollComponent do
 
   def handle_event("roll", %{"trait" => trait}, socket) do
 
-    trait = String.to_atom(trait)
+    trait = trait |> String.downcase() |> String.to_atom()
 
     params =
       %{
         type: 6,
         x1: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait), # trait
-        x2: Map.get(socket.assigns.user.active_character, trait), # trait value
+        x2: Map.get(socket.assigns.character, trait), # trait value
         x3: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier), # modifier
         x4: Enum.random(1..20), # result
         x5: Enum.random(1..20), # result confirmation
-        character_id: socket.assigns.user.active_character_id,
-        group_id: socket.assigns.group_id
+        character_id: socket.assigns.character_id,
+        group_id: @group_id
       }
 
     case Event.create_log(params) do
       {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(DsaWeb.DsaLive.topic(), "log", Repo.preload(log, :character))
+        broadcast_log!(log)
         {:noreply, assign(socket, :log_open?, true)}
 
       {:error, changeset} ->
@@ -187,7 +176,6 @@ defmodule DsaWeb.RollComponent do
   end
 
   def handle_event("talent-roll", _params, socket) do
-
     trait_1 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e1)
     trait_2 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e2)
     trait_3 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e3)
@@ -210,19 +198,24 @@ defmodule DsaWeb.RollComponent do
         x9: Enum.random(1..20),
         x10: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier),
         x11: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw),
-        character_id: socket.assigns.user.active_character_id,
-        group_id: socket.assigns.group_id
+        character_id: socket.assigns.character_id,
+        group_id: @group_id
       }
 
     case Event.create_log(params) do
       {:ok, log} ->
-        DsaWeb.Endpoint.broadcast(DsaWeb.DsaLive.topic(), "log", Repo.preload(log, :character))
+        broadcast_log!(log)
         {:noreply, assign(socket, :log_open?, true)}
 
       {:error, changeset} ->
         Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
         {:noreply, socket}
     end
+  end
+
+  defp broadcast_log!(log) do
+    # DsaWeb.Endpoint.broadcast!(topic(), "log", Dsa.Repo.preload(log, :character))
+    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(), {:log, Event.preload_character_name(log)})
   end
 
   defp modifier_field(form, value) do
@@ -252,23 +245,21 @@ defmodule DsaWeb.RollComponent do
     end
   end
 
-  defp trait_roll_button(trait, user) do
+  defp quickroll_button(assigns) do
+    ~L"""
+    <button type='button'
+      phx-click="quickroll"
+      phx-value-count="<%= @count %>"
+      phx-value-max="<%= @max %>"
+      phx-target="<%= @target %>"
+      class="bg-white w-1/6 h-8 leading-8 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3"><%= if @count > 1, do: @count %>W<%= @max %></button>
+    """
+  end
 
-    trait_name =
-      trait
-      |> Atom.to_string()
-      |> String.upcase()
-
-    case user && user.active_character do
-      true ->
-        content_tag :button, "#{trait_name}: #{Map.get(user.active_character, trait)}",
-          type: "button",
-          class: "bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-          phx_click: "roll",
-          phx_value_trait: trait
-
-      nil ->
-        nil
-    end
+  defp trait_button(trait, value, target) do
+    assigns = %{trait: trait, target: target, value: value}
+    ~L"""
+    <button type='button' class="bg-white py-2 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='roll' phx-target='<%= @target %>' phx-value-trait='<%= trait %>'><%= trait %>: <%= @value %></button>
+    """
   end
 end

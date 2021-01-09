@@ -1,67 +1,128 @@
-defmodule LogComponent do
+defmodule DsaWeb.LogComponent do
 
-  use Phoenix.LiveComponent
+  use DsaWeb, :live_component
 
   import Phoenix.HTML.Tag, only: [content_tag: 3]
-  import Phoenix.View, only: [render: 3]
+  import DsaWeb.DsaLive, only: [topic: 0]
 
-  alias DsaWeb.LogView
+  @group_id 1
 
   def render(assigns) do
     ~L"""
-    <div id='log-<%= @entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
-      <%= case @entry.type do %>
+    <%= f = form_for @changeset, "#", phx_change: :change, phx_submit: nil, phx_target: @myself %>
+      <div class='my-2 flex justify-between'>
+        <button phx-click="clear-log" phx-target="<%= @myself %>" type="button" class="bg-white py-1 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">Log leeren</button>
+        <div class="flex items-center align-middle">
+          <%= checkbox f, :dice, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-1", phx_change: :toggle %>
+          <%= label f, :dice, "Würfel", class: "font-medium text-gray-700" %>
+          <%= checkbox f, :result, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded ml-4 mr-1", phx_change: :toggle %>
+          <%= label f, :result, "Ergebnis", class: "font-medium text-gray-700" %>
+        </div>
+      </div>
+      <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
+        <%= for entry <- @entries do %>
+          <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
+            <%= case entry.type do %>
+              <% 1 -> %>
+                <%# Quickroll %>
+                <div class='mr-3'>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= entry.character %></span>
+                  <span class='mx-1 lg:mx-2'>»</span>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
+                    <%= if entry.x11 > 1, do: entry.x11 %>W<%= entry.x10 %>
+                    <%=
+                      cond do
+                        entry.x9 == 0 -> nil
+                        entry.x9 > 0 -> "+ #{entry.x9}"
+                        true -> "- #{abs(entry.x9)}"
+                      end
+                    %>
+                  </span>
+                </div>
+                <div class='flex'>
+                  <%= if input_value(f, :dice) do %>
+                    <%= tag :dice, entry.x1 %>
+                    <%= if entry.x11 >= 2, do: tag(:dice, entry.x2) %>
+                    <%= if entry.x11 >= 3, do: tag(:dice, entry.x3) %>
+                    <%= if entry.x11 >= 4, do: tag(:dice, entry.x4) %>
+                    <%= if entry.x11 >= 5, do: tag(:dice, entry.x5) %>
+                    <%= if entry.x11 >= 6, do: tag(:dice, entry.x6) %>
+                    <%= if entry.x11 >= 7, do: tag(:dice, entry.x7) %>
+                    <%= if entry.x11 == 8, do: tag(:dice, entry.x8) %>
+                    <%= if input_value(f, :result), do: separator() %>
+                  <% end %>
+                  <%= if input_value(f, :result), do: tag(:text, entry.x12) %>
+                </div>
 
-        <% 2 -> %><%= quickroll_w6(assigns) %>
-        <% 3 -> %><%= quickroll_2w6(assigns) %>
-        <% 4 -> %><%= quickroll_3w6(assigns) %>
-        <% 5 -> %><%= quickroll_3w20(assigns) %>
-        <% 6 -> %><%= trait_roll(assigns) %>
-        <% 7 -> %><%= talent_roll(assigns) %>
-        <% _ -> %> Unbekannter Logeintrag
-      <% end %>
-    </div>
+              <%# 6 -> %><%#= trait_roll(assigns) %>
+              <%# 7 -> %><%#= talent_roll(assigns) %>
+              <% _ -> %> Unbekannter Logeintrag
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
+        Bei Phex! Noch sind keine Würfel gerollt!
+      </div>
+    </form>
     """
   end
 
-  defp quickroll_w6(assigns) do
-    ~L"""
-    <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "W6") %>
-    </div>
-    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %></div>
-    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1) %></div>
-    """
+  def mount(socket) do
+    entries = Dsa.Event.list_logs(@group_id)
+
+    {:ok, socket
+    |> assign(:changeset, Dsa.UI.change_logsetting())
+    |> assign(:entries, entries)
+    |> assign(:log_empty?, Enum.count(entries) == 0)
+    |> assign(:log_resetcount, 0),
+    temporary_assigns: [entries: []]}
   end
 
-  defp quickroll_2w6(assigns) do
-    ~L"""
-    <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "2 W6") %>
-    </div>
-    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %></div>
-    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2) %></div>
-    """
+  def update(assigns, socket) do
+    case Map.get(assigns, :action) do
+      nil ->
+        {:ok, socket}
+
+      :add ->
+        {:ok, socket
+        |> assign(:log_empty?, false)
+        |> assign(:entries, [Map.get(assigns, :entry)])}
+
+      :clear ->
+        {:ok, socket
+        |> assign(:log_empty?, true)
+        |> assign(:entries, [false]) # forces temporary assign to be treated as updated
+        |> assign(:entries, [])
+        |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
+    end
   end
 
-  defp quickroll_3w6(assigns) do
-    ~L"""
-    <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "3 W6") %>
-    </div>
-    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %> <%= label(:gray, @entry.x3) %></div>
-    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2 + @entry.x3) %></div>
-    """
+  def handle_info(%{event: "log", payload: log}, socket) do
+    {:noreply, socket
+    |> assign(:log_empty?, false)
+    |> assign(:entries, [log])}
   end
 
-  defp quickroll_3w20(assigns) do
-    ~L"""
-    <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> würfelt <%= label(:yellow, "3 W20") %>
-    </div>
-    <div class='mx-1 <%= unless @dice, do: "hidden" %>'><%= label(:gray, @entry.x1) %> <%= label(:gray, @entry.x2) %> <%= label(:gray, @entry.x3) %></div>
-    <div class='ml-1 <%= unless @result, do: "hidden" %>'><%= label(:bold, @entry.x1 + @entry.x2 + @entry.x3) %></div>
-    """
+  def handle_event("change", %{"log_setting" => params}, socket) do
+    {:noreply, socket
+    |> assign(:changeset, Dsa.UI.change_logsetting(params))
+    |> assign(:entries, Dsa.Event.list_logs(@group_id))
+    |> assign(:log_resetcount, socket.assigns.log_resetcount + 1)}
+  end
+
+  def handle_event("clear-log", _params, socket) do
+    case Dsa.Event.delete_logs(@group_id) do
+      {0, _} ->
+        Logger.warn("No log entries exist for deleting.")
+        {:noreply, socket}
+
+      {count, _} ->
+        Logger.warn("#{count} log entries deleted.")
+        Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(), :clear_logs)
+        {:noreply, socket}
+    end
   end
 
   defp trait_roll(assigns) do
@@ -136,27 +197,24 @@ defmodule LogComponent do
 
   defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
 
-  defp label(type, content) do
-    class =
-      case type do
-        :blue ->
-          "inline-block text-xs font-semibold p-1 rounded text-blue-500 bg-blue-50"
+  import Phoenix.HTML.Tag, except: [tag: 2]
 
-        :gray ->
-          "text-xs font-semibold inline-block rounded text-center text-gray-500 border border-gray-300 bg-gray-100 w-5 h-5"
+  @base "inline-block font-semibold leading-6 px-1 rounded"
 
-        :yellow ->
-          "inline-block text-xs font-semibold p-1 rounded bg-yellow-50 text-yellow-600"
+  defp tag(:blue, c), do: content_tag :span, c,
+    class: "#{@base} text-blue-500 bg-blue-50 border border-blue-200"
 
-        :red ->
-          "inline-block text-xs font-semibold p-1 rounded bg-red-50 text-red-500"
+  defp tag(:green, c), do: content_tag :span, c, class: "#{@base} bg-green-50 text-green-500"
 
-        :green ->
-          "inline-block text-xs font-semibold p-1 rounded bg-green-50 text-green-500"
+  defp tag(:red, c), do: content_tag :span, c, class: "#{@base} bg-red-50 text-red-500"
 
-        :bold ->
-          "inline-block font-extrabold text-gray-900 align-middle"
-      end
-    content_tag(:span, content, class: class)
-  end
+  defp tag(:yellow, c), do: content_tag :span, c,
+    class: "#{@base} bg-yellow-50 text-yellow-600 border border-yellow-200"
+
+  defp tag(:dice, c), do: content_tag :span, c,
+    class: "#{@base} text-gray-500 border border-md border-gray-300 bg-gray-100 w-6 ml-1 text-center"
+
+  defp tag(:text, c), do: content_tag :span, c, class: "leading-6 font-bold text-gray-900"
+
+  defp separator, do: content_tag(:span, "»", class: "leading-6 mx-1 lg:mx-2")
 end

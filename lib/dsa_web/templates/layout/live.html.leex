@@ -65,51 +65,6 @@
     <div class='relative <%= if @log_open?, do: "hidden", else: "block" %> lg:block flex-none w-full lg:max-w-screen-md'><%= @inner_content %></div>
 
     <%# On right side always show log / group stuff %>
-
-
-    <div class='<%= if @log_open?, do: "block", else: "hidden" %> lg:block flex-auto px-2 lg:px-3'>
-
-      <div class='my-2 flex justify-between'>
-        <button phx-click="clear-log" type="button" class="bg-white py-1 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">Log leeren</button>
-        <div class="flex items-center align-middle">
-
-          <%= f = form_for @log_changeset, "#", phx_change: :change, phx_submit: nil %>
-            <%= checkbox f, :dice, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-1", phx_change: :toggle %>
-            <%= label f, :dice, "Würfel", class: "font-medium text-gray-700" %>
-            <%= checkbox f, :result, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded ml-4 mr-1", phx_change: :toggle %>
-            <%= label f, :result, "Ergebnis", class: "font-medium text-gray-700" %>
-          </form>
-        </div>
-      </div>
-
-      <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
-        <%= for entry <- @logs do %>
-          <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
-            <%= case entry.type do %>
-              <% 1 -> %>
-                <%= render LogView, "1w.html",
-                title: "W20", entry: entry, dice: @dice, result: @result %>
-
-              <% 2 -> %>
-                <%= render LogView, "1w.html",
-                title: "W6", entry: entry, dice: @dice, result: @result %>
-
-              <%# 1 -> %><%# quickroll_1w20(assigns) %>
-              <%# 2 -> %><%# quickroll_w6(assigns) %>
-              <%# 3 -> %><%# quickroll_2w6(assigns) %>
-              <%# 4 -> %><%# quickroll_3w6(assigns) %>
-              <%# 5 -> %><%# quickroll_3w20(assigns) %>
-              <%# 6 -> %><%# trait_roll(assigns) %>
-              <%# 7 -> %><%# talent_roll(assigns) %>
-              <% _ -> %> Unbekannter Logeintrag
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-    </div>
+    <div class='<%= if @log_open?, do: "block", else: "hidden" %> lg:block flex-auto px-2 lg:px-3'><%= live_component @socket, DsaWeb.LogComponent, id: :log %></div>
   </div>
 </div>

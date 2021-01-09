@@ -5,14 +5,14 @@ defmodule Dsa.Event do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
+  alias Dsa.Accounts.Character
   alias Dsa.Event.{Setting, Log}
 
   def list_logs(group_id) do
     from(l in Log,
       where: l.group_id == ^group_id,
-      preload: :character,
-      order_by: l.inserted_at,
-      limit: 200
+      preload: [character: ^from(c in Character, select: c.name)],
+      order_by: [desc: l.inserted_at]
     ) |> Repo.all()
   end
 
@@ -24,4 +24,8 @@ defmodule Dsa.Event do
 
   # Settings (Group View, does not persist in database)
   def change_settings(attrs \\ %{}), do: Setting.changeset(%Setting{}, attrs)
+
+  def preload_character_name(struct) do
+    Repo.preload(struct, character: from(c in Character, select: c.name))
+  end
 end
