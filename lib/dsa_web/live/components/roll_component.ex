@@ -89,7 +89,7 @@ defmodule DsaWeb.RollComponent do
 
           <%= select f, :e3, ["MU": "0", "KL": "1", "IN": "2", "CH": "3", "GE": "4", "FF": "5", "KO": "6", "KK": "7"], class: "block h-8 leading-8 px-3 py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
 
-          <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='talent-roll'>Würfel!</button>
+          <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='talent-roll' phx-target='<%= @myself %>'>Würfel!</button>
         </div>
 
 
@@ -211,31 +211,57 @@ defmodule DsaWeb.RollComponent do
   end
 
   def handle_event("talent-roll", _params, socket) do
+
+    # trait indexes
     trait_1 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e1)
     trait_2 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e2)
     trait_3 = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :e3)
 
-    trait_value_1 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_1)
-    trait_value_2 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_2)
-    trait_value_3 = Enum.at(~w(mu kl in ch ge ff ko kk)a, trait_3)
+    # trait values
+    trait_value_1 = Map.get(socket.assigns, Enum.at(~w(mu kl int ch ge ff ko kk)a, trait_1))
+    trait_value_2 = Map.get(socket.assigns, Enum.at(~w(mu kl int ch ge ff ko kk)a, trait_2))
+    trait_value_3 = Map.get(socket.assigns, Enum.at(~w(mu kl int ch ge ff ko kk)a, trait_3))
+
+    dice_1 = Enum.random(1..20)
+    dice_2 = Enum.random(1..20)
+    dice_3 = Enum.random(1..20)
+
+    modifier = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier)
+    talent_value = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw)
+
+    result =
+      cond do
+        Enum.count([dice_1, dice_2, dice_3], & &1 == 1) >= 2 -> 10 # critical success
+        Enum.count([dice_1, dice_2, dice_3], & &1 == 20) >= 2 -> -2 # critical failure
+        true ->
+          # count spent tw
+          remaining = talent_value - max(dice_1 - trait_value_1 - modifier, 0) - max(dice_2 - trait_value_2 - modifier, 0) - max(dice_3 - trait_value_3 - modifier, 0)
+
+          cond do
+            remaining < 0 -> -1 # normal failure
+            true -> div(remaining, 3) + 1 # normal success => show quality
+          end
+      end
 
     params =
       %{
-        type: 7,
+        type: 3,
         x1: trait_1,
         x2: trait_2,
         x3: trait_3,
-        x4: Map.get(socket.assigns.user.active_character, trait_value_1),
-        x5: Map.get(socket.assigns.user.active_character, trait_value_2),
-        x6: Map.get(socket.assigns.user.active_character, trait_value_3),
-        x7: Enum.random(1..20),
-        x8: Enum.random(1..20),
-        x9: Enum.random(1..20),
-        x10: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier),
-        x11: Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw),
+        x4: trait_value_1,
+        x5: trait_value_2,
+        x6: trait_value_3,
+        x7: dice_1,
+        x8: dice_2,
+        x9: dice_3,
+        x10: modifier,
+        x11: talent_value,
+        x12: result,
         character_id: socket.assigns.character_id,
         group_id: @group_id
       }
+
 
     case Event.create_log(params) do
       {:ok, log} ->

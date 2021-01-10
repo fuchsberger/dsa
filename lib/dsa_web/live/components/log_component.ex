@@ -78,7 +78,31 @@ defmodule DsaWeb.LogComponent do
                   <%= if input_value(f, :result), do: result_tag(:trait, entry.x12) %>
                 </div>
 
-              <%# 7 -> %><%#= talent_roll(assigns)✓ ✗ %>
+              <% 3 -> %>
+                <div class='mr-3'>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= entry.character %></span>
+                  <span class='mx-1 lg:mx-2'>»</span>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
+                    <%= "#{trait(entry.x1)}/#{trait(entry.x2)}/#{trait(entry.x3)}" %>
+                    <%=
+                      cond do
+                        entry.x10 == 0 -> nil
+                        entry.x10 > 0 -> "+ #{entry.x10}"
+                        true -> "- #{abs(entry.x10)}"
+                      end
+                    %>
+                  </span>
+                </div>
+                <div class='flex'>
+                  <%= if input_value(f, :dice) do %>
+                    <%= tag :dice, entry.x7 %>
+                    <%= tag :dice, entry.x8 %>
+                    <%= tag :dice, entry.x9 %>
+                    <%= if input_value(f, :result), do: separator() %>
+                  <% end %>
+                  <%= if input_value(f, :result), do: result_tag(:talent, entry.x12) %>
+                </div>
+
               <% _ -> %> Unbekannter Logeintrag
             <% end %>
           </div>
@@ -148,33 +172,6 @@ defmodule DsaWeb.LogComponent do
     end
   end
 
-  defp talent_roll(assigns) do
-
-    ~L"""
-    <div class='mr-1'>
-      <%= label(:blue, @entry.character.name) %> Talentprobe <%= label(:yellow, "#{trait(@entry.x1)}/#{trait(@entry.x2)}/#{trait(@entry.x3)}") %><%= modifier(@entry.x10) %>
-    </div>
-    <div class='mx-1 <%= unless @dice, do: "hidden" %>'>
-      <%= label(:gray, @entry.x7) %>
-      <%= label(:gray, @entry.x8) %>
-      <%= label(:gray, @entry.x9) %>
-    </div>
-    <div class='ml-1 <%= unless @result, do: "hidden" %>'>
-      <%= cond do %>
-        <%= Enum.count([@entry.x4, @entry.x5, @entry.x6], & &1 == 1) >= 2 -> %>
-          <%= label(:green, "✓ K!") %>
-
-          <%= Enum.count([@entry.x4, @entry.x5, @entry.x6], & &1 == 20) >= 2 -> %>
-          <%= label(:green, "✗ K!") %>
-
-        <%= true -> %>
-          <%= label(:bold, "TW: #{@entry.x11}") %>
-
-      <% end %>
-    </div>
-    """
-  end
-
   defp modifier(value) do
     cond do
       value < 0 -> label(:red, value)
@@ -214,6 +211,16 @@ defmodule DsaWeb.LogComponent do
       1 -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      nil -> "Error"
+    end
+  end
+
+  defp result_tag(:talent, value) do
+    case value do
+      10 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
+      -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
+      x -> content_tag :span, "✓ #{x}", class: "#{@base} bg-green-50 text-green-500"
       nil -> "Error"
     end
   end
