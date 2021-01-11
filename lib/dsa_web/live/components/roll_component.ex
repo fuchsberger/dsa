@@ -171,7 +171,7 @@ defmodule DsaWeb.RollComponent do
   def handle_event("roll", %{"trait" => trait}, socket) do
 
     trait = trait |> String.downcase() |> String.to_atom()
-    trait_value = Map.get(socket.assigns, trait)
+    trait_value = Map.get(socket.assigns, trait, socket.assigns.int)
     modifier = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :modifier)
     dice = Enum.random(1..20)
     dice_confirm = Enum.random(1..20)
