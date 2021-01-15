@@ -116,7 +116,13 @@ defmodule Dsa.Accounts do
   end
 
   def change_password(%User{} = user, params \\ %{}) do
-    User.password_changeset(user, params)
+    User.password_changeset(user, params, false)
+  end
+
+  def update_password(%User{} = user, params) do
+    user
+    |> User.password_changeset(params, true)
+    |> Repo.update()
   end
 
   def register_user(attrs \\ %{}) do
@@ -130,8 +136,6 @@ defmodule Dsa.Accounts do
     |> User.changeset(params)
     |> Repo.update()
   end
-
-  def update_password(user_changeset), do: Repo.update(user_changeset)
 
   def delete_user!(user), do: Repo.delete!(user)
 

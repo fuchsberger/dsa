@@ -13,10 +13,9 @@ defmodule DsaWeb.ChangePasswordComponent do
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Account Verwaltung
         </h2>
-
       </div>
 
-      <%= f = form_for @changeset, Routes.session_path(@socket, :create),
+      <%= f = form_for @changeset, "#",
         phx_change: :change,
         phx_submit: :submit,
         phx_target: @myself,
@@ -24,10 +23,12 @@ defmodule DsaWeb.ChangePasswordComponent do
       %>
 
         <%= label f, :password_old, "Altes Passwort", class: "block text-center text-gray-600 mb-2" %>
+
         <%= password_input f, :password_old,
           autocomplete: "current-password",
-          class: "appearance-none rounded-none relative block w-full px-3 py-2 border #{if true, do: "border-red-800", else: "border-gray-300" } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
-          placeholder: "Altes Passwort"
+          class: "w-full px-3 py-2 rounded-md sm:text-sm",
+          placeholder: "Altes Passwort",
+          value: input_value(f, :password_old)
         %>
         <%= error_tag f, :password_old %>
 
@@ -35,18 +36,20 @@ defmodule DsaWeb.ChangePasswordComponent do
 
         <div class="rounded-md shadow-sm -space-y-px">
           <%= password_input f, :password,
-            autocomplete: "current-password",
-            class: "appearance-none rounded-none relative block w-full px-3 py-2 border #{if false, do: "border-red-800", else: "border-gray-300" } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+            autocomplete: "new-password",
+            class: "w-full px-3 py-2 border rounded-t-md sm:text-sm",
             placeholder: "Neues Passwort",
             value: input_value(f, :password)
           %>
           <%= password_input f, :password_confirm,
-            autocomplete: "current-password",
-            class: "appearance-none rounded-none relative block w-full px-3 py-2 border #{if false, do: "border-red-800", else: "border-gray-300" } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+            autocomplete: "new-password",
+            class: "w-full px-3 py-2 rounded-b-md sm:text-sm",
             placeholder: "Neues Passwort wiederholen",
             value: input_value(f, :password_confirm)
           %>
         </div>
+        <%= error_tag f, :password %>
+        <%= error_tag f, :password_confirm %>
 
 
         <button type="submit" class="group relative w-full flex justify-center my-4 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -65,10 +68,8 @@ defmodule DsaWeb.ChangePasswordComponent do
   """
   end
 
-  # def preload(list_of_assigns), do: list_of_assigns
-
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, :submitted?, false)}
   end
 
   def update(%{user: user}, socket) do
@@ -76,14 +77,21 @@ defmodule DsaWeb.ChangePasswordComponent do
   end
 
   def handle_event("change", %{"user" => params}, socket) do
-    user = socket.assigns.changeset.data
-    changeset = Accounts.change_password(user, params)
-    Logger.warn(inspect(changeset.errors))
-
-    {:noreply, assign(socket, :changeset, Accounts.change_password(user, params))}
+    Logger.warn(inspect(params))
+    {:noreply, socket
+    |> assign(:changeset, Accounts.change_password(socket.assigns.changeset.data, params))
+    |> assign(:submitted?, false)}
   end
 
-  def handle_event("submit", _params, socket) do
-    {:noreply, assign(socket, :trigger_submit?, true)}
+  def handle_event("submit", %{"user" => params}, socket) do
+    case Accounts.update_password(socket.assigns.changeset.data, params) do
+      {:ok, user} ->
+        {:noreply, socket
+        |> assign(:changeset, Accounts.change_password(user))
+        |> assign(:submitted?, true)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
   end
 end

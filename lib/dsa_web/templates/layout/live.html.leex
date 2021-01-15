@@ -26,10 +26,10 @@
           <div class="flex space-x-4">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <%= live_patch "Held", to: Routes.dsa_path(@socket, :character),
-        class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
+        class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
 
             <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
-        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
+        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
           </div>
         </div>
       </div>
@@ -39,8 +39,8 @@
           <!-- Heroicon name: bell -->
           <%= icon :clipboard_list %>
         </button>
-        <a href='<%= Routes.session_path(@socket, :delete) %>' title='Logout' class='hidden <%= unless is_nil(@user_id), do: "lg:block" %> text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
-          <span class='ml-2 hidden <%= unless is_nil(@user_id), do: "lg:inline-block" %>'><%=  @username %></span>
+        <a href='<%= Routes.session_path(@socket, :delete) %>' title='Logout' class='hidden <%= unless is_nil(@user), do: "lg:block" %> text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
+          <span class='ml-2 hidden <%= unless is_nil(@user), do: "lg:inline-block" %>'><%= @user && @user.username %></span>
           <%= icon(:logout, class: "w-6 h-6 inline-block") %>
         </a>
       </div>
@@ -51,9 +51,9 @@
   <div class="<%= if @menu_open?, do: "block", else: "hidden" %> sm:hidden">
     <div class="px-2 pt-2 pb-3 space-y-1">
       <%= live_patch "Held", to: Routes.dsa_path(@socket, :character),
-        class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
+        class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
       <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
-        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
+        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
       <%= link "Ausloggen", to: Routes.session_path(@socket, :delete), class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>
     </div>
   </div>

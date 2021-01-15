@@ -37,21 +37,12 @@ defmodule DsaWeb.DsaLive do
 
   def mount(params, session, socket) do
 
-    {user_id, username, email, active_character_id} =
-      session
-      |> Map.get("user_id")
-      |> Accounts.get_user_base_data!()
-
-    DsaWeb.Endpoint.subscribe(topic())
-
     user_id = Map.get(session, "user_id")
     user = user_id && Accounts.get_user!(user_id)
 
+    DsaWeb.Endpoint.subscribe(topic())
+
     {:ok, socket
-    |> assign(:username, username)
-    |> assign(:email, email)
-    |> assign(:character_id, active_character_id)
-    |> assign(:user_id, user_id)
     |> assign(:show_log?, false)
     |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))
     |> assign(:user, user)}
@@ -76,15 +67,16 @@ defmodule DsaWeb.DsaLive do
   end
 
   def handle_params(_params, _uri, socket) do
-    authenticated? = not is_nil(socket.assigns.user)
+
+    %{live_action: action, user: user} = socket.assigns
 
     cond do
-      # if user is not authenticated and action is not login page, redirect to login page
-      socket.assigns.live_action != :login && not authenticated? ->
+      # if user is not authenticated and action is not a public page redirect to login page
+      is_nil(user) && not Enum.member?([:login], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
 
-      # if no active character and page is not dashboard redirect to dashboard
-      authenticated? && socket.assigns.live_action != :dashboard && is_nil(socket.assigns.character_id) ->
+      # if no active character and page requires one redirect to dashboard
+      not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :character], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
 
       # all went well, proceed
@@ -92,6 +84,7 @@ defmodule DsaWeb.DsaLive do
         # handle page title
         socket =
           case socket.assigns.live_action do
+            :change_password -> assign(socket, :page_title, "Account")
             :login -> assign(socket, :page_title, "Login")
             :character -> assign(socket, :page_title, "Held")
             :dashboard -> assign(socket, :page_title, "Übersicht")

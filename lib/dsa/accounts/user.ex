@@ -31,11 +31,11 @@ defmodule Dsa.Accounts.User do
     |> foreign_key_constraint(:group_id)
   end
 
-  def password_changeset(user, params) do
+  def password_changeset(user, params, validate?) do
     user
     |> cast(params, [:password_old, :password, :password_confirm])
     |> validate_required([:password_old, :password, :password_confirm])
-    |> validate_old_password()
+    |> validate_old_password(validate?)
     |> validate_password()
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
@@ -83,18 +83,24 @@ defmodule Dsa.Accounts.User do
       special: 1
   end
 
-  def validate_old_password(changeset) do
-    if Map.has_key?(changeset.changes, :password_old) do
-      case Pbkdf2.verify_pass(Map.get(changeset.changes, :password_old), changeset.data.password_hash) do
-        true ->
-          changeset
+  def validate_old_password(changeset, validate?) do
+    case validate? do
+      true ->
+        if Map.has_key?(changeset.changes, :password_old) do
+          case Pbkdf2.verify_pass(Map.get(changeset.changes, :password_old), changeset.data.password_hash) do
+            true ->
+              changeset
 
-        false ->
-          Pbkdf2.no_user_verify()
-          add_error(changeset, :password_old, "Current Password incorrect.")
-      end
-    else
-      changeset
+            false ->
+              Pbkdf2.no_user_verify()
+              add_error(changeset, :password_old, "Current Password incorrect.")
+          end
+        else
+          changeset
+        end
+
+      false ->
+        changeset
     end
   end
 end

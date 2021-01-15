@@ -2,7 +2,6 @@ defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
   import Dsa
-  import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
   alias Dsa.Data.{

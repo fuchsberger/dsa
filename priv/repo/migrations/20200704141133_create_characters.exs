@@ -1,27 +1,9 @@
-defmodule Dsa.Repo.Migrations.CreateAccounts do
+defmodule Dsa.Repo.Migrations.CreateCharacters do
   use Ecto.Migration
 
-  import Dsa.Lists
+  import Dsa
 
   def change do
-    create table(:users) do
-      add :email, :string
-      add :username, :string
-      add :password_hash, :string
-      add :admin, :boolean
-
-      timestamps()
-    end
-    create unique_index(:users, :email)
-    create unique_index(:users, :username)
-
-    create table(:groups) do
-      add :name, :string
-      add :master_id, references(:users, on_delete: :nilify_all)
-      timestamps()
-    end
-    create index(:groups, :master_id)
-
     create table(:characters) do
 
       # general
@@ -86,10 +68,8 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
 
     alter table(:users) do
       add :active_character_id, references(:characters, on_delete: :nilify_all)
-      add :group_id, references(:groups, on_delete: :nilify_all)
     end
 
     create index(:users, [:active_character_id])
-    create index(:users, [:group_id])
   end
 end
