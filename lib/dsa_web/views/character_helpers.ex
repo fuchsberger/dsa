@@ -4,6 +4,7 @@ defmodule DsaWeb.CharacterHelpers do
   """
   use Phoenix.HTML
 
+  import Dsa
   import Dsa.Lists
   import DsaWeb.DsaHelpers
 

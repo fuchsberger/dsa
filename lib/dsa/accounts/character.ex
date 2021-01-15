@@ -1,6 +1,7 @@
 defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
+  import Dsa
   import Dsa.Lists
   import DsaWeb.CharacterHelpers
 
@@ -31,9 +32,6 @@ defmodule Dsa.Accounts.Character do
 
   schema "characters" do
 
-    # base values
-    Enum.each(base_values(), & field(&1, :integer, default: 8))
-
     # general
     field :name, :string, default: "Held"
     # field :title, :string
@@ -44,6 +42,9 @@ defmodule Dsa.Accounts.Character do
     # field :age, :integer
     # field :culture, :string
     field :profession, :string
+
+    # base values
+    Enum.each(base_values(), & field(&1, :integer, default: 8))
 
     # # talents
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
@@ -122,20 +123,15 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
+
+
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :profession, :mu, :kl, :in, :ch, :ge, :ff, :ko, :kk])
-    |> validate_required([:name, :profession, :mu, :kl, :in, :ch, :ge, :ff, :ko, :kk])
+    |> cast(attrs, [:name, :profession] ++ base_values())
+    |> validate_required([:name, :profession] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
-    |> validate_number(:mu, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:kl, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:in, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:ch, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:ge, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:ff, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:ko, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-    |> validate_number(:kk, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    |> validate_base_values()
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
@@ -196,11 +192,11 @@ defmodule Dsa.Accounts.Character do
   #   |> validate_number(:species_id, greater_than: 0, less_than_or_equal_to: Species.count())
   # end
 
-  # defp validate_base_values(changeset) do
-  #   Enum.reduce(base_values(), changeset, fn field, changeset ->
-  #     validate_number(changeset, field, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
-  #   end)
-  # end
+  defp validate_base_values(changeset) do
+    Enum.reduce(base_values(), changeset, fn field, changeset ->
+      validate_number(changeset, field, greater_than_or_equal_to: 8, less_than_or_equal_to: 25)
+    end)
+  end
 
   # defp validate_combat_skills(changeset) do
   #   Enum.reduce(combat_fields(), changeset, fn field, changeset ->
