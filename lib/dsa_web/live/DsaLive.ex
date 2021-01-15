@@ -13,11 +13,15 @@ defmodule DsaWeb.DsaLive do
   def render(assigns) do
     ~L"""
     <%= case @live_action do %>
+      <% :change_password -> %>
+        <%= live_component @socket, DsaWeb.ChangePasswordComponent, id: :change_password, user: @user %>
+
       <% :login -> %>
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
 
       <% :dashboard -> %>
         <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard,
+          username: @username,
           character_id: @character_id,
           user_id: @user_id
         %>
@@ -40,14 +44,17 @@ defmodule DsaWeb.DsaLive do
 
     DsaWeb.Endpoint.subscribe(topic())
 
+    user_id = Map.get(session, "user_id")
+    user = user_id && Accounts.get_user!(user_id)
+
     {:ok, socket
     |> assign(:username, username)
     |> assign(:email, email)
     |> assign(:character_id, active_character_id)
     |> assign(:user_id, user_id)
-    |> assign(:gravatar_url, gravatar_url(email))
     |> assign(:show_log?, false)
-    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))}
+    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))
+    |> assign(:user, user)}
   end
 
   def handle_info({:log, entry}, socket) do
@@ -65,12 +72,11 @@ defmodule DsaWeb.DsaLive do
   end
 
   def handle_info(unknown, socket) do
-    Logger.warn(inspect(unknown))
     {:noreply, socket}
   end
 
   def handle_params(_params, _uri, socket) do
-    authenticated? = not is_nil(socket.assigns.user_id)
+    authenticated? = not is_nil(socket.assigns.user)
 
     cond do
       # if user is not authenticated and action is not login page, redirect to login page
@@ -124,11 +130,11 @@ defmodule DsaWeb.DsaLive do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
   end
 
-  defp gravatar_url(email, size \\ 24)
+  defp gravatar_url(user, size \\ 24)
 
   defp gravatar_url(nil, size), do: "https://s.gravatar.com/avatar/invalid?s=#{size}"
 
-  defp gravatar_url(email, size) do
-    "https://s.gravatar.com/avatar/#{Base.encode16(:erlang.md5(email), case: :lower)}?s=#{size}"
+  defp gravatar_url(user, size) do
+    "https://s.gravatar.com/avatar/#{Base.encode16(:erlang.md5(user.email), case: :lower)}?s=#{size}"
   end
 end

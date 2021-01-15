@@ -31,13 +31,12 @@ defmodule Dsa.Accounts.User do
     |> foreign_key_constraint(:group_id)
   end
 
-  @fields ~w(password_old password password_confirm)a
   def password_changeset(user, params) do
     user
-    |> cast(params, @fields)
-    |> validate_required(@fields)
-    |> validate_password(:password_old)
-    |> validate_length(:password, min: 6, max: 100)
+    |> cast(params, [:password_old, :password, :password_confirm])
+    |> validate_required([:password_old, :password, :password_confirm])
+    |> validate_old_password()
+    |> validate_password()
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
   end
@@ -69,15 +68,6 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  # @fields ~w(admin name username)a
-  # def changeset(user, attrs) do
-  #   user
-  #   |> cast(attrs, @fields)
-  #   |> validate_required(@fields)
-  #   |> validate_length(:name, min: 2, max: 10)
-  #   |> validate_length(:username, min: 2, max: 15)
-  # end
-
   defp validate_match(changeset, field1, field2) do
     case get_change(changeset, field1) == get_change(changeset, field2) do
       true -> changeset
@@ -85,15 +75,23 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  def validate_password(changeset, field) do
-    if Map.has_key?(changeset.changes, field) do
-      case Pbkdf2.verify_pass(Map.get(changeset.changes, field), changeset.data.password_hash) do
+  defp validate_password(changeset) do
+    PasswordValidator.validate changeset, :password,
+      length: [min: 8, max: 255],
+      lower_case: 1,
+      numbers: 1,
+      special: 1
+  end
+
+  def validate_old_password(changeset) do
+    if Map.has_key?(changeset.changes, :password_old) do
+      case Pbkdf2.verify_pass(Map.get(changeset.changes, :password_old), changeset.data.password_hash) do
         true ->
           changeset
 
         false ->
           Pbkdf2.no_user_verify()
-          add_error(changeset, field, "Current Password incorrect.")
+          add_error(changeset, :password_old, "Current Password incorrect.")
       end
     else
       changeset

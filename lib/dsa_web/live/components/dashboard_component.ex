@@ -5,14 +5,13 @@ defmodule DsaWeb.DashboardComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="absolute inset-0">
-      <!-- This example requires Tailwind CSS v2.0+ -->
-      <div class="m-3 flex flex-col">
+    <div class="absolute inset-0 lg:grid lg:grid-cols-5 lg:gap-4 p-2 lg:p-3">
+      <div class="lg:col-span-3 flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <div class="shadow-md overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-300">
                   <tr>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Held
@@ -54,23 +53,36 @@ defmodule DsaWeb.DashboardComponent do
           </div>
         </div>
       </div>
+      <div class="lg:col-span-2">
+        <div class="bg-white relative shadow-xl rounded-lg">
+          <h1 class="font-bold text-center bg-gray-300 rounded-t-lg leading-10 h-10 text-xl text-gray-900">Benutzerverwaltung</h1>
+          <div class="w-full">
+            <%= live_patch "Passwort ändern", to: Routes.dsa_path(@socket, :change_password),
+            class: "w-full font-medium text-gray-600 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150" %>
+
+            <a href="#" class="w-full border-t-2 border-gray-100 font-medium text-red-700 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150">Account löschen</a>
+          </div>
+        </div>
+      </div>
     </div>
     """
   end
 
-  def preload([%{character_id: character_id, user_id: user_id}]) do
+  def preload([%{character_id: character_id, user_id: user_id, username: username}]) do
     [%{
       active_id: character_id,
       characters: Accounts.get_user_characters(user_id),
-      user_id: user_id
+      user_id: user_id,
+      username: username
     }]
   end
 
-  def update(%{active_id: active_id, characters: characters, user_id: user_id}, socket) do
+  def update(params, socket) do
     {:ok, socket
-    |> assign(:active_id, active_id)
-    |> assign(:characters, characters)
-    |> assign(:user_id, user_id)}
+    |> assign(:active_id, Map.get(params, :active_id))
+    |> assign(:characters, Map.get(params, :characters))
+    |> assign(:user_id, Map.get(params, :user_id))
+    |> assign(:username, Map.get(params, :username))}
   end
 
   def handle_event("activate", %{"character" => id}, socket) do

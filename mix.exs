@@ -19,8 +19,9 @@ defmodule Dsa.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
+      # applications: [],
       mod: {Dsa.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo]
     ]
   end
 
@@ -44,6 +45,9 @@ defmodule Dsa.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
+      {:password_validator, "~> 0.4"},
+      {:bamboo, "~> 1.1.0", overwrite: true},
+      {:bamboo_sendinblue, "~> 0.2.0"},
       {:floki, ">= 0.0.0", only: :test}
     ]
   end

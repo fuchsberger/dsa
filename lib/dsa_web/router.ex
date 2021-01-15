@@ -26,35 +26,6 @@ defmodule DsaWeb.Router do
     live "/dashboard", DsaLive, :dashboard
     live "/roll", DsaLive, :roll
     live "/login", DsaLive, :login
+    live "/change_password", DsaLive, :change_password
   end
-
-  # scope "/", DsaWeb do
-  #   pipe_through [:browser, :authenticate_user]
-
-  #   get "/characters/new", PageController, :create_character
-
-  #   get "/change_password", UserController, :edit_password
-  #   put "/change_password", UserController, :change_password
-
-  #   live "/characters", ManageLive, :characters
-
-
-    # live "/character/:character_id/combat", CharacterLive, :combat
-    # live "/character/:character_id/gear", CharacterLive, :gear
-    # live "/character/:character_id/skills", CharacterLive, :skills
-    # live "/character/:character_id/magic", CharacterLive, :magic
-    # live "/character/:character_id/wonders", CharacterLive, :wonders
-    # live "/character/:character_id", CharacterLive, :index
-
-
-    # live "/group/:id/combat", GroupLive, :combat
-    # live "/group/:id/roll", GroupLive, :roll
-  # end
-
-  # scope "/", DsaWeb do
-  #   pipe_through [:browser, :authenticate_user, :admin]
-
-  #   live "/groups", ManageLive, :groups
-  #   live "/users", ManageLive, :users
-  # end
 end

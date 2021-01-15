@@ -18,7 +18,7 @@
 
         <%# Profilbild / Logo %>
         <%= live_patch class: "flex-shrink-0 flex items-center", to: Routes.dsa_path(@socket, :dashboard) do %>
-          <img class="h-8 w-auto rounded-full" src="<%= @gravatar_url %>" alt="Profil">
+          <img class="h-8 w-auto rounded-full" src="<%= gravatar_url(@user) %>" alt="Profil">
           <span class='ml-2 hidden lg:block w-auto font-sans font-bold text-2xl text-gray-200'>DSA Tool</span>
         <% end %>
 

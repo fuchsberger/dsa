@@ -18,6 +18,11 @@ config :dsa, DsaWeb.Endpoint,
   pubsub_server: Dsa.PubSub,
   live_view: [signing_salt: "eV1hYRod"]
 
+# Configures sending emails
+config :dsa, Dsa.Mailer,
+  adapter: Bamboo.SendinBlueAdapter,
+  api_key: System.get_env("SENDINBLUE_APIKEY")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

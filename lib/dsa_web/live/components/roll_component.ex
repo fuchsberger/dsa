@@ -91,9 +91,9 @@ defmodule DsaWeb.RollComponent do
 
           <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='talent-roll' phx-target='<%= @myself %>'>Würfel!</button>
         </div>
-
-
       </form>
+
+      <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='email' phx-target='<%= @myself %>'>Email</button>
     </div>
     """
   end
@@ -208,6 +208,12 @@ defmodule DsaWeb.RollComponent do
         Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
         {:noreply, socket}
     end
+  end
+
+  def handle_event("email", _params, socket) do
+    Dsa.Email.welcome_email()   # Create your email
+    |> Dsa.Mailer.deliver_now() # Send your email
+    {:noreply, socket}
   end
 
   def handle_event("talent-roll", _params, socket) do
