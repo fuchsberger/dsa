@@ -27,6 +27,9 @@ defmodule DsaWeb.DsaLive do
 
       <% :roll -> %>
         <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @character_id %>
+
+      <% :error404 -> %>
+        <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
     <% end %>
     """
   end
@@ -66,7 +69,7 @@ defmodule DsaWeb.DsaLive do
 
     cond do
       # if user is not authenticated and action is not a public page redirect to login page
-      is_nil(user) && not Enum.member?([:login], action) ->
+      is_nil(user) && not Enum.member?([:login, :error404], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
 
       not is_nil(user) && action == :index ->
