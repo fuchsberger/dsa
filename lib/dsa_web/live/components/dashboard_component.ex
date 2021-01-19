@@ -25,7 +25,7 @@ defmodule DsaWeb.DashboardComponent do
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <%= for character <- @characters do %>
+                  <%= for character <- @user.characters do %>
                     <tr>
                       <td class="px-3 py-2 whitespace-nowrap">
                         <div class="ml-4">
@@ -41,8 +41,8 @@ defmodule DsaWeb.DashboardComponent do
                         1200
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
-                        <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @active_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
-                          <%= if character.id == @active_id, do: "A", else: "Ina" %>ktiv
+                        <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @user.active_character_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
+                          <%= if character.id == @user.active_character_id, do: "A", else: "Ina" %>ktiv
                         </button>
                       </td>
                     </tr>
@@ -68,31 +68,12 @@ defmodule DsaWeb.DashboardComponent do
     """
   end
 
-  def preload([%{character_id: character_id, user_id: user_id, username: username}]) do
-    [%{
-      active_id: character_id,
-      characters: Accounts.get_user_characters(user_id),
-      user_id: user_id,
-      username: username
-    }]
-  end
-
-  def update(params, socket) do
-    {:ok, socket
-    |> assign(:active_id, Map.get(params, :active_id))
-    |> assign(:characters, Map.get(params, :characters))
-    |> assign(:user_id, Map.get(params, :user_id))
-    |> assign(:username, Map.get(params, :username))}
-  end
-
   def handle_event("activate", %{"character" => id}, socket) do
+    id = if String.to_integer(id) == socket.assigns.user.active_character_id, do: nil, else: id
 
-    id = if String.to_integer(id) == socket.assigns.active_id, do: nil, else: id
-    user = Accounts.get_user!(socket.assigns.user_id)
-
-    case Accounts.update_user(user, %{active_character_id: id}) do
-      {:ok, %Accounts.User{active_character_id: id}} ->
-        send self(), {:update, %{character_id: id}}
+    case Accounts.update_user(socket.assigns.user, %{active_character_id: id}) do
+      {:ok, user} ->
+        send self(), {:update_user, Accounts.preload_user(user)}
         {:noreply, socket}
 
       {:error, changeset} ->

@@ -20,11 +20,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
 
       <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard,
-          username: @username,
-          character_id: @character_id,
-          user_id: @user_id
-        %>
+        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
 
       <% :character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, character_id: @character_id %>
@@ -58,9 +54,7 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket}
   end
 
-  def handle_info({:update, %{character_id: id}}, socket) do
-    {:noreply, assign(socket, :character_id, id)}
-  end
+  def handle_info({:update_user, user}, socket), do: {:noreply, assign(socket, :user, user)}
 
   def handle_info(unknown, socket) do
     {:noreply, socket}
@@ -75,9 +69,14 @@ defmodule DsaWeb.DsaLive do
       is_nil(user) && not Enum.member?([:login], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
 
+      not is_nil(user) && action == :index ->
+        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
+
       # if no active character and page requires one redirect to dashboard
       not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :character], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
+
+
 
       # all went well, proceed
       true ->
