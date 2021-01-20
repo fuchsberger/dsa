@@ -64,11 +64,7 @@ defmodule DsaWeb.LoginComponent do
             </label>
           </div>
 
-          <div class="text-sm">
-            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-              Passwort vergessen?
-            </a>
-          </div>
+          <%= live_patch "Passwort vergessen?", to: Routes.dsa_path(@socket, :reset_password), class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
         </div>
 
         <div>

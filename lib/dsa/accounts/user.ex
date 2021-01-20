@@ -58,6 +58,13 @@ defmodule Dsa.Accounts.User do
     |> unique_constraint(:username)
   end
 
+  def reset_password_changeset(user, params) do
+    user
+    |> cast(params, [:email])
+    |> validate_required([:email])
+    |> validate_email(:email)
+  end
+
   defp put_pass_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->

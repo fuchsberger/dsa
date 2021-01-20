@@ -27,6 +27,7 @@ defmodule DsaWeb.Router do
     live "/roll", DsaLive, :roll
     live "/login", DsaLive, :login
     live "/change_password", DsaLive, :change_password
+    live "/reset_password", DsaLive, :reset_password
 
     live ":path", DsaLive, :error404
   end

@@ -127,6 +127,8 @@ defmodule Dsa.Accounts do
     User.password_changeset(user, params, false)
   end
 
+  def change_email(params \\ %{}), do: User.reset_password_changeset(%User{}, params)
+
   def update_password(%User{} = user, params) do
     user
     |> User.password_changeset(params, true)
