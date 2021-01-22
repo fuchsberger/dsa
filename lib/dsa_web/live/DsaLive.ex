@@ -17,7 +17,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.ChangePasswordComponent, id: :change_password, user: @user %>
 
       <% :login -> %>
-        <%= live_component @socket, DsaWeb.LoginComponent, id: :login, error: @invalid_login? %>
+        <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
 
       <% :dashboard -> %>
         <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
@@ -33,6 +33,9 @@ defmodule DsaWeb.DsaLive do
 
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
+
+      <% _ -> %>
+        <%= live_component @socket, DsaWeb.AccountComponent, id: :account, action: @live_action %>
     <% end %>
     """
   end
@@ -42,11 +45,14 @@ defmodule DsaWeb.DsaLive do
     user_id = Map.get(session, "user_id")
     user = user_id && Accounts.get_user!(user_id)
 
+    # Add error message from param if it exists
+    error = Map.get(params, "error")
+    socket = if is_nil(error), do: socket, else: put_flash(socket, :error, error)
+
     DsaWeb.Endpoint.subscribe(topic())
 
     {:ok, socket
     |> assign(:show_log?, false)
-    |> assign(:invalid_login?, Map.has_key?(params, "invalid_login"))
     |> assign(:user, user)}
   end
 
@@ -72,7 +78,7 @@ defmodule DsaWeb.DsaLive do
 
     cond do
       # if user is not authenticated and action is not a public page redirect to login page
-      is_nil(user) && not Enum.member?([:login, :error404, :reset_password], action) ->
+      is_nil(user) && not Enum.member?([:login, :error404, :register, :reset_password], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
 
       not is_nil(user) && action == :index ->
@@ -82,17 +88,17 @@ defmodule DsaWeb.DsaLive do
       not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :character], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
 
-
-
       # all went well, proceed
       true ->
         # handle page title
         socket =
           case socket.assigns.live_action do
             :change_password -> assign(socket, :page_title, "Account")
+
             :login -> assign(socket, :page_title, "Login")
             :character -> assign(socket, :page_title, "Held")
             :dashboard -> assign(socket, :page_title, "Übersicht")
+            :register -> assign(socket, :page_title, "Registrierung")
             :roll -> assign(socket, :page_title, "Probe")
             _ -> assign(socket, :page_title, "404 Error")
           end

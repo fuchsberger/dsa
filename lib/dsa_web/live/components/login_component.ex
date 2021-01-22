@@ -13,9 +13,8 @@ defmodule DsaWeb.LoginComponent do
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           Noch nicht
-          <a href="#" disabled='disabled' class="font-medium text-indigo-600 hover:text-indigo-500">
-            registriert
-          </a>?
+          <%= live_patch "registriert", to: Routes.dsa_path(@socket, :register), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+          ?
         </p>
       </div>
 
@@ -28,13 +27,6 @@ defmodule DsaWeb.LoginComponent do
         phx_trigger_action: @trigger_submit_login?
       %>
         <input type="hidden" name="remember" value="true">
-
-        <div class="<%= unless @error, do: "hidden" %> group relative w-full flex justify-center py-2 px-4 bg-red-200 text-red-800 rounded-md">
-          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-            <%= icon :exclamation_circle, class: "w-5 h-5" %>
-          </span>
-          Ungültige Logindaten
-        </div>
 
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
@@ -86,6 +78,7 @@ defmodule DsaWeb.LoginComponent do
 
   def mount(socket) do
     {:ok, socket
+    |> assign(:error, false)
     |> assign(:session_changeset, Dsa.Accounts.change_session())
     |> assign(:trigger_submit_login?, false)}
   end

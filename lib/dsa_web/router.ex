@@ -24,6 +24,7 @@ defmodule DsaWeb.Router do
     live "/", DsaLive, :index
     live "/character", DsaLive, :character
     live "/dashboard", DsaLive, :dashboard
+    live "/register", DsaLive, :register
     live "/roll", DsaLive, :roll
     live "/login", DsaLive, :login
     live "/change_password", DsaLive, :change_password

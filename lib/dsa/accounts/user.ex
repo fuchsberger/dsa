@@ -12,6 +12,9 @@ defmodule Dsa.Accounts.User do
     field :password_confirm, :string, virtual: true
     field :password_hash, :string
     field :admin, :boolean, default: false
+    field :confirmed, :boolean, default: false
+    field :reset, :boolean, default: false
+    field :token, :string
 
     belongs_to :group, Dsa.Accounts.Group
     belongs_to :active_character, Dsa.Accounts.Character
@@ -22,11 +25,10 @@ defmodule Dsa.Accounts.User do
 
   def changeset(user, params) do
     user
-    |> cast(params, [:admin, :password, :email, :username, :active_character_id, :group_id])
+    |> cast(params, [:admin, :email, :username, :active_character_id, :group_id])
     |> validate_email(:email)
     |> validate_length(:username, min: 2, max: 15)
-    |> validate_length(:password, min: 6, max: 100)
-    |> put_pass_hash()
+    |> unique_constraint(:email)
     |> foreign_key_constraint(:active_character_id)
     |> foreign_key_constraint(:group_id)
   end
@@ -50,12 +52,11 @@ defmodule Dsa.Accounts.User do
   def registration_changeset(user, params) do
     user
     |> changeset(params)
-    |> cast(params, [:password])
-    |> validate_required([:password])
-    |> validate_length(:password, min: 6, max: 100)
+    |> cast(params, [:password, :password_confirm])
+    |> validate_password()
+    |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
-    |> unique_constraint(:email)
-    |> unique_constraint(:username)
+    |> put_token()
   end
 
   def reset_password_changeset(user, params) do
@@ -75,6 +76,15 @@ defmodule Dsa.Accounts.User do
     end
   end
 
+  def put_token(changeset) do
+    token =
+      :crypto.strong_rand_bytes(64)
+      |> Base.url_encode64
+      |> binary_part(0, 64)
+
+    put_change(changeset, :token, token)
+  end
+
   defp validate_match(changeset, field1, field2) do
     case get_change(changeset, field1) == get_change(changeset, field2) do
       true -> changeset
@@ -83,11 +93,10 @@ defmodule Dsa.Accounts.User do
   end
 
   defp validate_password(changeset) do
-    PasswordValidator.validate changeset, :password,
-      length: [min: 8, max: 255],
-      lower_case: 1,
-      numbers: 1,
-      special: 1
+    changeset
+    |> validate_required([:password])
+    |> validate_length(:password, min: 8, max: 255)
+    |> PasswordValidator.validate(:password, lower_case: 1, numbers: 1, special: 1)
   end
 
   def validate_old_password(changeset, validate?) do

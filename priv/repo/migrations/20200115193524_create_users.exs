@@ -7,10 +7,12 @@ defmodule Dsa.Repo.Migrations.CreateUsers do
       add :username, :string
       add :password_hash, :string
       add :admin, :boolean
+      add :confirmed, :boolean
+      add :reset, :boolean
+      add :token, :string, size: 64
       timestamps()
     end
 
     create unique_index(:users, :email)
-    create unique_index(:users, :username)
   end
 end

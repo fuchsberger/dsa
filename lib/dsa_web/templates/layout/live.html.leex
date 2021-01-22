@@ -59,12 +59,20 @@
   </div>
 </nav>
 
-<div class='fixed top-16 inset-x-0 bottom-0'>
-  <div class='container mx-auto max-w-screen-xl flex h-full'>
-    <%# On left side show variable page content %>
-    <div class='relative <%= if @log_open?, do: "hidden", else: "block" %> lg:block flex-none w-full lg:max-w-screen-md'><%= @inner_content %></div>
+<div class='main-wrapper container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl'>
+  <%# In left column show variable page content %>
+  <div class='px-2 py-3 lg:px-3 lg:py-4 <%= if @log_open?, do: "hidden", else: "block" %> lg:block'>
+    <div class="<%= if is_nil(live_flash(@flash, :error)), do: "hidden" %> group relative w-full flex justify-center py-2 px-4 bg-red-200 text-red-800 rounded-md">
+      <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+        <%= icon :exclamation_circle, class: "w-5 h-5" %>
+      </span>
+      <%= live_flash(@flash, :error) %>
+    </div>
 
-    <%# On right side always show log / group stuff %>
-    <div class='<%= if @log_open?, do: "block", else: "hidden" %> lg:block flex-auto px-2 lg:px-3'><%= live_component @socket, DsaWeb.LogComponent, id: :log %></div>
+    <%= @inner_content %>
+  </div>
+  <%# In right column always show log / group stuff %>
+  <div class='px-2 py-3 lg:px-3 lg:py-4 <%= if @log_open?, do: "block", else: "hidden" %> lg:block max-h-full overflow-y-scroll'>
+    <%= live_component @socket, DsaWeb.LogComponent, id: :log %>
   </div>
 </div>

@@ -9,9 +9,7 @@ defmodule DsaWeb.SessionController do
         |> redirect(to: Routes.dsa_path(conn, :dashboard))
 
       {:error, _reason} ->
-        conn
-        |> put_flash(:error, "Invalid email/password combination")
-        |> redirect(to: Routes.dsa_path(conn, :login, invalid_login: true))
+        redirect(conn, to: Routes.dsa_path(conn, :login, error: "Ungültige Logindaten."))
     end
   end
 

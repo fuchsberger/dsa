@@ -4,3 +4,29 @@
 
 // hide live-refresh iframe (dev only)
 iframe { display: none; }
+
+@layer base {
+  a { @apply font-medium text-indigo-600; }
+  a:hover { @apply text-indigo-400; }
+}
+
+@layer components {
+  .main-wrapper {
+    @apply relative mt-16 overflow-hidden;
+    height: calc(100vh - 4rem);
+  }
+
+  button.large {
+    @apply h-10 leading-10 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600;
+  }
+
+  button.large:hover {
+    @apply bg-indigo-700;
+  }
+
+  button.large:focus {
+    @apply outline-none ring-2 ring-offset-2 ring-indigo-500;
+  }
+
+  h2.main { @apply mt-6 text-center text-3xl font-extrabold text-gray-900; }
+}
