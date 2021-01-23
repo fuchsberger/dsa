@@ -9,11 +9,5 @@ defmodule Dsa.Repo.Migrations.CreateGroups do
     end
 
     create index(:groups, :master_id)
-
-    alter table(:users) do
-      add :group_id, references(:groups, on_delete: :nilify_all)
-    end
-
-    create index(:users, [:group_id])
   end
 end

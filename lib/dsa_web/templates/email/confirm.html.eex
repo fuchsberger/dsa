@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<title>Bestätigungsemail</title>
+		<style>
+			p{margin: 18px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; }
+			a{font-size: 18px; background-color: #4338CA; color:white; padding: 10px; border-radius: 8px; text-decoration: none; text-transform: none;}
+			a:hover{background-color:#6366F1;}
+		</style>
+	</head>
+	<body>
+		<p>Die Zwölfe zum Gruß!</p>
+		<p><%= @user.username %>, sei herzlich willkommen im DSA Tool!</p>
+		<p>Um Dich einloggen zu können, musst Du noch Deinem Account bestätigen:</p>
+		<p><a href="<%= @url %>/confirm/<%= @user.token %>" target="_blank">Aktivieren</a></p>
+		<p>Möge Phex deinem Würfelglück gesonnen sein!</p>
+		<p>Cheers,<br/>Alex</p>
+	</body>
+</html>

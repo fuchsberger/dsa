@@ -2,13 +2,13 @@ defmodule Dsa.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Dsa.Repo, only: [validate_email: 2]
 
   schema "users" do
     field :email, :string
     field :username, :string
     field :password_old, :string, virtual: true
     field :password, :string, virtual: true
+    field :new_password, :string, virtual: true
     field :password_confirm, :string, virtual: true
     field :password_hash, :string
     field :admin, :boolean, default: false
@@ -16,7 +16,6 @@ defmodule Dsa.Accounts.User do
     field :reset, :boolean, default: false
     field :token, :string
 
-    belongs_to :group, Dsa.Accounts.Group
     belongs_to :active_character, Dsa.Accounts.Character
     has_many :characters, Dsa.Accounts.Character
 
@@ -25,12 +24,12 @@ defmodule Dsa.Accounts.User do
 
   def changeset(user, params) do
     user
-    |> cast(params, [:admin, :email, :username, :active_character_id, :group_id])
+    |> cast(params, [:email, :username, :confirmed, :token, :active_character_id])
     |> validate_email(:email)
     |> validate_length(:username, min: 2, max: 15)
+    |> validate_length(:token, size: 64)
     |> unique_constraint(:email)
     |> foreign_key_constraint(:active_character_id)
-    |> foreign_key_constraint(:group_id)
   end
 
   def password_changeset(user, params, validate?) do
@@ -52,9 +51,10 @@ defmodule Dsa.Accounts.User do
   def registration_changeset(user, params) do
     user
     |> changeset(params)
-    |> cast(params, [:password, :password_confirm])
-    |> validate_password()
-    |> validate_match(:password, :password_confirm)
+    |> cast(params, [:new_password, :password_confirm])
+    |> validate_required([:email, :username, :new_password, :password_confirm])
+    |> validate_password(:new_password)
+    |> validate_match(:new_password, :password_confirm)
     |> put_pass_hash()
     |> put_token()
   end
@@ -77,12 +77,18 @@ defmodule Dsa.Accounts.User do
   end
 
   def put_token(changeset) do
-    token =
-      :crypto.strong_rand_bytes(64)
-      |> Base.url_encode64
-      |> binary_part(0, 64)
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        token =
+          :crypto.strong_rand_bytes(64)
+          |> Base.url_encode64
+          |> binary_part(0, 64)
 
-    put_change(changeset, :token, token)
+        put_change(changeset, :token, token)
+
+      _ ->
+        changeset
+    end
   end
 
   defp validate_match(changeset, field1, field2) do
@@ -92,11 +98,17 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  defp validate_password(changeset) do
+  defp validate_email(changeset, field \\ :password) do
+    regex = ~r/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
+    validate_format(changeset, field, regex, message: "Keine gültige Email Adresse.")
+  end
+
+  defp validate_password(changeset, field \\ :password) do
+    regex = ~r/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s-]{8,}$/
+
     changeset
-    |> validate_required([:password])
-    |> validate_length(:password, min: 8, max: 255)
-    |> PasswordValidator.validate(:password, lower_case: 1, numbers: 1, special: 1)
+    |> validate_length(field, max: 255)
+    |> validate_format(field, regex, message: "Dein Passwort muss mindestens 8 Zeichen lang sein und muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Ziffer enthalten.")
   end
 
   def validate_old_password(changeset, validate?) do

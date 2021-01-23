@@ -18,18 +18,23 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    post "/login", SessionController, :create
+    # Private Routes
     get "/logout", SessionController, :delete
-
-    live "/", DsaLive, :index
-    live "/character", DsaLive, :character
-    live "/dashboard", DsaLive, :dashboard
-    live "/register", DsaLive, :register
-    live "/roll", DsaLive, :roll
-    live "/login", DsaLive, :login
     live "/change_password", DsaLive, :change_password
     live "/reset_password", DsaLive, :reset_password
 
-    live ":path", DsaLive, :error404
+    live "/character", DsaLive, :character
+    live "/dashboard", DsaLive, :dashboard
+    live "/roll", DsaLive, :roll
+
+    # Public Routes
+    live "/", DsaLive, :index
+    live "/login", DsaLive, :login
+    post "/login", SessionController, :create
+    live "/confirm", DsaLive, :confirm
+    live "/confirm/:token", DsaLive, :confirm
+    live "/register", DsaLive, :register
+
+    live "/:path", DsaLive, :error404
   end
 end

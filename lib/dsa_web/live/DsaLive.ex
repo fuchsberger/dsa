@@ -41,7 +41,6 @@ defmodule DsaWeb.DsaLive do
   end
 
   def mount(params, session, socket) do
-
     user_id = Map.get(session, "user_id")
     user = user_id && Accounts.get_user!(user_id)
 
@@ -72,29 +71,58 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket}
   end
 
-  def handle_params(_params, _uri, socket) do
+  def handle_params(params, _uri, socket) do
 
     %{live_action: action, user: user} = socket.assigns
+    token = Map.get(params, "token")
 
     cond do
-      # if user is not authenticated and action is not a public page redirect to login page
-      is_nil(user) && not Enum.member?([:login, :error404, :register, :reset_password], action) ->
-        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :login), replace: true)}
+      # index is a simple redirect to dashboard or login
+      action == :index ->
+        target = if is_nil(user), do: :login, else: :dashboard
+        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, target), replace: true)}
 
-      not is_nil(user) && action == :index ->
-        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
+      # attempt to confirm users
+      action == :confirm && not is_nil(token) ->
+        # if user exists and is not yet confirmed, confirm her and redirect to login.
+        case Accounts.get_user_by(confirmed: false, token: token) do
+          nil ->
+            {:noreply, socket
+            |> put_flash(:error, "Benutzer existiert nicht oder wurde bereits aktiviert.")
+            |> push_patch(to: Routes.dsa_path(socket, :login))}
 
-      # if no active character and page requires one redirect to dashboard
+          user ->
+            case Accounts.update_user(user, %{confirmed: true, token: nil}) do
+              {:noreply, user} ->
+                {:ok, socket
+                |> put_flash(:info, "Aktivierung abgeschlossen. Du kannst dich jetzt einloggen.")
+                |> push_patch(to: Routes.dsa_path(socket, :login))}
+
+              {:error, changeset} ->
+                Logger.warn(inspect(changeset.errors))
+                {:noreply, socket
+                |> put_flash(:error, "Ein unerwarteter Fehler ist aufgetreten.")
+                |> push_patch(to: Routes.dsa_path(socket, :login))}
+            end
+        end
+
+      # Do not allow unauthenticated users to access restricted pages
+      is_nil(user) && Enum.member?([:dashboard, :character, :roll, :reset_password], action) ->
+        {:noreply, socket
+        |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
+        |> push_patch(to: Routes.dsa_path(socket, :login))}
+
+      # redirect to dashboard if user does not has an active character and page requires it
       not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :character], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
 
-      # all went well, proceed
+      # all went normal, proceed
       true ->
         # handle page title
         socket =
           case socket.assigns.live_action do
             :change_password -> assign(socket, :page_title, "Account")
-
+            :confirm -> assign(socket, :page_title, "Registrierung")
             :login -> assign(socket, :page_title, "Login")
             :character -> assign(socket, :page_title, "Held")
             :dashboard -> assign(socket, :page_title, "Übersicht")

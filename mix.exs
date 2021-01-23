@@ -36,7 +36,7 @@ defmodule Dsa.MixProject do
     [
       {:phoenix, "~> 1.5.7"},
       {:phoenix_ecto, "~> 4.2.1"},
-      {:ecto_sql, "~> 3.5.3"},
+      {:ecto_sql, "~> 3.5.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.14.3"},
       {:phoenix_live_view, "~> 0.15.3"},
@@ -45,7 +45,6 @@ defmodule Dsa.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
-      {:password_validator, "~> 0.4"},
       {:bamboo, "~> 1.1.0", overwrite: true},
       {:bamboo_sendinblue, "~> 0.2.0"},
       {:floki, ">= 0.0.0", only: :test}

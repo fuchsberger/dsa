@@ -14,37 +14,35 @@ defmodule DsaWeb.FormHelpers do
   # Add HTML5 validations to fields
 
   def email_input(form, field, opts \\ []) do
-    Form.email_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
+    Form.email_input(form, field, expand(form, field, opts))
   end
 
   def number_input(form, field, opts \\ []) do
-    Form.number_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
+    Form.number_input(form, field, expand(form, field, opts))
   end
 
-  defp border_class(form, field) do
-    case is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
-      true -> "border-gray-300"
-      false -> "border-red-700"
-    end
-  end
-
-  def password_input(form, field, opts \\ []) do
-    opts =
-      opts
-      |> Keyword.merge(Form.input_validations(form, field))
-      |> Keyword.merge([
-        class: "#{@base_classes} #{border_class(form, field)} #{@focus_classes} #{Keyword.get(opts, :class)}"
-        ])
-
-    Form.password_input(form, field, opts)
+  def password_input(form, field, opts) do
+    Form.password_input(form, field, expand(form, field, opts))
   end
 
   def text_input(form, field, opts \\ []) do
-    Form.text_input(form, field, Keyword.merge(Form.input_validations(form, field), opts))
+    Form.text_input(form, field, expand(form, field, opts))
   end
 
   def select(form, field, options, opts \\ []) do
-    Form.select(form, field, options, Keyword.merge(Form.input_validations(form, field), opts))
+    Form.select(form, field, options, expand(form, field, opts))
+  end
+
+  defp expand(form, field, opts) do
+    error_class =
+      case is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
+        true -> ""
+        false -> " error"
+      end
+
+    opts
+    |> Keyword.merge(Form.input_validations(form, field))
+    |> Keyword.merge([class: "#{Keyword.get(opts, :class)}#{error_class}"])
   end
 
   @doc """
@@ -52,14 +50,14 @@ defmodule DsaWeb.FormHelpers do
   It'll call a simple mock method to interpolate, as translations should be
   handled in the Phoenix app implementing Pow.
   """
-  def error_tag(form, field) do
+  def error_tag(form, field, opt_classes \\ "") do
     form.errors
     |> Keyword.get_values(field)
-    |> Enum.map(&error_tag/1)
+    |> Enum.map(& error_div(&1, opt_classes))
   end
 
-  def error_tag(error) do
-    content_tag(:span, translate_error(error), class: "block text-sm text-red-700 text-bold text-center")
+  def error_div(error, opt_classes) do
+    content_tag(:div, translate_error(error), class: "text-sm text-red-700 text-bold #{opt_classes}")
   end
 
   defp translate_error({msg, opts}) do
