@@ -35,7 +35,7 @@ defmodule DsaWeb.FormHelpers do
 
   defp expand(form, field, opts) do
     error_class =
-      case is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
+      case is_nil(form.source) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
         true -> ""
         false -> " error"
       end

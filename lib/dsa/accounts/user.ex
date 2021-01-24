@@ -3,6 +3,8 @@ defmodule Dsa.Accounts.User do
 
   import Ecto.Changeset
 
+  require Logger
+
   schema "users" do
     field :email, :string
     field :username, :string
@@ -68,7 +70,7 @@ defmodule Dsa.Accounts.User do
 
   defp put_pass_hash(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+      %Ecto.Changeset{valid?: true, changes: %{new_password: pass}} ->
         put_change(changeset, :password_hash, Pbkdf2.hash_pwd_salt(pass))
 
       _ ->

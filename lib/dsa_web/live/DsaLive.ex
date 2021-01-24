@@ -35,7 +35,10 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
 
       <% _ -> %>
-        <%= live_component @socket, DsaWeb.AccountComponent, id: :account, action: @live_action %>
+        <%= live_component @socket, DsaWeb.AccountComponent, id: :account,
+          action: @live_action,
+          email: @email
+        %>
     <% end %>
     """
   end
@@ -51,6 +54,7 @@ defmodule DsaWeb.DsaLive do
     DsaWeb.Endpoint.subscribe(topic())
 
     {:ok, socket
+    |> assign(:email, Map.get(params, "email"))
     |> assign(:show_log?, false)
     |> assign(:user, user)}
   end
@@ -93,8 +97,8 @@ defmodule DsaWeb.DsaLive do
 
           user ->
             case Accounts.update_user(user, %{confirmed: true, token: nil}) do
-              {:noreply, user} ->
-                {:ok, socket
+              {:ok, user} ->
+                {:noreply, socket
                 |> put_flash(:info, "Aktivierung abgeschlossen. Du kannst dich jetzt einloggen.")
                 |> push_patch(to: Routes.dsa_path(socket, :login))}
 

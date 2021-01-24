@@ -144,13 +144,15 @@ defmodule DsaWeb.AccountComponent do
       end
 
     {:ok, socket
-    |> assign(:action, assigns.action)}
+    |> assign(:action, assigns.action)
+    |> assign(:email, assigns.email)}
   end
 
   def handle_event("change", %{"user" => params}, socket) do
     changeset =
       case socket.assigns.action do
         :register -> Accounts.change_registration(%Accounts.User{}, params)
+        _ -> nil
       end
 
     {:noreply, socket
@@ -160,12 +162,15 @@ defmodule DsaWeb.AccountComponent do
   def handle_event("submit", %{"user" => params}, socket) do
     case socket.assigns.action do
       :confirm ->
+        email = Map.get(params, "email")
+        email = if email == "", do: socket.assigns.email, else: email
+
         # Send confirmation email again.
-        Accounts.get_user_by(email: Map.get(params, "email"))
+        Accounts.get_user_by(email: email)
         |> Email.confirmation_email()
         |> Mailer.deliver_now()
 
-        {:norely, socket}
+        {:noreply, socket}
 
       :register ->
         # first see if user already exists

@@ -8,6 +8,9 @@ defmodule DsaWeb.SessionController do
         |> DsaWeb.Auth.login(user)
         |> redirect(to: Routes.dsa_path(conn, :dashboard))
 
+      {:error, :unconfirmed, email} ->
+        redirect(conn, to: Routes.dsa_path(conn, :confirm, email: email))
+
       {:error, _reason} ->
         redirect(conn, to: Routes.dsa_path(conn, :login, error: "Ungültige Logindaten."))
     end
