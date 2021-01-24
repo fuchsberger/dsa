@@ -13,7 +13,7 @@ defmodule Dsa.Accounts.Group do
   def changeset(group, attrs) do
     group
     |> cast(attrs, @fields)
-    |> validate_required(@fields)
+    # |> validate_required(@fields) #TODO: fix!
     |> validate_length(:name, max: 10)
     |> foreign_key_constraint(:master_id)
   end

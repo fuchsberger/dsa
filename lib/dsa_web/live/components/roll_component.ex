@@ -9,92 +9,94 @@ defmodule DsaWeb.RollComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="absolute inset-0 px-2 py-3">
-      <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_target: @myself, phx_submit: "roll" %>
-        <div class='lg:grid lg:grid-cols-12 border-solid border-gray-300 border-b pb-3 gap-3'>
-          <h4 class='lg:col-span-4 leading-8 text-center lg:text-left font-bold text-gray-700'>Schnellwurf / Schaden</h4>
 
-          <div class="lg:col-span-6 flex justify-evenly">
-            <%= quickroll_button %{target: @myself, max: 20, count: 1} %>
-            <%= quickroll_button %{target: @myself, max: 6, count: 1} %>
-            <%= quickroll_button %{target: @myself, max: 6, count: 2} %>
-            <%= quickroll_button %{target: @myself, max: 6, count: 3} %>
-            <%= quickroll_button %{target: @myself, max: 20, count: 3} %>
-          </div>
+    <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_target: @myself, phx_submit: "roll" %>
+      <div class='grid grid-cols-3 md:grid-cols-9 border-solid border-gray-300 border-b pb-3 gap-2'>
+        <h4 class='col-span-2 leading-8 text-center lg:text-left font-bold text-gray-700'>Schnellwurf</h4>
 
-          <div class="lg:col-span-2 mt-3 lg:mt-0 flex justify-center">
-            <%= label f, :bonus, "Bonus", class: " leading-8 mr-3" %>
-            <%= number_input f, :bonus, placeholder: 0, class: "w-16 h-8 block py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-          </div>
+        <%= quickroll_button %{target: @myself, max: 20, count: 1} %>
+        <%= quickroll_button %{target: @myself, max: 6, count: 1} %>
+        <%= quickroll_button %{target: @myself, max: 6, count: 2} %>
+        <%= quickroll_button %{target: @myself, max: 6, count: 3} %>
+        <%= quickroll_button %{target: @myself, max: 20, count: 3} %>
+
+        <div class="col-span-2 flex justify-end">
+          <%= label f, :bonus, "+", class: "leading-8 mr-2" %>
+          <%= number_input f, :bonus, placeholder: 0, class: "w-16 h-8 block py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+        </div>
+      </div>
+
+      <div class='grid grid-cols-1 md:grid-cols-3 py-3 gap-3'>
+        <div class='flex justify-between'>
+          <h4 class='leading-8 text-center lg:text-left font-bold text-gray-700'>Modifikator</h4>
+          <label class='bg-white h-8 leading-8 px-2 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+            <%= radio_button(f, :modifier, 0,
+              checked: input_value(f, :modifier) == 0,
+              class: "hidden"
+              )
+            %> reset
+          </label>
         </div>
 
-        <div class='grid grid-cols-1 md:grid-cols-3 py-3 gap-3'>
-          <div class='flex justify-between'>
-            <h4 class='leading-8 text-center lg:text-left font-bold text-gray-700'>Modifikator</h4>
-            <label class='bg-white h-8 leading-8 px-2 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-              <%= radio_button(f, :modifier, 0,
-                checked: input_value(f, :modifier) == 0,
-                class: "hidden"
-                )
-              %> reset
-            </label>
-          </div>
+        <div class="flex text-sm font-medium">
+          <%= modifier_field f, -6 %>
+          <%= modifier_field f, -5 %>
+          <%= modifier_field f, -4 %>
+          <%= modifier_field f, -3 %>
+          <%= modifier_field f, -2 %>
+          <%= modifier_field f, -1 %>
 
-          <div class="flex text-sm font-medium">
-            <%= modifier_field f, -6 %>
-            <%= modifier_field f, -5 %>
-            <%= modifier_field f, -4 %>
-            <%= modifier_field f, -3 %>
-            <%= modifier_field f, -2 %>
-            <%= modifier_field f, -1 %>
-
-          </div>
-
-          <div class="flex text-sm font-medium">
-            <%= modifier_field f, 1 %>
-            <%= modifier_field f, 2 %>
-            <%= modifier_field f, 3 %>
-            <%= modifier_field f, 4 %>
-            <%= modifier_field f, 5 %>
-            <%= modifier_field f, 6 %>
-          </div>
         </div>
 
-        <div class='grid grid-cols-2 lg:grid-cols-12 gap-3 mb-3'>
-          <h4 class='col-span-2 lg:col-span-4 leading-8 text-center lg:text-left font-bold text-gray-700'>Eigenschaftsprobe</h4>
+        <div class="flex text-sm font-medium">
+          <%= modifier_field f, 1 %>
+          <%= modifier_field f, 2 %>
+          <%= modifier_field f, 3 %>
+          <%= modifier_field f, 4 %>
+          <%= modifier_field f, 5 %>
+          <%= modifier_field f, 6 %>
+        </div>
+      </div>
+
+      <div class='grid grid-cols-1 lg:grid-cols-5 gap-2 mb-3'>
+        <h4 class='leading-8 text-center lg:text-left font-bold text-gray-700'>Eigenschaft</h4>
+        <div class='col-span-2 grid grid-cols-4 gap-2'>
           <%= trait_button("MU", @mu, @myself) %>
           <%= trait_button("KL", @kl, @myself) %>
           <%= trait_button("IN", @int, @myself) %>
           <%= trait_button("CH", @ch, @myself) %>
+        </div>
+        <div class='col-span-2 grid grid-cols-4 gap-2'>
           <%= trait_button("GE", @ge, @myself) %>
           <%= trait_button("FF", @ff, @myself) %>
           <%= trait_button("KO", @ko, @myself) %>
           <%= trait_button("KK", @kk, @myself) %>
         </div>
+      </div>
 
 
-        <div class='grid grid-cols-2 lg:grid-cols-6 pb-3 gap-3'>
+      <div class='grid grid-cols-1 lg:grid-cols-5 gap-2'>
 
-          <h4 class='leading-8 text-center lg:text-left font-bold text-gray-700'>Talentprobe</h4>
+        <h4 class='leading-8 text-center lg:text-left font-bold text-gray-700'>Talentprobe</h4>
 
-          <div class='flex justify-between'>
-            <%= label f, :tw, "TW", class: "leading-8 font-bold" %>
-
-            <%= number_input f, :tw, class: "block h-8 leading-8 px-3 text-center border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder: "TW" %>
-          </div>
-
+        <div class='col-span-2 grid grid-cols-3 gap-2'>
           <%= select f, :e1, ["MU": "0", "KL": "1", "IN": "2", "CH": "3", "GE": "4", "FF": "5", "KO": "6", "KK": "7"], class: "block h-8 leading-8 px-3 py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
 
           <%= select f, :e2, ["MU": "0", "KL": "1", "IN": "2", "CH": "3", "GE": "4", "FF": "5", "KO": "6", "KK": "7"], class: "block h-8 leading-8 px-3 py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
 
           <%= select f, :e3, ["MU": "0", "KL": "1", "IN": "2", "CH": "3", "GE": "4", "FF": "5", "KO": "6", "KK": "7"], class: "block h-8 leading-8 px-3 py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" %>
+        </div>
+
+        <div class='col-span-2 grid grid-cols-3 gap-2'>
+
+          <%= label f, :tw, "TW", class: "leading-8 font-bold text-right" %>
+
+          <%= number_input f, :tw, class: "block h-8 leading-8 px-3 text-center border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder: "TW" %>
 
           <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='talent-roll' phx-target='<%= @myself %>'>Würfel!</button>
         </div>
-      </form>
-
-      <button type='button' class="bg-white py-0 w-full border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" phx-click='email' phx-target='<%= @myself %>'>Email</button>
-    </div>
+      </div>
+    </form>
     """
   end
 
@@ -210,12 +212,6 @@ defmodule DsaWeb.RollComponent do
     end
   end
 
-  def handle_event("email", _params, socket) do
-    Dsa.Email.welcome_email()   # Create your email
-    |> Dsa.Mailer.deliver_now() # Send your email
-    {:noreply, socket}
-  end
-
   def handle_event("talent-roll", _params, socket) do
 
     # trait indexes
@@ -321,7 +317,7 @@ defmodule DsaWeb.RollComponent do
       phx-value-count="<%= @count %>"
       phx-value-max="<%= @max %>"
       phx-target="<%= @target %>"
-      class="bg-white w-1/6 h-8 leading-8 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3"><%= if @count > 1, do: @count %>W<%= @max %></button>
+      class="bg-white w-full h-8 leading-8 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><%= if @count > 1, do: @count %>W<%= @max %></button>
     """
   end
 

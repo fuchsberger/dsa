@@ -122,15 +122,14 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
-
-
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :profession] ++ base_values())
+    |> cast(attrs, [:name, :profession, :user_id] ++ base_values())
     |> validate_required([:name, :profession] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
     |> validate_base_values()
+    |> foreign_key_constraint(:user_id)
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a

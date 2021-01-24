@@ -22,11 +22,24 @@ defmodule DsaWeb.DsaLive do
       <% :dashboard -> %>
         <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
 
+      <% :new_character -> %>
+        <%= live_component @socket, DsaWeb.CharacterComponent,
+          id: :character,
+          action: :create,
+          character: %Dsa.Accounts.Character{},
+          user_id: @user.id
+        %>
+
       <% :character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, character_id: @character_id %>
+        <%= live_component @socket, DsaWeb.CharacterComponent,
+          id: :character,
+          action: :update,
+          character: @user.active_character,
+          user_id: @user.id
+        %>
 
       <% :roll -> %>
-        <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @character_id %>
+        <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @user.active_character_id %>
 
       <% :reset_password -> %>
         <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
@@ -69,7 +82,15 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket}
   end
 
+  def handle_info(:update_user, socket) do
+    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
+  end
+
   def handle_info({:update_user, user}, socket), do: {:noreply, assign(socket, :user, user)}
+
+  def handle_info({:update_character, character}, socket) do
+    {:noreply, assign(socket, :user, Map.put(socket.assigns.user, :active_character, character))}
+  end
 
   def handle_info(unknown, socket) do
     {:noreply, socket}
@@ -128,6 +149,7 @@ defmodule DsaWeb.DsaLive do
             :change_password -> assign(socket, :page_title, "Account")
             :confirm -> assign(socket, :page_title, "Registrierung")
             :login -> assign(socket, :page_title, "Login")
+            :new_character -> assign(socket, :page_title, "Heldenerschaffung")
             :character -> assign(socket, :page_title, "Held")
             :dashboard -> assign(socket, :page_title, "Übersicht")
             :register -> assign(socket, :page_title, "Registrierung")

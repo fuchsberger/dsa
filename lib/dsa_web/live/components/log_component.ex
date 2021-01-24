@@ -112,68 +112,6 @@ defmodule DsaWeb.LogComponent do
       <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
         Bei Phex! Noch sind keine Würfel gerollt!
       </div>
-
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-      <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-        Bei Phex! Noch sind keine Würfel gerollt!
-      </div>
-
     </form>
     """
   end

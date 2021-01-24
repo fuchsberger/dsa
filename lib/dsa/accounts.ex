@@ -63,7 +63,7 @@ defmodule Dsa.Accounts do
   end
 
   def get_user!(id) do
-    Repo.get!(from(u in User, preload: [characters: ^characters_query()]), id)
+    Repo.get!(from(u in User, preload: [:active_character, characters: ^characters_query()]), id)
   end
 
   def preload_user(user), do: Repo.preload(user, [characters: characters_query()], force: true)
@@ -196,10 +196,9 @@ defmodule Dsa.Accounts do
     |> cast_assoc(type)
   end
 
-  def create_character(%User{} = user, attrs) do
+  def create_character(attrs) do
     %Character{}
     |> Character.changeset(attrs)
-    |> put_assoc(:user, user)
     |> Repo.insert()
   end
 
