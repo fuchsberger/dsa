@@ -1,8 +1,8 @@
 defmodule Dsa.Accounts.Character do
   use Ecto.Schema
   import Ecto.Changeset
-  import Dsa
   import DsaWeb.CharacterHelpers
+  import Dsa
 
   alias Dsa.Data.{
     Advantage,
@@ -21,6 +21,7 @@ defmodule Dsa.Accounts.Character do
     MWeapon,
     Prayer,
     Script,
+    Skill,
     Species,
     Spell,
     SpellTrick,
@@ -47,7 +48,7 @@ defmodule Dsa.Accounts.Character do
 
     # # talents
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
-    Enum.each(talent_fields(), & field(&1, :integer, default: 0))
+    Enum.each(Skill.fields(), & field(&1, :integer, default: 0))
 
     # # combat
     # field :at, :integer, default: 5
@@ -130,6 +131,14 @@ defmodule Dsa.Accounts.Character do
     |> validate_length(:profession, min: 2, max: 80)
     |> validate_base_values()
     |> foreign_key_constraint(:user_id)
+  end
+
+  def skill_changeset(character, attrs) do
+    fields = Skill.fields()
+
+    Enum.reduce(fields, cast(character, attrs, fields), fn field, changeset ->
+      validate_number(changeset, field, greater_than_or_equal_to: 0, less_than_or_equal_to: 29)
+    end)
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a

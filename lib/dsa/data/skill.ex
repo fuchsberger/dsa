@@ -7,6 +7,7 @@ defmodule Dsa.Data.Skill do
   def count, do: 58
   def list, do: :ets.tab2list(@table)
 
+  def fields, do: Enum.map(1..count(), & String.to_atom("t#{&1}"))
   def options, do:  Enum.map(list(), fn {id, _sf, _category, _probe, name, _be} -> {name, id} end)
 
   def sf(id), do: :ets.lookup_element(@table, id, 2)

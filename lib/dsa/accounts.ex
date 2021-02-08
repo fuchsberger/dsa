@@ -24,6 +24,7 @@ defmodule Dsa.Accounts do
     MWeapon,
     Prayer,
     Script,
+    Skill,
     Spell,
     SpellTrick,
     StaffSpell
@@ -168,6 +169,11 @@ defmodule Dsa.Accounts do
 
   def get_character!(id), do: Repo.get!(Character, id)
 
+  def get_character(id, :skills) do
+    fields = [:id] ++ Skill.fields()
+    Repo.get(from(c in Character, select: ^fields), id)
+  end
+
   def preload(%Character{} = character) do
     Repo.preload(character, @character_preloads, force: true)
   end
@@ -182,6 +188,18 @@ defmodule Dsa.Accounts do
 
   def change_character(%Character{} = character, attrs, type) do
     Character.changeset(character, attrs, type)
+  end
+
+  def increment_character_skill(%Character{} = character, skill) do
+    character
+    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill) + 1))
+    |> Repo.update()
+  end
+
+  def decrement_character_skill(%Character{} = character, skill) do
+    character
+    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill) - 1))
+    |> Repo.update()
   end
 
   def change_character_assoc(%Character{} = character, nil, type) do

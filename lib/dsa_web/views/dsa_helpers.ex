@@ -8,7 +8,7 @@ defmodule DsaWeb.DsaHelpers do
     case be? do
       true -> "Ja"
       false -> "Nein"
-      nil -> "Event."
+      nil -> "Evtl"
     end
   end
 

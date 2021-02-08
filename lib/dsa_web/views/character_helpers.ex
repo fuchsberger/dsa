@@ -35,7 +35,7 @@ defmodule DsaWeb.CharacterHelpers do
     combat_skills = combat_skills - 9*12 - 12*18 # start value 6, 9 B talents, 12 C talents
 
     skills =
-      talent_fields()
+      Skill.fields()
       |> Enum.map(fn field ->
           id = Atom.to_string(field) |> String.slice(1, 2) |> String.to_integer()
           ap_cost(Map.get(c, field), Skill.sf(id))

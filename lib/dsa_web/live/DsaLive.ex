@@ -45,11 +45,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
 
       <% :skills -> %>
-        <%= live_component @socket, DsaWeb.SkillComponent,
-          id: :skills,
-          character: @user.active_character,
-          user_id: @user.id
-        %>
+        <%= live_component @socket, DsaWeb.SkillComponent, id: :skills, character_id: @user.active_character_id %>
 
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>

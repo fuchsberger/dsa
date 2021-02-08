@@ -33,6 +33,19 @@ defmodule DsaWeb.FormHelpers do
     Form.select(form, field, options, expand(form, field, opts))
   end
 
+  def submit_button(modified?) do
+    text =
+      case modified? do
+        nil -> "Unverändert..."
+        true -> "Speichern"
+        false -> "Gespeichert"
+      end
+
+    submit text,
+      class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none #{if modified?, do: "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", else: "bg-indigo-200 text-indigo-500 cursor-not-allowed"}",
+      disabled: is_nil(modified?) || not modified?
+  end
+
   defp expand(form, field, opts) do
     error_class =
       case is_nil(form.source) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do

@@ -2,6 +2,7 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
   use Ecto.Migration
 
   import Dsa
+  alias Dsa.Data.Skills
 
   def change do
     create table(:characters) do
@@ -22,7 +23,7 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
 
       # talents
       Enum.each(combat_fields(), & add(&1, :integer))
-      Enum.each(talent_fields(), & add(&1, :integer))
+      Enum.each(Skills.fields(), & add(&1, :integer))
 
       # combat
       add :at, :integer

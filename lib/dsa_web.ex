@@ -42,11 +42,14 @@ defmodule DsaWeb do
         select: 4
       ]
 
+      import Phoenix.LiveView.Helpers
+
+      import DsaWeb.DsaHelpers
       import DsaWeb.FormHelpers
+      import DsaWeb.ViewHelpers
+
       import DsaWeb.Gettext
       import DsaWeb.Icons
-      import DsaWeb.ViewHelpers
-      import Phoenix.LiveView.Helpers
 
       alias DsaWeb.Router.Helpers, as: Routes
 

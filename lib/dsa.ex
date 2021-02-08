@@ -26,6 +26,4 @@ defmodule Dsa do
   def sf_values, do: @sf_values
 
   def talent_categories, do: @talent_categories
-
-  def talent_fields, do: Enum.map(1..58, & String.to_atom("t#{&1}"))
 end
