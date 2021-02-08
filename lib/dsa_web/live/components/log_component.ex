@@ -5,6 +5,8 @@ defmodule DsaWeb.LogComponent do
   import Phoenix.HTML.Tag, only: [content_tag: 3]
   import DsaWeb.DsaLive, only: [topic: 0]
 
+  alias Dsa.Data.Skill
+
   @group_id 1
 
   def render(assigns) do
@@ -84,6 +86,32 @@ defmodule DsaWeb.LogComponent do
                   <span class='mx-1 lg:mx-2'>»</span>
                   <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
                     <%= "#{trait(entry.x1)}/#{trait(entry.x2)}/#{trait(entry.x3)}" %>
+                    <%=
+                      cond do
+                        entry.x10 == 0 -> nil
+                        entry.x10 > 0 -> "+ #{entry.x10}"
+                        true -> "- #{abs(entry.x10)}"
+                      end
+                    %>
+                  </span>
+                </div>
+                <div class='flex'>
+                  <%= if input_value(f, :dice) do %>
+                    <%= tag :dice, entry.x7 %>
+                    <%= tag :dice, entry.x8 %>
+                    <%= tag :dice, entry.x9 %>
+                    <%= if input_value(f, :result), do: separator() %>
+                  <% end %>
+                  <%= if input_value(f, :result), do: result_tag(:talent, entry.x12) %>
+                </div>
+
+              <% 4 -> %>
+                <%# Skill Roll %>
+                <div class='mr-3'>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= entry.character %></span>
+                  <span class='mx-1 lg:mx-2'>»</span>
+                  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
+                    <%= Skill.name(entry.x1) %>
                     <%=
                       cond do
                         entry.x10 == 0 -> nil

@@ -138,17 +138,5 @@ defmodule DsaWeb.GroupView do
 
   def base_value(character, index), do: Map.get(character, Enum.at(base_values(), index))
 
-  def base_value_indexes(probe) do
-    [b1, b2, b3] =
-      probe
-      |> String.downcase()
-      |> String.split("/")
-      |> Enum.map(& String.to_atom(&1))
 
-    [
-      Enum.find_index(base_values(), & &1 == b1),
-      Enum.find_index(base_values(), & &1 == b2),
-      Enum.find_index(base_values(), & &1 == b3)
-    ]
-  end
 end

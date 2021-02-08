@@ -45,7 +45,9 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
 
       <% :skills -> %>
-        <%= live_component @socket, DsaWeb.SkillComponent, id: :skills, character_id: @user.active_character_id %>
+        <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.SkillComponent, id: :skills,
+          character_id: @user.active_character_id, modifier: @modifier %>
 
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
@@ -73,6 +75,7 @@ defmodule DsaWeb.DsaLive do
 
     {:ok, socket
     |> assign(:email, Map.get(params, "email"))
+    |> assign(:modifier, 0)
     |> assign(:show_log?, false)
     |> assign(:user, user)}
   end
@@ -180,6 +183,10 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("close-account-dropdown", _params, socket) do
     {:noreply, socket}
+  end
+
+  def handle_event("set-modifier", %{"modifier" => modifier}, socket) do
+    {:noreply, assign(socket, :modifier, String.to_integer(modifier))}
   end
 
   def handle_event("toggle-account-dropdown", _params, socket) do

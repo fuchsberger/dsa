@@ -4,6 +4,33 @@ defmodule DsaWeb.DsaHelpers do
   """
   use Phoenix.HTML
 
+  @base_values ~w(mu kl in ch ff ge ko kk)a
+
+  def traits(probe) do
+    probe
+    |> String.downcase()
+    |> String.split("/")
+    |> Enum.map(& String.to_atom(&1))
+  end
+
+  def trait_index(trait) do
+    Enum.find_index(@base_values, trait)
+  end
+
+  # def base_value_indexes(probe) do
+  #   [b1, b2, b3] =
+  #     probe
+  #     |> String.downcase()
+  #     |> String.split("/")
+  #     |> Enum.map(& String.to_atom(&1))
+
+  #   [
+  #     Enum.find_index(base_values(), & &1 == b1),
+  #     Enum.find_index(base_values(), & &1 == b2),
+  #     Enum.find_index(base_values(), & &1 == b3)
+  #   ]
+  # end
+
   def be(be?) do
     case be? do
       true -> "Ja"
