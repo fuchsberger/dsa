@@ -17,7 +17,6 @@ defmodule Dsa do
 
   @talent_categories ~w(Körper Natur Gesellschaft Wissen Handwerk)
 
-
   # def base_value_options do
   #   Enum.map(@base_values, & {String.upcase(Atom.to_string(&1)), Atom.to_string(&1)})
   # end

@@ -47,7 +47,7 @@ defmodule Dsa.Accounts.Character do
 
     # # talents
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
-    # Enum.each(talent_fields(), & field(&1, :integer, default: 0))
+    Enum.each(talent_fields(), & field(&1, :integer, default: 0))
 
     # # combat
     # field :at, :integer, default: 5

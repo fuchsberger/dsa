@@ -7,9 +7,7 @@ defmodule Dsa.Data.Skill do
   def count, do: 58
   def list, do: :ets.tab2list(@table)
 
-  def options do
-    Enum.map(list(), fn {id, _sf, _category, _probe, name, _be} -> {name, id} end)
-  end
+  def options, do:  Enum.map(list(), fn {id, _sf, _category, _probe, name, _be} -> {name, id} end)
 
   def sf(id), do: :ets.lookup_element(@table, id, 2)
   def category(id), do: :ets.lookup_element(@table, id, 3)
@@ -21,7 +19,7 @@ defmodule Dsa.Data.Skill do
     :ets.new(@table , [:ordered_set, :protected, :named_table])
     :ets.insert(@table, [
       # {id, sf, category, probe, name, be}
-      # Körper (1)
+      # Körper
       {1, "B", 1, "MU/IN/GE", "Fliegen", true },
       {2, "A", 1, "MU/CH/FF", "Gaukeleien", true },
       {3, "B", 1, "MU/GE/KK", "Klettern", true },

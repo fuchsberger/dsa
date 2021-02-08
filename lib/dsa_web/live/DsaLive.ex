@@ -44,6 +44,13 @@ defmodule DsaWeb.DsaLive do
       <% :reset_password -> %>
         <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
 
+      <% :skills -> %>
+        <%= live_component @socket, DsaWeb.SkillComponent,
+          id: :skills,
+          character: @user.active_character,
+          user_id: @user.id
+        %>
+
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
 
@@ -59,6 +66,8 @@ defmodule DsaWeb.DsaLive do
   def mount(params, session, socket) do
     user_id = Map.get(session, "user_id")
     user = user_id && Accounts.get_user!(user_id)
+
+    Logger.warn Dsa.Data.Skill.options()
 
     # Add error message from param if it exists
     error = Map.get(params, "error")
@@ -132,13 +141,13 @@ defmodule DsaWeb.DsaLive do
         end
 
       # Do not allow unauthenticated users to access restricted pages
-      is_nil(user) && Enum.member?([:dashboard, :character, :roll, :reset_password], action) ->
+      is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll, :reset_password], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
         |> push_patch(to: Routes.dsa_path(socket, :login))}
 
       # redirect to dashboard if user does not has an active character and page requires it
-      not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :character], action) ->
+      not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :skills, :character], action) ->
         {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
 
       # all went normal, proceed
@@ -154,6 +163,7 @@ defmodule DsaWeb.DsaLive do
             :dashboard -> assign(socket, :page_title, "Übersicht")
             :register -> assign(socket, :page_title, "Registrierung")
             :roll -> assign(socket, :page_title, "Probe")
+            :skills -> assign(socket, :page_title, "Talente")
             _ -> assign(socket, :page_title, "404 Error")
           end
 
