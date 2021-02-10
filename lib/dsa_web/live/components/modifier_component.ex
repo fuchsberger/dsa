@@ -6,56 +6,39 @@ defmodule DsaWeb.ModifierComponent do
     ~L"""
     <div class='grid grid-cols-4 md:grid-cols-8 pb-3 gap-4 font-bold text-sm leading-6'>
 
-      <h3>Modifier</h3>
+      <h3 class='leading-6 border-2 border-transparent'>Modifier</h3>
 
-      <div class="col-span-3 grid grid-cols-6 text-sm font-medium">
-        <%= modifier_field -6, @modifier %>
-        <%= modifier_field -5, @modifier %>
-        <%= modifier_field -4, @modifier %>
-        <%= modifier_field -3, @modifier %>
-        <%= modifier_field -2, @modifier %>
-        <%= modifier_field -1, @modifier %>
+      <div class="col-span-3 grid grid-cols-6 text-sm text-center font-medium">
+        <button class='<%= class(@mod, -6) %>' phx-click='set' phx-value-mod='-6'>-6</button>
+        <button class='<%= class(@mod, -5) %>' phx-click='set' phx-value-mod='-5'>-5</button>
+        <button class='<%= class(@mod, -4) %>' phx-click='set' phx-value-mod='-4'>-4</button>
+        <button class='<%= class(@mod, -3) %>' phx-click='set' phx-value-mod='-3'>-3</button>
+        <button class='<%= class(@mod, -2) %>' phx-click='set' phx-value-mod='-2'>-2</button>
+        <button class='<%= class(@mod, -1) %>' phx-click='set' phx-value-mod='-1'>-1</button>
       </div>
 
-      <%= modifier_field 0, @modifier %>
+      <button class='<%= class(@mod, 0) %>' phx-click='set' phx-value-mod='0'>0</button>
 
       <div class="col-span-3 grid grid-cols-6 text-sm font-medium">
-        <%= modifier_field 1, @modifier %>
-        <%= modifier_field 2, @modifier %>
-        <%= modifier_field 3, @modifier %>
-        <%= modifier_field 4, @modifier %>
-        <%= modifier_field 5, @modifier %>
-        <%= modifier_field 6, @modifier %>
+        <button class='<%= class(@mod, 1) %>' phx-click='set' phx-value-mod='1'>1</button>
+        <button class='<%= class(@mod, 2) %>' phx-click='set' phx-value-mod='2'>2</button>
+        <button class='<%= class(@mod, 3) %>' phx-click='set' phx-value-mod='3'>3</button>
+        <button class='<%= class(@mod, 4) %>' phx-click='set' phx-value-mod='4'>4</button>
+        <button class='<%= class(@mod, 5) %>' phx-click='set' phx-value-mod='5'>5</button>
+        <button class='<%= class(@mod, 6) %>' phx-click='set' phx-value-mod='6'>6</button>
       </div>
     </div>
     """
   end
 
-  defp modifier_field(value, modifier) do
-    active = modifier == value
-
-    rounded_class =
-      case value do
-        -6 -> " rounded-l-md"
-        -1 -> " rounded-r-md"
-        6  -> " rounded-r-md"
-        1  -> " rounded-l-md"
-        _ -> nil
-      end
-
-    extra_classes =
+  defp class(modifier, value) do
+    base =
       cond do
-        value < 0 && active ->     "text-red-800 bg-red-200 border-red-400"
-        value < 0 && not active -> "text-red-800 bg-red-50 border-gray-300"
-        value > 0 && active ->     "text-green-800 bg-green-200 border-green-400"
-        value > 0 && not active -> "text-green-800 bg-green-50 border-gray-300"
-        true ->                    "text-gray-700 bg-gray-50 border-gray-300"
+        value > 0 -> "positive"
+        value < 0 -> "negative"
+        true -> "neutral"
       end
 
-    assigns = %{ rounded_class: rounded_class, extra_classes: extra_classes, value: value }
-
-    ~L"""
-      <button class='w-full leading-6 h-6 text-center border <%= @rounded_class %> <%= @extra_classes %>' phx-click='set-modifier' phx-value-modifier='<%= @value %>'><%= @value %></button>
-    """
+    if modifier == value, do: "#{base} active", else: base
   end
 end

@@ -23,6 +23,12 @@ config :dsa, Dsa.Mailer,
   adapter: Bamboo.SendinBlueAdapter,
   api_key: System.get_env("SENDINBLUE_APIKEY")
 
+
+config :dsa, Dsa.Mailer,
+  adapter: Bamboo.MailjetAdapter,
+  api_key: System.get_env("MAILJET_PUBLIC_KEY"),
+  api_private_key: System.get_env("MAILJET_PRIVATE_KEY")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

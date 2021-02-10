@@ -94,11 +94,7 @@ defmodule DsaWeb.SkillComponent do
         Enum.count([dice_1, dice_2, dice_3], & &1 == 20) >= 2 -> -2 # critical failure
         true ->
           # count spent tw
-          remaining =
-            skill_value
-            - max(dice_1 - trait_value_1 - modifier, 0)
-            - max(dice_2 - trait_value_2 - modifier, 0)
-            - max(dice_3 - trait_value_3 - modifier, 0)
+          remaining = skill_value - max(dice_1 - trait_value_1 - modifier, 0) - max(dice_2 - trait_value_2 - modifier, 0) - max(dice_3 - trait_value_3 - modifier, 0)
 
           cond do
             remaining < 0 -> -1 # normal failure
@@ -110,8 +106,6 @@ defmodule DsaWeb.SkillComponent do
       %{
         type: 4,
         x1: skill_id,
-        x2: nil,
-        x3: nil,
         x4: trait_value_1,
         x5: trait_value_2,
         x6: trait_value_3,
@@ -173,7 +167,7 @@ defmodule DsaWeb.SkillComponent do
       <td class="px-1 py-1 hidden sm:table-cell"><%= @probe %></td>
       <td class="px-1 py-1 hidden sm:table-cell"><%= @be %></td>
       <td class="px-1 py-1 hidden sm:table-cell"><%= @sf %></td>
-      <td class="pl-1 py-1 hidden sm:table-cell">
+      <td class="pl-1 py-1">
         <button class='<%= @show_minus %> focus-none' phx-click='decrement' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
@@ -181,7 +175,7 @@ defmodule DsaWeb.SkillComponent do
         </button>
       </td>
       <td class="px-0 py-1 text-center font-bold"><%= @value %></td>
-      <td class="pr-1 py-1 hidden sm:table-cell">
+      <td class="pr-1 py-1">
         <button class='<%= @show_plus %>' phx-click='increment' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

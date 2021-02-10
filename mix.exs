@@ -21,7 +21,7 @@ defmodule Dsa.MixProject do
     [
       # applications: [],
       mod: {Dsa.Application, []},
-      extra_applications: [:logger, :runtime_tools, :bamboo]
+      extra_applications: [:logger, :runtime_tools, :bamboo_mailjet]
     ]
   end
 
@@ -39,14 +39,14 @@ defmodule Dsa.MixProject do
       {:ecto_sql, "~> 3.5.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.14.3"},
-      {:phoenix_live_view, "~> 0.15.3"},
+      {:phoenix_live_view, "~> 0.15.4"},
       {:phoenix_live_reload, "~> 1.3.0", only: :dev},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
-      {:bamboo, "~> 1.1.0", overwrite: true},
-      {:bamboo_sendinblue, "~> 0.2.0"},
+      {:bamboo, "~> 1.7.0"},
+      {:bamboo_mailjet, "~> 0.1.0"},
       {:floki, ">= 0.0.0", only: :test}
     ]
   end

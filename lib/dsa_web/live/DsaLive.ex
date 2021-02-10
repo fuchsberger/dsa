@@ -45,7 +45,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
 
       <% :skills -> %>
-        <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, mod: @modifier %>
         <%= live_component @socket, DsaWeb.SkillComponent, id: :skills,
           character_id: @user.active_character_id, modifier: @modifier %>
 
@@ -185,7 +185,7 @@ defmodule DsaWeb.DsaLive do
     {:noreply, socket}
   end
 
-  def handle_event("set-modifier", %{"modifier" => modifier}, socket) do
+  def handle_event("set", %{"mod" => modifier}, socket) do
     {:noreply, assign(socket, :modifier, String.to_integer(modifier))}
   end
 

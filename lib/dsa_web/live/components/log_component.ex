@@ -115,8 +115,8 @@ defmodule DsaWeb.LogComponent do
                     <%=
                       cond do
                         entry.x10 == 0 -> nil
-                        entry.x10 > 0 -> "+ #{entry.x10}"
-                        true -> "- #{abs(entry.x10)}"
+                        entry.x10 > 0 -> "+#{entry.x10}"
+                        true -> entry.x10
                       end
                     %>
                   </span>
