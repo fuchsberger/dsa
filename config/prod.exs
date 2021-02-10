@@ -34,6 +34,12 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+# Configures sending emails
+config :dsa, Dsa.Mailer,
+  adapter: Bamboo.MailjetAdapter,
+  api_key: System.get_env("MAILJET_PUBLIC_KEY"),
+  api_private_key: System.get_env("MAILJET_PRIVATE_KEY")
+
 config :dsa, DsaWeb.Endpoint,
   http: [
     port: System.get_env("DSA_PORT" || 4000),

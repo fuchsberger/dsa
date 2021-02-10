@@ -180,7 +180,9 @@ defmodule DsaWeb.AccountComponent do
             case Accounts.register_user(params) do
               {:ok, user} ->
                 # Send confirmation email.
-                Email.confirmation_email(user) |> Mailer.deliver_now()
+                user
+                |> Email.confirmation_email()
+                |> Mailer.deliver_now()
 
                 {:noreply, assign(socket, :action, :confirm)}
 

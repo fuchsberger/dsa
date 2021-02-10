@@ -1,6 +1,10 @@
 defmodule DsaWeb.Router do
   use DsaWeb, :router
 
+  if Mix.env == :dev do
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
