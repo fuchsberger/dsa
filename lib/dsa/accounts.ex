@@ -96,7 +96,7 @@ defmodule Dsa.Accounts do
 
   def authenticate_by_email_and_pass(email, given_pass) do
     user = get_user_by(email: email)
-    Logger.warn inspect(user)
+
     cond do
       user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
         case user.confirmed do
@@ -127,11 +127,11 @@ defmodule Dsa.Accounts do
     User.changeset(user, params)
   end
 
+  def change_email(params), do: User.email_changeset(%User{}, params)
+
   def change_password(%User{} = user, params \\ %{}) do
     User.password_changeset(user, params, false)
   end
-
-  def change_email(params \\ %{}), do: User.reset_password_changeset(%User{}, params)
 
   def update_password(%User{} = user, params) do
     user
@@ -149,6 +149,13 @@ defmodule Dsa.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def reset_user(%User{} = user) do
+    user
+    |> change()
+    |> User.put_token(true)
+    |> Repo.update()
   end
 
   def update_user(%User{} = user, params \\ %{}) do

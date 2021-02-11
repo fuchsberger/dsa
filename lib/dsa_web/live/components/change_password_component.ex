@@ -9,10 +9,8 @@ defmodule DsaWeb.ChangePasswordComponent do
     <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Account Verwaltung
-        </h2>
+        <%= icon(:tailwind, class: "mx-auto h-12") %>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Account Verwaltung</h2>
       </div>
 
       <%= f = form_for @changeset, "#",
@@ -61,7 +59,6 @@ defmodule DsaWeb.ChangePasswordComponent do
           </span>
           Passwort ändern
         </button>
-
       </form>
     </div>
   </div>
@@ -72,12 +69,11 @@ defmodule DsaWeb.ChangePasswordComponent do
     {:ok, assign(socket, :submitted?, false)}
   end
 
-  def update(%{user: user}, socket) do
+  def update(%{user: user} = assigns, socket) do
     {:ok, assign(socket, :changeset, Accounts.change_password(user))}
   end
 
   def handle_event("change", %{"user" => params}, socket) do
-    Logger.warn(inspect(params))
     {:noreply, socket
     |> assign(:changeset, Accounts.change_password(socket.assigns.changeset.data, params))
     |> assign(:submitted?, false)}

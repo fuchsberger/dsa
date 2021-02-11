@@ -65,8 +65,6 @@ defmodule DsaWeb.DsaLive do
     user_id = Map.get(session, "user_id")
     user = user_id && Accounts.get_user!(user_id)
 
-    Logger.warn Dsa.Data.Skill.options()
-
     # Add error message from param if it exists
     error = Map.get(params, "error")
     socket = if is_nil(error), do: socket, else: put_flash(socket, :error, error)
@@ -121,7 +119,7 @@ defmodule DsaWeb.DsaLive do
         case Accounts.get_user_by(confirmed: false, token: token) do
           nil ->
             {:noreply, socket
-            |> put_flash(:error, "Benutzer existiert nicht oder wurde bereits aktiviert.")
+            |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
             |> push_patch(to: Routes.dsa_path(socket, :login))}
 
           user ->
@@ -132,15 +130,27 @@ defmodule DsaWeb.DsaLive do
                 |> push_patch(to: Routes.dsa_path(socket, :login))}
 
               {:error, changeset} ->
-                Logger.warn(inspect(changeset.errors))
                 {:noreply, socket
                 |> put_flash(:error, "Ein unerwarteter Fehler ist aufgetreten.")
                 |> push_patch(to: Routes.dsa_path(socket, :login))}
             end
         end
 
+      # attempt to reset password
+      action == :reset_password && not is_nil(token) ->
+        # if user exists and is not yet confirmed, confirm her and redirect to login.
+        case Accounts.get_user_by(reset: true, token: token) do
+          nil ->
+            {:noreply, socket
+            |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
+            |> push_patch(to: Routes.dsa_path(socket, :login))}
+
+          user ->
+            {:noreply, socket}
+        end
+
       # Do not allow unauthenticated users to access restricted pages
-      is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll, :reset_password], action) ->
+      is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
         |> push_patch(to: Routes.dsa_path(socket, :login))}

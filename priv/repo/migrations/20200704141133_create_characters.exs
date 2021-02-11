@@ -21,7 +21,7 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
       # base values
       Enum.each(base_values(), & add(&1, :integer))
 
-      # talents
+      # skills
       Enum.each(combat_fields(), & add(&1, :integer))
       Enum.each(Skill.fields(), & add(&1, :integer))
 
@@ -58,8 +58,6 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
       add :species_id, :integer
       add :magic_tradition_id, :integer
       add :karmal_tradition_id, :integer
-
-      # talents
 
       add :user_id, references(:users, on_delete: :delete_all), null: false
 

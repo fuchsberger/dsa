@@ -24,14 +24,21 @@ defmodule Dsa.Accounts.User do
     timestamps()
   end
 
+  # used for registration, change active character, creating tokens
   def changeset(user, params) do
     user
-    |> cast(params, [:email, :username, :confirmed, :token, :active_character_id])
-    |> validate_email(:email)
+    |> cast(params, [:username, :confirmed, :reset, :token, :active_character_id])
     |> validate_length(:username, min: 2, max: 15)
     |> validate_length(:token, size: 64)
-    |> unique_constraint(:email)
     |> foreign_key_constraint(:active_character_id)
+  end
+
+  # used for reset password (part 1) and registration
+  def email_changeset(user, params) do
+    user
+    |> cast(params, [:email])
+    |> validate_required([:email])
+    |> validate_email(:email)
   end
 
   def password_changeset(user, params, validate?) do
@@ -53,12 +60,14 @@ defmodule Dsa.Accounts.User do
   def registration_changeset(user, params) do
     user
     |> changeset(params)
+    |> email_changeset(params)
     |> cast(params, [:new_password, :password_confirm])
     |> validate_required([:email, :username, :new_password, :password_confirm])
     |> validate_password(:new_password)
     |> validate_match(:new_password, :password_confirm)
     |> put_pass_hash()
     |> put_token()
+    |> unique_constraint(:email)
   end
 
   def reset_password_changeset(user, params) do
@@ -66,6 +75,7 @@ defmodule Dsa.Accounts.User do
     |> cast(params, [:email])
     |> validate_required([:email])
     |> validate_email(:email)
+    |> put_token(true)
   end
 
   defp put_pass_hash(changeset) do
@@ -78,7 +88,7 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  def put_token(changeset) do
+  def put_token(changeset, reset \\ false) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         token =
@@ -86,7 +96,9 @@ defmodule Dsa.Accounts.User do
           |> Base.url_encode64
           |> binary_part(0, 64)
 
-        put_change(changeset, :token, token)
+        changeset
+        |> put_change(:reset, reset)
+        |> put_change(:token, token)
 
       _ ->
         changeset
@@ -100,7 +112,7 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  defp validate_email(changeset, field \\ :password) do
+  defp validate_email(changeset, field) do
     regex = ~r/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
     validate_format(changeset, field, regex, message: "Keine gültige Email Adresse.")
   end

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<title>Passwort zurücksetzen</title>
+	</head>
+	<body>
+		<p>Die Zwölfe zum Gruß!</p>
+		<p><%= @user.username %>,</p>
+		<p>Hier ist der Link um dein Passwort zurückzusetzen:<br><a href="<%= @url %>/reset_password/<%= @user.token %>" target="_blank">Aktivieren</a></p>
+		<p>Cheers,<br/>Alex</p>
+	</body>
+</html>

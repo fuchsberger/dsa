@@ -43,4 +43,14 @@ defmodule Dsa.Email do
       text_body: "Hey #{user.username},\n\nWillkommen im DSA Tool! Um deine Registrierung abzuschließen öffne bitte den folgenden Link:\n#{url()}/confirm/#{user.token}"
     )
   end
+
+  def reset_email(user) do
+    new_email(
+      to: user,
+      from: @sender,
+      subject: "DSA Tool - Passwort zurücksetzen",
+      html_body: render_to_string(EmailView, "reset.html", user: user, url: url()),
+      text_body: "Hey #{user.username},\n\n Hier ist der Link um dein Passwort zurückzusetzen: \n#{url()}/reset_password/#{user.token}"
+    )
+  end
 end

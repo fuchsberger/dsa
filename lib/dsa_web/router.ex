@@ -25,8 +25,6 @@ defmodule DsaWeb.Router do
     # Private Routes
     get "/logout", SessionController, :delete
     live "/change_password", DsaLive, :change_password
-    live "/reset_password", DsaLive, :reset_password
-
     live "/character/new", DsaLive, :new_character
     live "/character", DsaLive, :character
     live "/dashboard", DsaLive, :dashboard
@@ -39,8 +37,9 @@ defmodule DsaWeb.Router do
     post "/login", SessionController, :create
     live "/confirm", DsaLive, :confirm
     live "/confirm/:token", DsaLive, :confirm
+    live "/reset_password", DsaLive, :reset_password
+    live "/reset_password/:token", DsaLive, :reset_password
     live "/register", DsaLive, :register
-
     live "/:path", DsaLive, :error404
   end
 end

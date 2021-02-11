@@ -2,18 +2,13 @@ defmodule DsaWeb.ResetPasswordComponent do
 
   use DsaWeb, :live_component
 
-  alias Dsa.Accounts
+  alias Dsa.{Accounts, Email, Mailer}
 
   def render(assigns) do
     ~L"""
-    <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full">
-      <div>
-        <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Account Verwaltung
-        </h2>
-      </div>
+    <div class="max-w-md mx-auto md:pt-4">
+      <%= icon(:tailwind, class: "h-12 mx-auto text-indigo-600") %>
+      <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900">Account Verwaltung</h2>
 
       <%= f = form_for @changeset, "#",
         phx_change: :change,
@@ -30,7 +25,7 @@ defmodule DsaWeb.ResetPasswordComponent do
         %>
         <%= error_tag f, :email %>
 
-        <button type="submit" class="group relative w-full flex justify-center my-4 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <%= submit class: "group relative w-full flex justify-center my-4 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", disabled: not @changeset.valid? do %>
           <span class="absolute left-0 inset-y-0 flex items-center pl-3">
             <!-- Heroicon name: lock-closed -->
             <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -38,7 +33,7 @@ defmodule DsaWeb.ResetPasswordComponent do
             </svg>
           </span>
           Sende Passwort Reset Link
-        </button>
+        <% end %>
       </form>
 
       <div class='text-center text-sm'>
@@ -46,8 +41,7 @@ defmodule DsaWeb.ResetPasswordComponent do
         <%= live_patch "Login", to: Routes.dsa_path(@socket, :login), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
       </div>
     </div>
-  </div>
-  """
+    """
   end
 
   def mount(socket) do
@@ -57,20 +51,31 @@ defmodule DsaWeb.ResetPasswordComponent do
   end
 
   def handle_event("change", %{"user" => params}, socket) do
-    {:noreply, socket
-    |> assign(:changeset, Accounts.change_email(socket.assigns.changeset.data, params))
-    |> assign(:submitted?, false)}
+    {:noreply, assign(socket, :changeset, Accounts.change_email(params))}
   end
 
   def handle_event("submit", %{"user" => params}, socket) do
-    case Accounts.update_password(socket.assigns.changeset.data, params) do
-      {:ok, user} ->
-        {:noreply, socket
-        |> assign(:changeset, Accounts.change_email(user))
-        |> assign(:submitted?, true)}
+    case Accounts.get_user_by(email: params["email"]) do
+      nil ->
+        Pbkdf2.no_user_verify()
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, socket
+        |> put_flash(:error, "Die angegebene Email Addresse existiert nicht.")
+        |> push_patch(to: Routes.dsa_path(socket, :reset_password))}
+
+      user ->
+        case Accounts.reset_user(user) do
+          {:ok, user} ->
+            user
+            |> Email.reset_email()
+            |> Mailer.deliver_now()
+
+            {:noreply, assign(socket, :submitted?, true)}
+
+          {:error, changeset} ->
+            Logger.warn("Error preparing user for reset: \n#{inspect(changeset)}")
+            {:noreply, socket}
+        end
     end
   end
 end
