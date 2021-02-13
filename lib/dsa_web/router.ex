@@ -11,7 +11,6 @@ defmodule DsaWeb.Router do
     plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug DsaWeb.Auth
     plug :put_root_layout, {DsaWeb.LayoutView, :root}
   end
 
@@ -24,7 +23,7 @@ defmodule DsaWeb.Router do
 
     # Private Routes
     get "/logout", SessionController, :delete
-    live "/change_password", DsaLive, :change_password
+
     live "/character/new", DsaLive, :new_character
     live "/character", DsaLive, :character
     live "/dashboard", DsaLive, :dashboard

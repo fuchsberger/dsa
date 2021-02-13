@@ -41,14 +41,16 @@ defmodule Dsa.Accounts.User do
     |> validate_email(:email)
   end
 
-  def password_changeset(user, params, validate?) do
+  def password_changeset(user, params, bypass_security?) do
     user
     |> cast(params, [:password_old, :password, :password_confirm])
-    |> validate_required([:password_old, :password, :password_confirm])
-    |> validate_old_password(validate?)
+    |> validate_required([:password, :password_confirm])
+    |> validate_old_password(bypass_security?)
     |> validate_password()
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
+    |> put_change(:reset, false)
+    |> put_change(:token, nil)
   end
 
   def session_changeset(user, params) do
@@ -125,10 +127,12 @@ defmodule Dsa.Accounts.User do
     |> validate_format(field, regex, message: "Dein Passwort muss mindestens 8 Zeichen lang sein und muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Ziffer enthalten.")
   end
 
-  def validate_old_password(changeset, validate?) do
-    case validate? do
-      true ->
-        if Map.has_key?(changeset.changes, :password_old) do
+  def validate_old_password(changeset, bypass_security?) do
+    case bypass_security? do
+      false ->
+        changeset = validate_required(changeset, [:password_old])
+
+        if changeset.valid? do
           case Pbkdf2.verify_pass(Map.get(changeset.changes, :password_old), changeset.data.password_hash) do
             true ->
               changeset
@@ -141,7 +145,7 @@ defmodule Dsa.Accounts.User do
           changeset
         end
 
-      false ->
+      true ->
         changeset
     end
   end

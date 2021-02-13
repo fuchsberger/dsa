@@ -129,18 +129,17 @@ defmodule Dsa.Accounts do
 
   def change_email(params), do: User.email_changeset(%User{}, params)
 
-  def change_password(%User{} = user, params \\ %{}) do
-    User.password_changeset(user, params, false)
+  def change_password(%User{} = user, params, bypass_security \\ false) do
+    User.password_changeset(user, params, bypass_security)
   end
 
-  def update_password(%User{} = user, params) do
+  def update_password(%User{} = user, params, bypass_security \\ false) do
     user
-    |> User.password_changeset(params, true)
+    |> User.password_changeset(params, bypass_security)
     |> Repo.update()
   end
 
   # Registration
-
   def change_registration(%User{} = user, params) do
     User.registration_changeset(user, params)
   end

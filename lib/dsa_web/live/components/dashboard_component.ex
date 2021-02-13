@@ -46,13 +46,13 @@ defmodule DsaWeb.DashboardComponent do
 
 
 
-    <div class="hidden bg-white relative shadow-xl rounded-lg mt-4">
+    <div class="bg-white relative shadow-xl rounded-lg mt-4">
       <h1 class="font-bold text-center bg-gray-300 rounded-t-lg leading-10 h-10 text-xl text-gray-900">Benutzerverwaltung</h1>
       <div class="w-full">
-        <%= live_patch "Passwort ändern", to: Routes.dsa_path(@socket, :change_password),
+        <%= live_patch "Passwort ändern", to: Routes.dsa_path(@socket, :reset_password),
         class: "w-full font-medium text-gray-600 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150" %>
 
-        <a href="#" class="w-full border-t-2 border-gray-100 font-medium text-red-700 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150">Account löschen</a>
+        <a href="#" class="hidden w-full border-t-2 border-gray-100 font-medium text-red-700 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150">Account löschen</a>
       </div>
     </div>
 

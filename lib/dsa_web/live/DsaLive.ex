@@ -13,9 +13,6 @@ defmodule DsaWeb.DsaLive do
   def render(assigns) do
     ~L"""
     <%= case @live_action do %>
-      <% :change_password -> %>
-        <%= live_component @socket, DsaWeb.ChangePasswordComponent, id: :change_password, user: @user %>
-
       <% :login -> %>
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
 
@@ -42,7 +39,8 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @user.active_character_id %>
 
       <% :reset_password -> %>
-        <%= live_component @socket, DsaWeb.ResetPasswordComponent, id: :reset_password %>
+        <%= live_component @socket, DsaWeb.ResetPasswordComponent,
+          id: :reset_password, user_id: @user_id, token: @token %>
 
       <% :skills -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, mod: @modifier %>
@@ -75,7 +73,10 @@ defmodule DsaWeb.DsaLive do
     |> assign(:email, Map.get(params, "email"))
     |> assign(:modifier, 0)
     |> assign(:show_log?, false)
-    |> assign(:user, user)}
+    |> assign(:reset_user, nil)
+    |> assign(:token, Map.get(params, "token"))
+    |> assign(:user, user)
+    |> assign(:user_id, user_id)}
   end
 
   def handle_info({:log, entry}, socket) do
@@ -137,17 +138,19 @@ defmodule DsaWeb.DsaLive do
         end
 
       # attempt to reset password
-      action == :reset_password && not is_nil(token) ->
-        # if user exists and is not yet confirmed, confirm her and redirect to login.
-        case Accounts.get_user_by(reset: true, token: token) do
-          nil ->
-            {:noreply, socket
-            |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
-            |> push_patch(to: Routes.dsa_path(socket, :login))}
+      # action == :reset_password && not is_nil(token) ->
+      #   # if user has indeed requested request, forward to change password page without security.
+      #   case Accounts.get_user_by(reset: true, token: token) do
+      #     nil ->
+      #       {:noreply, socket
+      #       |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
+      #       |> push_patch(to: Routes.dsa_path(socket, :login))}
 
-          user ->
-            {:noreply, socket}
-        end
+      #     user ->
+      #       {:noreply, socket
+      #       |> assign(:reset_user, user)
+      #       |> push_patch(to: Routes.dsa_path(socket, :change_password))}
+      #   end
 
       # Do not allow unauthenticated users to access restricted pages
       is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll], action) ->
@@ -164,7 +167,8 @@ defmodule DsaWeb.DsaLive do
         # handle page title
         socket =
           case socket.assigns.live_action do
-            :change_password -> assign(socket, :page_title, "Account")
+            :change_password -> assign(socket, :page_title, "Account Verwaltung")
+            :reset_password -> assign(socket, :page_title, "Account Verwaltung")
             :confirm -> assign(socket, :page_title, "Registrierung")
             :login -> assign(socket, :page_title, "Login")
             :new_character -> assign(socket, :page_title, "Heldenerschaffung")

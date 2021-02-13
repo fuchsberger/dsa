@@ -11,8 +11,7 @@ config :dsa, Dsa.Repo,
   pool_size: 10
 
 config :dsa, Dsa.Mailer,
-  adapter: Bamboo.LocalAdapter,
-  open_email_in_browser_url: "http://localhost:4000/sent_emails" # optional
+  adapter: Bamboo.LocalAdapter
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
