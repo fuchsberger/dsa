@@ -1,4 +1,5 @@
 const path = require('path')
+// const glob = require('glob')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -39,8 +40,7 @@ module.exports = (env, options) => ({
         use: [
           MiniCssExtractPlugin.loader,  // extract CSS into separate file
           'css-loader',                 // translates CSS into CommonJS
-          'postcss-loader',             // CSS postprocessing
-          'sass-loader'                 // compiles Sass to CSS
+          'postcss-loader'              // CSS postprocessing
         ]
       }
       // {

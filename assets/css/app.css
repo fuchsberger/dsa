@@ -3,7 +3,7 @@
 @tailwind utilities;
 @tailwind screens;
 
-// hide live-refresh iframe (dev only)
+/* hide live-refresh iframe (dev only) */
 iframe { display: none; }
 
 @layer base {
@@ -47,11 +47,9 @@ iframe { display: none; }
     @apply outline-none ring-indigo-500 border-indigo-500;
   }
 
-  input.error {
-    @apply border-red-800 #{!important};
-  }
+  input.error { @apply border-red-800 !important; }
 
-  // Modifier Component
+  /* Modifier Component */
   .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; }
   .neutral:focus, .negative:focus, .positive:focus, { @apply outline-none; }
 
