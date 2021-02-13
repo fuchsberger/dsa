@@ -17,7 +17,11 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
 
       <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
+        <%= live_component @socket, DsaWeb.DashboardComponent,
+          id: :dashboard,
+          active_character_id: @user.active_character_id,
+          user_id: @user_id
+        %>
 
       <% :new_character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent,
@@ -90,7 +94,7 @@ defmodule DsaWeb.DsaLive do
   end
 
   def handle_info(:update_user, socket) do
-    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
+    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user_id))}
   end
 
   def handle_info({:update_user, user}, socket), do: {:noreply, assign(socket, :user, user)}

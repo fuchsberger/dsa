@@ -59,15 +59,9 @@ defmodule Dsa.Accounts do
 
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
-  defp characters_query do
-    from(c in Character, select: map(c, [:id, :name, :profession]), order_by: c.name)
-  end
-
   def get_user!(id) do
-    Repo.get!(from(u in User, preload: [:active_character, characters: ^characters_query()]), id)
+    Repo.get!(from(u in User, preload: [:active_character]), id)
   end
-
-  def preload_user(user), do: Repo.preload(user, [characters: characters_query()], force: true)
 
   @spec get_user_base_data!(integer() | nil) :: tuple()
 
@@ -116,8 +110,12 @@ defmodule Dsa.Accounts do
   def list_users, do: Repo.all(User)
   def list_user_options, do: Repo.all(from(u in User, select: {u.name, u.id}, order_by: u.name))
 
-  def list_user_characters(user_id) do
-    from(c in Character, preload: ^@character_preloads, where: c.user_id == ^user_id)
+  def list_user_characters!(user_id) do
+    from(c in Character,
+      select: map(c, [:id, :name, :profession]),
+      order_by: c.name,
+      where: c.user_id == ^user_id
+    )
     |> Repo.all()
   end
 
