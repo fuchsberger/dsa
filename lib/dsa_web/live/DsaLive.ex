@@ -99,10 +99,6 @@ defmodule DsaWeb.DsaLive do
     {:noreply, assign(socket, :user, Map.put(socket.assigns.user, :active_character, character))}
   end
 
-  def handle_info(unknown, socket) do
-    {:noreply, socket}
-  end
-
   def handle_params(params, _uri, socket) do
 
     %{live_action: action, user: user} = socket.assigns
@@ -125,32 +121,19 @@ defmodule DsaWeb.DsaLive do
 
           user ->
             case Accounts.update_user(user, %{confirmed: true, token: nil}) do
-              {:ok, user} ->
+              {:ok, _user} ->
                 {:noreply, socket
                 |> put_flash(:info, "Aktivierung abgeschlossen. Du kannst dich jetzt einloggen.")
                 |> push_patch(to: Routes.dsa_path(socket, :login))}
 
               {:error, changeset} ->
+                Logger.warn("Error confirming account: #{inspect(changeset.errors)}")
+
                 {:noreply, socket
                 |> put_flash(:error, "Ein unerwarteter Fehler ist aufgetreten.")
                 |> push_patch(to: Routes.dsa_path(socket, :login))}
             end
         end
-
-      # attempt to reset password
-      # action == :reset_password && not is_nil(token) ->
-      #   # if user has indeed requested request, forward to change password page without security.
-      #   case Accounts.get_user_by(reset: true, token: token) do
-      #     nil ->
-      #       {:noreply, socket
-      #       |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
-      #       |> push_patch(to: Routes.dsa_path(socket, :login))}
-
-      #     user ->
-      #       {:noreply, socket
-      #       |> assign(:reset_user, user)
-      #       |> push_patch(to: Routes.dsa_path(socket, :change_password))}
-      #   end
 
       # Do not allow unauthenticated users to access restricted pages
       is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll], action) ->
@@ -213,13 +196,5 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
-  end
-
-  defp gravatar_url(user, size \\ 24)
-
-  defp gravatar_url(nil, size), do: "https://s.gravatar.com/avatar/invalid?s=#{size}"
-
-  defp gravatar_url(user, size) do
-    "https://s.gravatar.com/avatar/#{Base.encode16(:erlang.md5(user.email), case: :lower)}?s=#{size}"
   end
 end

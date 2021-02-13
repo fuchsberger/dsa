@@ -49,6 +49,16 @@ iframe { display: none; }
 
   input.error { @apply border-red-800 !important; }
 
+  /* Label */
+  .label { @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full; }
+  button.label:focus {  @apply outline-none; }
+
+  .label.gray { @apply bg-gray-50 text-gray-500; }
+  button.label.gray:hover { @apply bg-gray-200; }
+
+  .label.green { @apply bg-green-100 text-green-800; }
+  button.label.green:hover { @apply bg-green-200; }
+
   /* Modifier Component */
   .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; }
   .neutral:focus, .negative:focus, .positive:focus, { @apply outline-none; }

@@ -260,6 +260,8 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
+  def delete_character(%Character{} = character), do: Repo.delete(character)
+
   def list_groups, do: Repo.all(from(g in Group, preload: :master))
 
   def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))

@@ -34,17 +34,16 @@ defmodule DsaWeb.DashboardComponent do
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <button type='button' class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full focus:outline-none <%= if character.id == @user.active_character_id, do: "bg-green-100 text-green-800 hover:bg-green-200", else: "bg-gray-50 text-gray-500 hover:bg-gray-200" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
+                <button type='button' class="label <%= if character.id == @user.active_character_id, do: "green", else: "gray" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
                   <%= if character.id == @user.active_character_id, do: "A", else: "Ina" %>ktiv
                 </button>
+                <button type='button' class='label gray'>Entfernen</button>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
-
-
 
     <div class="bg-white relative shadow-xl rounded-lg mt-4">
       <h1 class="font-bold text-center bg-gray-300 rounded-t-lg leading-10 h-10 text-xl text-gray-900">Benutzerverwaltung</h1>
@@ -55,8 +54,6 @@ defmodule DsaWeb.DashboardComponent do
         <a href="#" class="hidden w-full border-t-2 border-gray-100 font-medium text-red-700 py-2 px-4 w-full block hover:bg-gray-100 transition duration-150">Account löschen</a>
       </div>
     </div>
-
-
     """
   end
 
@@ -72,5 +69,18 @@ defmodule DsaWeb.DashboardComponent do
         Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
         {:noreply, socket}
     end
+  end
+
+  def handle_event("delete", %{"character" => _id}, socket) do
+    # case Accounts.delete_character(id) do
+    #   {:ok, character} ->
+    #     send self(), {:update_user, Accounts.preload_user(user)}
+    #     {:noreply, socket}
+
+    #   {:error, changeset} ->
+    #     Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
+    #     {:noreply, socket}
+    # end
+    {:noreply, socket}
   end
 end

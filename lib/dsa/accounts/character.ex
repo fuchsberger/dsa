@@ -33,7 +33,7 @@ defmodule Dsa.Accounts.Character do
   schema "characters" do
 
     # general
-    field :name, :string, default: "Held"
+    field :name, :string
     # field :title, :string
     # field :height, :float
     # field :weight, :integer
