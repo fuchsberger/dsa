@@ -30,7 +30,6 @@
     "sass-loader": "^11.0.1",
     "tailwindcss": "^2.0.3",
     "terser-webpack-plugin": "^5.1.1",
-    "url-loader": "^4.1.1",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0"
   }

@@ -42,15 +42,15 @@ module.exports = (env, options) => ({
           'postcss-loader',             // CSS postprocessing
           'sass-loader'                 // compiles Sass to CSS
         ]
-      },
-      {
-        test: /\.(png|woff2)$/i,
-        use: {
-          // handles icons font
-          loader: 'url-loader',
-          options: { limit: 8192 } // 8 Kb
-        }
       }
+      // {
+      //   test: /\.(png|woff2)$/i,
+      //   use: {
+      //     // handles icons font
+      //     loader: 'url-loader',
+      //     options: { limit: 8192 } // 8 Kb
+      //   }
+      // }
     ]
   },
   plugins: [
