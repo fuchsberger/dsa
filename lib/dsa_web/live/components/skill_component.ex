@@ -32,7 +32,7 @@ defmodule DsaWeb.SkillComponent do
         <%= header_row("Wissenstalente", "KL/KL/IN", "201-206", "48 AP") %>
         <%= for skill_id <- 31..42 do %><%= row(@myself, @character, skill_id) %><% end %>
         <%= header_row("Handwerkstalente", "FF/FF/KO", "206-213", "48 AP") %>
-        <%= for skill_id <- 43..58 do %><%= row(@myself, @character, skill_id) %><% end %>
+        <%= for skill_id <- 43..59 do %><%= row(@myself, @character, skill_id) %><% end %>
       </tbody>
     </table>
     """

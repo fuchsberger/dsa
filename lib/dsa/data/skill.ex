@@ -4,7 +4,7 @@ defmodule Dsa.Data.Skill do
   """
   @table :skills
 
-  def count, do: 58
+  def count, do: 59
   def list, do: :ets.tab2list(@table)
 
   def fields, do: Enum.map(1..count(), & String.to_atom("t#{&1}"))
@@ -82,7 +82,8 @@ defmodule Dsa.Data.Skill do
       {55, "C", 5, "FF/KO/KK", "Metallbearbeitung", true },
       {56, "A", 5, "CH/FF/KO", "Musizieren", true },
       {57, "C", 5, "IN/FF/FF", "Schlösserknacken", true },
-      {58, "A", 5, "FF/FF/KK", "Steinbearbeitung", true }
+      {58, "A", 5, "FF/FF/KK", "Steinbearbeitung", true },
+      {59, "A", 5, "KL/FF/FF", "Stoffbearbeitung", true }
     ])
   end
 end

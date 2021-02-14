@@ -196,13 +196,13 @@ defmodule Dsa.Accounts do
 
   def increment_character_skill(%Character{} = character, skill) do
     character
-    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill) + 1))
+    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill, 0) + 1))
     |> Repo.update()
   end
 
   def decrement_character_skill(%Character{} = character, skill) do
     character
-    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill) - 1))
+    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill, 0) - 1))
     |> Repo.update()
   end
 
