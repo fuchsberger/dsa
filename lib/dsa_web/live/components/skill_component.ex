@@ -42,12 +42,16 @@ defmodule DsaWeb.SkillComponent do
 
   def update(%{character_id: id, modifier: modifier}, socket) do
     {:ok, socket
-    |> assign(:character, Accounts.get_character(id, :skills))
+    |> assign(:character, Accounts.get_character!(id))
     |> assign(:modifier, modifier)}
   end
 
   def handle_event("decrement", %{"skill" => id}, socket) do
-    case Accounts.decrement_character_skill(socket.assigns.character, String.to_atom("t#{id}")) do
+    field = Skill.field(id)
+    value = Map.get(socket.assigns.character, field) - 1
+    character = Accounts.get_character!(socket.assigns.character_id)
+
+    case Accounts.update_character(socket.assigns.character, Map.put(%{}, field, value)) do
       {:ok, character} ->
         {:noreply, assign(socket, character: character)}
 
@@ -58,7 +62,11 @@ defmodule DsaWeb.SkillComponent do
   end
 
   def handle_event("increment", %{"skill" => id}, socket) do
-    case Accounts.increment_character_skill(socket.assigns.character, String.to_atom("t#{id}")) do
+    field = Skill.field(id)
+    value = Map.get(socket.assigns.character, field) + 1
+    character = Accounts.get_character!(socket.assigns.character_id)
+
+    case Accounts.update_character(character, Map.put(%{}, field, value)) do
       {:ok, character} ->
         {:noreply, assign(socket, character: character)}
 
@@ -72,49 +80,19 @@ defmodule DsaWeb.SkillComponent do
 
     skill_id = String.to_integer(id)
 
-    [trait_1, trait_2, trait_3] =
-      skill_id
-      |> Skill.probe()
-      |> traits()
-
-    trait_value_1 = Map.get(socket.assigns.character, trait_1)
-    trait_value_2 = Map.get(socket.assigns.character, trait_2)
-    trait_value_3 = Map.get(socket.assigns.character, trait_3)
-
-    dice_1 = Enum.random(1..20)
-    dice_2 = Enum.random(1..20)
-    dice_3 = Enum.random(1..20)
-
-    modifier = socket.assigns.modifier
-    skill_value = Map.get(socket.assigns.character, String.to_atom("t#{id}"))
-
-    result =
-      cond do
-        Enum.count([dice_1, dice_2, dice_3], & &1 == 1) >= 2 -> 10 # critical success
-        Enum.count([dice_1, dice_2, dice_3], & &1 == 20) >= 2 -> -2 # critical failure
-        true ->
-          # count spent tw
-          remaining = skill_value - max(dice_1 - trait_value_1 - modifier, 0) - max(dice_2 - trait_value_2 - modifier, 0) - max(dice_3 - trait_value_3 - modifier, 0)
-
-          cond do
-            remaining < 0 -> -1 # normal failure
-            true -> div(remaining, 3) + 1 # normal success => show quality
-          end
-      end
+    d1 = Enum.random(1..20)
+    d2 = Enum.random(1..20)
+    d3 = Enum.random(1..20)
 
     params =
       %{
         type: 4,
         x1: skill_id,
-        x4: trait_value_1,
-        x5: trait_value_2,
-        x6: trait_value_3,
-        x7: dice_1,
-        x8: dice_2,
-        x9: dice_3,
-        x10: modifier,
-        x11: skill_value,
-        x12: result,
+        x7: d1,
+        x8: d2,
+        x9: d3,
+        x10: socket.assigns.modifier,
+        x12: result(socket.assigns.character, skill_id, socket.assigns.modifier, d1, d2, d3),
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }
@@ -127,6 +105,24 @@ defmodule DsaWeb.SkillComponent do
       {:error, changeset} ->
         Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
         {:noreply, socket}
+    end
+  end
+
+  defp result(character, skill_id, mod, d1, d2, d3) do
+    cond do
+      Enum.count([d1, d2, d3], & &1 == 1) >= 2 -> 10 # critical success
+      Enum.count([d1, d2, d3], & &1 == 20) >= 2 -> -2 # critical failure
+      true ->
+        skill = Map.get(character, Skill.field(skill_id))
+        [t1, t2, t3] = Enum.map(Skill.traits(skill_id), & Map.get(character, &1))
+
+        # count spent tw
+        remaining = skill - max(d1 - t1 - mod, 0) - max(d2 - t2 - mod, 0) - max(d3 - t3 - mod, 0)
+
+        cond do
+          remaining < 0 -> -1 # normal failure
+          true -> div(remaining, 3) + 1 # normal success => show quality
+        end
     end
   end
 
@@ -147,8 +143,9 @@ defmodule DsaWeb.SkillComponent do
     """
   end
 
-  defp row(target, character, skill_id) do
-    value = Map.get(character, String.to_atom("t#{skill_id}"))
+  defp row(target, skill_values, skill_id) do
+    field = Skill.field(skill_id)
+    value = Map.get(skill_values, field)
 
     assigns = %{
       id: skill_id,

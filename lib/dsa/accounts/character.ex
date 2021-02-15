@@ -125,20 +125,13 @@ defmodule Dsa.Accounts.Character do
 
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :profession, :user_id] ++ base_values())
+    |> cast(attrs, [:name, :profession, :user_id] ++ base_values() ++ Skill.fields())
     |> validate_required([:name, :profession] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
     |> validate_base_values()
+    |> validate_skills()
     |> foreign_key_constraint(:user_id)
-  end
-
-  def skill_changeset(character, attrs) do
-    fields = Skill.fields()
-
-    Enum.reduce(fields, cast(character, attrs, fields), fn field, changeset ->
-      validate_number(changeset, field, greater_than_or_equal_to: 0, less_than_or_equal_to: 29)
-    end)
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
@@ -210,6 +203,12 @@ defmodule Dsa.Accounts.Character do
   #     validate_number(changeset, field, greater_than_or_equal_to: 6, less_than_or_equal_to: 25)
   #   end)
   # end
+
+  def validate_skills(changeset) do
+    Enum.reduce(Skill.fields(), changeset, fn field, changeset ->
+      validate_number(changeset, field, greater_than_or_equal_to: 0, less_than_or_equal_to: 29)
+    end)
+  end
 
   # defp validate_talents(changeset) do
   #   Enum.reduce(talent_fields(), changeset, fn field, changeset ->

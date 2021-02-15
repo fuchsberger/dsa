@@ -36,12 +36,12 @@ defmodule DsaWeb.CharacterComponent do
           <%= number_input f, :ch, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "CH" %>
         </div>
         <div>
-          <%= label f, :ge, "GE", class: "block text-center text-sm font-medium text-gray-700" %>
-          <%= number_input f, :ge, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "GE" %>
-        </div>
-        <div>
           <%= label f, :ff, "FF", class: "block text-center text-sm font-medium text-gray-700" %>
           <%= number_input f, :ff, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "FF" %>
+        </div>
+        <div>
+          <%= label f, :ge, "GE", class: "block text-center text-sm font-medium text-gray-700" %>
+          <%= number_input f, :ge, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "GE" %>
         </div>
         <div>
           <%= label f, :ko, "KO", class: "block text-center text-sm font-medium text-gray-700" %>

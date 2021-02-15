@@ -194,18 +194,6 @@ defmodule Dsa.Accounts do
     Character.changeset(character, attrs, type)
   end
 
-  def increment_character_skill(%Character{} = character, skill) do
-    character
-    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill, 0) + 1))
-    |> Repo.update()
-  end
-
-  def decrement_character_skill(%Character{} = character, skill) do
-    character
-    |> Character.skill_changeset(Map.put(%{}, skill, Map.get(character, skill, 0) - 1))
-    |> Repo.update()
-  end
-
   def change_character_assoc(%Character{} = character, nil, type) do
     character
     |> cast(%{}, [])
