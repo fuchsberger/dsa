@@ -2,7 +2,10 @@ defmodule DsaWeb.LiveHelpers do
 
   use Phoenix.HTML
   import Phoenix.LiveView
+
   alias Dsa.Accounts
+  alias DsaWeb.LiveView
+
   require Logger
 
   @doc """

@@ -4,8 +4,6 @@ defmodule DsaWeb.SkillComponent do
   alias Dsa.Data.Skill
   alias Dsa.{Accounts, Event, Repo}
 
-  import DsaWeb.DsaLive, only: [topic: 0]
-
   @group_id 1
 
   def render(assigns) do
@@ -18,7 +16,6 @@ defmodule DsaWeb.SkillComponent do
           <th scope="col" class="px-1 hidden sm:table-cell">BE</th>
           <th scope="col" class="px-1 hidden sm:table-cell">SF</th>
           <th scope="col" colspan='3'>FW</th>
-          <th scope="col">R</th>
           <th scope="col">P</th>
         </tr>
       </thead>
@@ -40,40 +37,10 @@ defmodule DsaWeb.SkillComponent do
 
   def mount(socket), do: {:ok, socket}
 
-  def update(%{character_id: id, modifier: modifier}, socket) do
-    {:ok, socket
-    |> assign(:character, Accounts.get_character!(id))
-    |> assign(:modifier, modifier)}
-  end
-
-  def handle_event("decrement", %{"skill" => id}, socket) do
-    field = Skill.field(id)
-    value = Map.get(socket.assigns.character, field) - 1
-    character = Accounts.get_character!(socket.assigns.character_id)
-
-    case Accounts.update_character(socket.assigns.character, Map.put(%{}, field, value)) do
-      {:ok, character} ->
-        {:noreply, assign(socket, character: character)}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while decrementing character skill: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("increment", %{"skill" => id}, socket) do
-    field = Skill.field(id)
-    value = Map.get(socket.assigns.character, field) + 1
-    character = Accounts.get_character!(socket.assigns.character_id)
-
-    case Accounts.update_character(character, Map.put(%{}, field, value)) do
-      {:ok, character} ->
-        {:noreply, assign(socket, character: character)}
-
-      {:error, changeset} ->
-        Logger.error("Error occured while incrementing character skill: #{inspect(changeset)}")
-        {:noreply, socket}
-    end
+  def handle_event("update", params, socket) do
+    Accounts.update_character!(socket.assigns.character, params)
+    broadcast(:update_user)
+    {:noreply, socket}
   end
 
   def handle_event("roll", %{"skill" => id}, socket) do
@@ -99,7 +66,7 @@ defmodule DsaWeb.SkillComponent do
 
     case Event.create_log(params) do
       {:ok, log} ->
-        Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(), {:log, Event.preload_character_name(log)})
+        broadcast({:log, Event.preload_character_name(log)})
         {:noreply, assign(socket, :log_open?, true)}
 
       {:error, changeset} ->
@@ -134,7 +101,7 @@ defmodule DsaWeb.SkillComponent do
       <th scope="row" class="hidden sm:table-cell px-0"><%= @probe %></th>
       <th colspan='2' scope="row" class="px-1 hidden sm:table-cell"><%= @pages %></th>
       <th colspan='3' scope="row"><%= @ap %></th>
-      <th scope="row" class="px-1" colspan='2'>
+      <th scope="row" class="px-1">
         <svg class='inline-block w-4 h-4' viewBox="0 0 20 20" fill="currentColor">
           <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
         </svg>
@@ -165,7 +132,11 @@ defmodule DsaWeb.SkillComponent do
       <td class="px-1 py-1 hidden sm:table-cell"><%= @be %></td>
       <td class="px-1 py-1 hidden sm:table-cell"><%= @sf %></td>
       <td class="pl-1 py-1">
-        <button class='<%= @show_minus %> focus-none' phx-click='decrement' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>
+        <button
+          class='<%= @show_minus %> focus-none'
+          phx-click='update'
+          phx-value-t<%= @id %>='<%= @value - 1 %>'
+          phx-target='<%= @target %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
           </svg>
@@ -173,19 +144,15 @@ defmodule DsaWeb.SkillComponent do
       </td>
       <td class="px-0 py-1 text-center font-bold"><%= @value %></td>
       <td class="pr-1 py-1">
-        <button class='<%= @show_plus %>' phx-click='increment' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>
+        <button
+          class='<%= @show_plus %> focus-none'
+          phx-click='update'
+          phx-value-t<%= @id %>='<%= @value + 1 %>'
+          phx-target='<%= @target %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
         </button>
-      </td>
-      <td class="px-1 py-1">
-        <button class='hidden' phx-click='increment' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>
-          <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
-          </svg>
-        </button>
-        -
       </td>
       <td class="px-1 py-1">
         <button class='' phx-click='roll' phx-value-skill='<%= @id %>' phx-target='<%= @target %>'>

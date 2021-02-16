@@ -8,6 +8,8 @@ defmodule DsaWeb.DsaLive do
 
   @group_id 1
 
+  def broadcast(message), do: Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(), message)
+
   def topic, do: "log:#{@group_id}"
 
   def render(assigns) do
@@ -48,8 +50,11 @@ defmodule DsaWeb.DsaLive do
 
       <% :skills -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, mod: @modifier %>
-        <%= live_component @socket, DsaWeb.SkillComponent, id: :skills,
-          character_id: @user.active_character_id, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.SkillComponent,
+          id: :skills,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
 
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
@@ -79,8 +84,11 @@ defmodule DsaWeb.DsaLive do
     |> assign(:show_log?, false)
     |> assign(:reset_user, nil)
     |> assign(:token, Map.get(params, "token"))
-    |> assign(:user, user)
-    |> assign(:user_id, user_id)}
+    |> assign(:user, user)}
+  end
+
+  def handle_info(:update_user, socket) do
+    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
   end
 
   def handle_info({:log, entry}, socket) do
@@ -92,12 +100,6 @@ defmodule DsaWeb.DsaLive do
     send_update(DsaWeb.LogComponent, id: :log, action: :clear)
     {:noreply, socket}
   end
-
-  def handle_info(:update_user, socket) do
-    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user_id))}
-  end
-
-  def handle_info({:update_user, user}, socket), do: {:noreply, assign(socket, :user, user)}
 
   def handle_info({:update_character, character}, socket) do
     {:noreply, assign(socket, :user, Map.put(socket.assigns.user, :active_character, character))}
@@ -201,4 +203,6 @@ defmodule DsaWeb.DsaLive do
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
   end
+
+
 end

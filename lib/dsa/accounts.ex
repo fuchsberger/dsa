@@ -234,6 +234,12 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
+  def update_character!(%Character{} = character, attrs) do
+    character
+    |> Character.changeset(attrs)
+    |> Repo.update!()
+  end
+
   def update_character(%Character{} = character, attrs, type) do
     character
     |> Character.changeset(attrs, type)

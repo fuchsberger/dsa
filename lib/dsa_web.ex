@@ -43,11 +43,11 @@ defmodule DsaWeb do
       ]
 
       import Phoenix.LiveView.Helpers
-
       import DsaWeb.DsaHelpers
       import DsaWeb.FormHelpers
       import DsaWeb.ViewHelpers
 
+      import DsaWeb.DsaLive, only: [broadcast: 1]
       import DsaWeb.Gettext
       import DsaWeb.Icons
 
