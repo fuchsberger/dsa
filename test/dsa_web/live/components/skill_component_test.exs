@@ -36,7 +36,6 @@ defmodule Dsa.SkillComponentTest do
     assert SkillComponent.result(character, 1, 0, 10, 10, 10) == 2 # all dice below or equal
     assert SkillComponent.result(character, 1, -1, 10, 10, 10) == 1 # negative modifier
     assert SkillComponent.result(character, 1, 6, 10, 10, 10) == 2 # positive modifier
-    assert SkillComponent.result(character, 1, 6, 10, 10, 10) == 2 # positive modifier
     assert SkillComponent.result(character, 1, 0, 10, 11, 10) == 2 # 1 skill point used
     assert SkillComponent.result(character, 1, 0, 10, 12, 10) == 1 # 2 skill points used
     assert SkillComponent.result(character, 1, 0, 10, 14, 10) == 1 # 4 skill points used
