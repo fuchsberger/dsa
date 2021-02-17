@@ -75,7 +75,7 @@ defmodule DsaWeb.SkillComponent do
     end
   end
 
-  defp result(character, skill_id, mod, d1, d2, d3) do
+  def result(character, skill_id, mod, d1, d2, d3) do
     cond do
       Enum.count([d1, d2, d3], & &1 == 1) >= 2 -> 10 # critical success
       Enum.count([d1, d2, d3], & &1 == 20) >= 2 -> -2 # critical failure
