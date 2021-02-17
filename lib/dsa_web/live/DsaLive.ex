@@ -22,7 +22,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.DashboardComponent,
           id: :dashboard,
           active_character_id: @user.active_character_id,
-          user_id: @user_id
+          user_id: @user.id
         %>
 
       <% :new_character -> %>
@@ -46,7 +46,7 @@ defmodule DsaWeb.DsaLive do
 
       <% :reset_password -> %>
         <%= live_component @socket, DsaWeb.ResetPasswordComponent,
-          id: :reset_password, user_id: @user_id, token: @token %>
+          id: :reset_password, user_id: @user.id, token: @token %>
 
       <% :skills -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, mod: @modifier %>
