@@ -134,11 +134,11 @@ defmodule DsaWeb.DsaHelpers do
 
   def ap_level(level, sf) do
     case sf do
-      "A" -> if level < 13, do: 1, else: level - 11
-      "B" -> if level < 13, do: 2, else: level * 2 - 22
-      "C" -> if level < 13, do: 3, else: level * 3 - 33
-      "D" -> if level < 13, do: 4, else: level * 4 - 44
-      "E" -> if level == 0, do: 0, else: (if level < 15, do: 15, else: (level - 13) * 15)
+      :A -> if level < 13, do: 1, else: level - 11
+      :B -> if level < 13, do: 2, else: level * 2 - 22
+      :C -> if level < 13, do: 3, else: level * 3 - 33
+      :D -> if level < 13, do: 4, else: level * 4 - 44
+      :E -> if level == 0, do: 0, else: (if level < 15, do: 15, else: (level - 13) * 15)
     end
   end
 end

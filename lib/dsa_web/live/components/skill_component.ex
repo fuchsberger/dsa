@@ -20,15 +20,15 @@ defmodule DsaWeb.SkillComponent do
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <%= header_row("Körpertalente", "MU/GE/KK", "188-194", "48 AP") %>
+        <%= header_row("Körpertalente", "MU/GE/KK", "188-194", @ap_1) %>
         <%= for skill_id <- 1..14 do %><%= row(@myself, @character, skill_id) %><% end %>
-        <%= header_row("Gesellschaftstalente", "IN/CH/CH", "194-198", "48 AP") %>
+        <%= header_row("Gesellschaftstalente", "IN/CH/CH", "194-198", @ap_2) %>
         <%= for skill_id <- 15..23 do %><%= row(@myself, @character, skill_id) %><% end %>
-        <%= header_row("Naturtalente", "MU/GE/KO", "198-201", "48 AP") %>
+        <%= header_row("Naturtalente", "MU/GE/KO", "198-201", @ap_3) %>
         <%= for skill_id <- 24..30 do %><%= row(@myself, @character, skill_id) %><% end %>
-        <%= header_row("Wissenstalente", "KL/KL/IN", "201-206", "48 AP") %>
+        <%= header_row("Wissenstalente", "KL/KL/IN", "201-206", @ap_4) %>
         <%= for skill_id <- 31..42 do %><%= row(@myself, @character, skill_id) %><% end %>
-        <%= header_row("Handwerkstalente", "FF/FF/KO", "206-213", "48 AP") %>
+        <%= header_row("Handwerkstalente", "FF/FF/KO", "206-213", @ap_5) %>
         <%= for skill_id <- 43..59 do %><%= row(@myself, @character, skill_id) %><% end %>
       </tbody>
     </table>
@@ -37,13 +37,20 @@ defmodule DsaWeb.SkillComponent do
 
   def mount(socket), do: {:ok, socket}
 
-  def handle_event("update", params, socket) do
-    Accounts.update_character!(socket.assigns.character, params)
-    broadcast(:update_user)
-    {:noreply, socket}
+  def update(%{character: character, modifier: modifier}, socket) do
+    {:ok, socket
+    |> assign(:character, character)
+    |> assign(:modifier, character)
+    |> assign(:ap_1, ap(character, :skills, 1))
+    |> assign(:ap_2, ap(character, :skills, 2))
+    |> assign(:ap_3, ap(character, :skills, 3))
+    |> assign(:ap_4, ap(character, :skills, 4))
+    |> assign(:ap_5, ap(character, :skills, 5))}
   end
 
   def handle_event("roll", %{"skill" => id}, socket) do
+
+    ap(socket.assigns.character, :skills, 1)
 
     skill_id = String.to_integer(id)
 
@@ -100,7 +107,7 @@ defmodule DsaWeb.SkillComponent do
       <th scope="row" class="px-2 text-left text-base"><%= @category %></th>
       <th scope="row" class="hidden sm:table-cell px-0"><%= @probe %></th>
       <th colspan='2' scope="row" class="px-1 hidden sm:table-cell"><%= @pages %></th>
-      <th colspan='3' scope="row"><%= @ap %></th>
+      <th colspan='3' scope="row"><%= @ap %> AP</th>
       <th scope="row" class="px-1">
         <svg class='inline-block w-4 h-4' viewBox="0 0 20 20" fill="currentColor">
           <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
@@ -134,9 +141,8 @@ defmodule DsaWeb.SkillComponent do
       <td class="pl-1 py-1">
         <button
           class='<%= @show_minus %> focus-none'
-          phx-click='update'
-          phx-value-t<%= @id %>='<%= @value - 1 %>'
-          phx-target='<%= @target %>'>
+          phx-click='update_character'
+          phx-value-t<%= @id %>='<%= @value - 1 %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
           </svg>
@@ -146,9 +152,8 @@ defmodule DsaWeb.SkillComponent do
       <td class="pr-1 py-1">
         <button
           class='<%= @show_plus %> focus-none'
-          phx-click='update'
-          phx-value-t<%= @id %>='<%= @value + 1 %>'
-          phx-target='<%= @target %>'>
+          phx-click='update_character'
+          phx-value-t<%= @id %>='<%= @value + 1 %>'>
           <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>

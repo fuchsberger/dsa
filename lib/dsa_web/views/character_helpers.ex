@@ -7,6 +7,8 @@ defmodule DsaWeb.CharacterHelpers do
   import Dsa
   import DsaWeb.DsaHelpers
 
+  require Logger
+
   alias Dsa.Data.{
     Advantage,
     CombatSkill,
@@ -121,6 +123,14 @@ defmodule DsaWeb.CharacterHelpers do
   def ap(c, :languages), do: Enum.map(c.languages, & &1.level  * 2) |> Enum.sum()
 
   def ap(c, :scripts), do: Enum.map(c.scripts, & Script.ap(&1.script_id)) |> Enum.sum()
+
+  def ap(c, :skills, category) do
+    1..Skill.count()
+    |> Enum.map(& {&1, Skill.category(&1), Skill.sf(&1), Map.get(c, Skill.field(&1))})
+    |> Enum.filter(fn {_id, group, _sf, _level} -> category == group end)
+    |> Enum.map(fn {_id, _group, sf, level} -> ap_cost(level, sf) end)
+    |> Enum.sum()
+  end
 
   defp add_total(map), do: Map.put(map, :total, Enum.sum(Map.values(map)))
 

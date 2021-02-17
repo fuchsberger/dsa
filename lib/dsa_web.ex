@@ -44,6 +44,7 @@ defmodule DsaWeb do
 
       import Phoenix.LiveView.Helpers
       import DsaWeb.DsaHelpers
+      import DsaWeb.CharacterHelpers
       import DsaWeb.FormHelpers
       import DsaWeb.ViewHelpers
 

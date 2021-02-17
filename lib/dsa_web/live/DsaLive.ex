@@ -204,5 +204,9 @@ defmodule DsaWeb.DsaLive do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
   end
 
-
+  def handle_event("update_character", params, socket) do
+    Accounts.update_character!(socket.assigns.user.active_character, params)
+    broadcast(:update_user)
+    {:noreply, socket}
+  end
 end
