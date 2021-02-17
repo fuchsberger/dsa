@@ -40,7 +40,7 @@ defmodule DsaWeb.SkillComponent do
   def update(%{character: character, modifier: modifier}, socket) do
     {:ok, socket
     |> assign(:character, character)
-    |> assign(:modifier, character)
+    |> assign(:modifier, modifier)
     |> assign(:ap_1, ap(character, :skills, 1))
     |> assign(:ap_2, ap(character, :skills, 2))
     |> assign(:ap_3, ap(character, :skills, 3))
@@ -50,9 +50,9 @@ defmodule DsaWeb.SkillComponent do
 
   def handle_event("roll", %{"skill" => id}, socket) do
 
-    ap(socket.assigns.character, :skills, 1)
-
     skill_id = String.to_integer(id)
+    level = Map.get(socket.assigns.character, Skill.field(skill_id))
+    [t1, t2, t3] = Enum.map(Skill.traits(skill_id), & Map.get(socket.assigns.character, &1))
 
     d1 = Enum.random(1..20)
     d2 = Enum.random(1..20)
@@ -66,7 +66,7 @@ defmodule DsaWeb.SkillComponent do
         x8: d2,
         x9: d3,
         x10: socket.assigns.modifier,
-        x12: result(socket.assigns.character, skill_id, socket.assigns.modifier, d1, d2, d3),
+        x12: result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }
@@ -82,16 +82,13 @@ defmodule DsaWeb.SkillComponent do
     end
   end
 
-  def result(character, skill_id, mod, d1, d2, d3) do
+  def result(t1, t2, t3, level, mod, d1, d2, d3) do
     cond do
       Enum.count([d1, d2, d3], & &1 == 1) >= 2 -> 10 # critical success
       Enum.count([d1, d2, d3], & &1 == 20) >= 2 -> -2 # critical failure
       true ->
-        skill = Map.get(character, Skill.field(skill_id))
-        [t1, t2, t3] = Enum.map(Skill.traits(skill_id), & Map.get(character, &1))
-
         # count spent tw
-        remaining = skill - max(d1 - t1 - mod, 0) - max(d2 - t2 - mod, 0) - max(d3 - t3 - mod, 0)
+        remaining = level - max(d1 - t1 - mod, 0) - max(d2 - t2 - mod, 0) - max(d3 - t3 - mod, 0)
 
         cond do
           remaining < 0 -> -1 # normal failure
