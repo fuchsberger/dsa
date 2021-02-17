@@ -88,7 +88,7 @@ defmodule DsaWeb.SkillComponent do
 
         cond do
           remaining < 0 -> -1 # normal failure
-          true -> div(remaining, 3) + 1 # normal success => show quality
+          true -> min(6, div(remaining, 3) + 1) # normal success => show quality
         end
     end
   end
