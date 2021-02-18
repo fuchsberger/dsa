@@ -42,7 +42,17 @@ defmodule DsaWeb.DsaLive do
         %>
 
       <% :roll -> %>
-        <%= live_component @socket, DsaWeb.RollComponent, id: :roll, character_id: @user.active_character_id %>
+        <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.TraitComponent,
+          id: :traits,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
+        <%= live_component @socket, DsaWeb.RollComponent,
+          id: :roll,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
 
       <% :reset_password -> %>
         <%= live_component @socket, DsaWeb.ResetPasswordComponent,
@@ -50,6 +60,11 @@ defmodule DsaWeb.DsaLive do
 
       <% :skills -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.TraitComponent,
+          id: :traits,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
         <%= live_component @socket, DsaWeb.SkillComponent,
           id: :skills,
           character: @user.active_character,
