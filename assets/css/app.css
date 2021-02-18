@@ -61,7 +61,7 @@ iframe { display: none; }
 
   /* Modifier Component */
   .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; }
-  .neutral:focus, .negative:focus, .positive:focus, { @apply outline-none; }
+  .neutral:focus, .negative:focus, .positive:focus { @apply outline-none; }
 
   .neutral { @apply border-gray-300 bg-white; }
   .neutral:hover { @apply border-gray-400 bg-gray-100;}

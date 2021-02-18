@@ -49,7 +49,7 @@ defmodule DsaWeb.DsaLive do
           id: :reset_password, user_id: @user.id, token: @token %>
 
       <% :skills -> %>
-        <%= live_component @socket, DsaWeb.ModifierComponent, id: :modifier, mod: @modifier %>
+        <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
         <%= live_component @socket, DsaWeb.SkillComponent,
           id: :skills,
           character: @user.active_character,
@@ -176,6 +176,10 @@ defmodule DsaWeb.DsaLive do
     end
   end
 
+  def handle_event("assign", %{"modifier" => modifier}, socket) do
+    {:noreply, assign(socket, :modifier, String.to_integer(modifier))}
+  end
+
   def handle_event("close-account-dropdown", %{"key" => "Esc"}, socket) do
     {:noreply, assign(socket, :account_dropdown_open?, false)}
   end
@@ -186,10 +190,6 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("close-account-dropdown", _params, socket) do
     {:noreply, socket}
-  end
-
-  def handle_event("set", %{"mod" => modifier}, socket) do
-    {:noreply, assign(socket, :modifier, String.to_integer(modifier))}
   end
 
   def handle_event("toggle-account-dropdown", _params, socket) do

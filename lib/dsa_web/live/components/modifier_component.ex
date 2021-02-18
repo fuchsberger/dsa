@@ -9,29 +9,21 @@ defmodule DsaWeb.ModifierComponent do
       <h3 class='leading-6 border-2 border-transparent'>Modifier</h3>
 
       <div class="col-span-3 grid grid-cols-6 text-sm text-center font-medium">
-        <button class='<%= class(@mod, -6) %>' phx-click='set' phx-value-mod='-6'>-6</button>
-        <button class='<%= class(@mod, -5) %>' phx-click='set' phx-value-mod='-5'>-5</button>
-        <button class='<%= class(@mod, -4) %>' phx-click='set' phx-value-mod='-4'>-4</button>
-        <button class='<%= class(@mod, -3) %>' phx-click='set' phx-value-mod='-3'>-3</button>
-        <button class='<%= class(@mod, -2) %>' phx-click='set' phx-value-mod='-2'>-2</button>
-        <button class='<%= class(@mod, -1) %>' phx-click='set' phx-value-mod='-1'>-1</button>
+        <%= for value <- -6..-1 do %>
+          <%= modifier_button(@modifier, value) %>
+        <% end %>
       </div>
-
-      <button class='<%= class(@mod, 0) %>' phx-click='set' phx-value-mod='0'>0</button>
-
+      <%= modifier_button(@modifier, 0)  %>
       <div class="col-span-3 grid grid-cols-6 text-sm font-medium">
-        <button class='<%= class(@mod, 1) %>' phx-click='set' phx-value-mod='1'>1</button>
-        <button class='<%= class(@mod, 2) %>' phx-click='set' phx-value-mod='2'>2</button>
-        <button class='<%= class(@mod, 3) %>' phx-click='set' phx-value-mod='3'>3</button>
-        <button class='<%= class(@mod, 4) %>' phx-click='set' phx-value-mod='4'>4</button>
-        <button class='<%= class(@mod, 5) %>' phx-click='set' phx-value-mod='5'>5</button>
-        <button class='<%= class(@mod, 6) %>' phx-click='set' phx-value-mod='6'>6</button>
+        <%= for value <- 1..6 do %>
+          <%= modifier_button(@modifier, value) %>
+        <% end %>
       </div>
     </div>
     """
   end
 
-  defp class(modifier, value) do
+  defp modifier_button(modifier, value) do
     base =
       cond do
         value > 0 -> "positive"
@@ -39,6 +31,13 @@ defmodule DsaWeb.ModifierComponent do
         true -> "neutral"
       end
 
-    if modifier == value, do: "#{base} active", else: base
+    assigns = %{
+      class: (if modifier == value, do: "#{base} active", else: base),
+      value: value
+    }
+
+    ~L"""
+    <button class='<%= @class %>' phx-click='assign' phx-value-modifier='<%= @value %>'><%= @value %></button>
+    """
   end
 end
