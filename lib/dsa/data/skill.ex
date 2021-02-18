@@ -6,7 +6,7 @@ defmodule Dsa.Data.Skill do
 
   require Logger
 
-  def count, do: 59
+  def count, do: 110
   def list, do: :ets.tab2list(@table)
 
   def field(id), do: String.to_atom("t#{id}")
@@ -96,7 +96,58 @@ defmodule Dsa.Data.Skill do
       {56, :A, 5, :ch, :ff, :ko, "Musizieren", true },
       {57, :C, 5, :in, :ff, :ff, "Schlösserknacken", true },
       {58, :A, 5, :ff, :ff, :kk, "Steinbearbeitung", true },
-      {59, :A, 5, :kl, :ff, :ff, "Stoffbearbeitung", true }
+      {59, :A, 5, :kl, :ff, :ff, "Stoffbearbeitung", true },
+      {60, :B,999, :kl,:in,:ff, "Adlerauge", nil},
+      {61, :D,999, :kl,:in,:ff, "Arcanovi", nil},
+      {62, :C,999, :kl,:kl,:in, "Analys Arkanstruktur", nil},
+      {63, :C,999, :kl,:in,:ff, "Armatrutz", nil},
+      {64, :B,999, :kl,:in,:ff, "Axxeleratus", nil},
+      {65, :B,999, :kl,:in,:ff, "Balsam Salabunde", nil},
+      {66, :B,999, :mu,:in,:ch, "Bannbaladin", nil},
+      {67, :C,999, :mu,:kl,:in, "Blick in die Gedanken", nil},
+      {68, :A,999, :mu,:in,:ch, "Blitz dich find", nil},
+      {69, :C,999, :kl,:in,:ko, "Corpofesso", nil},
+      {70, :B,999, :mu,:kl,:ch, "Disruptivo", nil},
+      {71, :C,999, :mu,:ch,:ko, "Dschinnenruf", nil},
+      {72, :C,999, :kl,:in,:ch, "Duplicatus", nil},
+      {73, :B,999, :mu,:ch,:ko, "Elementarer Diener", nil},
+      {74, :B,999, :mu,:kl,:in, "Falkenauge", nil},
+      {75, :A,999, :mu,:kl,:ch, "Flim Flam", nil},
+      {76, :C,999, :kl,:in,:ko, "Fulminictus", nil},
+      {77, :B,999, :mu,:kl,:ch, "Gardianum", nil},
+      {78, :B,999, :mu,:in,:ch, "Große Gier", nil},
+      {79, :B,999, :kl,:in,:ch, "Harmlose Gestalt", nil},
+      {80, :B,999, :kl,:in,:ko, "Hexengalle", nil },
+      {81, :A,999, :kl,:in,:ko, "Hexenkrallen", nil },
+      {82, :B,999, :mu,:in,:ch, "Horriphobus", nil },
+      {83, :C,999, :mu,:kl,:ch, "Ignifaxius", nil },
+      {84, :C,999, :mu,:ch,:ko, "Invocatio Maior", nil },
+      {85, :A,999, :mu,:ch,:ko, "Invocatio Minima", nil },
+      {86, :B,999, :mu,:ch,:ko, "Invocatio Minor", nil },
+      {87, :A,999, :kl,:in,:ko, "Katzenaugen", nil},
+      {88, :A,999, :kl,:in,:ko, "Krötensprung", nil},
+      {89, :A,999, :mu,:kl,:ch, "Manifesto", nil},
+      {90, :A,999, :kl,:ff,:kk, "Manus Miracula", nil},
+      {91, :B,999, :kl,:ff,:kk, "Motoricus", nil},
+      {92, :C,999, :mu,:kl,:ch, "Nebelwand", nil},
+      {93, :B,999, :kl,:in,:ch, "Oculus Illusionis", nil},
+      {94, :A,999, :kl,:in,:in, "Odem Arcanum", nil},
+      {95, :B,999, :kl,:in,:ko, "Paralysis", nil},
+      {96, :B,999, :mu,:kl,:in, "Penetrizzel", nil},
+      {97, :B,999, :kl,:in,:ff, "Psychostabilis", nil},
+      {98, :B,999, :kl,:ff,:kk, "Radau", nil},
+      {99, :B,999, :mu,:in,:ch, "Respondami", nil},
+      {100,:C,999, :kl,:in,:ko, "Salander", nil},
+      {101,:A,999, :mu,:in,:ch, "Sanftmut", nil},
+      {102,:B,999, :kl,:in,:ko, "Satuarias Herrlichkeit", nil},
+      {103,:B,999, :kl,:ff,:kk, "Silentium", nil},
+      {104,:B,999, :mu,:in,:ch, "Somnigravis", nil},
+      {105,:A,999, :kl,:in,:ko, "Spinnenlauf", nil},
+      {106,:B,999, :kl,:ff,:kk, "Spurlos", nil},
+      {107,:C,999, :mu,:ch,:ko, "Transversalis", nil},
+      {108,:B,999, :kl,:in,:ko, "Visibili", nil},
+      {109,:B,999, :kl,:in,:ko, "Wasseratem", nil},
+      {110,:D,999, :kl,:in,:ff, "Zauberklinge Geisterspeer", nil }
     ])
   end
 end
