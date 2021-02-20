@@ -13,7 +13,7 @@ defmodule DsaWeb.AccountComponent do
       phx_trigger_action: @trigger_login?,
       novalidate: true
     %>
-      <%= icon(:tailwind, class: "mt-4 text-indigo-600 h-12 w-auto mx-auto") %>
+      <%= icon @socket, "tailwind", "mt-4 text-indigo-600 h-12 w-auto mx-auto" %>
 
       <%# Heading %>
       <%= case @action do %>
