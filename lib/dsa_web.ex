@@ -50,7 +50,6 @@ defmodule DsaWeb do
 
       import DsaWeb.DsaLive, only: [broadcast: 1]
       import DsaWeb.Gettext
-      import DsaWeb.Icons
 
       alias DsaWeb.Router.Helpers, as: Routes
 
@@ -73,7 +72,6 @@ defmodule DsaWeb do
 
       import DsaWeb.FormHelpers
       import DsaWeb.Gettext
-      import DsaWeb.Icons
       import DsaWeb.ViewHelpers
       import Phoenix.LiveView.Helpers
 

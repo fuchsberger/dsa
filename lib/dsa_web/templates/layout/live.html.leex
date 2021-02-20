@@ -5,13 +5,7 @@
         <!-- Mobile menu button-->
         <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" phx-click='toggle-menu' aria-expanded="false">
           <span class="sr-only">Open main menu</span>
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <!-- Icon when menu is closed. -->
-            <path class='<%= if @menu_open?, do: "hidden", else: "block" %>' stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-
-            <!-- Icon when menu is open. -->
-            <path class="<%= if @menu_open?, do: "block", else: "hidden" %>" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <%= if @menu_open?, do: icon(@socket, "x"), else: icon(@socket, "menu") %>
         </button>
       </div>
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
@@ -39,12 +33,11 @@
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <button class="lg:hidden bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" phx-click='toggle-log'>
           <span class="sr-only">View Log</span>
-          <!-- Heroicon name: bell -->
-          <%= icon :clipboard_list %>
+          <%= icon @socket, "clipboard-list" %>
         </button>
         <a href='<%= Routes.session_path(@socket, :delete) %>' title='Logout' class='hidden <%= unless is_nil(@user), do: "lg:block" %> text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>
           <span class='ml-2 hidden <%= unless is_nil(@user), do: "lg:inline-block" %>'><%= @user && @user.username %></span>
-          <%= icon(:logout, class: "w-6 h-6 inline-block") %>
+          <%= icon @socket, "logout" %>
         </a>
       </div>
     </div>
@@ -67,13 +60,13 @@
   <div class='px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-auto <%= if @log_open?, do: "hidden", else: "block" %> lg:block'>
     <div class="<%= if is_nil(live_flash(@flash, :error)), do: "hidden" %> group relative w-full flex justify-center py-2 pl-10 pr-4 bg-red-200 text-red-800 rounded-md">
       <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-        <%= icon :exclamation_circle, class: "w-5 h-5" %>
+        <%= icon @socket, "exclamation-circle", "inline-block w-5 h-5" %>
       </span>
       <%= live_flash(@flash, :error) %>
     </div>
     <div class="<%= if is_nil(live_flash(@flash, :info)), do: "hidden" %> group relative w-full flex justify-center py-2 pl-10 pr-4 bg-blue-200 text-blue-800 rounded-md">
       <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-        <%= icon :exclamation_circle, class: "w-5 h-5" %>
+        <%= icon @socket, "exclamation-circle", "inline-block w-5 h-5" %>
       </span>
       <%= live_flash(@flash, :info) %>
     </div>

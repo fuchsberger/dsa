@@ -82,16 +82,16 @@ defmodule DsaWeb.LiveHelpers do
     |> String.to_atom()
   end
 
-  def buttons(target) do
-    ~E"""
-      <div class="buttons are-small is-centered">
-        <button type='submit' class='button is-info py-0 mb-1 h-auto'>
-          <span class='icon mr-1'><i class='icon-ok'></i></span> speichern
-        </button>
-        <button class='button is-light py-0 mb-1 h-auto' phx-click='cancel' phx-target='<%= target %>' type='button'>
-          <span class='icon mr-1'><i class='icon-cancel'></i></span> abbrechen
-        </button>
-      </div>
-    """
-  end
+  # def buttons(target) do
+  #   ~E"""
+  #     <div class="buttons are-small is-centered">
+  #       <button type='submit' class='button is-info py-0 mb-1 h-auto'>
+  #         <span class='icon mr-1'><i class='icon-ok'></i></span> speichern
+  #       </button>
+  #       <button class='button is-light py-0 mb-1 h-auto' phx-click='cancel' phx-target='<%= target %>' type='button'>
+  #         <span class='icon mr-1'><i class='icon-cancel'></i></span> abbrechen
+  #       </button>
+  #     </div>
+  #   """
+  # end
 end

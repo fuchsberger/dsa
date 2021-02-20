@@ -19,11 +19,7 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
 
       <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent,
-          id: :dashboard,
-          active_character_id: @user.active_character_id,
-          user_id: @user.id
-        %>
+        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
 
       <% :new_character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent,

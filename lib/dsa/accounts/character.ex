@@ -33,6 +33,7 @@ defmodule Dsa.Accounts.Character do
   schema "characters" do
 
     # general
+    field :visible, :boolean
     field :name, :string
     # field :title, :string
     # field :height, :float
@@ -125,7 +126,7 @@ defmodule Dsa.Accounts.Character do
 
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:name, :profession, :user_id] ++ base_values() ++ Skill.fields())
+    |> cast(attrs, [:visible, :name, :profession, :user_id] ++ base_values() ++ Skill.fields())
     |> validate_required([:name, :profession] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)

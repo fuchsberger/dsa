@@ -1,6 +1,6 @@
 const path = require('path')
 // const glob = require('glob')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -42,19 +42,18 @@ module.exports = (env, options) => ({
           'css-loader',                 // translates CSS into CommonJS
           'postcss-loader'              // CSS postprocessing
         ]
+      },
+      {
+        test: /\.(svg|png)$/,
+        use: {
+          loader: 'url-loader',
+          options: { limit: 8192 } // 8 Kb
+        }
       }
-      // {
-      //   test: /\.(png|woff2)$/i,
-      //   use: {
-      //     // handles icons font
-      //     loader: 'url-loader',
-      //     options: { limit: 8192 } // 8 Kb
-      //   }
-      // }
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({ filename: '../css/app.css' }),
-    new CopyWebpackPlugin({ patterns: [{ from: 'static/', to: '../' }]})
+    new CopyPlugin({ patterns: [{ from: 'static/', to: '../' }]})
   ]
 });

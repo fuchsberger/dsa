@@ -95,8 +95,6 @@ defmodule DsaWeb.AccountComponent do
       </div>
       <%= if @action == :register, do: error_tag f, :password_confirm %>
 
-
-
       <div class="hidden flex items-center justify-between">
         <div class="flex items-center">
           <input id="remember_me" disabled name="remember_me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
@@ -109,10 +107,7 @@ defmodule DsaWeb.AccountComponent do
       </div>
 
       <button type="submit" class="large group relative mx-auto block pl-10 pr-4 mt-3">
-        <!-- Heroicon name: lock-closed -->
-        <svg class="absolute block left-2 top-2 h-6 w-6 text-indigo-500 group-hover:text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" />
-        </svg>
+        <%= icon @socket, "lock-closed", "absolute block left-2 top-2 w-6 h-6 text-indigo-500 group-hover:text-indigo-400" %>
         <%= case @action do %>
           <% :confirm -> %><span>Erneut senden</span>
           <% :register -> %><span>Registrieren</span>
