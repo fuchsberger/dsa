@@ -11,11 +11,12 @@ defmodule DsaWeb.DashboardComponent do
           <tr>
             <th scope="col" class="px-6">
               <%= live_patch to: Routes.dsa_path(@socket, :new_character) do %>
-                <svg class='inline-block w-5 h-5' fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+                <%= icon @socket, "plus" %>
               <% end %>
               <span>Held</span>
+            </th>
+            <th scope="col" class='text-center'>
+              <%= icon @socket, "eye-solid" %>
             </th>
             <th scope="col" class="px-6">Status</th>
           </tr>
@@ -32,6 +33,16 @@ defmodule DsaWeb.DashboardComponent do
                     <%= character.profession %>
                   </div>
                 </div>
+              </td>
+              <td class='text-center'>
+                <button
+                  class='text-indigo-400'
+                  phx-click='update-character'
+                  phx-value-id='<%= character.id %>'
+                  phx-value-visible='<%= not character.visible %>'
+                  phx-target='<%= @myself %>'>
+                  <%= icon @socket, (if character.visible, do: "eye", else: "eye-off") %>
+                </button>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <button type='button' class="label <%= if character.id == @user.active_character_id, do: "green", else: "gray" %>" phx-click='activate' phx-target='<%= @myself %>' phx-value-character='<%= character.id %>'>
@@ -67,6 +78,20 @@ defmodule DsaWeb.DashboardComponent do
 
       {:error, changeset} ->
         Logger.error("An error occured when toggling active character: \n#{inspect(changeset)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("update-character", %{"id" => id, "visible" => visible}, socket) do
+    character = Enum.find(socket.assigns.user.characters, & &1.id == String.to_integer(id))
+
+    case Accounts.update_character(character, %{visible: visible}) do
+      {:ok, _character} ->
+        send self(), :update_user
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error("An error occured when updating character: \n#{inspect(changeset)}")
         {:noreply, socket}
     end
   end
