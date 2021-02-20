@@ -48,6 +48,10 @@
     <div class="px-2 pt-2 pb-3 space-y-1">
       <%= live_patch "Held", to: Routes.dsa_path(@socket, :character),
         class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
+
+      <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
+        class: "#{if @live_action == :skills, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
+
       <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
         class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
       <%= link "Ausloggen", to: Routes.session_path(@socket, :delete), class: "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" %>

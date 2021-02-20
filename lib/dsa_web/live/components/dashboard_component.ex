@@ -102,8 +102,7 @@ defmodule DsaWeb.DashboardComponent do
     case Accounts.delete_character(character) do
       {:ok, character} ->
         send self(), :update_user
-        characters = Enum.reject(socket.assigns.characters, & &1.id == character.id)
-        {:noreply, assign(socket, :characters, characters)}
+        {:noreply, socket}
 
       {:error, changeset} ->
         Logger.error("An error occured when deleting character: \n#{inspect(changeset)}")
