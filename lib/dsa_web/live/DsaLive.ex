@@ -22,20 +22,10 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
 
       <% :new_character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent,
-          id: :character,
-          action: :create,
-          character: %Dsa.Accounts.Character{},
-          user_id: @user.id
-        %>
+        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
 
       <% :character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent,
-          id: :character,
-          action: :update,
-          character: @user.active_character,
-          user_id: @user.id
-        %>
+        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
 
       <% :roll -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>

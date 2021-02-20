@@ -51,6 +51,11 @@ defmodule Dsa.Accounts.Character do
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
     Enum.each(Skill.fields(), & field(&1, :integer, default: 0))
 
+    # current stats
+    field :le, :integer
+    field :ke, :integer
+    field :ae, :integer
+
     # # combat
     # field :at, :integer, default: 5
     # field :pa, :integer, default: 5
@@ -69,10 +74,10 @@ defmodule Dsa.Accounts.Character do
     # field :ke_lost, :integer, default: 0
     # field :ke_back, :integer, default: 0
 
-    # # overwrites
-    # field :le, :integer
-    # field :ke, :integer
-    # field :ae, :integer
+    # overwrites (will be deleted once formulas are fully completed)
+    field :le_max, :integer, default: 0
+    field :ae_max, :integer, default: 0
+    field :ke_max, :integer, default: 0
     # field :sk, :integer
     # field :zk, :integer
     # field :ini, :integer
@@ -124,12 +129,17 @@ defmodule Dsa.Accounts.Character do
     timestamps()
   end
 
+  @fields ~w(name visible profession le_max ae_max ke_max le ae ke)a
+
   def changeset(character, attrs) do
     character
-    |> cast(attrs, [:visible, :name, :profession, :user_id] ++ base_values() ++ Skill.fields())
-    |> validate_required([:name, :profession] ++ base_values())
+    |> cast(attrs, @fields ++ base_values() ++ Skill.fields())
+    |> validate_required([:name] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
+    |> validate_number(:le_max, greater_than_or_equal_to: 0)
+    |> validate_number(:ae_max, greater_than_or_equal_to: 0)
+    |> validate_number(:ke_max, greater_than_or_equal_to: 0)
     |> validate_base_values()
     |> validate_skills()
     |> foreign_key_constraint(:user_id)

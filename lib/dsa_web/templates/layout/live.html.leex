@@ -18,15 +18,17 @@
 
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <%= live_patch "Held", to: Routes.dsa_path(@socket, :character),
-        class: "#{if @live_action == :character, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
+            <%= live_patch "+ Neuer Held", to: Routes.dsa_path(@socket, :new_character),
+              class: "menu-item #{if @live_action == :new_character, do: "active"} #{if is_nil(@user) || not is_nil(@user.active_character_id), do: "hidden"}" %>
 
-          <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
-        class: "#{if @live_action == :skills, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
+            <%= live_patch "Held", to: Routes.dsa_path(@socket, :character),
+              class: "menu-item #{if @live_action == :character, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
+
+            <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
+              class: "menu-item #{if @live_action == :skills, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
 
             <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
-        class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-sm font-medium" %>
+              class: "menu-item  #{if @live_action == :roll, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
           </div>
         </div>
       </div>

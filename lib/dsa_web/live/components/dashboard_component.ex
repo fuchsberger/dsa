@@ -9,15 +9,8 @@ defmodule DsaWeb.DashboardComponent do
       <table class="w-full border-gray-200 divide-y divide-gray-200">
         <thead class="leading-8 text-gray-900 bg-gray-300 font-medium text-left">
           <tr>
-            <th scope="col" class="px-6">
-              <%= live_patch to: Routes.dsa_path(@socket, :new_character) do %>
-                <%= icon @socket, "plus" %>
-              <% end %>
-              <span>Held</span>
-            </th>
-            <th scope="col" class='text-center'>
-              <%= icon @socket, "eye-solid" %>
-            </th>
+            <th scope="col" class="px-6">Held</th>
+            <th scope="col" class='text-center'><%= icon @socket, "eye-solid" %></th>
             <th scope="col" class="px-6">Status</th>
           </tr>
         </thead>

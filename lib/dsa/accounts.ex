@@ -60,7 +60,7 @@ defmodule Dsa.Accounts do
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
   def get_user!(id) do
-    Repo.get!(from(u in User, preload: [:characters, :active_character]), id)
+    Repo.get!(from(u in User, preload: [:characters, active_character: [:user]]), id)
   end
 
   @spec get_user_base_data!(integer() | nil) :: tuple()
@@ -200,6 +200,13 @@ defmodule Dsa.Accounts do
     %Character{}
     |> Character.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def submit_character(%User{} = user, %Character{} = character, attrs) do
+    character
+    |> Character.changeset(attrs)
+    |> put_assoc(:user, user)
+    |> Repo.insert_or_update()
   end
 
   def update_character(%Character{} = character, attrs) do
