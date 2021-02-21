@@ -80,7 +80,7 @@ defmodule DsaWeb.DashboardComponent do
 
     case Accounts.update_character(character, %{visible: visible}) do
       {:ok, _character} ->
-        send self(), :update_user
+        broadcast :update_user
         {:noreply, socket}
 
       {:error, changeset} ->
@@ -94,7 +94,7 @@ defmodule DsaWeb.DashboardComponent do
 
     case Accounts.delete_character(character) do
       {:ok, character} ->
-        send self(), :update_user
+        broadcast :update_user
         {:noreply, socket}
 
       {:error, changeset} ->

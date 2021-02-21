@@ -46,9 +46,10 @@ defmodule DsaWeb.FormHelpers do
       disabled: is_nil(modified?) || not modified?
   end
 
-  defp expand(form, field, opts) do
+  defp expand(%{source: source} = form, field, opts) when is_map(source) do
+
     error_class =
-      case is_nil(form.source) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
+      case is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
         true -> ""
         false -> " error"
       end
@@ -57,6 +58,8 @@ defmodule DsaWeb.FormHelpers do
     |> Keyword.merge(Form.input_validations(form, field))
     |> Keyword.merge([class: "#{Keyword.get(opts, :class)}#{error_class}"])
   end
+
+  defp expand(form, field, opts), do: opts
 
   @doc """
   Generates tag for inlined form input errors.

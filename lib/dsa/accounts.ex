@@ -168,6 +168,11 @@ defmodule Dsa.Accounts do
     Repo.get(from(c in Character, select: ^fields), id)
   end
 
+  def get_visible_characters do
+    from(c in Character, where: c.visible == true, order_by: [desc: c.ini, asc: c.name])
+    |> Repo.all()
+  end
+
   def preload(%Character{} = character) do
     Repo.preload(character, @character_preloads, force: true)
   end
@@ -263,7 +268,7 @@ defmodule Dsa.Accounts do
 
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
-  def get_group!(id), do: Repo.get!(from(g in Group, preload: ^@group_preloads), id)
+  def get_group!(id), do: Repo.get!(Group, id)
 
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
   def add_armor(params), do: Armor.changeset(%Armor{}, params) |> Repo.insert()

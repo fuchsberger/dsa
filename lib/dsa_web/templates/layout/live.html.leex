@@ -27,6 +27,9 @@
             <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
               class: "menu-item #{if @live_action == :skills, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
 
+            <%= live_patch "Kampf", to: Routes.dsa_path(@socket, :combat),
+              class: "menu-item #{if @live_action == :combat, do: "active"} #{if is_nil(@user), do: "hidden"}" %>
+
             <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
               class: "menu-item  #{if @live_action == :roll, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
           </div>
@@ -53,6 +56,9 @@
 
       <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
         class: "#{if @live_action == :skills, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
+
+      <%= live_patch "Kampf", to: Routes.dsa_path(@socket, :combat),
+        class: "#{if @live_action == :combat, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{if is_nil(@user), do: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>
 
       <%= live_patch "Probe", to: Routes.dsa_path(@socket, :roll),
         class: "#{if @live_action == :roll, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700"} #{unless is_nil(@user && @user.active_character_id), do: "block", else: "hidden"} px-3 py-2 rounded-md text-base font-medium" %>

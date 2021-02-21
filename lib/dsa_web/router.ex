@@ -26,6 +26,7 @@ defmodule DsaWeb.Router do
 
     live "/character/new", DsaLive, :new_character
     live "/character", DsaLive, :character
+    live "/combat", DsaLive, :combat
     live "/dashboard", DsaLive, :dashboard
     live "/roll", DsaLive, :roll
     live "/skills", DsaLive, :skills

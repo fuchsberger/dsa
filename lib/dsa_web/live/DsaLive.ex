@@ -27,6 +27,13 @@ defmodule DsaWeb.DsaLive do
       <% :character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
 
+      <% :combat -> %>
+        <%= live_component @socket, DsaWeb.CombatComponent,
+          id: :combat,
+          user: @user,
+          visible_characters: @visible_characters
+        %>
+
       <% :roll -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
         <%= live_component @socket, DsaWeb.TraitComponent,
@@ -85,11 +92,14 @@ defmodule DsaWeb.DsaLive do
     |> assign(:show_log?, false)
     |> assign(:reset_user, nil)
     |> assign(:token, Map.get(params, "token"))
-    |> assign(:user, user)}
+    |> assign(:user, user)
+    |> assign(:visible_characters, Accounts.get_visible_characters())}
   end
 
   def handle_info(:update_user, socket) do
-    {:noreply, assign(socket, :user, Accounts.get_user!(socket.assigns.user.id))}
+    {:noreply, socket
+    |> assign(:user, Accounts.get_user!(socket.assigns.user.id))
+    |> assign(:visible_characters, Accounts.get_visible_characters())}
   end
 
   def handle_info({:log, entry}, socket) do
@@ -143,7 +153,7 @@ defmodule DsaWeb.DsaLive do
         end
 
       # Do not allow unauthenticated users to access restricted pages
-      is_nil(user) && Enum.member?([:dashboard, :character, :skills, :roll], action) ->
+      is_nil(user) && Enum.member?([:dashboard, :character, :combat, :skills, :roll], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
         |> push_patch(to: Routes.dsa_path(socket, :login))}
@@ -160,6 +170,7 @@ defmodule DsaWeb.DsaLive do
             :change_password -> assign(socket, :page_title, "Account Verwaltung")
             :reset_password -> assign(socket, :page_title, "Account Verwaltung")
             :confirm -> assign(socket, :page_title, "Registrierung")
+            :combat -> assign(socket, :page_title, "Kampf")
             :login -> assign(socket, :page_title, "Login")
             :new_character -> assign(socket, :page_title, "Heldenerschaffung")
             :character -> assign(socket, :page_title, "Held")
