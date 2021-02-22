@@ -64,6 +64,19 @@ defmodule DsaWeb.DsaLive do
           modifier: @modifier
         %>
 
+      <% :spells -> %>
+        <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
+        <%= live_component @socket, DsaWeb.TraitComponent,
+          id: :traits,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
+        <%= live_component @socket, DsaWeb.SpellComponent,
+          id: :spells,
+          character: @user.active_character,
+          modifier: @modifier
+        %>
+
       <% :error404 -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
 
