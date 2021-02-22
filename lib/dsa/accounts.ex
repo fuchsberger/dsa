@@ -48,7 +48,6 @@ defmodule Dsa.Accounts do
     mweapons: from(s in MWeapon, order_by: s.id),
     prayers: from(s in Prayer, order_by: s.id),
     scripts: from(s in Script, order_by: s.script_id),
-    spells: from(s in Spell, order_by: s.id),
     spell_tricks: from(s in SpellTrick, order_by: s.id),
     staff_spells: from(s in StaffSpell, order_by: s.id)
   ]
@@ -284,7 +283,6 @@ defmodule Dsa.Accounts do
   def add_mweapon(params), do: MWeapon.changeset(%MWeapon{}, params) |> Repo.insert()
   def add_prayer(params), do: Prayer.changeset(%Prayer{}, params) |> Repo.insert()
   def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
-  def add_spell(params), do: Spell.changeset(%Spell{}, params) |> Repo.insert()
   def add_spell_trick(params), do: SpellTrick.changeset(%SpellTrick{}, params) |> Repo.insert()
   def add_staff_spell(params), do: StaffSpell.changeset(%StaffSpell{}, params) |> Repo.insert()
 
