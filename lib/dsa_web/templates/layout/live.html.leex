@@ -27,6 +27,9 @@
             <%= live_patch "Talente", to: Routes.dsa_path(@socket, :skills),
               class: "menu-item #{if @live_action == :skills, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
 
+            <%= live_patch "Zauber", to: Routes.dsa_path(@socket, :spells),
+              class: "menu-item #{if @live_action == :spells, do: "active"} #{if is_nil(@user) || is_nil(@user.active_character_id), do: "hidden"}" %>
+
             <%= live_patch "Kampf", to: Routes.dsa_path(@socket, :combat),
               class: "menu-item #{if @live_action == :combat, do: "active"} #{if is_nil(@user), do: "hidden"}" %>
 
