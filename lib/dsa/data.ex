@@ -25,7 +25,7 @@ defmodule Dsa.Data do
     # Dsa.Data.Script.seed()
     Dsa.Data.Skill.seed()
     # Dsa.Data.Species.seed()
-    # Dsa.Data.Spell.seed()
+    Dsa.Data.Spell.seed()
     # Dsa.Data.SpellTrick.seed()
     # Dsa.Data.StaffSpell.seed()
 

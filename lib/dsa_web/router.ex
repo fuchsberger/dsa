@@ -30,6 +30,7 @@ defmodule DsaWeb.Router do
     live "/dashboard", DsaLive, :dashboard
     live "/roll", DsaLive, :roll
     live "/skills", DsaLive, :skills
+    live "/spells", DsaLive, :spells
 
     # Public Routes
     live "/", DsaLive, :index

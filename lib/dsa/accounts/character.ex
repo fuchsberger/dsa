@@ -51,6 +51,8 @@ defmodule Dsa.Accounts.Character do
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
     Enum.each(Skill.fields(), & field(&1, :integer, default: 0))
 
+    Enum.each(Spell.fields(), & field(&1, :integer, default: 0))
+
     # current stats
     field :le, :integer
     field :ke, :integer
