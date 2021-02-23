@@ -7,12 +7,24 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Deployment Instructions
+After ssh into the production server this sequence will update the web application:
 
-## Learn more
+| Command | Condition |
+| :-- | :-- |
+| `git pull` | always |
+| `mix deps.get --only prod` | hex dependencies have changed |
+| `npm install --prefix ./assets` | npm dependencies have changed |
+| `npm run deploy --prefix ./assets` | assets have changed |
+| `mix phx.digest` | assets have changed |
+| `MIX_ENV=prod mix ecto.migrate` | new database migrations (*) |
+| `MIX_ENV=prod mix compile` | always |
+| `MIX_ENV=prod mix release` | always |
+| `sudo systemctl restart app_dsa.service` | always |
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+(*) if there are database migrations the server needs to be stopped and afterwards restarted:
+```bash
+sudo systemctl stop app_dsa.service
+MIX_ENV=prod mix ecto.migrate
+sudo systemctl start app_dsa.service
+```
