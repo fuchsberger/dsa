@@ -18,6 +18,7 @@ defmodule Dsa.Accounts.User do
     field :reset, :boolean, default: false
     field :token, :string
 
+    belongs_to :group, Dsa.Accounts.Group
     belongs_to :active_character, Dsa.Accounts.Character
     has_many :characters, Dsa.Accounts.Character
 
@@ -27,9 +28,10 @@ defmodule Dsa.Accounts.User do
   # used for registration, change active character, creating tokens
   def changeset(user, params) do
     user
-    |> cast(params, [:username, :confirmed, :reset, :token, :active_character_id])
+    |> cast(params, [:username, :confirmed, :reset, :token, :active_character_id, :group_id])
     |> validate_length(:username, min: 2, max: 15)
     |> validate_length(:token, size: 64)
+    |> foreign_key_constraint(:group_id)
     |> foreign_key_constraint(:active_character_id)
   end
 

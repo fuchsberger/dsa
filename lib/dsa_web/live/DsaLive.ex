@@ -19,7 +19,11 @@ defmodule DsaWeb.DsaLive do
         <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
 
       <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent, id: :dashboard, user: @user %>
+        <%= live_component @socket, DsaWeb.DashboardComponent,
+          id: :dashboard,
+          group_options: @group_options,
+          user: @user
+        %>
 
       <% :new_character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
@@ -101,6 +105,7 @@ defmodule DsaWeb.DsaLive do
 
     {:ok, socket
     |> assign(:email, Map.get(params, "email"))
+    |> assign(:group_options, Accounts.list_group_options())
     |> assign(:modifier, 0)
     |> assign(:show_log?, false)
     |> assign(:reset_user, nil)

@@ -59,7 +59,12 @@ defmodule Dsa.Accounts do
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
   def get_user!(id) do
-    Repo.get!(from(u in User, preload: [:characters, active_character: [:user]]), id)
+    from(u in User, preload: [
+      :characters,
+      active_character: [:user],
+      group: ^@group_preloads
+    ])
+    |> Repo.get!(id)
   end
 
   @spec get_user_base_data!(integer() | nil) :: tuple()
