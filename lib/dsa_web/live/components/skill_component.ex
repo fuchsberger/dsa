@@ -53,10 +53,10 @@ defmodule DsaWeb.SkillComponent do
     skill_id = String.to_integer(id)
     level = Map.get(socket.assigns.character, Skill.field(skill_id))
     [t1, t2, t3] = Enum.map(Skill.traits(skill_id), & Map.get(socket.assigns.character, &1))
-
-    d1 = Enum.random(1..20)
-    d2 = Enum.random(1..20)
-    d3 = Enum.random(1..20)
+    traits = [t1, t2, t3]
+    dices = Dsa.Trial.roll_dices(20, 3)
+    [{_, d1}, {_, d2}, {_, d3}] = dices
+    result = Dsa.Trial.perform_talent_trial(traits, level, socket.assigns.modifier, dices)
 
     params =
       %{
@@ -66,7 +66,7 @@ defmodule DsaWeb.SkillComponent do
         x8: d2,
         x9: d3,
         x10: socket.assigns.modifier,
-        x12: result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
+        x12: result,
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }
@@ -79,21 +79,6 @@ defmodule DsaWeb.SkillComponent do
       {:error, changeset} ->
         Logger.error("Error occured while creating log entry: #{inspect(changeset)}")
         {:noreply, socket}
-    end
-  end
-
-  def result(t1, t2, t3, level, mod, d1, d2, d3) do
-    cond do
-      Enum.count([d1, d2, d3], & &1 == 1) >= 2 -> 10 # critical success
-      Enum.count([d1, d2, d3], & &1 == 20) >= 2 -> -2 # critical failure
-      true ->
-        # count spent tw
-        remaining = level - max(d1 - t1 - mod, 0) - max(d2 - t2 - mod, 0) - max(d3 - t3 - mod, 0)
-
-        cond do
-          remaining < 0 -> -1 # normal failure
-          true -> min(6, div(remaining, 3) + 1) # normal success => show quality
-        end
     end
   end
 
