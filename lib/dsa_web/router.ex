@@ -12,6 +12,7 @@ defmodule DsaWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :put_root_layout, {DsaWeb.LayoutView, :root}
+    plug DsaWeb.Auth
   end
 
   pipeline :api do
@@ -33,9 +34,11 @@ defmodule DsaWeb.Router do
     live "/spells", DsaLive, :spells
 
     # Public Routes
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
+
     live "/", DsaLive, :index
-    live "/login", DsaLive, :login
-    post "/login", SessionController, :create
+    # live "/login", DsaLive, :login
+    # post "/login", SessionController, :create
     live "/confirm", DsaLive, :confirm
     live "/confirm/:token", DsaLive, :confirm
     live "/reset_password", DsaLive, :reset_password
@@ -43,4 +46,8 @@ defmodule DsaWeb.Router do
     live "/register", DsaLive, :register
     live "/:path", DsaLive, :error404
   end
+
+  # scope "/", DsaWeb do
+  #   pipe_through :b
+  # end
 end

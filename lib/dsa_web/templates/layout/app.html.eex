@@ -1,1 +1,101 @@
-<%= @inner_content %>
+<%# Endpoint Layout %>
+<nav class="bg-gray-800">
+  <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <div class="relative flex items-center justify-between h-16">
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <!-- Mobile menu button-->
+        <button type='button' id='mobile-button' class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only"><%= gettext("Open main menu") %></span>
+          <!-- Icon when menu is closed. -->
+          <%= icon @conn, "menu", "block h-6 w-6" %>
+          <!-- Icon when menu is open. -->
+          <%= icon @conn, "x", "hidden h-6 w-6" %>
+        </button>
+      </div>
+      <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+        <%# Profilbild / Logo %>
+        <%= link class: "flex-shrink-0 flex items-center", to: Routes.dsa_path(@conn, :index) do %>
+          <img class="block h-8 w-auto rounded-full" src="<%= gravatar_url(@current_user) %>" alt="Profil">
+          <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl text-gray-200'><%= gettext("DSA Tool") %></span>
+        <% end %>
+
+        <div class="hidden sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            <%= menu_link @conn, gettext("Hero"),
+              to: Routes.dsa_path(@conn, :character),
+              class: "menu-item text-sm" %>
+
+            <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills),
+              class: "menu-item text-sm" %>
+
+            <%= menu_link @conn, gettext("Spells"),
+              to: Routes.dsa_path(@conn, :spells),
+              class: "menu-item text-sm" %>
+
+            <%= menu_link @conn, gettext("Combat"),
+              to: Routes.dsa_path(@conn, :combat),
+              class: "menu-item text-sm" %>
+
+            <%= menu_link @conn, gettext("Roll"),
+              to: Routes.dsa_path(@conn, :roll),
+              class: "menu-item text-sm" %>
+          </div>
+        </div>
+      </div>
+      <%= unless is_nil(@current_user) do %>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <button id='log-button' type='button' class="lg:hidden bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            <span class="sr-only"><%= gettext("View Log") %></span>
+            <%= icon @conn, "clipboard-list", "h-6 w-6" %>
+          </button>
+          <%= link to: Routes.session_path(@conn, :delete),
+            class: "hidden lg:block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" do %>
+            <span class='sr-only'><%= gettext("Logout") %></span>
+            <span class='ml-2 hidden lg:inline-block"'><%= @current_user.username %></span>
+            <%= icon @conn, "logout", "h-6 w-6" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Mobile menu, toggle classes based on menu state. -->
+  <div id='mobile-menu' class="hidden sm:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <%= menu_link @conn, gettext("Hero"), to: Routes.dsa_path(@conn, :character), class: "menu-item block text-base" %>
+      <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills), class: "menu-item block text-base" %>
+      <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
+      <%= menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
+      <%= menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
+    </div>
+  </div>
+</nav>
+
+<div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl'>
+  <%# In left column show variable page content %>
+  <div class='block lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-auto'>
+    <%= unless is_nil(get_flash(@conn, :error)) do %>
+      <div class="group relative w-full flex justify-center py-2 pl-10 pr-4 bg-red-200 text-red-800 rounded-md">
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+          <%= icon @conn, "exclamation-circle", "inline-block w-5 h-5" %>
+        </span>
+        <%= get_flash(@conn, :error) %>
+      </div>
+    <% end %>
+    <%= unless is_nil(get_flash(@conn, :info)) do %>
+      <div class="group relative w-full flex justify-center py-2 pl-10 pr-4 bg-blue-200 text-blue-800 rounded-md">
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+          <%= icon @conn, "exclamation-circle", "inline-block w-5 h-5" %>
+        </span>
+        <%= get_flash(@conn, :info) %>
+      </div>
+    <% end %>
+    <%= @inner_content %>
+  </div>
+  <%# In right column always show log / group stuff %>
+  <%= unless is_nil(@current_user) do %>
+    <div class='hidden lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
+      <%# live_component @socket, DsaWeb.LogComponent, id: :log, logs: @user.group.logs %>
+    </div>
+  <% end %>
+</div>

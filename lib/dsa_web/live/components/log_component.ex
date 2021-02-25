@@ -171,6 +171,7 @@ defmodule DsaWeb.LogComponent do
   end
 
   def mount(socket) do
+
     entries = Dsa.Event.list_logs(@group_id)
 
     {:ok, socket

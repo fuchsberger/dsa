@@ -1,0 +1,73 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:19
+#: lib/dsa_web/templates/layout/root.html.eex:8
+msgid "DSA Tool"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/root.html.eex:7
+msgid "A character, dice, and group management tool for DSA, Das Schwarze Auge"
+msgstr "Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:35
+#: lib/dsa_web/templates/layout/app.html.eex:68
+msgid "Combat"
+msgstr "Kampf"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:24
+#: lib/dsa_web/templates/layout/app.html.eex:65
+msgid "Hero"
+msgstr "Held"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:53
+msgid "Logout"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:8
+msgid "Open main menu"
+msgstr "Öffne Menu"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:39
+#: lib/dsa_web/templates/layout/app.html.eex:69
+msgid "Roll"
+msgstr "Probe"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:28
+#: lib/dsa_web/templates/layout/app.html.eex:66
+msgid "Skills"
+msgstr "Talente"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:31
+#: lib/dsa_web/templates/layout/app.html.eex:67
+msgid "Spells"
+msgstr "Zauber"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:48
+msgid "View Log"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/controllers/session_controller.ex:20
+msgid "Invalid Login Data"
+msgstr "Ungültige Login Daten"

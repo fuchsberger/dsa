@@ -125,7 +125,6 @@ defmodule DsaWeb.DashboardComponent do
     end
   end
 
-
   def handle_event("update-character", %{"id" => id, "visible" => visible}, socket) do
     character = Enum.find(socket.assigns.user.characters, & &1.id == String.to_integer(id))
 

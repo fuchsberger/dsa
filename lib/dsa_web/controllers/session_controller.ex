@@ -1,6 +1,10 @@
 defmodule DsaWeb.SessionController do
   use DsaWeb, :controller
 
+  def new(conn, _) do
+    render(conn, "new.html")
+  end
+
   def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
     case Dsa.Accounts.authenticate_by_email_and_pass(email, pass) do
       {:ok, user} ->
@@ -12,7 +16,9 @@ defmodule DsaWeb.SessionController do
         redirect(conn, to: Routes.dsa_path(conn, :confirm, email: email))
 
       {:error, _reason} ->
-        redirect(conn, to: Routes.dsa_path(conn, :login, error: "Ungültige Logindaten."))
+        conn
+        |> put_flash(:error, gettext("Invalid Login Data"))
+        |> render("new.html")
     end
   end
 

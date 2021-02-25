@@ -2,7 +2,8 @@ module.exports = {
   purge: [
     '../lib/**/*.ex',
     '../lib/**/*.leex',
-    '../lib/**/*.eex'
+    '../lib/**/*.eex',
+    './js/**/*.js'
   ],
   theme: {},
   variants: {},

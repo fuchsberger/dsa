@@ -4,8 +4,8 @@
     <%= csrf_meta_tag() %>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="A character sheet and dice tool for DSA.">
-    <%= live_title_tag @page_title, suffix: " | DSA Tool" %>
+    <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
+    <title><%= gettext("DSA Tool") %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body class='bg-gray-100'>

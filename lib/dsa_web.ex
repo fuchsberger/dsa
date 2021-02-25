@@ -26,6 +26,8 @@ defmodule DsaWeb do
       import DsaWeb.Gettext
 
       alias DsaWeb.Router.Helpers, as: Routes
+
+      require Logger
     end
   end
 
@@ -70,8 +72,11 @@ defmodule DsaWeb do
         select: 4
       ]
 
-      import DsaWeb.FormHelpers
       import DsaWeb.Gettext
+
+      import DsaWeb.FormHelpers
+      import DsaWeb.DsaHelpers
+      import DsaWeb.CharacterHelpers
       import DsaWeb.ViewHelpers
       import Phoenix.LiveView.Helpers
 

@@ -49,7 +49,7 @@ defmodule DsaWeb.FormHelpers do
   defp expand(%{source: source} = form, field, opts) when is_map(source) do
 
     error_class =
-      case is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
+      case not Map.has_key?(form.source, :action) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
         true -> ""
         false -> " error"
       end

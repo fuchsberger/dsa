@@ -13,26 +13,44 @@ let liveSocket = new LiveSocket("/live", Socket, {
 // Connect if there are any LiveViews on the page
 liveSocket.connect()
 
-// Get all "navbar-burger" elements
-const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+let el
 
-// Check if there are any navbar burgers
-if ($navbarBurgers.length > 0) {
+// Enable Mobile Button
+el = document.getElementById("mobile-button")
 
-  // Add a click event on each of them
-  $navbarBurgers.forEach( el => {
-    el.addEventListener('click', () => {
+if (el !== null) {
 
-      // Get the target from the "data-target" attribute
-      const target = el.dataset.target;
-      const $target = document.getElementById(target);
+  // Add a click event on it
+  el.addEventListener('click', () => {
 
-      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-      el.classList.toggle('is-active');
-      $target.classList.toggle('is-active');
+    // Toggle the classes in the mobile menu button
+    for(let svg of el.getElementsByTagName("svg")){
+      svg.classList.toggle("block")
+      svg.classList.toggle("hidden")
+    }
 
-    });
-  });
+    let menu = document.getElementById("mobile-menu")
+    menu.classList.toggle("hidden")
+    menu.classList.toggle("block")
+  })
+}
+
+// Enable Log Button
+el = document.getElementById("log-button")
+
+if (el !== null) {
+
+  // Add a click event on it
+  el.addEventListener('click', () => {
+
+    // Toggle the classes in the mobile menu button
+    el.classList.toggle("active")
+
+    for(let elm of el.children){
+      elm.classList.toggle("block")
+      elm.classList.toggle("hidden")
+    }
+  })
 }
 
 // Enable Notification dismissal

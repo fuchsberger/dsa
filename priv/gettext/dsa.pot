@@ -1,0 +1,72 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:19
+#: lib/dsa_web/templates/layout/root.html.eex:8
+msgid "DSA Tool"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/root.html.eex:7
+msgid "A character, dice, and group management tool for DSA, Das Schwarze Auge"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:35
+#: lib/dsa_web/templates/layout/app.html.eex:68
+msgid "Combat"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:24
+#: lib/dsa_web/templates/layout/app.html.eex:65
+msgid "Hero"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:53
+msgid "Logout"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:8
+msgid "Open main menu"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:39
+#: lib/dsa_web/templates/layout/app.html.eex:69
+msgid "Roll"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:28
+#: lib/dsa_web/templates/layout/app.html.eex:66
+msgid "Skills"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:31
+#: lib/dsa_web/templates/layout/app.html.eex:67
+msgid "Spells"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:48
+msgid "View Log"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/controllers/session_controller.ex:20
+msgid "Invalid Login Data"
+msgstr ""
