@@ -51,6 +51,6 @@ if (el !== null) {
 }
 
 // Enable Notification dismissal
-(document.querySelectorAll('.notification .delete') || []).forEach(elm =>
+(document.querySelectorAll('button.dismiss') || []).forEach(elm =>
   elm.addEventListener('click', () => elm.parentNode.parentNode.removeChild(elm.parentNode))
 );

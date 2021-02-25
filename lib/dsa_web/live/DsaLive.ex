@@ -15,9 +15,6 @@ defmodule DsaWeb.DsaLive do
   def render(assigns) do
     ~L"""
     <%= case @live_action do %>
-      <% :login -> %>
-        <%= live_component @socket, DsaWeb.LoginComponent, id: :login %>
-
       <% :dashboard -> %>
         <%= live_component @socket, DsaWeb.DashboardComponent,
           id: :dashboard,
@@ -140,11 +137,6 @@ defmodule DsaWeb.DsaLive do
     token = Map.get(params, "token")
 
     cond do
-      # index is a simple redirect to dashboard or login
-      action == :index ->
-        target = if is_nil(user), do: :login, else: :dashboard
-        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, target), replace: true)}
-
       # attempt to confirm users
       action == :confirm && not is_nil(token) ->
         # if user exists and is not yet confirmed, confirm her and redirect to login.
@@ -152,21 +144,21 @@ defmodule DsaWeb.DsaLive do
           nil ->
             {:noreply, socket
             |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
-            |> push_patch(to: Routes.dsa_path(socket, :login))}
+            |> push_patch(to: Routes.session_path(socket, :new))}
 
           user ->
             case Accounts.update_user(user, %{confirmed: true, token: nil}) do
               {:ok, _user} ->
                 {:noreply, socket
                 |> put_flash(:info, "Aktivierung abgeschlossen. Du kannst dich jetzt einloggen.")
-                |> push_patch(to: Routes.dsa_path(socket, :login))}
+                |> push_patch(to: Routes.session_path(socket, :new))}
 
               {:error, changeset} ->
                 Logger.warn("Error confirming account: #{inspect(changeset.errors)}")
 
                 {:noreply, socket
                 |> put_flash(:error, "Ein unerwarteter Fehler ist aufgetreten.")
-                |> push_patch(to: Routes.dsa_path(socket, :login))}
+                |> push_patch(to: Routes.session_path(socket, :new))}
             end
         end
 
@@ -174,7 +166,7 @@ defmodule DsaWeb.DsaLive do
       is_nil(user) && Enum.member?([:dashboard, :character, :combat, :skills, :roll], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
-        |> push_patch(to: Routes.dsa_path(socket, :login))}
+        |> redirect(to: Routes.session_path(socket, :new))}
 
       # redirect to dashboard if user does not has an active character and page requires it
       not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :skills, :character], action) ->
@@ -182,23 +174,6 @@ defmodule DsaWeb.DsaLive do
 
       # all went normal, proceed
       true ->
-        # handle page title
-        socket =
-          case socket.assigns.live_action do
-            :change_password -> assign(socket, :page_title, "Account Verwaltung")
-            :reset_password -> assign(socket, :page_title, "Account Verwaltung")
-            :confirm -> assign(socket, :page_title, "Registrierung")
-            :combat -> assign(socket, :page_title, "Kampf")
-            :login -> assign(socket, :page_title, "Login")
-            :new_character -> assign(socket, :page_title, "Heldenerschaffung")
-            :character -> assign(socket, :page_title, "Held")
-            :dashboard -> assign(socket, :page_title, "Übersicht")
-            :register -> assign(socket, :page_title, "Registrierung")
-            :roll -> assign(socket, :page_title, "Probe")
-            :skills -> assign(socket, :page_title, "Talente")
-            _ -> assign(socket, :page_title, "404 Error")
-          end
-
         {:noreply, socket
         |> assign(:log_open?, false)
         |> assign(:account_dropdown_open?, false)

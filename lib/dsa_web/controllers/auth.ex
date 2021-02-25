@@ -1,5 +1,11 @@
 defmodule DsaWeb.Auth do
+
   import Plug.Conn
+  import Phoenix.Controller
+  import DsaWeb.Gettext
+
+  alias DsaWeb.Router.Helpers, as: Routes
+  require Logger
 
   def init(opts), do: opts
 
@@ -17,5 +23,17 @@ defmodule DsaWeb.Auth do
 
   def logout(conn) do
     configure_session(conn, drop: true)
+  end
+
+  def authenticate_user(conn, _opts) do
+    Logger.warn inspect conn.assigns
+    if conn.assigns.current_user do
+      conn
+    else
+      conn
+      |> put_flash(:error, gettext("You must be logged in to access that page"))
+      |> redirect(to: Routes.session_path(conn, :new))
+      |> halt()
+    end
   end
 end

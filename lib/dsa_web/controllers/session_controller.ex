@@ -3,7 +3,7 @@ defmodule DsaWeb.SessionController do
 
   def new(conn, _) do
     conn
-    |> put_layout("w_full.html")
+    |> put_layout("wide.html")
     |> render("new.html")
   end
 
@@ -20,7 +20,7 @@ defmodule DsaWeb.SessionController do
       {:error, _reason} ->
         conn
         |> put_flash(:error, gettext("Invalid Login Data"))
-        |> put_layout("w_full.html")
+        |> put_layout("wide.html")
         |> render("new.html")
     end
   end
