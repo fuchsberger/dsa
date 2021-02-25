@@ -2,7 +2,7 @@ defmodule DsaWeb.SpellComponent do
   use DsaWeb, :live_component
 
   alias Dsa.Data.Spell
-  alias Dsa.{Accounts, Event, Repo}
+  alias Dsa.{Event}
 
   @group_id 1
 
@@ -45,9 +45,7 @@ defmodule DsaWeb.SpellComponent do
     level = Map.get(socket.assigns.character, Spell.field(spell_id))
     [t1, t2, t3] = Enum.map(Spell.traits(spell_id), & Map.get(socket.assigns.character, &1))
 
-    d1 = Enum.random(1..20)
-    d2 = Enum.random(1..20)
-    d3 = Enum.random(1..20)
+    [{_, d1}, {_, d2}, {_, d3}] = Dsa.Trial.roll_dices(20, 3)
 
     params =
       %{
