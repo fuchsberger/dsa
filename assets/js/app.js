@@ -13,30 +13,27 @@ let liveSocket = new LiveSocket("/live", Socket, {
 // Connect if there are any LiveViews on the page
 liveSocket.connect()
 
-let el
 
-// Enable Mobile Button
-el = document.getElementById("mobile-button")
+// Select mobile button
+let mobile_button = document.getElementById("mobile-button")
 
-if (el !== null) {
+// Add a click event on it
+mobile_button.addEventListener('click', e => {
 
-  // Add a click event on it
-  el.addEventListener('click', () => {
+  // Toggle the classes in the mobile menu button
+  for(let svg of mobile_button.getElementsByTagName("svg")){
+    svg.classList.toggle("block")
+    svg.classList.toggle("hidden")
+  }
 
-    // Toggle the classes in the mobile menu button
-    for(let svg of el.getElementsByTagName("svg")){
-      svg.classList.toggle("block")
-      svg.classList.toggle("hidden")
-    }
+  let menu = document.getElementById("mobile-menu")
+  menu.classList.toggle("hidden")
+  menu.classList.toggle("block")
+})
 
-    let menu = document.getElementById("mobile-menu")
-    menu.classList.toggle("hidden")
-    menu.classList.toggle("block")
-  })
-}
 
 // Enable Log Button
-el = document.getElementById("log-button")
+let el = document.getElementById("log-button")
 
 if (el !== null) {
 

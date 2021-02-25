@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body class='bg-gray-100'>
+    <%= render DsaWeb.LayoutView, "menu.html", conn: @conn, current_user: @current_user %>
     <%= @inner_content %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>

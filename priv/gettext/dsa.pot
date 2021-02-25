@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:19
+#: lib/dsa_web/templates/layout/menu.html.eex:18
 #: lib/dsa_web/templates/layout/root.html.eex:8
 msgid "DSA Tool"
 msgstr ""
@@ -22,51 +22,84 @@ msgid "A character, dice, and group management tool for DSA, Das Schwarze Auge"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:35
-#: lib/dsa_web/templates/layout/app.html.eex:68
+#: lib/dsa_web/templates/layout/menu.html.eex:34
+#: lib/dsa_web/templates/layout/menu.html.eex:66
 msgid "Combat"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:24
-#: lib/dsa_web/templates/layout/app.html.eex:65
+#: lib/dsa_web/templates/layout/menu.html.eex:23
+#: lib/dsa_web/templates/layout/menu.html.eex:63
 msgid "Hero"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:53
+#: lib/dsa_web/templates/layout/menu.html.eex:50
+#: lib/dsa_web/templates/layout/menu.html.eex:51 lib/dsa_web/templates/layout/menu.html.eex:69
 msgid "Logout"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:8
+#: lib/dsa_web/templates/layout/menu.html.eex:7
 msgid "Open main menu"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:39
-#: lib/dsa_web/templates/layout/app.html.eex:69
+#: lib/dsa_web/templates/layout/menu.html.eex:38
+#: lib/dsa_web/templates/layout/menu.html.eex:67
 msgid "Roll"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:28
-#: lib/dsa_web/templates/layout/app.html.eex:66
+#: lib/dsa_web/templates/layout/menu.html.eex:27
+#: lib/dsa_web/templates/layout/menu.html.eex:64
 msgid "Skills"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:31
-#: lib/dsa_web/templates/layout/app.html.eex:67
+#: lib/dsa_web/templates/layout/menu.html.eex:30
+#: lib/dsa_web/templates/layout/menu.html.eex:65
 msgid "Spells"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:48
+#: lib/dsa_web/templates/layout/menu.html.eex:47
 msgid "View Log"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/session_controller.ex:20
+#: lib/dsa_web/controllers/session_controller.ex:22
 msgid "Invalid Login Data"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:16
+#: lib/dsa_web/templates/session/new.html.leex:20
+msgid "Email"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:43
+msgid "Forgot your password?"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:38
+msgid "Login"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:11
+msgid "Not yet registered?"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:24
+#: lib/dsa_web/templates/session/new.html.leex:28
+msgid "Password"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/session/new.html.leex:6
+msgid "Welcome in Aventuria!"
 msgstr ""

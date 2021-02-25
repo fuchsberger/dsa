@@ -7,6 +7,12 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+## Translation Instructions
+```bash
+mix gettext.extract
+mix gettext.merge priv/gettext --locale de
+```
+
 ## Deployment Instructions
 After ssh into the production server this sequence will update the web application:
 

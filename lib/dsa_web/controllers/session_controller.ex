@@ -2,7 +2,9 @@ defmodule DsaWeb.SessionController do
   use DsaWeb, :controller
 
   def new(conn, _) do
-    render(conn, "new.html")
+    conn
+    |> put_layout("w_full.html")
+    |> render("new.html")
   end
 
   def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
@@ -18,6 +20,7 @@ defmodule DsaWeb.SessionController do
       {:error, _reason} ->
         conn
         |> put_flash(:error, gettext("Invalid Login Data"))
+        |> put_layout("w_full.html")
         |> render("new.html")
     end
   end
@@ -25,6 +28,6 @@ defmodule DsaWeb.SessionController do
   def delete(conn, _) do
     conn
     |> DsaWeb.Auth.logout()
-    |> redirect(to: Routes.dsa_path(conn, :login))
+    |> redirect(to: Routes.session_path(conn, :new))
   end
 end

@@ -23,8 +23,6 @@ defmodule DsaWeb.Router do
     pipe_through :browser
 
     # Private Routes
-    get "/logout", SessionController, :delete
-
     live "/character/new", DsaLive, :new_character
     live "/character", DsaLive, :character
     live "/combat", DsaLive, :combat
