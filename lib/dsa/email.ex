@@ -9,6 +9,8 @@ defmodule Dsa.Email do
   import Phoenix.View, only: [render_to_string: 3]
 
   alias DsaWeb.EmailView
+  alias DsaWeb.Router.Helpers, as: Routes
+
   require Logger
 
   @sender %Dsa.Accounts.User{email: "noreply@fuchsberger.us", username: "DSA Tool"}
@@ -40,7 +42,7 @@ defmodule Dsa.Email do
       from: @sender,
       subject: "DSA Tool - Account Aktivierung",
       html_body: render_to_string(EmailView, "confirm.html", user: user, url: url()),
-      text_body: "Hey #{user.username},\n\nWillkommen im DSA Tool! Um deine Registrierung abzuschließen öffne bitte den folgenden Link:\n#{url()}/confirm/#{user.token}"
+      text_body: "Hey #{user.username},\n\nWillkommen im DSA Tool! Um deine Registrierung abzuschließen öffne bitte den folgenden Link:\n#{url()}/user/confirm/#{user.token}"
     )
   end
 
@@ -50,7 +52,7 @@ defmodule Dsa.Email do
       from: @sender,
       subject: "DSA Tool - Passwort zurücksetzen",
       html_body: render_to_string(EmailView, "reset.html", user: user, url: url()),
-      text_body: "Hey #{user.username},\n\n Hier ist der Link um dein Passwort zurückzusetzen: \n#{url()}/reset_password/#{user.token}"
+      text_body: "Hey #{user.username},\n\n Hier ist der Link um dein Passwort zurückzusetzen: \n#{url()}/user/reset/#{user.token}"
     )
   end
 end

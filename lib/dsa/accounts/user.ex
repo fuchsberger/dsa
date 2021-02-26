@@ -30,10 +30,9 @@ defmodule Dsa.Accounts.User do
   # used for non-sensitive changes by user
   def changeset(user, params) do
     user
-    |> cast(params, [:email, :username, :active_character_id, :group_id])
-    |> validate_required([:email, :username])
+    |> cast(params, [:username, :active_character_id, :group_id])
+    |> validate_required([:username])
     |> validate_length(:username, min: 2, max: 15)
-    |> validate_email(:email)
     |> validate_user_character(:active_character_id)
     |> foreign_key_constraint(:active_character_id)
     |> foreign_key_constraint(:group_id)
@@ -44,6 +43,7 @@ defmodule Dsa.Accounts.User do
     user
     |> changeset(params)
     |> email_changeset(params)
+    |> password_changeset(params)
     |> cast(params, [:password, :password_confirm])
     |> validate_required([:password, :password_confirm])
     |> validate_password(:password)
@@ -66,16 +66,14 @@ defmodule Dsa.Accounts.User do
     |> validate_email(:email)
   end
 
-  def password_changeset(user, params, bypass_security?) do
+  # used for reset password (part 2) and registration
+  def password_changeset(user, params) do
     user
-    |> cast(params, [:password_old, :password, :password_confirm])
+    |> cast(params, [:password, :password_confirm])
     |> validate_required([:password, :password_confirm])
-    |> validate_old_password(bypass_security?)
     |> validate_password()
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
-    |> put_change(:reset, false)
-    |> put_change(:token, nil)
   end
 
   def reset_password_changeset(user, params) do
@@ -99,16 +97,17 @@ defmodule Dsa.Accounts.User do
   def put_token(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
-        token =
-          :crypto.strong_rand_bytes(64)
-          |> Base.url_encode64
-          |> binary_part(0, 64)
-
-        put_change(changeset, :token, token)
+        put_change(changeset, :token, token())
 
       _ ->
         changeset
     end
+  end
+
+  def token do
+    :crypto.strong_rand_bytes(64)
+    |> Base.url_encode64
+    |> binary_part(0, 64)
   end
 
   defp validate_match(changeset, field1, field2) do

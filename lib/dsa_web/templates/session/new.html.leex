@@ -40,7 +40,7 @@
         </p>
 
         <p class="text-center">
-          <%= live_patch gettext("Forgot your password?"), to: Routes.dsa_path(@conn, :reset_password), class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
+          <%= live_patch gettext("Forgot your password?"), to: Routes.user_path(@conn, :reset), class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
         </p>
       </div>
     <% end %>

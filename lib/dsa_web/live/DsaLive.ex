@@ -48,10 +48,6 @@ defmodule DsaWeb.DsaLive do
           modifier: @modifier
         %>
 
-      <% :reset_password -> %>
-        <%= live_component @socket, DsaWeb.ResetPasswordComponent,
-          id: :reset_password, user_id: @user.id, token: @token %>
-
       <% :skills -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
         <%= live_component @socket, DsaWeb.TraitComponent,

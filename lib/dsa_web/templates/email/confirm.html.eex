@@ -2,18 +2,18 @@
 <html>
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<title>Bestätigungsemail</title>
+		<title><%= gettext "Confirm Account" %></title>
 		<style>
 			a{background-color: #EEF2FF; padding: 10px; border-radius: 8px; text-decoration: none; text-transform: none;}
 			a:hover{background-color:#C7D2FE;}
 		</style>
 	</head>
 	<body>
-		<p>Die Zwölfe zum Gruß!</p>
-		<p><%= @user.username %>, sei herzlich willkommen im DSA Tool!</p>
-		<p>Um Dich einloggen zu können, musst Du noch Deinem Account bestätigen:</p>
-		<p><a href="<%= @url %>/user/confirm/<%= @user.token %>" target="_blank">Aktivieren</a></p>
-		<p>Möge Phex deinem Würfelglück gesonnen sein!</p>
-		<p>Cheers,<br/>Alex</p>
+		<p><%= gettext "The Twelve Divines greet you!" %></p>
+		<p><%= @user.username %><%= gettext ", welcome to the DSA Tool!" %></p>
+		<p><%= gettext "To be able to login you first must activate your account:" %></p>
+		<p><a href="<%= @url %>/user/confirm/<%= @user.token %>" target="_blank"><%= gettext "Activate" %></a></p>
+		<p><%= gettext "May Phex bring you luck when you roll your dice!" %></p>
+		<p><%= gettext "Cheers," %><br/>Alex</p>
 	</body>
 </html>

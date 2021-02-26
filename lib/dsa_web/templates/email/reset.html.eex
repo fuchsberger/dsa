@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<title>Passwort zurücksetzen</title>
+		<title><%= gettext "Reset Password" %></title>
 	</head>
 	<body>
-		<p>Die Zwölfe zum Gruß!</p>
+		<p><%= gettext "The Twelve Divines greet you!" %></p>
 		<p><%= @user.username %>,</p>
-		<p>Hier ist der Link um dein Passwort zurückzusetzen:<br><a href="<%= @url %>/reset_password/<%= @user.token %>" target="_blank">Aktivieren</a></p>
-		<p>Cheers,<br/>Alex</p>
+		<p><%= gettext "Here is your link to reset your password:" %><br><a href="<%= @url %>/user/reset/<%= @user.token %>" target="_blank"><%= gettext "Reset Password" %></a></p>
+		<p><%= gettext "Cheers," %><br/>Alex</p>
 	</body>
 </html>
