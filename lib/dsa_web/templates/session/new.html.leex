@@ -8,7 +8,7 @@
     <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
       <div class='mt-8 space-y-4'>
         <p class="mt-2 text-center text-sm text-gray-600">
-          <%= live_patch gettext("Not yet registered?"), to: Routes.dsa_path(@conn, :register), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+          <%= live_patch gettext("Not yet registered?"), to: Routes.user_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
         </p>
 
         <div class="rounded-md shadow-sm -space-y-px">

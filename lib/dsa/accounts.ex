@@ -113,10 +113,25 @@ defmodule Dsa.Accounts do
     |> Repo.all()
   end
 
-  def change_session(params \\ %{}), do: User.session_changeset(%User{}, params)
-
+  # TODO: Remove params
   def change_user(%User{} = user, params \\ %{}) do
     User.changeset(user, params)
+  end
+
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def change_registration(%User{} = user, params) do
+    User.registration_changeset(user, params)
+  end
+
+  def register_user(attrs \\ %{}) do
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert()
   end
 
   def change_email(params), do: User.email_changeset(%User{}, params)
@@ -129,17 +144,6 @@ defmodule Dsa.Accounts do
     user
     |> User.password_changeset(params, bypass_security)
     |> Repo.update()
-  end
-
-  # Registration
-  def change_registration(%User{} = user, params) do
-    User.registration_changeset(user, params)
-  end
-
-  def register_user(attrs \\ %{}) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
   end
 
   def reset_user(%User{} = user) do

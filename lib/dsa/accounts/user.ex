@@ -2,21 +2,23 @@ defmodule Dsa.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import DsaWeb.Gettext
 
-  require Logger
+  alias Dsa.Repo
 
   schema "users" do
     field :email, :string
     field :username, :string
-    field :password_old, :string, virtual: true
-    field :password, :string, virtual: true
-    field :new_password, :string, virtual: true
-    field :password_confirm, :string, virtual: true
     field :password_hash, :string
     field :admin, :boolean, default: false
     field :confirmed, :boolean, default: false
     field :reset, :boolean, default: false
     field :token, :string
+
+    # virtual fields
+    field :password_old, :string, virtual: true
+    field :password, :string, virtual: true
+    field :password_confirm, :string, virtual: true
 
     belongs_to :group, Dsa.Accounts.Group
     belongs_to :active_character, Dsa.Accounts.Character
@@ -25,14 +27,29 @@ defmodule Dsa.Accounts.User do
     timestamps()
   end
 
-  # used for registration, change active character, creating tokens
+  # used for non-sensitive changes by user
   def changeset(user, params) do
     user
-    |> cast(params, [:username, :confirmed, :reset, :token, :active_character_id, :group_id])
+    |> cast(params, [:email, :username, :active_character_id, :group_id])
+    |> validate_required([:email, :username])
     |> validate_length(:username, min: 2, max: 15)
-    |> validate_length(:token, size: 64)
-    |> foreign_key_constraint(:group_id)
+    |> validate_email(:email)
+    |> validate_user_character(:active_character_id)
     |> foreign_key_constraint(:active_character_id)
+    |> foreign_key_constraint(:group_id)
+    |> unique_constraint(:email)
+  end
+
+  def registration_changeset(user, params) do
+    user
+    |> changeset(params)
+    |> email_changeset(params)
+    |> cast(params, [:password, :password_confirm])
+    |> validate_required([:password, :password_confirm])
+    |> validate_password(:password)
+    |> validate_match(:password, :password_confirm)
+    |> put_pass_hash()
+    |> put_token()
   end
 
   # used for reset password (part 1) and registration
@@ -55,31 +72,14 @@ defmodule Dsa.Accounts.User do
     |> put_change(:token, nil)
   end
 
-  def session_changeset(user, params) do
-    user
-    |> cast(params, [:email, :password])
-    |> validate_required([:email, :password])
-  end
 
-  def registration_changeset(user, params) do
-    user
-    |> changeset(params)
-    |> email_changeset(params)
-    |> cast(params, [:new_password, :password_confirm])
-    |> validate_required([:email, :username, :new_password, :password_confirm])
-    |> validate_password(:new_password)
-    |> validate_match(:new_password, :password_confirm)
-    |> put_pass_hash()
-    |> put_token()
-    |> unique_constraint(:email)
-  end
 
   def reset_password_changeset(user, params) do
     user
     |> cast(params, [:email])
     |> validate_required([:email])
     |> validate_email(:email)
-    |> put_token(true)
+    |> put_token()
   end
 
   defp put_pass_hash(changeset) do
@@ -92,7 +92,7 @@ defmodule Dsa.Accounts.User do
     end
   end
 
-  def put_token(changeset, reset \\ false) do
+  def put_token(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         token =
@@ -100,9 +100,7 @@ defmodule Dsa.Accounts.User do
           |> Base.url_encode64
           |> binary_part(0, 64)
 
-        changeset
-        |> put_change(:reset, reset)
-        |> put_change(:token, token)
+        put_change(changeset, :token, token)
 
       _ ->
         changeset
@@ -149,6 +147,27 @@ defmodule Dsa.Accounts.User do
 
       true ->
         changeset
+    end
+  end
+
+  # constraint to ensure active_character_id references a user-owned character
+  defp validate_user_character(changeset, field) do
+    case get_change(changeset, field) do
+      nil ->
+        changeset
+
+      id ->
+        character_ids =
+          changeset.data
+          |> Repo.preload(:characters)
+          |> Map.get(:characters)
+          |> Enum.map(& &1.id)
+
+        if Enum.member?(character_ids, id) do
+          changeset
+        else
+          add_error(changeset, field, gettext("Character does not belong to user."))
+        end
     end
   end
 end

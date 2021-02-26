@@ -75,12 +75,13 @@ msgstr "Ungültige Login Daten"
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:16
-#: lib/dsa_web/templates/session/new.html.leex:20
+#: lib/dsa_web/templates/session/new.html.leex:20 lib/dsa_web/templates/user/new.html.eex:35
 msgid "Email"
 msgstr "Email"
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:43
+#: lib/dsa_web/templates/user/new.html.eex:70
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
@@ -96,11 +97,57 @@ msgstr "Noch nicht registriert?"
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:24
-#: lib/dsa_web/templates/session/new.html.leex:28
+#: lib/dsa_web/templates/session/new.html.leex:28 lib/dsa_web/templates/user/new.html.eex:45
 msgid "Password"
 msgstr "Passwort"
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:6
+#: lib/dsa_web/templates/user/new.html.eex:6
 msgid "Welcome in Aventuria!"
 msgstr "Willkommen in Aventurien!"
+
+#, elixir-format
+#: lib/dsa_web/controllers/auth.ex:33
+msgid "You must be logged in to access that page"
+msgstr "Du must eingeloggt sein um diese Seite anzuzeigen"
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_controller.ex:29
+msgid "Account created! An email to activate your account was sent."
+msgstr "Account erstellt! Ein Email zum bestätigen wurde gesendet."
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:11
+msgid "Already registered?"
+msgstr "Bereits registriert?"
+
+#, elixir-format
+#: lib/dsa/accounts/user.ex:169
+msgid "Character does not belong to user."
+msgstr "Der Held gehört einem anderem Benutzer."
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:55
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:16
+msgid "Oops, something went wrong!"
+msgstr "Ups, etwas ist schiefgelaufen!"
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:16
+msgid "Please check the errors below."
+msgstr "Bitte die unten angeführten Fehler überprüfen."
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:65
+msgid "Register"
+msgstr "Registrieren"
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:25
+msgid "Username"
+msgstr "Benutzername"

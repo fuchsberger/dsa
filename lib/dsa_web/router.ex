@@ -25,12 +25,12 @@ defmodule DsaWeb.Router do
 
     resources "/", PageController, only: [:index]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/user", UserController, only: [:new, :create]
 
     live "/confirm", DsaLive, :confirm
     live "/confirm/:token", DsaLive, :confirm
     live "/reset_password", DsaLive, :reset_password
     live "/reset_password/:token", DsaLive, :reset_password
-    live "/register", DsaLive, :register
   end
 
   # Private Routes

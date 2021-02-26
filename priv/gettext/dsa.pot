@@ -74,12 +74,13 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:16
-#: lib/dsa_web/templates/session/new.html.leex:20
+#: lib/dsa_web/templates/session/new.html.leex:20 lib/dsa_web/templates/user/new.html.eex:35
 msgid "Email"
 msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:43
+#: lib/dsa_web/templates/user/new.html.eex:70
 msgid "Forgot your password?"
 msgstr ""
 
@@ -95,11 +96,57 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:24
-#: lib/dsa_web/templates/session/new.html.leex:28
+#: lib/dsa_web/templates/session/new.html.leex:28 lib/dsa_web/templates/user/new.html.eex:45
 msgid "Password"
 msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/session/new.html.leex:6
+#: lib/dsa_web/templates/user/new.html.eex:6
 msgid "Welcome in Aventuria!"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/controllers/auth.ex:33
+msgid "You must be logged in to access that page"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_controller.ex:29
+msgid "Account created! An email to activate your account was sent."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:11
+msgid "Already registered?"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/accounts/user.ex:169
+msgid "Character does not belong to user."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:55
+msgid "Confirm Password"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:16
+msgid "Oops, something went wrong!"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:16
+msgid "Please check the errors below."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:65
+msgid "Register"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user/new.html.eex:25
+msgid "Username"
 msgstr ""

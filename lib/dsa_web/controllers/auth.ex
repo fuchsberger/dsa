@@ -26,7 +26,6 @@ defmodule DsaWeb.Auth do
   end
 
   def authenticate_user(conn, _opts) do
-    Logger.warn inspect conn.assigns
     if conn.assigns.current_user do
       conn
     else
