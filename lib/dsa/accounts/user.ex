@@ -52,6 +52,12 @@ defmodule Dsa.Accounts.User do
     |> put_token()
   end
 
+  # used to reset tokens (should never be handled via web form)
+  def manage_changeset(user, params) do
+    user
+    |> cast(params, [:confirmed, :reset, :token])
+  end
+
   # used for reset password (part 1) and registration
   def email_changeset(user, params) do
     user
@@ -71,8 +77,6 @@ defmodule Dsa.Accounts.User do
     |> put_change(:reset, false)
     |> put_change(:token, nil)
   end
-
-
 
   def reset_password_changeset(user, params) do
     user

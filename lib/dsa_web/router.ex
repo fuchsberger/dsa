@@ -26,6 +26,7 @@ defmodule DsaWeb.Router do
     resources "/", PageController, only: [:index]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/user", UserController, only: [:new, :create]
+    get "/user/confirm/:token", UserController, :confirm
 
     live "/confirm", DsaLive, :confirm
     live "/confirm/:token", DsaLive, :confirm

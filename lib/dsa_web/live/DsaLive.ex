@@ -137,31 +137,6 @@ defmodule DsaWeb.DsaLive do
     token = Map.get(params, "token")
 
     cond do
-      # attempt to confirm users
-      action == :confirm && not is_nil(token) ->
-        # if user exists and is not yet confirmed, confirm her and redirect to login.
-        case Accounts.get_user_by(confirmed: false, token: token) do
-          nil ->
-            {:noreply, socket
-            |> put_flash(:error, "Der Link ist ungültig oder abgelaufen.")
-            |> push_patch(to: Routes.session_path(socket, :new))}
-
-          user ->
-            case Accounts.update_user(user, %{confirmed: true, token: nil}) do
-              {:ok, _user} ->
-                {:noreply, socket
-                |> put_flash(:info, "Aktivierung abgeschlossen. Du kannst dich jetzt einloggen.")
-                |> push_patch(to: Routes.session_path(socket, :new))}
-
-              {:error, changeset} ->
-                Logger.warn("Error confirming account: #{inspect(changeset.errors)}")
-
-                {:noreply, socket
-                |> put_flash(:error, "Ein unerwarteter Fehler ist aufgetreten.")
-                |> push_patch(to: Routes.session_path(socket, :new))}
-            end
-        end
-
       # Do not allow unauthenticated users to access restricted pages
       is_nil(user) && Enum.member?([:dashboard, :character, :combat, :skills, :roll], action) ->
         {:noreply, socket

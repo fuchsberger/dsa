@@ -134,6 +134,12 @@ defmodule Dsa.Accounts do
     |> Repo.insert()
   end
 
+  def manage_user!(%User{} = user, params) do
+    user
+    |> User.manage_changeset(params)
+    |> Repo.update!()
+  end
+
   def change_email(params), do: User.email_changeset(%User{}, params)
 
   def change_password(%User{} = user, params, bypass_security \\ false) do
