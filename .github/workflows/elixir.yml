@@ -1,0 +1,16 @@
+name: Elixir CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-elixir@v1
+        with:
+          otp-version: '22.2'
+          elixir-version: '1.9.4'
+          experimental-otp: true
+      - run: mix deps.get
+      - run: mix test
