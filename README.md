@@ -18,6 +18,7 @@ After ssh into the production server this sequence will update the web applicati
 
 | Command | Condition |
 | :-- | :-- |
+| `cd ~/apps/dsa` | always |
 | `git pull` | always |
 | `mix deps.get --only prod` | hex dependencies have changed |
 | `npm install --prefix ./assets` | npm dependencies have changed |
