@@ -14,7 +14,7 @@
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
         <%# Profilbild / Logo %>
         <%= link class: "flex-shrink-0 flex items-center", to: Routes.page_path(@conn, :index) do %>
-          <img class="block h-8 w-auto rounded-full" src="<%= gravatar_url(@current_user) %>" alt="Profil">
+          <img class="block w-8 h-8 rounded-full" src="<%= gravatar_url(@current_user) %>" alt="Profil">
           <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl text-gray-200'><%= gettext("DSA Tool") %></span>
         <% end %>
 

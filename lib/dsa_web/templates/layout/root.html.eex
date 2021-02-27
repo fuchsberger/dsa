@@ -7,10 +7,10 @@
     <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
     <title><%= gettext("DSA Tool") %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body class='bg-gray-100'>
     <%= render DsaWeb.LayoutView, "menu.html", conn: @conn, current_user: @current_user %>
     <%= @inner_content %>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
