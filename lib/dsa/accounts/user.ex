@@ -21,7 +21,7 @@ defmodule Dsa.Accounts.User do
     field :password_confirm, :string, virtual: true
 
     belongs_to :group, Dsa.Accounts.Group
-    belongs_to :active_character, Dsa.Accounts.Character
+    belongs_to :active_character, Dsa.Accounts.Character, on_replace: :nilify
     has_many :characters, Dsa.Accounts.Character
 
     timestamps()
@@ -30,11 +30,9 @@ defmodule Dsa.Accounts.User do
   # used for non-sensitive changes by user
   def changeset(user, params) do
     user
-    |> cast(params, [:username, :active_character_id, :group_id])
+    |> cast(params, [:username, :group_id])
     |> validate_required([:username])
     |> validate_length(:username, min: 2, max: 15)
-    |> validate_user_character(:active_character_id)
-    |> foreign_key_constraint(:active_character_id)
     |> foreign_key_constraint(:group_id)
     |> unique_constraint(:email)
   end
@@ -150,27 +148,6 @@ defmodule Dsa.Accounts.User do
 
       true ->
         changeset
-    end
-  end
-
-  # constraint to ensure active_character_id references a user-owned character
-  defp validate_user_character(changeset, field) do
-    case get_change(changeset, field) do
-      nil ->
-        changeset
-
-      id ->
-        character_ids =
-          changeset.data
-          |> Repo.preload(:characters)
-          |> Map.get(:characters)
-          |> Enum.map(& &1.id)
-
-        if Enum.member?(character_ids, id) do
-          changeset
-        else
-          add_error(changeset, field, gettext("Character does not belong to user."))
-        end
     end
   end
 end

@@ -9,6 +9,22 @@ defmodule DsaWeb.CharacterController do
     apply(__MODULE__, action_name(conn), args)
   end
 
+  def activate(conn, %{"id" => id}, current_user) do
+    character = Accounts.get_user_character!(current_user, id)
+
+    case Accounts.activate_character(current_user, character) do
+      {:ok, _user} ->
+        redirect(conn, to: Routes.character_path(conn, :index))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error("Error updating user: \n#{inspect(changeset.errors)}")
+
+        conn
+        |> put_flash(:info, "An error occured when updating user.")
+        |> redirect(to: Routes.character_path(conn, :index))
+    end
+  end
+
   def index(conn, _params, current_user) do
     characters = Accounts.list_user_characters(current_user)
     render(conn, "index.html", characters: characters)
@@ -40,8 +56,8 @@ defmodule DsaWeb.CharacterController do
   end
 
   def delete(conn, %{"id" => id}, current_user) do
-    character = Multimedia.get_user_character!(current_user, id)
-    {:ok, _character} = Multimedia.delete_character(character)
+    character = Accounts.get_user_character!(current_user, id)
+    {:ok, _character} = Accounts.delete_character(character)
 
     conn
     |> put_flash(:info, "Character deleted successfully.")
@@ -58,10 +74,26 @@ defmodule DsaWeb.CharacterController do
       {:ok, character} ->
         conn
         |> put_flash(:info, gettext("Character created successfully."))
-        |> redirect(to: Routes.character_path(conn, :show, character))
+        |> redirect(to: Routes.character_path(conn, :edit, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
+    end
+  end
+
+  def toggle_visible(conn, %{"id" => id}, current_user) do
+    character = Accounts.get_user_character!(current_user, id)
+
+    case Accounts.update_character(character, %{visible: !character.visible}) do
+      {:ok, _character} ->
+        redirect(conn, to: Routes.character_path(conn, :index))
+
+      {:error, changeset} ->
+        Logger.error("Error updating character: \n#{inspect(changeset.errors)}")
+
+        conn
+        |> put_flash(:info, "An error occured when updating character.")
+        |> redirect(to: Routes.character_path(conn, :index))
     end
   end
 end

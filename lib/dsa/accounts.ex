@@ -80,7 +80,7 @@ defmodule Dsa.Accounts do
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)
 
-  defp user_query, do: from(u in User, preload: :characters)
+  defp user_query, do: from(u in User, preload: [:active_character, :characters])
 
   def authenticate_by_email_and_pass(email, given_pass) do
     user = get_user_by(email: email)
@@ -230,6 +230,13 @@ defmodule Dsa.Accounts do
     character
     |> cast(attrs, [])
     |> cast_assoc(type)
+  end
+
+  def activate_character(user, character) do
+    user
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:active_character, character)
+    |> Repo.update()
   end
 
   def create_character(%User{} = user, attrs) do
