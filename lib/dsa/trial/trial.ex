@@ -64,4 +64,24 @@ defmodule Dsa.Trial do
         talent_quality(skill_point + diff)
     end
   end
+
+  def handle_trial_event(traits, level, modifier, group_id, character_id, type, skill_id) do
+    dices = Dsa.Trial.roll_dices(20, 3)
+    [{_, d1}, {_, d2}, {_, d3}] = dices
+    result = Dsa.Trial.perform_talent_trial(traits, level, modifier, dices)
+
+    [t1,t2,t3] = traits
+
+    %{
+        type: type,
+        x1: skill_id,
+        x7: d1,
+        x8: d2,
+        x9: d3,
+        x10: modifier,
+        x12: result,
+        character_id: character_id,
+        group_id: group_id
+    }
+  end
 end

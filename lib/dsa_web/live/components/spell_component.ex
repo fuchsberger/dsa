@@ -43,25 +43,13 @@ defmodule DsaWeb.SpellComponent do
   def handle_event("roll", %{"spell" => id}, socket) do
     spell_id = String.to_integer(id)
     level = Map.get(socket.assigns.character, Spell.field(spell_id))
-    [t1, t2, t3] = Enum.map(Spell.traits(spell_id), & Map.get(socket.assigns.character, &1))
-    traits = [t1, t2, t3]
+    traits = Enum.map(Spell.traits(spell_id), & Map.get(socket.assigns.character, &1))
+    modifier = socket.assigns.modifier
+    character_id = socket.assigns.character.id
+    group_id = @group_id
+    type = 5
 
-    dices = Dsa.Trial.roll_dices(20, 3)
-    [{_, d1}, {_, d2}, {_, d3}] = dices
-    result = Dsa.Trial.perform_talent_trial(traits, level, socket.assigns.modifier, dices)
-
-    params =
-      %{
-        type: 5,
-        x1: spell_id,
-        x7: d1,
-        x8: d2,
-        x9: d3,
-        x10: socket.assigns.modifier,
-        x12: result,
-        character_id: socket.assigns.character.id,
-        group_id: @group_id
-      }
+    params = Dsa.Trial.handle_trial_event(traits, level, modifier, group_id, character_id, type, spell_id)
 
     case Event.create_log(params) do
       {:ok, log} ->
