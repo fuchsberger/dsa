@@ -4,7 +4,12 @@ defmodule DsaWeb.UserController do
   alias Dsa.{Accounts, Email, Mailer}
   alias Dsa.Accounts.User
 
-  def new(conn, _params) do
+  def action(conn, _) do
+    args = [conn, conn.params, conn.assigns.current_user]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
+  def new(conn, _params, _current_user) do
     changeset = Accounts.change_registration(%User{}, %{})
 
     conn
@@ -12,7 +17,7 @@ defmodule DsaWeb.UserController do
     |> render("new.html", changeset: changeset)
   end
 
-  def confirm(conn, %{"token" => token}) do
+  def confirm(conn, %{"token" => token}, _current_user) do
     case Accounts.get_user_by(confirmed: false, token: token) do
       nil ->
         conn
@@ -25,11 +30,11 @@ defmodule DsaWeb.UserController do
         conn
         |> DsaWeb.Auth.login(user)
         |> put_flash(:info, "Activation complete. Welcome to DSA Tool!")
-        |> redirect(to: Routes.dsa_path(conn, :dashboard))
+        |> redirect(to: Routes.character_path(conn, :index))
     end
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def create(conn, %{"user" => user_params}, _current_user) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
 
@@ -48,13 +53,43 @@ defmodule DsaWeb.UserController do
     end
   end
 
-  def reset(conn, _params) do
+  def edit(conn, _params, current_user) do
+    changeset = Accounts.change_user(current_user, %{})
+    group_options = Accounts.list_group_options()
+
+    conn
+    |> render("edit.html", changeset: changeset, options: group_options)
+  end
+
+  def update(conn, %{"user" => user_params}, current_user) do
+    case Accounts.update_user(current_user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Account updated successfully.")
+        |> redirect(to: Routes.character_path(conn, :index))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        group_options = Accounts.list_group_options()
+        render(conn, "edit.html", changeset: changeset, options: group_options)
+    end
+  end
+
+  def delete(conn, _params, current_user) do
+    {:ok, _user} = Accounts.delete_user(current_user)
+
+    conn
+    |> DsaWeb.Auth.logout()
+    |> put_flash(:info, "Account deleted successfully.")
+    |> redirect(to: Routes.session_path(conn, :new))
+  end
+
+  def reset(conn, _params, _current_user) do
     conn
     |> put_layout("wide.html")
     |> render("reset.html", changeset: Accounts.change_email(%{}))
   end
 
-  def send_reset_link(conn, %{"user" => %{"email" => email} = params}) do
+  def send_reset_link(conn, %{"user" => %{"email" => email} = params}, _current_user) do
     case Accounts.get_user_by(email: email) do
       nil ->
         Pbkdf2.no_user_verify()
@@ -76,7 +111,7 @@ defmodule DsaWeb.UserController do
     end
   end
 
-  def reset_password(conn, %{"token" => token}) do
+  def reset_password(conn, %{"token" => token}, _current_user) do
     case Accounts.get_user_by(reset: true, token: token) do
       nil ->
         conn
@@ -92,7 +127,7 @@ defmodule DsaWeb.UserController do
     end
   end
 
-  def update_password(conn, %{"token" => token, "user" => user_params}) do
+  def update_password(conn, %{"token" => token, "user" => user_params}, _current_user) do
     Logger.warn(inspect (user_params))
     case Accounts.get_user_by(reset: true, token: token) do
       nil ->
@@ -108,7 +143,7 @@ defmodule DsaWeb.UserController do
             conn
             |> DsaWeb.Auth.login(user)
             |> put_flash(:info, gettext("Password successfully reset. Welcome back!"))
-            |> redirect(to: Routes.dsa_path(conn, :dashboard))
+            |> redirect(to: Routes.character_path(conn, :index))
 
           {:error, %Ecto.Changeset{} = changeset} ->
             conn

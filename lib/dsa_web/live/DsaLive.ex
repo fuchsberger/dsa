@@ -15,13 +15,6 @@ defmodule DsaWeb.DsaLive do
   def render(assigns) do
     ~L"""
     <%= case @live_action do %>
-      <% :dashboard -> %>
-        <%= live_component @socket, DsaWeb.DashboardComponent,
-          id: :dashboard,
-          group_options: @group_options,
-          user: @user
-        %>
-
       <% :new_character -> %>
         <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
 
@@ -134,14 +127,14 @@ defmodule DsaWeb.DsaLive do
 
     cond do
       # Do not allow unauthenticated users to access restricted pages
-      is_nil(user) && Enum.member?([:dashboard, :character, :combat, :skills, :roll], action) ->
+      is_nil(user) && Enum.member?([:character, :combat, :skills, :roll], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
         |> redirect(to: Routes.session_path(socket, :new))}
 
       # redirect to dashboard if user does not has an active character and page requires it
       not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :skills, :character], action) ->
-        {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard), replace: true)}
+        {:noreply, push_patch(socket, to: Routes.user_path(socket, :edit, user), replace: true)}
 
       # all went normal, proceed
       true ->

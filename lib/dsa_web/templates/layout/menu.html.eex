@@ -20,24 +20,38 @@
 
         <div class="hidden sm:block sm:ml-6">
           <div class="flex space-x-4">
-            <%= menu_link @conn, gettext("Hero"),
-              to: Routes.dsa_path(@conn, :character),
-              class: "menu-item text-sm" %>
+            <%= unless is_nil(@current_user) do %>
+              <%= menu_link @conn, gettext("Characters"),
+                to: Routes.character_path(@conn, :index),
+                class: "menu-item text-sm" %>
+            <% end %>
 
-            <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills),
-              class: "menu-item text-sm" %>
+            <%= if @current_user.active_character_id do %>
+              <%= menu_link @conn, gettext("Hero"),
+                to: Routes.character_path(@conn, :edit, @current_user.active_character),
+                class: "menu-item text-sm" %>
 
-            <%= menu_link @conn, gettext("Spells"),
-              to: Routes.dsa_path(@conn, :spells),
-              class: "menu-item text-sm" %>
+              <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills),
+                class: "menu-item text-sm" %>
 
-            <%= menu_link @conn, gettext("Combat"),
-              to: Routes.dsa_path(@conn, :combat),
-              class: "menu-item text-sm" %>
+              <%= menu_link @conn, gettext("Spells"),
+                to: Routes.dsa_path(@conn, :spells),
+                class: "menu-item text-sm" %>
 
-            <%= menu_link @conn, gettext("Roll"),
-              to: Routes.dsa_path(@conn, :roll),
-              class: "menu-item text-sm" %>
+              <%= menu_link @conn, gettext("Combat"),
+                to: Routes.dsa_path(@conn, :combat),
+                class: "menu-item text-sm" %>
+
+              <%= menu_link @conn, gettext("Roll"),
+                to: Routes.dsa_path(@conn, :roll),
+                class: "menu-item text-sm" %>
+            <% end %>
+
+            <%= unless is_nil(@current_user) do %>
+              <%= menu_link @conn, gettext("Settings"),
+                to: Routes.character_path(@conn, :edit, @current_user),
+                class: "menu-item text-sm" %>
+            <% end %>
           </div>
         </div>
       </div>
@@ -60,12 +74,19 @@
   <!-- Mobile menu, toggle classes based on menu state. -->
   <div id='mobile-menu' class="hidden sm:hidden">
     <div class="px-2 pt-2 pb-3 space-y-1">
-      <%= menu_link @conn, gettext("Hero"), to: Routes.dsa_path(@conn, :character), class: "menu-item block text-base" %>
-      <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills), class: "menu-item block text-base" %>
-      <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
-      <%= menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
-      <%= menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
       <%= unless is_nil(@current_user) do %>
+        <%= menu_link @conn, gettext("Characters"), to: Routes.character_path(@conn, :index), class: "menu-item block text-base" %>
+      <% end %>
+
+      <%= if @current_user.active_character_id do %>
+        <%= menu_link @conn, gettext("Hero"), to: Routes.character_path(@conn, :edit, @current_user), class: "menu-item block text-base" %>
+        <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills), class: "menu-item block text-base" %>
+        <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
+        <%= menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
+        <%= menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
+      <% end %>
+      <%= unless is_nil(@current_user) do %>
+        <%= menu_link @conn, gettext("Settings"), to: Routes.user_path(@conn, :edit, @current_user), class: "menu-item block text-base" %>
         <%= menu_link @conn, gettext("Logout"), to: Routes.session_path(@conn, :delete, @current_user), class: "menu-item block text-base", method: :delete %>
       <% end %>
     </div>

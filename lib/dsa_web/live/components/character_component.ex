@@ -104,7 +104,7 @@ defmodule DsaWeb.CharacterComponent do
       {:ok, _character} ->
         broadcast :update_user
         case is_nil(socket.assigns.user.active_character) do
-          true -> {:noreply, push_patch(socket, to: Routes.dsa_path(socket, :dashboard))}
+          true -> {:noreply, push_patch(socket, to: Routes.user_path(socket, :edit, socket.assigns.user))}
           false -> {:noreply, assign(socket, :modified, false)}
         end
 

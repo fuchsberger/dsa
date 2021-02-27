@@ -1,0 +1,27 @@
+<div class="bg-white relative shadow-xl rounded-lg mt-4">
+  <h1 class="font-bold text-center bg-gray-300 rounded-t-lg leading-10 h-10 text-xl text-gray-900"><%= gettext "Benutzerverwaltung" %></h1>
+  <div class="w-full">
+    <%= form_for @changeset, Routes.user_path(@conn, :update, @current_user), fn f -> %>
+      <div class="grid grid-cols-1 md:grid-cols-5">
+        <div class='col-span-2 p-2'>
+          <%= label f, :username, gettext("Username"), class: "text-sm font-medium text-gray-700" %>
+          <%= text_input f, :username, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+          <%= error_tag f, :username %>
+        </div>
+        <div class='col-span-2 p-2'>
+          <%= label f, :group_id, gettext("Group"), class: "text-sm font-medium text-gray-700" %>
+          <%= select f, :group_id, @options, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+          <%= error_tag f, :group_id %>
+        </div>
+        <div class='p-2'>
+          <%= submit gettext("Save"), class: "lg:w-full lg:mt-7 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </div>
+      </div>
+    <% end %>
+
+    <p class='p-2'><%= gettext "Other Actions:" %>
+      <%= link gettext("Change Password"), to: Routes.user_path(@conn, :reset), class: "pl-2" %>
+      <%= link gettext("Delete Account"), to: Routes.user_path(@conn, :delete, @current_user), class: "pl-2 text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you permanently want to delete your account and all associated data?"), method: :delete %>
+    </p>
+  </div>
+</div>

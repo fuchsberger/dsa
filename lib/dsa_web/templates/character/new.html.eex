@@ -1,0 +1,2 @@
+<h1 class='text-center font-sans font-bold text-2xl'><%= gettext("New Character") %></h1>
+<%= render "form.html", Map.put(assigns, :action, Routes.character_path(@conn, :create)) %>

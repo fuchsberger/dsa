@@ -23,7 +23,7 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    resources "/", PageController, only: [:index]
+    get "/", PageController, :index
     resources "/sessions", SessionController, only: [:new, :create, :delete]
 
     # user registration
@@ -41,10 +41,10 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
 
-    live "/character/new", DsaLive, :new_character
-    live "/character", DsaLive, :character
+    resources "/character", CharacterController
+    resources "/user", UserController, only: [:delete, :edit, :update]
+
     live "/combat", DsaLive, :combat
-    live "/dashboard", DsaLive, :dashboard
     live "/roll", DsaLive, :roll
     live "/skills", DsaLive, :skills
     live "/spells", DsaLive, :spells

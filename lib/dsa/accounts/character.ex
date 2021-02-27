@@ -144,7 +144,6 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ke_max, greater_than_or_equal_to: 0)
     |> validate_base_values()
     |> validate_skills()
-    |> foreign_key_constraint(:user_id)
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a

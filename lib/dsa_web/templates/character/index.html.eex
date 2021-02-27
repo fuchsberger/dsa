@@ -1,0 +1,47 @@
+<div class="shadow-xl overflow-hidden border-b sm:rounded-lg">
+  <table class="w-full border-gray-200 divide-y divide-gray-200">
+    <thead class="leading-8 text-gray-900 bg-gray-300 font-medium text-left">
+      <tr>
+        <th scope="col" class="px-6">Held</th>
+        <th scope="col" class='text-center'><%= icon @conn, "eye-solid" %></th>
+        <th scope="col" class="px-6">Status</th>
+        <th scope="col" class="px-1"><%= link icon(@conn, "plus"), to: Routes.character_path(@conn, :new) %></th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <%= for character <- @characters do %>
+        <tr>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <div class="ml-4">
+              <div class="text-sm font-medium text-gray-900">
+                <%= character.name %>
+              </div>
+              <div class="text-sm text-gray-500">
+                <%= character.profession %>
+              </div>
+            </div>
+          </td>
+          <td class='text-center'>
+            <button
+              class='text-indigo-400'
+              phx-click='update-character'
+              phx-value-id='<%= character.id %>'
+              phx-value-visible='<%= not character.visible %>'
+            >
+              <%= icon @conn, (if character.visible, do: "eye", else: "eye-off") %>
+            </button>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <button type='button' class="label <%= if character.id == @current_user.active_character_id, do: "green", else: "gray" %>" phx-click='activate' phx-value-character='<%= character.id %>'>
+              <%= if character.id == @current_user.active_character_id, do: "A", else: "Ina" %>ktiv
+            </button>
+            <button type='button' class='label gray' data-confirm='Bist du sicher?' phx-click='delete' phx-value-character='<%= character.id %>'>Entfernen</button>
+          </td>
+          <td class='px-1'>
+            <%= link icon(@conn, "pencil"), to: Routes.character_path(@conn, :edit, character) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

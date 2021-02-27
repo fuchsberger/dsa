@@ -89,7 +89,7 @@ defmodule Dsa.Accounts do
       user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
         case user.confirmed do
           true -> {:ok, user}
-          false -> {:error, :unconfirmed, user.email}
+          false -> {:error, :unconfirmed}
         end
 
       user ->
@@ -104,6 +104,7 @@ defmodule Dsa.Accounts do
   def list_users, do: Repo.all(User)
   def list_user_options, do: Repo.all(from(u in User, select: {u.name, u.id}, order_by: u.name))
 
+
   def list_user_characters!(user_id) do
     from(c in Character,
       select: map(c, [:id, :name, :profession]),
@@ -111,6 +112,22 @@ defmodule Dsa.Accounts do
       where: c.user_id == ^user_id
     )
     |> Repo.all()
+  end
+
+  def list_user_characters(%User{} = user) do
+    Character
+    |> user_characters_query(user)
+    |> Repo.all()
+  end
+
+  def get_user_character!(%User{} = user, id) do
+    Character
+    |> user_characters_query(user)
+    |> Repo.get!(id)
+  end
+
+  defp user_characters_query(query, %User{id: user_id}) do
+    from(c in query, where: c.user_id == ^user_id)
   end
 
   # TODO: Remove params
@@ -165,7 +182,7 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def delete_user!(user), do: Repo.delete!(user)
+  def delete_user(%User{} = user), do: Repo.delete(user)
 
   def list_characters, do: Repo.all(from(c in Character, preload: :user))
 
@@ -215,9 +232,10 @@ defmodule Dsa.Accounts do
     |> cast_assoc(type)
   end
 
-  def create_character(attrs) do
+  def create_character(%User{} = user, attrs) do
     %Character{}
     |> Character.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 

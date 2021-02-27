@@ -1,31 +1,15 @@
-<%# Endpoint Layout %>
-
-
-<div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl'>
+<div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show variable page content %>
   <div class='block lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-auto'>
-    <%= unless is_nil(get_flash(@conn, :error)) do %>
-      <div class="group relative w-full flex justify-center py-2 pl-10 pr-4 bg-red-200 text-red-800 rounded-md">
-        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <%= icon @conn, "exclamation-circle", "inline-block w-5 h-5" %>
-        </span>
-        <%= get_flash(@conn, :error) %>
-      </div>
-    <% end %>
-    <%= unless is_nil(get_flash(@conn, :info)) do %>
-      <div class="group relative w-full flex justify-center py-2 pl-10 pr-4 bg-blue-200 text-blue-800 rounded-md">
-        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <%= icon @conn, "exclamation-circle", "inline-block w-5 h-5" %>
-        </span>
-        <%= get_flash(@conn, :info) %>
-      </div>
-    <% end %>
+    <%= render "flash.html", conn: @conn %>
     <%= @inner_content %>
   </div>
   <%# In right column always show log / group stuff %>
-  <%= unless is_nil(@current_user) do %>
-    <div class='hidden lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
+  <%= unless is_nil(@current_user.group_id) do %>
+    <div class='lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
       <%# live_component @socket, DsaWeb.LogComponent, id: :log, logs: @user.group.logs %>
     </div>
+  <% else %>
+    <%# TODO: Add Info that a user must join a group first to see log. %>
   <% end %>
 </div>

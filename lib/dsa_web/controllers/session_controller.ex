@@ -12,10 +12,12 @@ defmodule DsaWeb.SessionController do
       {:ok, user} ->
         conn
         |> DsaWeb.Auth.login(user)
-        |> redirect(to: Routes.dsa_path(conn, :dashboard))
+        |> redirect(to: Routes.character_path(conn, :index))
 
-      {:error, :unconfirmed, email} ->
-        redirect(conn, to: Routes.dsa_path(conn, :confirm, email: email))
+      {:error, :unconfirmed} ->
+        conn
+        |> put_flash(:error, gettext("Account must be confirmed first. Please check your email."))
+        |> redirect(to: Routes.session_path(conn, :new))
 
       {:error, _reason} ->
         conn
