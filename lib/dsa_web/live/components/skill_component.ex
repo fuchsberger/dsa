@@ -45,21 +45,4 @@ defmodule DsaWeb.SkillComponent do
         {:noreply, socket}
     end
   end
-
-  defp row(target, skill_values, skill_id) do
-    field = Skill.field(skill_id)
-    value = Map.get(skill_values, field)
-
-    assigns = %{
-      id: skill_id,
-      name: Skill.name(skill_id),
-      probe: Skill.probe(skill_id),
-      be: be(Skill.be(skill_id)),
-      sf: Skill.sf(skill_id),
-      value: value,
-      show_minus: (if value == 0, do: "hidden"),
-      show_plus: (if value == 29, do: "hidden"),
-      target: target
-    }
-  end
 end
