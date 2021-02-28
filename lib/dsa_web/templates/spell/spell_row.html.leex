@@ -1,0 +1,43 @@
+<% field = Dsa.Data.Spell.field(@spell_id) %>
+<% value = Map.get(@character, field) %>
+<% id = @spell_id %>
+<% target = @target %>
+<% name = Dsa.Data.Spell.name(@spell_id) %>
+<% probe = Dsa.Data.Spell.probe(@spell_id) %>
+<% sf = Dsa.Data.Spell.sf(@spell_id) %>
+<% show_minus = (if value == 0, do: "hidden") %>
+<% show_plus = (if value == 29, do: "hidden") %>
+<tr>
+  <td class="px-2 py-1 text-left"><%= name %></td>
+  <td class="px-1 py-1 hidden sm:table-cell"><%= probe %></td>
+  <td class="px-1 py-1 hidden sm:table-cell"></td>
+  <td class="px-1 py-1 hidden sm:table-cell"><%= sf %></td>
+  <td class="pl-1 py-1">
+    <button
+      class='<%= show_minus %> focus-none'
+      phx-click='update_character'
+      phx-value-t<%= id %>='<%= value - 1 %>'>
+      <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+      </svg>
+    </button>
+  </td>
+  <td class="px-0 py-1 text-center font-bold"><%= value %></td>
+  <td class="pr-1 py-1">
+    <button
+      class='<%= show_plus %> focus-none'
+      phx-click='update_character'
+      phx-value-t<%= id %>='<%= value + 1 %>'>
+      <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+      </svg>
+    </button>
+  </td>
+  <td class="px-1 py-1">
+    <button class='' phx-click='roll' phx-value-skill='<%= id %>' phx-target='<%= target %>'>
+      <svg class='inline-block w-4 h-4 text-indigo-600' fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    </button>
+  </td>
+</tr>

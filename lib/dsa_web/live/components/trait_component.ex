@@ -32,8 +32,8 @@ defmodule DsaWeb.TraitComponent do
     trait = trait |> String.downcase() |> String.to_atom()
     level = Map.get(socket.assigns.character, trait)
 
-    d1 = Enum.random(1..20)
-    d2 = Enum.random(1..20)
+    dices = Dsa.Trial.roll_dices(20, 2)
+    [{_, d1}, {_, d2}] = dices
 
     params =
       %{

@@ -1,0 +1,18 @@
+<table class="w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200 text-center">
+  <thead class="leading-8 text-gray-900 bg-gray-300 font-medium">
+    <tr>
+      <th scope="col" class="px-2 text-left">Talent</th>
+      <th scope="col" class="px-1 hidden sm:table-cell">Probe</th>
+      <th scope="col" class="px-1 hidden sm:table-cell">BE</th>
+      <th scope="col" class="px-1 hidden sm:table-cell">SF</th>
+      <th scope="col" colspan='3'>FW</th>
+      <th scope="col">P</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <%= render DsaWeb.SkillView, "header_row.html", %{title: "Zauber", traits: "traits", pages: "tbd", ap: @ap_1} %>
+    <%= for spell_id <- 1..51 do %>
+      <%= render DsaWeb.SpellView, "spell_row.html", %{spell_id: spell_id, character: @character, target: @myself} %>
+    <%= end%>
+  </tbody>
+</table>
