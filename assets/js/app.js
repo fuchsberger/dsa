@@ -5,17 +5,16 @@ import * as Turbo from "@hotwired/turbo"
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {
-  params: {_csrf_token: csrfToken},
-  metadata: { keydown: e => ({key: e.key, metaKey: e.metaKey, repeat: e.repeat}) }
-})
-
-// Connect if there are any LiveViews on the page
-liveSocket.connect()
-
-
 document.addEventListener("turbo:load", function() {
+
+  let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+  let liveSocket = new LiveSocket("/live", Socket, {
+    params: {_csrf_token: csrfToken},
+    metadata: { keydown: e => ({key: e.key, metaKey: e.metaKey, repeat: e.repeat}) }
+  })
+
+  // Connect if there are any LiveViews on the page
+  liveSocket.connect()
 
   // Select mobile button
   let mobile_button = document.getElementById("mobile-button")
