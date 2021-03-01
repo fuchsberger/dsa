@@ -82,6 +82,8 @@ defmodule DsaWeb do
 
       alias DsaWeb.Router.Helpers, as: Routes
       alias DsaWeb.LogView
+
+      require Logger
     end
   end
 

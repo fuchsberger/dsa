@@ -8,6 +8,7 @@
   <%= unless is_nil(@current_user.group_id) do %>
     <div class='lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
       <%# live_component @socket, DsaWeb.LogComponent, id: :log, logs: @user.group.logs %>
+      <%= live_render(@conn, DsaWeb.LogLive, session: %{"group_id" => @current_user.group_id} ) %>
     </div>
   <% else %>
     <%# TODO: Add Info that a user must join a group first to see log. %>

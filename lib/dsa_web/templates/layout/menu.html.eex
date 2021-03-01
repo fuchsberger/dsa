@@ -49,7 +49,7 @@
 
             <%= unless is_nil(@current_user) do %>
               <%= menu_link @conn, gettext("Settings"),
-                to: Routes.character_path(@conn, :edit, @current_user),
+                to: Routes.user_path(@conn, :edit, @current_user),
                 class: "menu-item text-sm" %>
             <% end %>
           </div>
