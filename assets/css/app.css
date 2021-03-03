@@ -31,6 +31,11 @@ iframe { display: none; }
     @apply outline-none ring-2 ring-offset-2 ring-indigo-500;
   }
 
+  /* Mobile buttons used in menu */
+  button.mobile { @apply p-1 rounded-full text-gray-400; }
+  button.mobile:focus { @apply outline-none; }
+  button.mobile.active { @apply bg-gray-700 ring-1 ring-offset-1 ring-gray-100 text-gray-50; }
+
   h2.main { @apply mt-6 text-center text-3xl font-extrabold text-gray-900; }
 
   .input-icon-wrapper {

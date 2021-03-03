@@ -34,17 +34,13 @@ document.addEventListener("turbo:load", function() {
   })
 
   // Enable Log Button
-  let el = document.getElementById("log-button")
+  const log_button = document.getElementById("log-button")
 
-  if (el !== null) {
+  if(log_button){
+    log_button.addEventListener('click', () => {
+      log_button.classList.toggle("active")
 
-    // Add a click event on it
-    el.addEventListener('click', () => {
-
-      // Toggle the classes in the mobile menu button
-      el.classList.toggle("active")
-
-      for(let elm of el.children){
+      for(let elm of document.getElementById("main-wrapper").children){
         elm.classList.toggle("block")
         elm.classList.toggle("hidden")
       }
