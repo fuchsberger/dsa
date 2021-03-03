@@ -1,0 +1,34 @@
+<%= f = form_for @changeset, "#", phx_change: :change, phx_submit: nil, phx_target: @myself %>
+  <div class='my-2 flex justify-between'>
+    <button phx-click="clear-log" phx-target="<%= @myself %>" type="button" class="bg-white py-1 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2 lg:mr-3">Log leeren</button>
+    <div class="flex items-center align-middle">
+      <%= checkbox f, :dice, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-1", phx_change: :toggle %>
+      <%= label f, :dice, "Würfel", class: "font-medium text-gray-700" %>
+      <%= checkbox f, :result, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded ml-4 mr-1", phx_change: :toggle %>
+      <%= label f, :result, "Ergebnis", class: "font-medium text-gray-700" %>
+    </div>
+  </div>
+  <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
+    <%= for entry <- @entries do %>
+      <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
+        <%= case entry.type do %>
+          <% 1 -> %>
+            <%= render DsaWeb.LogView, "quick_roll.html", %{entry: entry, f: f} %>
+          <% 2 -> %>
+            <%= render DsaWeb.LogView, "base_roll.html", %{entry: entry, f: f} %>
+          <% 3 -> %>
+            <%= render DsaWeb.LogView, "custom_talent_roll.html", %{entry: entry, f: f} %>
+          <% 4 -> %>
+            <%= render DsaWeb.LogView, "skill_roll.html", %{entry: entry, f: f} %>
+          <% 5 -> %>
+            <%= render DsaWeb.LogView, "spell_roll.html", %{entry: entry, f: f} %>
+          <% _ -> %> 
+            <%= render DsaWeb.LogView, "unknown.html", %{entry: entry, f: f} %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
+    <%= render DsaWeb.LogView, "empty.html" %>
+  </div>
+</form>

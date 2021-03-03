@@ -10,13 +10,15 @@ defmodule DsaWeb.RollComponent do
 
     <%= f = form_for @roll_changeset, "#", phx_change: "change", phx_target: @myself, phx_submit: "roll" %>
       <div class='grid grid-cols-3 md:grid-cols-9 border-solid border-gray-300 border-b pb-3 gap-2'>
-        <h4 class='col-span-2 leading-8 text-center lg:text-left font-bold text-gray-700'>Schnellwurf</h4>
+        <h4 class='col-span-1 leading-8 text-center lg:text-left font-bold text-gray-700'>Quick</h4>
 
-        <%= quickroll_button %{target: @myself, max: 20, count: 1} %>
+
+        <%= quickroll_button %{target: @myself, max: 3, count: 1} %>
         <%= quickroll_button %{target: @myself, max: 6, count: 1} %>
         <%= quickroll_button %{target: @myself, max: 6, count: 2} %>
         <%= quickroll_button %{target: @myself, max: 6, count: 3} %>
-        <%= quickroll_button %{target: @myself, max: 20, count: 3} %>
+        <%= quickroll_button %{target: @myself, max: 20, count: 1} %>
+        <%= quickroll_button %{target: @myself, max: 20, count: 2} %>
 
         <div class="col-span-2 flex justify-end">
           <%= label f, :bonus, "+", class: "leading-8 mr-2" %>
@@ -124,7 +126,7 @@ defmodule DsaWeb.RollComponent do
         x8: d2,
         x9: d3,
         x10: socket.assigns.modifier,
-        x12: DsaWeb.SkillComponent.result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
+        x12: Dsa.Trial.Trial.result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }
