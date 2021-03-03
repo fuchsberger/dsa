@@ -46,6 +46,7 @@ defmodule Dsa.MixProject do
       {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
       {:bamboo, "~> 1.7.1"},
+      {:enum_type, "~> 1.1.0"},
       {:bamboo_mailjet, "~> 0.1.0"},
       {:floki, ">= 0.0.0", only: :test}
     ]
