@@ -2,6 +2,7 @@ defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
   alias Dsa.Data.Spell
+  alias Dsa.Event.Log
   alias Dsa.Data.Skill
 
   @base "inline-block font-semibold leading-6 px-1 rounded"

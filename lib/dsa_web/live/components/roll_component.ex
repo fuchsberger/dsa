@@ -118,7 +118,7 @@ defmodule DsaWeb.RollComponent do
 
     params =
       %{
-        type: 3,
+        type: Event.Log.Type.CustomTalentRoll.value,
         x1: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_1),
         x2: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_2),
         x3: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_3),
@@ -126,7 +126,7 @@ defmodule DsaWeb.RollComponent do
         x8: d2,
         x9: d3,
         x10: socket.assigns.modifier,
-        x12: Dsa.Trial.result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
+        x12: Dsa.Trial.perform_talent_trial([t1, t2, t3], level, socket.assigns.modifier, [{20, d1}, {20, d2}, {20, d3}]),
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }
