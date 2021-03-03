@@ -46,12 +46,6 @@
                 to: Routes.dsa_path(@conn, :roll),
                 class: "menu-item text-sm" %>
             <% end %>
-
-            <%= unless is_nil(@current_user) do %>
-              <%= menu_link @conn, gettext("Settings"),
-                to: Routes.user_path(@conn, :edit, @current_user),
-                class: "menu-item text-sm" %>
-            <% end %>
           </div>
         </div>
       </div>
@@ -60,11 +54,31 @@
           <span class="sr-only"><%= gettext("View Log") %></span>
           <%= icon @conn, "clipboard-list", "h-6 w-6" %>
         </button>
-        <%= link to: Routes.session_path(@conn, :delete, @current_user), title: gettext("Logout"), class: "hidden lg:block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium", method: :delete do %>
-          <span class='sr-only'><%= gettext("Logout") %></span>
-          <span class='ml-2 hidden lg:inline-block"'><%= @current_user.username %></span>
-          <%= icon @conn, "logout", "h-6 w-6" %>
-        <% end %>
+
+        <div class="hidden lg:inline-block menu-item dropdown group">
+          <button class='text-sm flex items-center min-w-32 focus:outline-none'>
+            <span class="pr-1 font-semibold flex-1"><%= @current_user.active_character.name %></span>
+            <%= icon @conn, "chevron-down-solid", "fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out" %>
+          </button>
+          <div
+            class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 group-hover:scale-100
+          transition duration-150 ease-in-out text-gray-800"
+          >
+            <%# TODO: List all visible user characters %>
+
+            <hr>
+
+            <%= link to: Routes.user_path(@conn, :edit, @current_user) do %>
+              <%= icon @conn, "cog-solid" %>
+              <%= gettext "Settings" %>
+            <% end %>
+
+            <%= link to: Routes.session_path(@conn, :delete, @current_user), method: :delete do %>
+              <%= icon @conn, "lock-closed-solid" %>
+              <%= gettext "Logout" %>
+            <% end %>
+          </ul>
+        </div>
       <% end %>
     </div>
   </div>
