@@ -64,9 +64,24 @@
             class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 group-hover:scale-100
           transition duration-150 ease-in-out text-gray-800"
           >
-            <%# TODO: List all visible user characters %>
+            <h4 class='text-center text-gray-500 bg-gray-100 border-solid border-gray-300 border-b'><%= gettext "Characters" %></h4>
 
-            <hr>
+            <%= for character <- @current_user.characters do %>
+              <%= link to: Routes.character_path(@conn, :activate, character), method: :put do %>
+                <%= if character.id == @current_user.active_character_id do %>
+                  <%= icon @conn, "star-solid" %>
+                <% else %>
+                  <%= icon @conn, "star" %>
+                <% end %>
+                <%= character.name %>
+              <% end %>
+            <% end %>
+            <%= link to: Routes.character_path(@conn, :new) do %>
+              <%= icon @conn, "plus" %>
+              <%= gettext "New Character" %>
+            <% end %>
+
+            <h4 class='text-center bg-gray-100 text-gray-500 border-solid border-gray-300 border-b border-t'><%= @current_user.username %></h4>
 
             <%= link to: Routes.user_path(@conn, :edit, @current_user) do %>
               <%= icon @conn, "cog-solid" %>

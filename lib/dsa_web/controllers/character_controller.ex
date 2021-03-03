@@ -14,7 +14,7 @@ defmodule DsaWeb.CharacterController do
 
     case Accounts.activate_character(current_user, character) do
       {:ok, _user} ->
-        redirect(conn, to: Routes.character_path(conn, :index))
+        redirect(conn, to: Routes.character_path(conn, :edit, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         Logger.error("Error updating user: \n#{inspect(changeset.errors)}")
