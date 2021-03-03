@@ -22,6 +22,8 @@
             <%= render DsaWeb.LogView, "skill_roll.html", %{entry: entry, f: f} %>
           <% Log.Type.SpellRoll -> %>
             <%= render DsaWeb.LogView, "spell_roll.html", %{entry: entry, f: f} %>
+          <% Log.Type.SimpleText -> %>
+            <%= render DsaWeb.LogView, "simple_text.html", %{entry: entry, f: f} %>
           <% _ -> %> 
             <%= render DsaWeb.LogView, "unknown.html", %{entry: entry, f: f} %>
         <% end %>

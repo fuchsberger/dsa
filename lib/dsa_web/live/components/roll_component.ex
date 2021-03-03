@@ -60,11 +60,10 @@ defmodule DsaWeb.RollComponent do
   end
 
   def handle_event("quickroll", %{"max" => max, "count" => count}, socket) do
-
     count = String.to_integer(count)
     max = String.to_integer(max)
     bonus = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :bonus)
-    rolls = Enum.map(1..8, & (if count >= &1, do: Enum.random(1..max), else: nil))
+    rolls = Enum.map(1..8, &if(count >= &1, do: Enum.random(1..max), else: nil))
     result = Enum.reduce(rolls, bonus, fn x, sum -> if is_nil(x), do: sum, else: sum + x end)
 
     params = %{
@@ -78,9 +77,12 @@ defmodule DsaWeb.RollComponent do
       x7: Enum.at(rolls, 6),
       x8: Enum.at(rolls, 7),
       x9: bonus,
-      x10: max, # dice type
-      x11: count, # dice count
-      x12: result, # sum + bonus
+      # dice type
+      x10: max,
+      # dice count
+      x11: count,
+      # sum + bonus
+      x12: result,
       character_id: socket.assigns.character.id,
       group_id: @group_id
     }
@@ -97,7 +99,6 @@ defmodule DsaWeb.RollComponent do
   end
 
   def handle_event("talent-roll", _params, socket) do
-
     # trait indexes
     trait_1 = socket.assigns.roll_changeset |> Ecto.Changeset.get_field(:e1) |> String.to_atom()
     trait_2 = socket.assigns.roll_changeset |> Ecto.Changeset.get_field(:e2) |> String.to_atom()
@@ -114,22 +115,32 @@ defmodule DsaWeb.RollComponent do
 
     level = Ecto.Changeset.get_field(socket.assigns.roll_changeset, :tw)
 
-    Logger.warn(inspect({trait_1, trait_2, trait_3, t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3}))
+    result =
+      Dsa.Trial.perform_talent_trial([t1, t2, t3], level, socket.assigns.modifier, [
+        {20, d1},
+        {20, d2},
+        {20, d3}
+      ])
 
-    params =
-      %{
-        type: Event.Log.Type.CustomTalentRoll.value,
-        x1: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_1),
-        x2: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_2),
-        x3: Enum.find_index(~w(mu kl in ch ge ff ko kk)a, & &1 == trait_3),
-        x7: d1,
-        x8: d2,
-        x9: d3,
-        x10: socket.assigns.modifier,
-        x12: Dsa.Trial.perform_talent_trial([t1, t2, t3], level, socket.assigns.modifier, [{20, d1}, {20, d2}, {20, d3}]),
-        character_id: socket.assigns.character.id,
-        group_id: @group_id
-      }
+    params = %{
+      type: Event.Log.Type.CustomTalentRoll.value(),
+      data: %{
+        "talent1" => trait_1 |> Atom.to_string |> String.upcase,
+        "talent2" => trait_2 |> Atom.to_string |> String.upcase,
+        "talent3" => trait_3 |> Atom.to_string |> String.upcase,
+        "dice1" => d1,
+        "dice2" => d2,
+        "dice3" => d3,
+        "modifier" => socket.assigns.modifier,
+        "result": result
+      },
+      x7: d1,
+      x8: d2,
+      x9: d3,
+      x12: result,
+      character_id: socket.assigns.character.id,
+      group_id: @group_id
+    }
 
     case Event.create_log(params) do
       {:ok, log} ->
@@ -153,5 +164,5 @@ defmodule DsaWeb.RollComponent do
     """
   end
 
-  defp trait_options, do: Enum.map(~w(mu kl in ch ff ge ko kk), & {String.upcase(&1), &1})
+  defp trait_options, do: Enum.map(~w(mu kl in ch ff ge ko kk), &{String.upcase(&1), &1})
 end
