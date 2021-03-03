@@ -1,14 +1,13 @@
+import * as Turbo from "@hotwired/turbo"
 import "../css/app.css"
 import "phoenix_html"
-import * as Turbo from "@hotwired/turbo"
-
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 
 document.addEventListener("turbo:load", function() {
 
-  let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-  let liveSocket = new LiveSocket("/live", Socket, {
+  const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+  const liveSocket = new LiveSocket("/live", Socket, {
     params: {_csrf_token: csrfToken},
     metadata: { keydown: e => ({key: e.key, metaKey: e.metaKey, repeat: e.repeat}) }
   })
@@ -16,13 +15,11 @@ document.addEventListener("turbo:load", function() {
   // Connect if there are any LiveViews on the page
   liveSocket.connect()
 
-  // Select mobile button
-  let mobile_button = document.getElementById("mobile-button")
+  // Enable mobile button
+  const mobile_button = document.getElementById("mobile-button")
 
-  // Add a click event on it
-  mobile_button.addEventListener('click', e => {
+  mobile_button.addEventListener('click', () => {
 
-    // Toggle the classes in the mobile menu button
     for(let svg of mobile_button.getElementsByTagName("svg")){
       svg.classList.toggle("block")
       svg.classList.toggle("hidden")
@@ -33,7 +30,7 @@ document.addEventListener("turbo:load", function() {
     menu.classList.toggle("block")
   })
 
-  // Enable Log Button
+  // Enable log button
   const log_button = document.getElementById("log-button")
 
   if(log_button){
@@ -47,7 +44,7 @@ document.addEventListener("turbo:load", function() {
     })
   }
 
-  // Enable Notification dismissal
+  // Enable notification dismissal
   (document.querySelectorAll('button.dismiss') || []).forEach(elm =>
     elm.addEventListener('click', () => elm.parentNode.parentNode.removeChild(elm.parentNode))
   )

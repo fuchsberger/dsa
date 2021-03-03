@@ -2,7 +2,7 @@ defmodule DsaWeb.CharacterController do
   use DsaWeb, :controller
 
   alias Dsa.Accounts
-  alias Dsa.Accounts.{Character, User}
+  alias Dsa.Accounts.Character
 
   def action(conn, _) do
     args = [conn, conn.params, conn.assigns.current_user]

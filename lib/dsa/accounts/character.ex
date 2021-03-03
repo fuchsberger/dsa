@@ -1,31 +1,31 @@
 defmodule Dsa.Accounts.Character do
   use Ecto.Schema
+
   import Ecto.Changeset
-  import DsaWeb.CharacterHelpers
   import Dsa
 
   alias Dsa.Data.{
-    Advantage,
-    Armor,
-    Blessing,
-    CombatTrait,
-    Disadvantage,
-    FateTrait,
-    FWeapon,
-    GeneralTrait,
-    KarmalTradition,
-    KarmalTrait,
-    Language,
-    MagicTradition,
-    MagicTrait,
-    MWeapon,
-    Prayer,
-    Script,
+    # Advantage,
+    # Armor,
+    # Blessing,
+    # CombatTrait,
+    # Disadvantage,
+    # FateTrait,
+    # FWeapon,
+    # GeneralTrait,
+    # KarmalTradition,
+    # KarmalTrait,
+    # Language,
+    # MagicTradition,
+    # MagicTrait,
+    # MWeapon,
+    # Prayer,
+    # Script,
     Skill,
-    Species,
+    # Species,
     Spell,
-    SpellTrick,
-    StaffSpell
+    # SpellTrick,
+    # StaffSpell
   }
 
   alias Dsa.Accounts.User

@@ -1,6 +1,6 @@
 defmodule DsaWeb.LogView do
   use DsaWeb, :view
-  
+
   alias Dsa.Data.Spell
   alias Dsa.Data.Skill
 
@@ -28,8 +28,6 @@ defmodule DsaWeb.LogView do
 
   defp tag_helper(:text, c), do: content_tag :span, c, class: "leading-6 font-bold text-gray-900"
 
-  defp separator, do: content_tag(:span, "»", class: "leading-6 mx-1 lg:mx-2")
-
   defp result_tag(:trait, value) do
     case value do
       2 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
@@ -46,10 +44,9 @@ defmodule DsaWeb.LogView do
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       x -> content_tag :span, "✓ #{x}", class: "#{@base} bg-green-50 text-green-500"
-      nil -> "Error"
     end
   end
 
-  defp trial_result(form,entry) do
-  end
+  # defp trial_result(_form, _entry) do
+  # end
 end

@@ -4,7 +4,6 @@ defmodule DsaWeb.ViewHelpers do
   """
   use Phoenix.HTML
 
-  alias Phoenix.HTML.Form
   alias DsaWeb.Router.Helpers, as: Routes
 
   def action_submit(changeset) do

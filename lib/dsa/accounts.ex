@@ -25,7 +25,7 @@ defmodule Dsa.Accounts do
     Prayer,
     Script,
     Skill,
-    Spell,
+    # Spell,
     SpellTrick,
     StaffSpell
   }
@@ -172,7 +172,7 @@ defmodule Dsa.Accounts do
   def reset_user(%User{} = user) do
     user
     |> change()
-    |> User.put_token(true)
+    |> User.put_token()
     |> Repo.update()
   end
 
@@ -212,14 +212,6 @@ defmodule Dsa.Accounts do
     Character.changeset(character, attrs)
   end
 
-  def change_character(%Character{} = character, attrs, :combat) do
-    Character.combat_changeset(character, attrs)
-  end
-
-  def change_character(%Character{} = character, attrs, type) do
-    Character.changeset(character, attrs, type)
-  end
-
   def change_character_assoc(%Character{} = character, nil, type) do
     character
     |> cast(%{}, [])
@@ -244,13 +236,6 @@ defmodule Dsa.Accounts do
     |> Character.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
-  end
-
-  def submit_character(%User{} = user, %Character{} = character, attrs) do
-    character
-    |> Character.changeset(attrs)
-    |> put_assoc(:user, user)
-    |> Repo.insert_or_update()
   end
 
   def update_character(%Character{} = character, attrs) do
@@ -279,18 +264,6 @@ defmodule Dsa.Accounts do
     character
     |> Character.changeset(attrs)
     |> Repo.update!()
-  end
-
-  def update_character(%Character{} = character, attrs, type) do
-    character
-    |> Character.changeset(attrs, type)
-    |> Repo.update()
-  end
-
-  def update_character_assocs(%Character{} = character, attrs, type) do
-    character
-    |> change_character_assoc(attrs, type)
-    |> Repo.update()
   end
 
   def delete_character(%Character{} = character), do: Repo.delete(character)

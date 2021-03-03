@@ -31,7 +31,7 @@ defmodule Dsa.Trial do
     |> Enum.map(fn dice -> roll_dice(dice, rand) end)
   end
 
-  def perform_trial({pib, dice_roll} = dice, skill_point, modifier) do
+  def perform_trial({_pib, dice_roll} = dice, skill_point, modifier) do
     skill_point_modified = skill_point + modifier
 
     case dice_roll do
@@ -70,7 +70,7 @@ defmodule Dsa.Trial do
     [{_, d1}, {_, d2}, {_, d3}] = dices
     result = Dsa.Trial.perform_talent_trial(traits, level, modifier, dices)
 
-    [t1,t2,t3] = traits
+    # [t1,t2,t3] = traits
 
     %{
         type: type,

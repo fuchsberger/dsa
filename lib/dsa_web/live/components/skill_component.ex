@@ -2,7 +2,7 @@ defmodule DsaWeb.SkillComponent do
   use DsaWeb, :live_component
 
   alias Dsa.Data.Skill
-  alias Dsa.{Accounts, Event, Repo}
+  alias Dsa.Event
 
   @group_id 1
 

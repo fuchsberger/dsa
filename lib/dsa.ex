@@ -9,10 +9,6 @@ defmodule Dsa do
 
   def base_values, do: ~w(mu kl in ch ff ge ko kk)a
 
-  @moduledoc """
-  Contains frequently used lists.
-  """
-
   @sf_values ~w(A B C D E)
 
   @talent_categories ~w(Körper Natur Gesellschaft Wissen Handwerk)

@@ -8,9 +8,6 @@ defmodule DsaWeb.FormHelpers do
 
   require Logger
 
-  @base_classes " placeholder-gray-500 text-gray-900"
-  @focus_classes "focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10"
-
   # Add HTML5 validations to fields
 
   def email_input(form, field, opts \\ []) do
@@ -59,7 +56,7 @@ defmodule DsaWeb.FormHelpers do
     |> Keyword.merge([class: "#{Keyword.get(opts, :class)}#{error_class}"])
   end
 
-  defp expand(form, field, opts), do: opts
+  defp expand(_form, _field, opts), do: opts
 
   @doc """
   Generates tag for inlined form input errors.

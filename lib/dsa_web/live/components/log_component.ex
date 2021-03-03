@@ -2,11 +2,7 @@ defmodule DsaWeb.LogComponent do
 
   use DsaWeb, :live_component
 
-  import Phoenix.HTML.Tag, only: [content_tag: 3]
   import DsaWeb.DsaLive, only: [topic: 0]
-
-  alias Dsa.Data.Skill
-  alias Dsa.Data.Spell
 
   @group_id 1
 
@@ -70,14 +66,4 @@ defmodule DsaWeb.LogComponent do
         {:noreply, socket}
     end
   end
-
-  defp modifier(value) do
-    cond do
-      value < 0 -> label(:red, value)
-      value > 0 -> label(:green, value)
-      true -> nil
-    end
-  end
-
-  import Phoenix.HTML.Tag, except: [tag: 2]
 end

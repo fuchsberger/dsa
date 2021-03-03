@@ -4,17 +4,17 @@ defmodule DsaWeb.CharacterView do
   # # import DSA.Lists
   # import DsaWeb.CharacterHelpers
 
-  # alias Dsa.Data.{
-  #   Armor,
-  #   Blessing,
-  #   CombatTrait,
-  #   FWeapon,
-  #   KarmalTrait,
-  #   MagicTrait,
-  #   MWeapon,
-  #   SpellTrick,
-  #   StaffSpell
-  # }
+  alias Dsa.Data.{
+    Armor,
+    Blessing,
+    CombatTrait,
+    FWeapon,
+    KarmalTrait,
+    MagicTrait,
+    MWeapon,
+    SpellTrick,
+    StaffSpell
+  }
 
   # def talent_tab(name, category, active_category) do
   #   active = category == active_category

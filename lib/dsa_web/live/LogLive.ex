@@ -4,7 +4,7 @@ defmodule DsaWeb.LogLive do
 
   import DsaWeb.Gettext
 
-  alias Dsa.Data.Skill
+  alias Dsa.Data.{Skill, Spell}
 
   require Logger
 
@@ -227,15 +227,12 @@ defmodule DsaWeb.LogLive do
 
   defp clabel(:text, c), do: content_tag :span, c, class: "leading-6 font-bold text-gray-900"
 
-  defp separator, do: content_tag(:span, "»", class: "leading-6 mx-1 lg:mx-2")
-
   defp result_clabel(:trait, value) do
     case value do
       2 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
       1 -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
-      nil -> "Error"
     end
   end
 
@@ -245,7 +242,6 @@ defmodule DsaWeb.LogLive do
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       x -> content_tag :span, "✓ #{x}", class: "#{@base} bg-green-50 text-green-500"
-      nil -> "Error"
     end
   end
 end

@@ -15,12 +15,6 @@ defmodule DsaWeb.DsaLive do
   def render(assigns) do
     ~L"""
     <%= case @live_action do %>
-      <% :new_character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
-
-      <% :character -> %>
-        <%= live_component @socket, DsaWeb.CharacterComponent, id: :character, user: @user %>
-
       <% :combat -> %>
         <%= live_component @socket, DsaWeb.CombatComponent,
           id: :combat,
@@ -67,14 +61,8 @@ defmodule DsaWeb.DsaLive do
           modifier: @modifier
         %>
 
-      <% :error404 -> %>
-        <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
-
       <% _ -> %>
-        <%= live_component @socket, DsaWeb.AccountComponent, id: :account,
-          action: @live_action,
-          email: @email
-        %>
+        <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
     <% end %>
     """
   end
@@ -120,20 +108,19 @@ defmodule DsaWeb.DsaLive do
     {:noreply, assign(socket, :user, Map.put(socket.assigns.user, :active_character, character))}
   end
 
-  def handle_params(params, _uri, socket) do
+  def handle_params(_params, _uri, socket) do
 
     %{live_action: action, user: user} = socket.assigns
-    token = Map.get(params, "token")
 
     cond do
       # Do not allow unauthenticated users to access restricted pages
-      is_nil(user) && Enum.member?([:character, :combat, :skills, :roll], action) ->
+      is_nil(user) && Enum.member?([:combat, :skills, :roll], action) ->
         {:noreply, socket
         |> put_flash(:error, "Die angeforderte Seite benötigt Authentifizierung.")
         |> redirect(to: Routes.session_path(socket, :new))}
 
       # redirect to dashboard if user does not has an active character and page requires it
-      not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :skills, :character], action) ->
+      not is_nil(user) && is_nil(user.active_character_id) && Enum.member?([:roll, :skills], action) ->
         {:noreply, push_patch(socket, to: Routes.user_path(socket, :edit, user), replace: true)}
 
       # all went normal, proceed

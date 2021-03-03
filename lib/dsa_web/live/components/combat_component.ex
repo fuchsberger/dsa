@@ -6,8 +6,6 @@ defmodule DsaWeb.CombatComponent do
 
   alias Dsa.Accounts
 
-  @group_id 1
-
   def render(assigns) do
     ~L"""
     <div class='shadow-xl overflow-hidden border-b sm:rounded-lg'>

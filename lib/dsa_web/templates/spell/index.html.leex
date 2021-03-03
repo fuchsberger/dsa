@@ -13,6 +13,6 @@
     <%= render DsaWeb.SkillView, "header_row.html", %{title: "Zauber", traits: "traits", pages: "tbd", ap: @ap_1} %>
     <%= for spell_id <- 1..51 do %>
       <%= render DsaWeb.SpellView, "spell_row.html", %{spell_id: spell_id, character: @character, target: @myself} %>
-    <%= end%>
+    <% end %>
   </tbody>
 </table>

@@ -126,7 +126,7 @@ defmodule DsaWeb.RollComponent do
         x8: d2,
         x9: d3,
         x10: socket.assigns.modifier,
-        x12: Dsa.Trial.Trial.result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
+        x12: Dsa.Trial.result(t1, t2, t3, level, socket.assigns.modifier, d1, d2, d3),
         character_id: socket.assigns.character.id,
         group_id: @group_id
       }

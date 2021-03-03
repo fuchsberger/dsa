@@ -2,9 +2,7 @@ defmodule Dsa.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import DsaWeb.Gettext
-
-  alias Dsa.Repo
+  import DsaWeb.Gettext #TODO: Change Validation Error Domain for messages
 
   schema "users" do
     field :email, :string
@@ -111,13 +109,13 @@ defmodule Dsa.Accounts.User do
   defp validate_match(changeset, field1, field2) do
     case get_change(changeset, field1) == get_change(changeset, field2) do
       true -> changeset
-      false -> add_error(changeset, field2, "Passwords don't match")
+      false -> add_error(changeset, field2, gettext("Passwords don't match"))
     end
   end
 
   defp validate_email(changeset, field) do
     regex = ~r/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/
-    validate_format(changeset, field, regex, message: "Keine gültige Email Adresse.")
+    validate_format(changeset, field, regex, message: gettext("Invalid email address."))
   end
 
   defp validate_password(changeset, field \\ :password) do
@@ -125,7 +123,7 @@ defmodule Dsa.Accounts.User do
 
     changeset
     |> validate_length(field, max: 255)
-    |> validate_format(field, regex, message: "Dein Passwort muss mindestens 8 Zeichen lang sein und muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Ziffer enthalten.")
+    |> validate_format(field, regex, message: gettext("Password must contain at least 8 characters, one upper-case, one lower-case letter and one digit."))
   end
 
   def validate_old_password(changeset, bypass_security?) do
@@ -140,7 +138,7 @@ defmodule Dsa.Accounts.User do
 
             false ->
               Pbkdf2.no_user_verify()
-              add_error(changeset, :password_old, "Current Password incorrect.")
+              add_error(changeset, :password_old, gettext("Current Password incorrect."))
           end
         else
           changeset
