@@ -70,6 +70,8 @@ defmodule Dsa.Accounts.User do
     |> validate_password()
     |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
+    |> put_change(:reset, false)
+    |> put_change(:token, nil)
   end
 
   def reset_password_changeset(user, params) do
@@ -82,7 +84,7 @@ defmodule Dsa.Accounts.User do
 
   defp put_pass_hash(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{new_password: pass}} ->
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
         put_change(changeset, :password_hash, Pbkdf2.hash_pwd_salt(pass))
 
       _ ->

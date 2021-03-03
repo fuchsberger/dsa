@@ -128,7 +128,7 @@ defmodule DsaWeb.UserController do
   end
 
   def update_password(conn, %{"token" => token, "user" => user_params}, _current_user) do
-    Logger.warn(inspect (user_params))
+
     case Accounts.get_user_by(reset: true, token: token) do
       nil ->
         conn
@@ -138,7 +138,7 @@ defmodule DsaWeb.UserController do
       user ->
         case Accounts.update_password(user, user_params) do
           {:ok, user} ->
-            Accounts.manage_user!(user, %{reset: false, token: nil})
+            Logger.warn(user)
 
             conn
             |> DsaWeb.Auth.login(user)

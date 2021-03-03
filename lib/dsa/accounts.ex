@@ -84,7 +84,7 @@ defmodule Dsa.Accounts do
 
   def authenticate_by_email_and_pass(email, given_pass) do
     user = get_user_by(email: email)
-
+    Logger.warn(inspect {given_pass, user})
     cond do
       user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
         case user.confirmed do
