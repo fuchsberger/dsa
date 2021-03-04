@@ -30,7 +30,7 @@ defmodule DsaWeb.SpellComponent do
     modifier = socket.assigns.modifier
     character_id = socket.assigns.character.id
     group_id = @group_id
-    type = 5
+    type = Dsa.Event.Log.Type.SpellRoll.value()
 
     params = Dsa.Trial.handle_trial_event(traits, level, modifier, group_id, character_id, type, spell_id)
 

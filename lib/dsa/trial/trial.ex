@@ -70,18 +70,18 @@ defmodule Dsa.Trial do
     [{_, d1}, {_, d2}, {_, d3}] = dices
     result = Dsa.Trial.perform_talent_trial(traits, level, modifier, dices)
 
-    # [t1,t2,t3] = traits
-
     %{
-        type: type,
-        x1: skill_id,
-        x7: d1,
-        x8: d2,
-        x9: d3,
-        x10: modifier,
-        x12: result,
-        character_id: character_id,
-        group_id: group_id
+      data: %{
+        "skill_id" => skill_id,
+        "dice1" => d1,
+        "dice2" => d2,
+        "dice3" => d3,
+        "modifier" => modifier,
+        "result" => result
+      },
+      character_id: character_id,
+      group_id: group_id,
+      type: type
     }
   end
 end

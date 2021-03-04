@@ -132,12 +132,8 @@ defmodule DsaWeb.RollComponent do
         "dice2" => d2,
         "dice3" => d3,
         "modifier" => socket.assigns.modifier,
-        "result": result
+        "result" => result
       },
-      x7: d1,
-      x8: d2,
-      x9: d3,
-      x12: result,
       character_id: socket.assigns.character.id,
       group_id: @group_id
     }
