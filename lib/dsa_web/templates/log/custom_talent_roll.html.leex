@@ -2,12 +2,12 @@
   <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= @entry.character %></span>
   <span class='mx-1 lg:mx-2'>»</span>
   <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
-    <%= "#{trait(@entry.x1)}/#{trait(@entry.x2)}/#{trait(@entry.x3)}" %>
+    <%= "#{@entry.data["talent1"]}/#{@entry.data["talent2"]}/#{@entry.data["talent2"]}" %>
     <%=
       cond do
-        @entry.x10 == 0 -> nil
-        @entry.x10 > 0 -> "+ #{@entry.x10}"
-        true -> "- #{abs(@entry.x10)}"
+        @entry.data["modifier"] == 0 -> nil
+        @entry.data["modifier"] > 0 -> "+ #{@entry.data["modifier"]}"
+        true -> "- #{abs(@entry.data["result"])}"
       end
     %>
   </span>

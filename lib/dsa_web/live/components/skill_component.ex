@@ -31,7 +31,7 @@ defmodule DsaWeb.SkillComponent do
     modifier = socket.assigns.modifier
     character_id = socket.assigns.character.id
     group_id = @group_id
-    type = 4
+    type = Dsa.Event.Log.Type.SkillRoll.value()
 
     params = Dsa.Trial.handle_trial_event(traits, level, modifier, group_id, character_id, type, skill_id)
 

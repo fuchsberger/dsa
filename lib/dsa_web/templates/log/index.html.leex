@@ -12,16 +12,18 @@
     <%= for entry <- @entries do %>
       <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
         <%= case entry.type do %>
-          <% 1 -> %>
+          <% Log.Type.QuickRoll -> %>
             <%= render DsaWeb.LogView, "quick_roll.html", %{entry: entry, f: f} %>
-          <% 2 -> %>
+          <% Log.Type.BaseRoll -> %>
             <%= render DsaWeb.LogView, "base_roll.html", %{entry: entry, f: f} %>
-          <% 3 -> %>
+          <% Log.Type.CustomTalentRoll -> %>
             <%= render DsaWeb.LogView, "custom_talent_roll.html", %{entry: entry, f: f} %>
-          <% 4 -> %>
+          <% Log.Type.SkillRoll -> %>
             <%= render DsaWeb.LogView, "skill_roll.html", %{entry: entry, f: f} %>
-          <% 5 -> %>
+          <% Log.Type.SpellRoll -> %>
             <%= render DsaWeb.LogView, "spell_roll.html", %{entry: entry, f: f} %>
+          <% Log.Type.SimpleText -> %>
+            <%= render DsaWeb.LogView, "simple_text.html", %{entry: entry, f: f} %>
           <% _ -> %> 
             <%= render DsaWeb.LogView, "unknown.html", %{entry: entry, f: f} %>
         <% end %>

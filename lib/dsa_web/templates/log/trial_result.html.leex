@@ -1,9 +1,9 @@
 <div class='flex'>
   <%= if input_value(@f, :dice) do %>
-    <%= tag_helper :dice, @entry.x7 %>
-    <%= tag_helper :dice, @entry.x8 %>
-    <%= tag_helper :dice, @entry.x9 %>
+    <%= tag_helper :dice, @entry.data["dice1"] %>
+    <%= tag_helper :dice, @entry.data["dice2"] %>
+    <%= tag_helper :dice, @entry.data["dice3"] %>
     <%= if input_value(@f, :result), do: separator() %>
   <% end %>
-  <%= if input_value(@f, :result), do: result_tag(:talent, @entry.x12) %>
+  <%= if input_value(@f, :result), do: result_tag_trial(@entry.data["criticality"]) %>
 </div>

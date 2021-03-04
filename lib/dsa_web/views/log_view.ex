@@ -2,6 +2,7 @@ defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
   alias Dsa.Data.Spell
+  alias Dsa.Event.Log
   alias Dsa.Data.Skill
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
@@ -35,6 +36,16 @@ defmodule DsaWeb.LogView do
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
       nil -> "Error"
+    end
+  end
+
+  defp result_tag_trial( value) do
+    case value do
+      :critical_success -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
+      :pass -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
+      :fail -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
+      :critical_failure -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      _ -> "Error #{value}" 
     end
   end
 
