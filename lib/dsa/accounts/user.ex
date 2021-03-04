@@ -32,7 +32,6 @@ defmodule Dsa.Accounts.User do
     |> validate_required([:username])
     |> validate_length(:username, min: 2, max: 15)
     |> foreign_key_constraint(:group_id)
-    |> unique_constraint(:email)
   end
 
   def registration_changeset(user, params) do
@@ -40,10 +39,6 @@ defmodule Dsa.Accounts.User do
     |> changeset(params)
     |> email_changeset(params)
     |> password_changeset(params)
-    |> cast(params, [:password, :password_confirm])
-    |> validate_required([:password, :password_confirm])
-    |> validate_password(:password)
-    |> validate_match(:password, :password_confirm)
     |> put_pass_hash()
     |> put_token()
   end
@@ -60,6 +55,7 @@ defmodule Dsa.Accounts.User do
     |> cast(params, [:email])
     |> validate_required([:email])
     |> validate_email(:email)
+    |> unique_constraint(:email)
   end
 
   # used for reset password (part 2) and registration
@@ -121,11 +117,11 @@ defmodule Dsa.Accounts.User do
   end
 
   defp validate_password(changeset, field \\ :password) do
-    regex = ~r/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s-]{8,}$/
+    regex = ~r/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s-]{1,}$/
 
     changeset
-    |> validate_length(field, max: 255)
-    |> validate_format(field, regex, message: gettext("Password must contain at least 8 characters, one upper-case, one lower-case letter and one digit."))
+    |> validate_length(field, min: 8, max: 255)
+    |> validate_format(field, regex, message: gettext("must contain one upper-case, one lower-case letter and one digit"))
   end
 
   def validate_old_password(changeset, bypass_security?) do

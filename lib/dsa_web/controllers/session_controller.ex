@@ -8,7 +8,7 @@ defmodule DsaWeb.SessionController do
   end
 
   def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
-    case Dsa.Accounts.authenticate_by_email_and_pass(email, pass) do
+    case Dsa.Accounts.authenticate_by_email_and_password(email, pass) do
       {:ok, user} ->
         conn
         |> DsaWeb.Auth.login(user)
