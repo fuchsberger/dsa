@@ -2,7 +2,7 @@
   <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= @entry.character %></span>
   <span class='mx-1 lg:mx-2'>»</span>
   <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
-    <%= spell_name(@entry.data["skill_id"]) %>
+    <%= skill_name(@entry.data["skill_id"]) %>
     <%=
       cond do
         @entry.data["modifier"] == 0 -> nil

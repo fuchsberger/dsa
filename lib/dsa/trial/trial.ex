@@ -48,6 +48,18 @@ defmodule Dsa.Trial do
 
   def is_critical_success?(numbers), do: Enum.count(numbers, &(&1 == 1)) >= 2
   def is_critical_failure?(numbers), do: Enum.count(numbers, &(&1 == 20)) >= 2
+
+  def criticality(numbers, result) do
+    criticality = {is_critical_success?(numbers), is_critical_failure?(numbers)}
+
+    case criticality do
+      {true, _} -> :critical_success
+      {false, true} -> :critical_failure
+      _ when result >= 0 -> :pass
+      _ -> :fail
+    end
+  end
+
   def talent_quality(remaining), do: min(6, div(remaining, 3) + 1)
 
   def perform_talent_trial(traits, skill_point, modifier, dices) do
@@ -77,7 +89,8 @@ defmodule Dsa.Trial do
         "dice2" => d2,
         "dice3" => d3,
         "modifier" => modifier,
-        "result" => result
+        "result" => result,
+        "criticality" => criticality([d1, d2, d3], result)
       },
       character_id: character_id,
       group_id: group_id,
