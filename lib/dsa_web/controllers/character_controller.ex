@@ -92,10 +92,11 @@ defmodule DsaWeb.CharacterController do
 
   def skills(conn, %{"id" => id}, current_user) do
     character = Accounts.get_user_character!(current_user, id)
+    changeset = Dsa.UI.change_skill_roll(%{})
 
     conn
     |> put_view(DsaWeb.SkillView)
-    |> render("character_skills.html", character: character)
+    |> render("character_skills.html", character: character, changeset: changeset)
   end
 
   def toggle_visible(conn, %{"id" => id}, current_user) do

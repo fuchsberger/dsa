@@ -56,4 +56,11 @@ defmodule DsaWeb.Router do
 
     live "/spells", DsaLive, :spells
   end
+
+  # Private Routes that require an active_character
+  scope "/", DsaWeb do
+    pipe_through [:browser, :authenticate_user, :has_active_character]
+
+    post "/roll/skill", TrialController, :skill
+  end
 end

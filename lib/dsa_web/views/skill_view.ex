@@ -42,7 +42,8 @@ defmodule DsaWeb.SkillView do
       skill_value: value,
       f: form,
       field: field,
-      path: Routes.character_path(conn, :skill_roll, character, skill_id)
+      path: Routes.character_path(conn, :skill_roll, character, skill_id),
+      icon: icon(conn, "cube")
     ]
   end
 end

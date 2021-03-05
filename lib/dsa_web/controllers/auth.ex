@@ -30,8 +30,20 @@ defmodule DsaWeb.Auth do
       conn
     else
       conn
-      |> put_flash(:error, gettext("You must be logged in to access that page"))
+      |> put_flash(:error, gettext("You must be logged in to access this page."))
       |> redirect(to: Routes.session_path(conn, :new))
+      |> halt()
+    end
+  end
+
+  def has_active_character(conn, _opts) do
+    if conn.assigns.current_user.active_character_id do
+      # preload active_character only for routes which actually need it
+      assign(conn, :current_user, Dsa.Repo.preload(conn.assigns.current_user, :active_character))
+    else
+      conn
+      |> put_flash(:error, gettext("You must be have a character activated to access this page."))
+      |> redirect(to: Routes.character_path(conn, :index))
       |> halt()
     end
   end

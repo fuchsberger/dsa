@@ -1,15 +1,12 @@
 <tr>
-  <td class="px-2 py-1 text-left"><%= @name %></td>
-  <td class="px-1 py-1"><%= @be %></td>
-  <td class="px-1 py-1"><%= @probe %></td>
-  <td class="px-0 py-0 font-bold w-10"><%= @skill_value %></td>
-  <%= for n <- -6..-1 do %>
-    <td class="w-6"><%= button n, to: @path, class: "negative" %></td>
-  <% end %>
-
-  <td class="w-8"><%= button "0", to: @path, class: "neutral" %></td>
-
-  <%= for n <- 1..6 do %>
-    <td class="w-6"><%= button n, to: @path, class: "positive" %></td>
-  <% end %>
+  <td class="px-2 pr-1 py-1 text-left"><%= @name %></td>
+  <td class="px-1"><%= @be %></td>
+  <td class="px-1"><%= @probe %></td>
+  <td class="px-1 font-bold"><%= @skill_value %></td>
+  <td class="pl-1 pr-2">
+    <%= submit @icon,
+      class: "text-indigo-600 hover:text-indigo-400",
+      name: input_name(:skill_roll, :id),
+      value: @id %>
+  </td>
 </tr>

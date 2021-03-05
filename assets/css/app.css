@@ -87,18 +87,34 @@ iframe { display: none; }
   button.label.green:hover { @apply bg-green-200; }
 
   /* Modifier Component */
-  .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; }
-  .neutral:focus, .negative:focus, .positive:focus { @apply outline-none; }
+  .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; } /* Delete */
+  .neutral:focus, .negative:focus, .positive:focus { @apply outline-none; } /* Delete */
 
   .neutral { @apply border-gray-300 bg-white; }
   .neutral:hover { @apply border-gray-400 bg-gray-100;}
-  .neutral.active { @apply border-2 border-gray-400 bg-gray-100;}
+  .neutral.active { @apply border-2 border-gray-400 bg-gray-100;} /* Delete */
 
   .negative { @apply border-red-300 bg-red-100 text-red-800; }
   .negative:hover { @apply border-red-400 bg-red-200;}
-  .negative.active { @apply border-2 border-red-400 bg-red-200;}
+  .negative.active { @apply border-2 border-red-400 bg-red-200;} /* Delete */
 
   .positive { @apply border-green-300 bg-green-100 text-green-800; }
   .positive:hover { @apply border-green-400 bg-green-200;}
-  .positive.active { @apply border-2 border-green-400 bg-green-200;}
+  .positive.active { @apply border-2 border-green-400 bg-green-200;} /* Delete */
+
+  #modifier-component input[type="radio"] { @apply hidden; }
+
+  #modifier-component label { @apply w-full font-bold leading-6 border; }
+
+  #modifier-component input[type="radio"]:checked+label.negative {
+    @apply border-2 border-red-400 bg-red-200;
+  }
+
+  #modifier-component input[type="radio"]:checked+label.positive {
+    @apply border-2 border-gray-400 bg-gray-100;
+  }
+
+  #modifier-component input[type="radio"]:checked+label.positive {
+    @apply border-2 border-green-400 bg-green-200;
+  }
 }
