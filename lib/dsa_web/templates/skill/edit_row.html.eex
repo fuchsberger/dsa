@@ -1,0 +1,7 @@
+<tr>
+  <td class="px-2 py-1 text-left"><%= @name %></td>
+  <td class="px-1 py-1 hidden sm:table-cell w-10"><%= @sf %></td>
+  <td class="px-0 py-0 font-bold w-10">
+    <%= number_input @f, @field, class: "small text-right px-1 pr-0" %>
+  </td>
+</tr>

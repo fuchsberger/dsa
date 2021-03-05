@@ -6,10 +6,10 @@
 /* hide live-refresh iframe (dev only) */
 iframe { display: none; }
 
-/* @layer base {
+@layer base {
   a { @apply font-medium text-indigo-600; }
   a:hover { @apply text-indigo-400; }
-} */
+}
 
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-16 overflow-hidden; }
@@ -44,6 +44,10 @@ iframe { display: none; }
 
   input.icon {
     @apply bg-transparent pl-8 pr-2;
+  }
+
+  input.small {
+    @apply appearance-none h-6 leading-6 rounded-md border-gray-300 placeholder-gray-500 text-gray-800 w-full;
   }
 
   input.normal {

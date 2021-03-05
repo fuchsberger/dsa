@@ -30,11 +30,6 @@ defmodule DsaWeb.CharacterController do
     render(conn, "index.html", characters: characters)
   end
 
-  def skills(conn, %{"id" => id}, current_user) do
-    character = Accounts.get_user_character!(current_user, id)
-    render(conn, "skills.html", character: character)
-  end
-
   def show(conn, %{"id" => id}, current_user) do
     character = Accounts.get_user_character!(current_user, id)
     render(conn, "show.html", character: character)
@@ -44,6 +39,15 @@ defmodule DsaWeb.CharacterController do
     character = Accounts.get_user_character!(current_user, id)
     changeset = Accounts.change_character(character)
     render(conn, "edit.html", character: character, changeset: changeset)
+  end
+
+  def edit_skills(conn, %{"id" => id}, current_user) do
+    character = Accounts.get_user_character!(current_user, id)
+    changeset = Accounts.change_character(character)
+
+    conn
+    |> put_view(DsaWeb.SkillView)
+    |> render("edit.html", character: character, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "character" => character_params}, current_user) do

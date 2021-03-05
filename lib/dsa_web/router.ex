@@ -44,14 +44,15 @@ defmodule DsaWeb.Router do
     resources "/character", CharacterController
     resources "/user", UserController, only: [:delete, :edit, :update]
 
-    get "/character/:id/skills", CharacterController, :skills
+    get "/character/:id/edit/skills", CharacterController, :edit_skills
+    live "/character/:id/skills", DsaLive, :skills
 
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
     live "/combat", DsaLive, :combat
     live "/roll", DsaLive, :roll
-    live "/skills", DsaLive, :skills
+
     live "/spells", DsaLive, :spells
   end
 end

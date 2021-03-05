@@ -1,6 +1,6 @@
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show variable page content %>
-  <div class='block lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-auto'>
+  <div class='block lg:block px-2 lg:px-3 max-h-full overflow-y-auto'>
     <%= render "flash.html", conn: @conn %>
     <%= @inner_content %>
   </div>
