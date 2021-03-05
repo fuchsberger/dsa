@@ -20,19 +20,19 @@
   </thead>
   <tbody class="bg-white divide-y divide-gray-200">
     <%= render "header_edit_row.html", header_row_assigns(@character, 1) %>
-    <%= for id <- 1..14, do: render "edit_row.html", row_assigns(@character, id, f) %>
+    <%= for id <- 1..14, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
 
     <%= render "header_edit_row.html", header_row_assigns(@character, 2) %>
-    <%= for id <- 15..23, do: render "edit_row.html", row_assigns(@character, id, f) %>
+    <%= for id <- 15..23, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
 
     <%= render "header_edit_row.html", header_row_assigns(@character, 3) %>
-    <%= for id <- 24..30, do: render "edit_row.html", row_assigns(@character, id, f) %>
+    <%= for id <- 24..30, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
 
     <%= render "header_edit_row.html", header_row_assigns(@character, 4) %>
-    <%= for id <- 31..42, do: render "edit_row.html", row_assigns(@character, id, f) %>
+    <%= for id <- 31..42, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
 
     <%= render "header_edit_row.html", header_row_assigns(@character, 5) %>
-    <%= for id <- 43..59, do: render "edit_row.html", row_assigns(@character, id, f) %>
+    <%= for id <- 43..59, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
   </tbody>
 </table>
 <% end %>

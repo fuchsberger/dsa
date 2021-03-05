@@ -23,11 +23,11 @@ defmodule DsaWeb.SkillView do
       4 -> [traits: "KL/KL/IN", pages: "201-206" ]
       5 -> [traits: "FF/FF/KO", pages: "206-213" ]
     end
-    |> Keyword.put(:ap, ap(character, :skills, 1))
+    |> Keyword.put(:ap, ap(character, :skills, category))
     |> Keyword.put(:title, title)
   end
 
-  def row_assigns(character, skill_id, form \\ nil) do
+  def row_assigns(conn, character, skill_id, form \\ nil) do
     field = Skill.field(skill_id)
     value = Map.get(character, field)
 
@@ -41,7 +41,8 @@ defmodule DsaWeb.SkillView do
       show_plus: (if value == 0, do: "hidden"),
       skill_value: value,
       f: form,
-      field: field
+      field: field,
+      path: Routes.character_path(conn, :skill_roll, character, skill_id)
     ]
   end
 end
