@@ -30,6 +30,11 @@ defmodule DsaWeb.CharacterController do
     render(conn, "index.html", characters: characters)
   end
 
+  def skills(conn, %{"id" => id}, current_user) do
+    character = Accounts.get_user_character!(current_user, id)
+    render(conn, "skills.html", character: character)
+  end
+
   def show(conn, %{"id" => id}, current_user) do
     character = Accounts.get_user_character!(current_user, id)
     render(conn, "show.html", character: character)

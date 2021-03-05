@@ -43,6 +43,9 @@ defmodule DsaWeb.Router do
 
     resources "/character", CharacterController
     resources "/user", UserController, only: [:delete, :edit, :update]
+
+    get "/character/:id/skills", CharacterController, :skills
+
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 

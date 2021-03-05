@@ -3,10 +3,19 @@ defmodule DsaWeb.LayoutView do
 
   import Phoenix.Controller, only: [get_flash: 2]
 
+  alias Dsa.Accounts.User
+
   defp active_class(conn, path) do
     case path == Path.join(["/" | conn.path_info]) do
       true -> "active"
       false -> nil
+    end
+  end
+
+  def active_character_name(%User{active_character_id: character_id} = user) do
+    case Enum.find(user.characters, fn {id, _name} -> id == character_id end) do
+      nil -> nil
+      {_id, name} -> name
     end
   end
 

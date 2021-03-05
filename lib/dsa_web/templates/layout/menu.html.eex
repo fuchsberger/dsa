@@ -28,10 +28,11 @@
 
             <%= if @current_user && @current_user.active_character_id do %>
               <%= menu_link @conn, gettext("Hero"),
-                to: Routes.character_path(@conn, :edit, @current_user.active_character),
+                to: Routes.character_path(@conn, :edit, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
-              <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills),
+              <%= menu_link @conn, gettext("Skills"),
+                to: Routes.character_path(@conn, :skills, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
               <%= menu_link @conn, gettext("Spells"),
@@ -57,7 +58,7 @@
 
         <div class="hidden lg:inline-block menu-item dropdown group">
           <button class='text-sm flex items-center min-w-32 focus:outline-none'>
-            <span class="pr-1 font-semibold flex-1"><%= @current_user.active_character.name %></span>
+            <span class="pr-1 font-semibold flex-1"><%= active_character_name(@current_user) %></span>
             <%= icon @conn, "chevron-down-solid", "fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out" %>
           </button>
           <div
@@ -66,14 +67,14 @@
           >
             <h4 class='text-center text-gray-500 bg-gray-100 border-solid border-gray-300 border-b'><%= gettext "Characters" %></h4>
 
-            <%= for character <- @current_user.characters do %>
-              <%= link to: Routes.character_path(@conn, :activate, character), method: :put do %>
-                <%= if character.id == @current_user.active_character_id do %>
+            <%= for {id, name} <- @current_user.characters do %>
+              <%= link to: Routes.character_path(@conn, :activate, id), method: :put do %>
+                <%= if id == @current_user.active_character_id do %>
                   <%= icon @conn, "star-solid" %>
                 <% else %>
                   <%= icon @conn, "star" %>
                 <% end %>
-                <%= character.name %>
+                <%= name %>
               <% end %>
             <% end %>
             <%= link to: Routes.character_path(@conn, :new) do %>
@@ -106,8 +107,15 @@
       <% end %>
 
       <%= if @current_user && @current_user.active_character_id do %>
-        <%= menu_link @conn, gettext("Hero"), to: Routes.character_path(@conn, :edit, @current_user), class: "menu-item block text-base" %>
-        <%= menu_link @conn, gettext("Skills"), to: Routes.dsa_path(@conn, :skills), class: "menu-item block text-base" %>
+
+        <%= menu_link @conn, gettext("Hero"),
+          to: Routes.character_path(@conn, :edit, @current_user.active_character_id),
+          class: "menu-item block text-base" %>
+
+        <%= menu_link @conn, gettext("Skills"),
+          to: Routes.character_path(@conn, :skills, @current_user.active_character_id),
+          class: "menu-item block text-base" %>
+
         <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
         <%= menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
         <%= menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
