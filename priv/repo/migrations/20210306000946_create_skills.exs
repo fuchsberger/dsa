@@ -1,7 +1,9 @@
 defmodule Dsa.Repo.Migrations.CreateSkills do
   use Ecto.Migration
 
-  def change do
+  alias Dsa.Repo.Seeds.SkillSeeder
+
+  def up do
     create table(:skills) do
       add :name, :string
       add :be, :boolean
@@ -11,5 +13,13 @@ defmodule Dsa.Repo.Migrations.CreateSkills do
     end
 
     create unique_index(:skills, [:name])
+
+    flush()
+    SkillSeeder.seed()
+  end
+
+  def down do
+    drop index(:skills, [:name])
+    drop table(:skills)
   end
 end
