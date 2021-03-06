@@ -8,6 +8,15 @@ defmodule Dsa.Type.SkillCategory do
   @doc """
   Converts a category atom into an index for efficient database storage
   """
+  def cast(category) when is_binary(category) do
+    category = String.to_atom(category)
+
+    case Enum.find_index(@categories, & &1 == category) do
+      nil -> :error
+      idx -> {:ok, idx}
+    end
+  end
+
   def cast(category) when category in @categories do
     {:ok, Enum.find_index(@categories, & &1 == category)}
   end

@@ -13,6 +13,16 @@ defmodule DsaWeb.SkillView do
 
   def header_assigns(category), do: Keyword.get(@header, category)
 
+  def be_options do
+    [
+      {gettext("Event."), nil},
+      {gettext("Ja"), true},
+      {gettext("Nein"), false}
+    ]
+  end
+
+  def category_options, do: Enum.map(@header, fn {k, v} -> {Keyword.get(v, :short), k} end)
+
   def categories do
     [
       {gettext("Körpertalente"), gettext("Körper")},

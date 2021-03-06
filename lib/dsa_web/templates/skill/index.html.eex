@@ -7,15 +7,18 @@
       <%= link short, to: "##{category}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
-    <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button" %>
+    <%= if @current_user.admin do %>
+      <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button" %>
+    <% end %>
   </div>
 </div>
 
 <table class="table text-center">
   <tbody>
     <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "skill_header_row.html", header_assigns(category) %>
-      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row2.html", as: :skill, conn: @conn %>
+      <%= render DsaWeb.SkillView, "skill_header_row.html",
+        Keyword.put(header_assigns(category), :admin, @current_user.admin) %>
+      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row2.html", as: :skill, conn: @conn, admin: @current_user.admin %>
     <% end %>
   </tbody>
 </table>

@@ -1,4 +1,4 @@
-<div class='w-full text-center'>
+<div class='w-full text-center mt-3'>
   <%= unless is_nil(get_flash(@conn, :error)) do %>
     <div class="alert error">
       <%= icon @conn, "exclamation-circle", "absolute left-3 top-3 w-5 h-5" %>

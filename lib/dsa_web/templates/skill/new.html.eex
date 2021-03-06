@@ -1,5 +1,9 @@
-<h1>New Skill</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.skill_path(@conn, :create)) %>
-
-<span><%= link "Back", to: Routes.skill_path(@conn, :index) %></span>
+<div class="bg-white shadow-xl rounded-lg mt-4">
+  <div class='bg-gray-200 rounded-t-lg'>
+    <div class='flex justify-between px-3'>
+      <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "New Skill" %></h2>
+      <%= link "Back", to: Routes.skill_path(@conn, :index), class: "link leading-8" %>
+    </div>
+  </div>
+  <%= render "form.html", Map.put(assigns, :action, Routes.skill_path(@conn, :create)) %>
+</div>

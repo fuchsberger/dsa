@@ -1,19 +1,57 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+    <div class="mx-3 my-2 alert error">
+      <p><%= gettext "Oops, something went wrong! Please check the errors below." %></p>
     </div>
   <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name, [] %>
-  <%= error_tag f, :name %>
+  <div class="grid grid-cols-3 lg:grid-cols-6 gap-2 lg:gap-x-1 px-3 py-2">
+    <div class='col-span-3'>
+      <%= label f, :name, gettext("Name"), class: "label" %>
+      <%= text_input f, :name, class: "input" %>
+      <%= error_tag f, :name %>
+    </div>
 
-  <%= label f, :be %>
-  <%= checkbox f, :be %>
-  <%= error_tag f, :be %>
+    <div class='col-span-3'>
+      <%= label f, :category, gettext("Category"), class: "label" %>
+      <%= select f, :category, category_options(), class: "input" %>
+      <%= error_tag f, :category %>
+    </div>
 
-  <div>
-    <%= submit "Save" %>
+    <% {t1, t2, t3} = input_value(f, :probe) %>
+
+    <div>
+      <%= label f, :t1, gettext("T1"), class: "label text-center" %>
+      <%= select f, :t1, trait_options(), class: "input", value: t1 %>
+      <%= error_tag f, :t1 %>
+    </div>
+
+    <div>
+      <%= label f, :t2, gettext("T3"), class: "label text-center" %>
+      <%= select f, :t2, trait_options(), class: "input", value: t2 %>
+      <%= error_tag f, :t2 %>
+    </div>
+
+    <div>
+      <%= label f, :t3, gettext("T3"), class: "label text-center" %>
+      <%= select f, :t3, trait_options(), class: "input", value: t3 %>
+      <%= error_tag f, :t3 %>
+    </div>
+
+    <div>
+      <%= label f, :sf, gettext("SF"), class: "label text-center" %>
+      <%= select f, :sf, Ecto.Enum.values(Dsa.Data.Skill, :sf), class: "input" %>
+      <%= error_tag f, :sf %>
+    </div>
+
+    <div>
+      <%= label f, :be, gettext("BE"), class: "label text-center" %>
+      <%= select f, :be, be_options(), class: "input" %>
+      <%= error_tag f, :be %>
+    </div>
+
+    <div class='pt-5'>
+      <%= submit gettext("Save"), class: "button w-full leading-7" %>
+    </div>
   </div>
 <% end %>

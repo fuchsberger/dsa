@@ -1,7 +1,7 @@
 defmodule DsaWeb.LayoutView do
   use DsaWeb, :view
 
-  import Phoenix.Controller, only: [get_flash: 2]
+  import Phoenix.Controller, only: [get_flash: 1, get_flash: 2]
 
   alias Dsa.Accounts.User
 

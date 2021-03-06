@@ -16,19 +16,15 @@ defmodule DsaWeb.SkillController do
 
   def create(conn, %{"skill" => skill_params}) do
     case Data.create_skill(skill_params) do
-      {:ok, skill} ->
+      {:ok, _skill} ->
         conn
         |> put_flash(:info, "Skill created successfully.")
-        |> redirect(to: Routes.skill_path(conn, :show, skill))
+        |> redirect(to: Routes.skill_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn inspect changeset
         render(conn, "new.html", changeset: changeset)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    skill = Data.get_skill!(id)
-    render(conn, "show.html", skill: skill)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -41,10 +37,10 @@ defmodule DsaWeb.SkillController do
     skill = Data.get_skill!(id)
 
     case Data.update_skill(skill, skill_params) do
-      {:ok, skill} ->
+      {:ok, _skill} ->
         conn
         |> put_flash(:info, "Skill updated successfully.")
-        |> redirect(to: Routes.skill_path(conn, :show, skill))
+        |> redirect(to: Routes.skill_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", skill: skill, changeset: changeset)

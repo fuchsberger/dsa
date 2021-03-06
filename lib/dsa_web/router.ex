@@ -42,6 +42,7 @@ defmodule DsaWeb.Router do
     pipe_through [:browser, :authenticate_user]
 
     resources "/character", CharacterController
+    resources "/skills", SkillController, only: [:index]
     resources "/user", UserController, only: [:delete, :edit, :update]
 
     get "/character/:id/skills", CharacterController, :skills
@@ -68,6 +69,6 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user, :admin]
 
-    resources "/skills", SkillController
+    resources "/skills", SkillController, except: [:index, :show]
   end
 end

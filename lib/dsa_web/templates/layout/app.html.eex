@@ -1,7 +1,9 @@
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show variable page content %>
   <div class='block lg:block px-2 lg:px-3 max-h-full overflow-y-auto'>
-    <%= render "flash.html", conn: @conn %>
+    <%= unless %{} == get_flash(@conn) do %>
+      <%= render "flash.html", conn: @conn %>
+    <% end %>
     <%= @inner_content %>
   </div>
   <%# In right column always show log / group stuff %>

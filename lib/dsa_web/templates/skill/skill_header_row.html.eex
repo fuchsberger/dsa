@@ -3,5 +3,7 @@
   <th scope="col"><%= gettext "BE" %></th>
   <th scope="col"><%= @probe %></th>
   <th scope="col"><%= gettext "SF" %></th>
-  <th scope="col"><%= @pages %></th>
+  <%= if @admin do %>
+    <th scope="col"><%= @pages %></th>
+  <% end %>
 </tr>

@@ -10,6 +10,7 @@ defmodule DsaWeb.DsaHelpers do
 
   @traits ~w(mu kl in ch ff ge ko kk)a
 
+  def traits, do: @traits
 
   def traits(probe) do
     probe
@@ -17,6 +18,8 @@ defmodule DsaWeb.DsaHelpers do
     |> String.split("/")
     |> Enum.map(& String.to_atom(&1))
   end
+
+  def trait_options, do: Enum.map(~w(mu kl in ch ff ge ko kk), &{String.upcase(&1), &1})
 
   def trait_index(trait) do
     Enum.find_index(@traits, trait)

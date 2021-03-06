@@ -3,6 +3,8 @@ defmodule DsaWeb.RollComponent do
 
   alias Dsa.Event
 
+  import DsaWeb.DsaHelpers
+
   @group_id 1
 
   def render(assigns) do
@@ -159,6 +161,4 @@ defmodule DsaWeb.RollComponent do
       class="bg-white w-full h-8 leading-8 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><%= if @count > 1, do: @count %>W<%= @max %></button>
     """
   end
-
-  defp trait_options, do: Enum.map(~w(mu kl in ch ff ge ko kk), &{String.upcase(&1), &1})
 end
