@@ -3,6 +3,16 @@ defmodule DsaWeb.SkillView do
 
   alias Dsa.Data.Skill
 
+  @header [
+    body: [probe: "MU/GE/KK", pages: "188-194", title: "Körpertalente", short: "Körper"],
+    social: [probe: "IN/CH/CH", pages: "194-198", title: "Gesellschaftstalente", short: "Gesellschaft"],
+    nature: [probe: "MU/GE/KO", pages: "198-201", title: "Naturtalente", short: "Natur"],
+    knowledge: [probe: "KL/KL/IN", pages: "201-206", title: "Wissenstalente", short: "Wissen"],
+    crafting: [probe: "FF/FF/KO", pages: "206-213", title: "Handwerkstalente", short: "Handwerk"]
+  ]
+
+  def header_assigns(category), do: Keyword.get(@header, category)
+
   def categories do
     [
       {gettext("Körpertalente"), gettext("Körper")},

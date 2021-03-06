@@ -14,6 +14,15 @@ iframe { display: none; }
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-16 overflow-hidden; }
 
+  /* Links */
+  a.negative { @apply text-red-800; }
+  a.negative:hover { @apply text-red-500; }
+
+  /* Big Blue Submit Buttons */
+  .button { @apply leading-8 py-0 px-3 border border-transparent text-sm font-medium rounded-md text-gray-100 bg-indigo-600; }
+  .button:hover { @apply bg-indigo-700 text-white; }
+  .button:focus { @apply outline-none ring-2 ring-offset-2 ring-indigo-500; }
+
   /* Alerts */
   .alert { @apply relative inline-block py-2 px-10 mb-3 rounded-md; }
   .alert.error { @apply bg-red-200 text-red-800; }
@@ -87,20 +96,24 @@ iframe { display: none; }
   button.label.green:hover { @apply bg-green-200; }
 
   /* Modifier Component */
-  .neutral, .negative, .positive { @apply w-full font-bold leading-6 border; } /* Delete */
-  .neutral:focus, .negative:focus, .positive:focus { @apply outline-none; } /* Delete */
+  label..neutral, label..negative, label..positive {
+    @apply w-full font-bold leading-6 border;
+  } /* Delete */
+  label.neutral:focus, label.negative:focus, label.positive:focus {
+    @apply outline-none;
+  } /* Delete */
 
-  .neutral { @apply border-gray-300 bg-white; }
-  .neutral:hover { @apply border-gray-400 bg-gray-100;}
-  .neutral.active { @apply border-2 border-gray-400 bg-gray-100;} /* Delete */
+  label.neutral { @apply border-gray-300 bg-white; }
+  label.neutral:hover { @apply border-gray-400 bg-gray-100;}
+  label.neutral.active { @apply border-2 border-gray-400 bg-gray-100;} /* Delete */
 
-  .negative { @apply border-red-300 bg-red-100 text-red-800; }
-  .negative:hover { @apply border-red-400 bg-red-200;}
-  .negative.active { @apply border-2 border-red-400 bg-red-200;} /* Delete */
+  label.negative { @apply border-red-300 bg-red-100 text-red-800; }
+  label.negative:hover { @apply border-red-400 bg-red-200;}
+  label.negative.active { @apply border-2 border-red-400 bg-red-200;} /* Delete */
 
-  .positive { @apply border-green-300 bg-green-100 text-green-800; }
-  .positive:hover { @apply border-green-400 bg-green-200;}
-  .positive.active { @apply border-2 border-green-400 bg-green-200;} /* Delete */
+  label.positive { @apply border-green-300 bg-green-100 text-green-800; }
+  label.positive:hover { @apply border-green-400 bg-green-200;}
+  label.positive.active { @apply border-2 border-green-400 bg-green-200;} /* Delete */
 
   #modifier-component input[type="radio"] { @apply hidden; }
 
@@ -117,4 +130,12 @@ iframe { display: none; }
   #modifier-component input[type="radio"]:checked+label.positive {
     @apply border-2 border-green-400 bg-green-200;
   }
+
+  /* Tables */
+  .table {@apply w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200;}
+
+  .table .header-row { @apply bg-gray-200; }
+  .table th, .table td { @apply px-1 leading-6; }
+  .table th:first-child, .table td:first-child { @apply pl-2; }
+  .table th:last-child, .table td:last-child { @apply pr-2; }
 }

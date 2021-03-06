@@ -3,6 +3,8 @@ defmodule Dsa.Data do
 
   @name __MODULE__
 
+  import Ecto.Query, warn: false
+
   alias Dsa.Repo
   alias Dsa.Data.Skill
 
@@ -35,7 +37,10 @@ defmodule Dsa.Data do
     {:ok, "In-Memory database created and filled."}
   end
 
-  def list_skills, do: Repo.all(Skill)
+  def list_skills do
+    from(s in Skill, order_by: [s.category, s.name])
+    |> Repo.all()
+  end
 
   def get_skill(id), do: Repo.get(Skill, id)
 

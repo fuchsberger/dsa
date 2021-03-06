@@ -4,7 +4,12 @@ defmodule DsaWeb.DsaHelpers do
   """
   use Phoenix.HTML
 
-  @base_values ~w(mu kl in ch ff ge ko kk)a
+  import DsaWeb.Gettext
+
+  alias Dsa.Type.Probe
+
+  @traits ~w(mu kl in ch ff ge ko kk)a
+
 
   def traits(probe) do
     probe
@@ -14,7 +19,7 @@ defmodule DsaWeb.DsaHelpers do
   end
 
   def trait_index(trait) do
-    Enum.find_index(@base_values, trait)
+    Enum.find_index(@traits, trait)
   end
 
   # def base_value_indexes(probe) do
@@ -33,10 +38,21 @@ defmodule DsaWeb.DsaHelpers do
 
   def be(be?) do
     case be? do
-      true -> "Ja"
-      false -> "Nein"
-      nil -> "Evtl"
+      true -> gettext "Ja"
+      false -> gettext "Nein"
+      nil -> gettext "Evtl"
     end
+  end
+
+  @doc """
+  Takes a tuple of traits and converts it into a "Probe" string.
+  Example: {:mu, :kl, :ch} => "MU/KL/CH"
+  """
+  def probe({t1, t2, t3}) when t1 in @traits and t2 in @traits and t3 in @traits do
+    t1 = t1 |> Atom.to_string() |> String.upcase()
+    t2 = t2 |> Atom.to_string() |> String.upcase()
+    t3 = t3 |> Atom.to_string() |> String.upcase()
+    "#{t1}/#{t2}/#{t3}"
   end
 
   def short_trait(trait), do: trait |> Atom.to_string() |> String.upcase(:ascii)

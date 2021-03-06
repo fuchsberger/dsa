@@ -1,28 +1,21 @@
-<h1>Listing Skills</h1>
+<div class='sticky top-0 bg-gray-100 py-2'>
+  <div class='flex justify-between pb-1'>
+    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Be</th>
+    <%= for category <- Dsa.Type.SkillCategory.list() do %>
+      <% [probe: _, pages: _, title: title, short: short] = header_assigns(category) %>
+      <%= link short, to: "##{category}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <% end %>
 
-      <th></th>
-    </tr>
-  </thead>
+    <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button" %>
+  </div>
+</div>
+
+<table class="table text-center">
   <tbody>
-<%= for skill <- @skills do %>
-    <tr>
-      <td><%= skill.name %></td>
-      <td><%= skill.be %></td>
-
-      <td>
-        <span><%= link "Show", to: Routes.skill_path(@conn, :show, skill) %></span>
-        <span><%= link "Edit", to: Routes.skill_path(@conn, :edit, skill) %></span>
-        <span><%= link "Delete", to: Routes.skill_path(@conn, :delete, skill), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
+    <%= for category <- Dsa.Type.SkillCategory.list() do  %>
+      <%= render DsaWeb.SkillView, "skill_header_row.html", header_assigns(category) %>
+      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row2.html", as: :skill, conn: @conn %>
+    <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Skill", to: Routes.skill_path(@conn, :new) %></span>
