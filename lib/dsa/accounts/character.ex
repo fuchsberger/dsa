@@ -49,7 +49,6 @@ defmodule Dsa.Accounts.Character do
 
     # # talents
     # Enum.each(combat_fields(), & field(&1, :integer, default: 6))
-    Enum.each(Skill.fields(), & field(&1, :integer, default: 0))
 
     Enum.each(Spell.fields(), & field(&1, :integer, default: 0))
 
@@ -137,7 +136,7 @@ defmodule Dsa.Accounts.Character do
 
   def changeset(character, attrs) do
     character
-    |> cast(attrs, @fields ++ base_values() ++ Skill.fields())
+    |> cast(attrs, @fields ++ base_values())
     |> validate_required([:name] ++ base_values())
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 2, max: 80)
@@ -145,7 +144,6 @@ defmodule Dsa.Accounts.Character do
     |> validate_number(:ae_max, greater_than_or_equal_to: 0)
     |> validate_number(:ke_max, greater_than_or_equal_to: 0)
     |> validate_base_values()
-    |> validate_skills()
   end
 
   # @required_fields ~w(le_bonus le_lost ae_bonus ae_lost ae_back ke_bonus ke_lost ke_back)a
@@ -217,12 +215,6 @@ defmodule Dsa.Accounts.Character do
   #     validate_number(changeset, field, greater_than_or_equal_to: 6, less_than_or_equal_to: 25)
   #   end)
   # end
-
-  def validate_skills(changeset) do
-    Enum.reduce(Skill.fields(), changeset, fn field, changeset ->
-      validate_number(changeset, field, greater_than_or_equal_to: 0, less_than_or_equal_to: 29)
-    end)
-  end
 
   # defp validate_talents(changeset) do
   #   Enum.reduce(talent_fields(), changeset, fn field, changeset ->
