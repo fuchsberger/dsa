@@ -63,4 +63,11 @@ defmodule DsaWeb.Router do
 
     post "/roll/skill", TrialController, :skill
   end
+
+  # Admin Routes
+  scope "/", DsaWeb do
+    pipe_through [:browser, :authenticate_user, :admin]
+
+    resources "/skills", SkillController
+  end
 end

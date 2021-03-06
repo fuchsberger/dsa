@@ -1,0 +1,28 @@
+<h1>Listing Skills</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Be</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for skill <- @skills do %>
+    <tr>
+      <td><%= skill.name %></td>
+      <td><%= skill.be %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.skill_path(@conn, :show, skill) %></span>
+        <span><%= link "Edit", to: Routes.skill_path(@conn, :edit, skill) %></span>
+        <span><%= link "Delete", to: Routes.skill_path(@conn, :delete, skill), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Skill", to: Routes.skill_path(@conn, :new) %></span>

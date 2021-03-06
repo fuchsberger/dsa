@@ -37,7 +37,6 @@ defmodule DsaWeb.TrialController do
       case Event.create_log(params) do
         {:ok, log} ->
           broadcast(current_user.group_id, {:log, Event.preload_character_name(log)})
-
           redirect(conn, to: Routes.character_path(conn, :skills, character))
 
         {:error, changeset} ->
@@ -48,8 +47,6 @@ defmodule DsaWeb.TrialController do
           |> redirect(to: Routes.character_path(conn, :skills, character))
       end
     else
-      Logger.warn inspect  changeset
-
       conn
       |> put_flash(:error, gettext("Invalid Form Data.")) # Hack Attempt
       |> redirect(to: Routes.character_path(conn, :skills, character))

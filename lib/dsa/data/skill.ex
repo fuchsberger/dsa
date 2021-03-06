@@ -1,7 +1,36 @@
 defmodule Dsa.Data.Skill do
-  @moduledoc """
-  CharacterSpecies module
-  """
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  alias Dsa.Type.{SkillCategory, Probe}
+
+  @sf_values ~w(A B C D E)a
+
+  schema "skills" do
+    field :name, :string
+    field :be, :boolean
+    field :category, SkillCategory
+    field :probe, Probe
+    field :sf, Ecto.Enum, values: @sf_values
+  end
+
+  @fields ~w(id name sf category probe)a
+
+  @doc false
+  def changeset(skill, attrs) do
+    skill
+    |> cast(attrs, [:be | @fields])
+    |> validate_required(@fields)
+    |> validate_length(:name, min: 5, max: 23)
+    |> validate_number(:category, greater_than_or_equal_to: 0, less_than_or_equal_to: SkillCategory.count())
+    |> validate_number(:category, greater_than_or_equal_to: 0, less_than_or_equal_to: 512)
+    |> validate_inclusion(:sf, @sf_values)
+    # TODO: Validate Probe
+    |> unique_constraint(:name)
+  end
+
+  # TODO: TO BE DELETED
+
   @table :skills
 
   require Logger

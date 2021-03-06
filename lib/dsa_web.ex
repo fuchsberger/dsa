@@ -94,7 +94,7 @@ defmodule DsaWeb do
       import Phoenix.LiveView.Router #TODO: Remove once live views are integrated.
       import Plug.Conn
       import Phoenix.Controller
-      import DsaWeb.Auth, only: [authenticate_user: 2, has_active_character: 2]
+      import DsaWeb.Auth, only: [authenticate_user: 2, has_active_character: 2, admin: 2]
     end
   end
 

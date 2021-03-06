@@ -3,6 +3,9 @@ defmodule Dsa.Data do
 
   @name __MODULE__
 
+  alias Dsa.Repo
+  alias Dsa.Data.Skill
+
   def start_link(_), do: GenServer.start_link(__MODULE__, [], name: @name)
 
   def init(_) do
@@ -23,12 +26,28 @@ defmodule Dsa.Data do
     # Dsa.Data.MWeapon.seed()
     # Dsa.Data.Prayer.seed()
     # Dsa.Data.Script.seed()
-    Dsa.Data.Skill.seed()
+    Skill.seed()
     # Dsa.Data.Species.seed()
     Dsa.Data.Spell.seed()
     # Dsa.Data.SpellTrick.seed()
     # Dsa.Data.StaffSpell.seed()
 
     {:ok, "In-Memory database created and filled."}
+  end
+
+  def list_skills, do: Repo.all(Skill)
+
+  def get_skill(id), do: Repo.get(Skill, id)
+
+  def create_skill!(attrs) do
+    %Skill{}
+    |> Skill.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  def update_skill!(%Skill{} = skill, attrs) do
+    skill
+    |> Skill.changeset(attrs)
+    |> Repo.update!()
   end
 end
