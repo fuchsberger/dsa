@@ -1,38 +1,40 @@
-<%= form_for @changeset, Routes.character_path(@conn, :update, @character), [], fn f -> %>
+<%= form_for @changeset, Routes.character_skill_path(@conn, :update, @character), [method: :put], fn f -> %>
 
-<div class='sticky top-0 flex justify-between bg-gray-100 py-3'>
-  <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Skills" %></h2>
+<div class='sticky top-0 bg-gray-100 py-3'>
+  <div class='flex justify-between pb-1'>
+    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Skills" %></h2>
 
-  <%= for {title, short} <- categories() do %>
-    <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
-  <% end %>
+    <%= for {title, short} <- categories() do %>
+      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <% end %>
 
-  <%= submit gettext("Save Skills"), class: "leading-8 py-0 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <%= submit gettext("Save Skills"), class: "button" %>
+  </div>
+
+  <div class='grid lg:grid-cols-3 lg:gap-x-5 gap-y-2'>
+    <%= link gettext("Add remaining skills"),
+      to: Routes.character_skill_path(@conn, :add_all, @character), method: :put,
+      class: "button gray text-center leading-7" %>
+    <%= link gettext("Remove Skills at 0"),
+      to: Routes.character_skill_path(@conn, :remove_all, @character), method: :delete,
+      class: "button gray text-center leading-7" %>
+    <%= link gettext("Add Skill..."), to: "#", class: "button gray text-center leading-7"  %>
+  </div>
 </div>
 
-<table class=" w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200 text-center">
-  <thead class=" leading-8 text-gray-900 bg-gray-300 font-medium">
-    <tr>
-      <th scope="col" class="px-2 text-left">Talent</th>
-      <th scope="col" class="px-1 hidden sm:table-cell">SF</th>
-      <th scope="col" colspan='3'>FW</th>
+<table class="table text-center">
+  <thead>
+    <tr class='header-row'>
+      <th scope="col" class="text-left"><%= gettext "Skill" %></th>
+      <th scope="col" class="hidden md:table-cell"><%= gettext "Probe" %></th>
+      <th scope="col" class="hidden sm:table-cell"><%= gettext "SF" %></th>
+      <th scope="col"><%= gettext "FW" %></th>
     </tr>
   </thead>
   <tbody class="bg-white divide-y divide-gray-200">
-    <%= render "header_edit_row.html", header_row_assigns(@character, 1) %>
-    <%= for id <- 1..14, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
-
-    <%= render "header_edit_row.html", header_row_assigns(@character, 2) %>
-    <%= for id <- 15..23, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
-
-    <%= render "header_edit_row.html", header_row_assigns(@character, 3) %>
-    <%= for id <- 24..30, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
-
-    <%= render "header_edit_row.html", header_row_assigns(@character, 4) %>
-    <%= for id <- 31..42, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
-
-    <%= render "header_edit_row.html", header_row_assigns(@character, 5) %>
-    <%= for id <- 43..59, do: render "edit_row.html", row_assigns(@conn, @character, id, f) %>
+    <%= for f_cs <- inputs_for(f, :character_skills) do %>
+      <%= render DsaWeb.SkillView, "edit_row.html", f: f_cs %>
+    <% end %>
   </tbody>
 </table>
 <% end %>

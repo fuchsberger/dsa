@@ -41,15 +41,6 @@ defmodule DsaWeb.CharacterController do
     render(conn, "edit.html", character: character, changeset: changeset)
   end
 
-  def edit_skills(conn, %{"id" => id}, current_user) do
-    character = Accounts.get_user_character!(current_user, id)
-    changeset = Accounts.change_character(character)
-
-    conn
-    |> put_view(DsaWeb.SkillView)
-    |> render("character_edit_skills.html", character: character, changeset: changeset)
-  end
-
   def update(conn, %{"id" => id, "character" => character_params}, current_user) do
     character = Accounts.get_user_character!(current_user, id)
 
@@ -88,15 +79,6 @@ defmodule DsaWeb.CharacterController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
-  end
-
-  def skills(conn, %{"id" => id}, current_user) do
-    character = Accounts.get_user_character!(current_user, id)
-    changeset = Dsa.UI.change_skill_roll(%{})
-
-    conn
-    |> put_view(DsaWeb.SkillView)
-    |> render("character_skills.html", character: character, changeset: changeset)
   end
 
   def toggle_visible(conn, %{"id" => id}, current_user) do

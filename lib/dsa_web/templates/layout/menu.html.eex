@@ -32,7 +32,7 @@
                 class: "menu-item text-sm" %>
 
               <%= menu_link @conn, gettext("Skills"),
-                to: Routes.character_path(@conn, :skills, @current_user.active_character_id),
+                to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
               <%= menu_link @conn, gettext("Spells"),
@@ -113,7 +113,7 @@
           class: "menu-item block text-base" %>
 
         <%= menu_link @conn, gettext("Skills"),
-          to: Routes.character_path(@conn, :skills, @current_user.active_character_id),
+          to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
           class: "menu-item block text-base" %>
 
         <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>

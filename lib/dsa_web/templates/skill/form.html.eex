@@ -18,7 +18,7 @@
       <%= error_tag f, :category %>
     </div>
 
-    <% {t1, t2, t3} = input_value(f, :probe) %>
+    <% {t1, t2, t3} = probe_defaults(f) %>
 
     <div>
       <%= label f, :t1, gettext("T1"), class: "label text-center" %>

@@ -1,5 +1,5 @@
 <%= form_for @changeset, Routes.trial_path(@conn, :skill), [], fn f -> %>
-<div class='sticky top-0 bg-gray-100 py-2'>
+<div class='sticky top-0 bg-gray-100 py-3'>
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
 
@@ -7,7 +7,7 @@
       <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
-    <%= link gettext("Edit Skills"), to: Routes.character_path(@conn, :edit_skills, @character), class: "leading-8 py-0 px-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <%= link gettext("Edit Skills"), to: Routes.character_skill_path(@conn, :edit_skills, @character), class: "button" %>
   </div>
 
   <div id='modifier-component' class='grid grid-cols-4 md:grid-cols-8 pb-1 gap-x-4 gap-y-1 font-bold text-sm text-center leading-6'>
@@ -32,31 +32,12 @@
   </div>
 </div>
 
-<table class=" w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200 text-center">
-  <thead class=" leading-8 text-gray-900 bg-gray-300 font-medium">
-    <tr>
-      <th scope="col" class="px-2 text-left"><%= gettext "Skill" %></th>
-      <th scope="col" class="px-1"><%= gettext "BE" %></th>
-      <th scope="col" class="px-1"><%= gettext "Trials" %></th>
-      <th scope="col"><%= gettext "FW" %></th>
-      <th scope="col" colspan='13'><%= gettext "Roll" %></th>
-    </tr>
-  </thead>
+<table class="table text-center">
   <tbody class="bg-white divide-y divide-gray-200">
-    <%= render "header_row.html", header_row_assigns(@character, 1) %>
-    <%= for id <- 1..14, do: render "row.html", row_assigns(@conn, @character, id) %>
-
-    <%= render "header_row.html", header_row_assigns(@character, 2) %>
-    <%= for id <- 15..23, do: render "row.html", row_assigns(@conn, @character, id) %>
-
-    <%= render "header_row.html", header_row_assigns(@character, 3) %>
-    <%= for id <- 24..30, do: render "row.html", row_assigns(@conn, @character, id) %>
-
-    <%= render "header_row.html", header_row_assigns(@character, 4) %>
-    <%= for id <- 31..42, do: render "row.html", row_assigns(@conn, @character, id) %>
-
-    <%= render "header_row.html", header_row_assigns(@character, 5) %>
-    <%= for id <- 43..59, do: render "row.html", row_assigns(@conn, @character, id) %>
+    <%= for category <- Dsa.Type.SkillCategory.list() do  %>
+      <%= render DsaWeb.SkillView, "roll_header.html", header_assigns(category) %>
+      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn %>
+    <% end %>
   </tbody>
 </table>
 <% end %>

@@ -6,8 +6,8 @@ defmodule Dsa.Accounts do
 
   require Logger
 
-  alias Dsa.Repo
-  alias Dsa.Accounts.{Character, Group, User}
+  alias Dsa.{Data, Repo}
+  alias Dsa.Accounts.{Character, CharacterSkill, Group, User}
 
   alias Dsa.Data.{
     Advantage,
@@ -124,7 +124,11 @@ defmodule Dsa.Accounts do
   end
 
   defp user_characters_query(query, %User{id: user_id}) do
-    from(c in query, where: c.user_id == ^user_id)
+    character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
+
+    from(c in query,
+      preload: [character_skills: ^character_skill_query],
+      where: c.user_id == ^user_id)
   end
 
   # TODO: Remove params
@@ -238,6 +242,7 @@ defmodule Dsa.Accounts do
   def update_character(%Character{} = character, attrs) do
     character
     |> Character.changeset(attrs)
+    |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
     # |> cast_assoc(:armors, with: &Armor.changeset/2)
     # |> cast_assoc(:blessings, with: &Blessing.changeset/2)
     # |> cast_assoc(:combat_traits, with: &CombatTrait.changeset/2)
@@ -278,6 +283,34 @@ defmodule Dsa.Accounts do
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
   def get_group!(id), do: Repo.get!(Group, id)
+
+  def add_skills(character) do
+    character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)
+
+    character_skills =
+      Data.list_skills()
+      |> Enum.reject(& Enum.member?(character_skill_ids, &1.id))
+      |> Enum.map(& %CharacterSkill{
+        character_id: character.id,
+        skill_id: &1.id,
+        level: 0
+      })
+      |> Enum.concat(character.character_skills)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_skills, character_skills)
+    |> Repo.update()
+  end
+
+  def remove_skills(character) do
+    character_skills = Enum.reject(character.character_skills, & &1.level == 0)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_skills, character_skills)
+    |> Repo.update()
+  end
 
   def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
   def add_armor(params), do: Armor.changeset(%Armor{}, params) |> Repo.insert()

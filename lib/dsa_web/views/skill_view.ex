@@ -47,6 +47,13 @@ defmodule DsaWeb.SkillView do
     |> Keyword.put(:title, title)
   end
 
+  def probe_defaults(form) do
+    case input_value(form, :probe) do
+      {t1, t2, t3} -> {t1, t2, t3}
+      nil -> {0, 0, 0}
+    end
+  end
+
   def row_assigns(conn, character, skill_id, form \\ nil) do
     field = Skill.field(skill_id)
     value = Map.get(character, field)

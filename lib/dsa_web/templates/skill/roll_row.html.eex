@@ -1,0 +1,12 @@
+<tr>
+  <td class="text-left"><%= @entry.skill.name %></td>
+  <td><%= be(@entry.skill.be) %></td>
+  <td><%= probe(@entry.skill.probe) %></td>
+  <td class="px-1 font-bold"><%= @entry.level %></td>
+  <td>
+    <%= submit icon(@conn, "cube"),
+      class: "text-indigo-600 hover:text-indigo-400",
+      name: input_name(:skill_roll, :id),
+      value: @entry.skill_id %>
+  </td>
+</tr>

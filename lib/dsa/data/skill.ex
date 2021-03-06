@@ -29,9 +29,6 @@ defmodule Dsa.Data.Skill do
     |> validate_number(:category, greater_than_or_equal_to: 0, less_than_or_equal_to: SkillCategory.count())
     |> validate_number(:probe, greater_than_or_equal_to: 0, less_than_or_equal_to: 512)
     |> validate_inclusion(:sf, @sf_values)
-    # |> validate_inclusion(:t1, Enum.map(traits(), & Atom.to_string(&1))
-    # |> validate_inclusion(:t2, Enum.map(traits(), & Atom.to_string(&1))
-    # |> validate_inclusion(:t3, Enum.map(traits(), & Atom.to_string(&1))
     |> validate_probe()
     |> unique_constraint(:name)
   end
