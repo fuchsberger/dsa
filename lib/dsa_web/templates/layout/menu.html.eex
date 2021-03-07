@@ -35,15 +35,15 @@
                 to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
-              <%= menu_link @conn, gettext("Spells"),
+              <%# menu_link @conn, gettext("Spells"),
                 to: Routes.dsa_path(@conn, :spells),
                 class: "menu-item text-sm" %>
 
-              <%= menu_link @conn, gettext("Combat"),
+              <%# menu_link @conn, gettext("Combat"),
                 to: Routes.dsa_path(@conn, :combat),
                 class: "menu-item text-sm" %>
 
-              <%= menu_link @conn, gettext("Roll"),
+              <%# menu_link @conn, gettext("Roll"),
                 to: Routes.dsa_path(@conn, :roll),
                 class: "menu-item text-sm" %>
             <% end %>
@@ -116,9 +116,9 @@
           to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
           class: "menu-item block text-base" %>
 
-        <%= menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
-        <%= menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
-        <%= menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
+        <%# menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
+        <%# menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
+        <%# menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
       <% end %>
       <%= unless is_nil(@current_user) do %>
         <%= menu_link @conn, gettext("Settings"), to: Routes.user_path(@conn, :edit, @current_user), class: "menu-item block text-base" %>

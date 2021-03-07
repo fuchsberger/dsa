@@ -164,35 +164,35 @@ defmodule Dsa.TrialTest do
              {20, 10},
              {20, 15},
              {20, 10}
-           ]) == -1
+           ]) == 0
 
     # too little, split
     assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 12},
              {20, 13}
-           ]) == -1
+           ]) == 0
 
     # with modifier
     assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -1, [
              {20, 10},
              {20, 12},
              {20, 10}
-           ]) == -1
+           ]) == 0
 
     # with modifier, split
     assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -1, [
              {20, 10},
              {20, 11},
              {20, 11}
-           ]) == -1
+           ]) == 0
 
     # modifier only
     assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -2, [
              {20, 10},
              {20, 10},
              {20, 10}
-           ]) == -1
+           ]) == 0
   end
 
   test "skill roll: success" do
