@@ -30,7 +30,7 @@ defmodule Dsa.Accounts do
     StaffSpell
   }
 
-  alias Dsa.Event.Log
+  alias Dsa.Event.{Log, SkillRoll}
 
   @character_preloads [
     :user,
@@ -121,6 +121,12 @@ defmodule Dsa.Accounts do
     Character
     |> user_characters_query(user)
     |> Repo.get!(id)
+  end
+
+  def get_user_group!(%User{} = user) do
+    user
+    |> Repo.preload(:group)
+    |> Map.get(:group)
   end
 
   defp user_characters_query(query, %User{id: user_id}) do
@@ -281,8 +287,6 @@ defmodule Dsa.Accounts do
   end
 
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
-
-  def get_group!(id), do: Repo.get!(Group, id)
 
   def add_skills(character) do
     character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)

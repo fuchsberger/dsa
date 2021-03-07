@@ -6,6 +6,7 @@ defmodule DsaWeb.DsaHelpers do
 
   import DsaWeb.Gettext
 
+  alias Dsa.Accounts.Character
   alias Dsa.Type.Probe
 
   @traits ~w(mu kl in ch ff ge ko kk)a

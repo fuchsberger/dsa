@@ -48,6 +48,8 @@ defmodule DsaWeb.Router do
       resources "/skills", SkillController, only: [:index]
       get "/skills/edit", SkillController, :edit_skills
 
+      post "skills/roll", SkillController, :roll
+
       put "/skills/update", SkillController, :update
       put "/skills/add", SkillController, :add_all
       delete "/skills/remove", SkillController, :remove_all
@@ -57,7 +59,7 @@ defmodule DsaWeb.Router do
 
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
-    put "/character/:id/skill_roll/:skill_id", CharacterController, :skill_roll
+
 
     live "/combat", DsaLive, :combat
     live "/roll", DsaLive, :roll

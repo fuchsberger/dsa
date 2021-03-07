@@ -6,7 +6,7 @@
   <td>
     <%= submit icon(@conn, "cube"),
       class: "text-indigo-600 hover:text-indigo-400",
-      name: input_name(:skill_roll, :id),
+      name: input_name(:skill_roll, :skill_id),
       value: @entry.skill_id %>
   </td>
 </tr>

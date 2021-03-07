@@ -39,13 +39,12 @@ defmodule DsaWeb.LogView do
     end
   end
 
-  defp result_tag_trial( value) do
-    case value do
-      :critical_success -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
-      :pass -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
-      :fail -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
-      :critical_failure -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
-      _ -> "Error #{value}" 
+  defp result_tag_trial(quality, critical?) do
+    case {quality, critical?} do
+      {0, true} -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      {_, true} -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
+      {0, false} -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
+      {q, false} -> content_tag :span, "✓ #{q}", class: "#{@base} bg-green-50 text-green-500"
     end
   end
 

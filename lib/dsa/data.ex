@@ -28,7 +28,6 @@ defmodule Dsa.Data do
     # Dsa.Data.MWeapon.seed()
     # Dsa.Data.Prayer.seed()
     # Dsa.Data.Script.seed()
-    Skill.seed()
     # Dsa.Data.Species.seed()
     Dsa.Data.Spell.seed()
     # Dsa.Data.SpellTrick.seed()

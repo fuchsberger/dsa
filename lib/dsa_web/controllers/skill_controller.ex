@@ -1,9 +1,8 @@
 defmodule DsaWeb.SkillController do
   use DsaWeb, :controller
 
-  alias Dsa.Accounts
+  alias Dsa.{Accounts, Data, Event}
   alias Dsa.Accounts.CharacterSkill
-  alias Dsa.Data
   alias Dsa.Data.Skill
 
   @doc """
@@ -11,7 +10,7 @@ defmodule DsaWeb.SkillController do
   """
   def index(conn, %{"character_id" => id}) do
     character = Accounts.get_user_character!(conn.assigns.current_user, id)
-    changeset = Dsa.UI.change_skill_roll(%{})
+    changeset = Dsa.Event.change_skill_roll(%{})
 
     render(conn, "character_skills.html", character: character, changeset: changeset)
   end
@@ -122,5 +121,20 @@ defmodule DsaWeb.SkillController do
     conn
     |> put_flash(:info, gettext("Skills deleted successfully."))
     |> redirect(to: Routes.skill_path(conn, :index))
+  end
+
+  def roll(conn, %{"character_id" => id, "skill_roll" => roll_params}) do
+    character = Accounts.get_user_character!(conn.assigns.current_user, id)
+    group = Accounts.get_user_group!(conn.assigns.current_user)
+
+    case Event.create_skill_roll(character, group, roll_params) do
+      {:ok, _skill} ->
+        DsaWeb.LogLive.broadcast(group.id, :reload)
+        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn inspect changeset
+        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+    end
   end
 end

@@ -1,8 +1,6 @@
 defmodule Dsa.Repo.Migrations.AddCharacterSkills do
   use Ecto.Migration
 
-  alias Dsa.Data.Skill
-
   def change do
     create table(:character_skills, primary_key: false) do
       add :level, :smallint, null: false
@@ -13,7 +11,7 @@ defmodule Dsa.Repo.Migrations.AddCharacterSkills do
     create index :character_skills, [:character_id, :skill_id]
 
     alter table(:characters) do
-      Enum.each(Skill.fields(), & remove(&1))
+      Enum.each(1..59, & remove(String.to_atom("t#{&1}"), :integer))
     end
   end
 end

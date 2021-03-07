@@ -3,6 +3,8 @@ defmodule Dsa.Trial do
   This module handles all logic regarding trialing
   """
 
+  alias Dsa.Accounts.Character
+
   def roll(maxnumber), do: roll(maxnumber, &:rand.uniform(&1))
 
   def roll(maxnumber, rand) do
@@ -49,6 +51,10 @@ defmodule Dsa.Trial do
   def is_critical_success?(numbers), do: Enum.count(numbers, &(&1 == 1)) >= 2
   def is_critical_failure?(numbers), do: Enum.count(numbers, &(&1 == 20)) >= 2
 
+  def criticality(numbers) do
+    is_critical_success?(numbers) || is_critical_failure?(numbers)
+  end
+
   def criticality(numbers, result) do
     criticality = {is_critical_success?(numbers), is_critical_failure?(numbers)}
 
@@ -71,10 +77,26 @@ defmodule Dsa.Trial do
 
     case diff do
       _ when skill_point + diff < 0 ->
-        -1
+        0
       _ ->
         talent_quality(skill_point + diff)
     end
+  end
+
+  @doc """
+  Performs a trial on a character (skills or magic)
+  Returns a tuple {quality, cricitcally?}
+  """
+  def handle_skill_event(%Character{} = character, skill_id, modifier) do
+    character_skill = Enum.find(character.character_skills, & &1.skill_id == skill_id)
+    traits = get_character_trait_values(character, character_skill.skill.probe)
+    dices = Dsa.Trial.roll_dices(20, 3)
+    [{_, d1}, {_, d2}, {_, d3}] = dices
+
+    quality = Dsa.Trial.perform_talent_trial(traits, character_skill.level, modifier, dices)
+    critically? = criticality([d1, d2, d3])
+
+    {{d1, d2, d2}, quality, critically?}
   end
 
   def handle_trial_event(traits, level, modifier, group_id, character_id, type, skill_id) do
@@ -96,5 +118,12 @@ defmodule Dsa.Trial do
       group_id: group_id,
       type: type
     }
+  end
+
+  @doc """
+  Given a character and a probe (Example: {:mu, :kl, :ch}), returns the characters traits for it
+  """
+  defp get_character_trait_values(%Character{} = character, {t1, t2, t3}) do
+    [Map.get(character, t1), Map.get(character, t2), Map.get(character, t3)]
   end
 end
