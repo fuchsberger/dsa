@@ -23,7 +23,7 @@ defmodule Dsa.Event do
     entries = group.skill_rolls
 
     entries
-    |> Enum.sort(&(&1.inserted_at < &2.inserted_at))
+    |> Enum.sort(&(&1.inserted_at >= &2.inserted_at))
     |> Enum.take(30)
   end
 
@@ -31,7 +31,13 @@ defmodule Dsa.Event do
 
   def create_log(attrs), do: Repo.insert(Log.changeset(%Log{}, attrs))
 
-  def delete_logs(group_id), do: Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
+  @doc """
+  Deletes all types of logs for a given Group
+  """
+  def delete_logs!(group_id) do
+    Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
+    Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
+  end
 
   # Settings (Group View, does not persist in database)
   def change_settings(attrs \\ %{}), do: Setting.changeset(%Setting{}, attrs)

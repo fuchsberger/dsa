@@ -18,7 +18,7 @@
     <%= link gettext("Remove Skills at 0"),
       to: Routes.character_skill_path(@conn, :remove_all, @character), method: :delete,
       class: "button gray text-center leading-7" %>
-    <%= link gettext("Add Skill..."), to: "#", class: "button gray text-center leading-7"  %>
+    <%# link gettext("Add Skill..."), to: "#", class: "button gray text-center leading-7", disabled: true  %>
   </div>
 </div>
 

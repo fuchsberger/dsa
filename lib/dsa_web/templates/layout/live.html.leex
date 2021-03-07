@@ -1,3 +1,4 @@
+<%# TODO: GET rid of this  %>
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl'>
   <%# In left column show variable page content %>
   <div class='px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-auto <%= if @log_open?, do: "hidden", else: "block" %> lg:block'>
@@ -17,8 +18,5 @@
   </div>
   <%# In right column always show log / group stuff %>
   <div class='px-2 py-3 lg:px-3 lg:py-4 <%= if @log_open?, do: "block", else: "hidden" %> lg:block max-h-full overflow-y-scroll'>
-    <%= unless is_nil(@user) do %>
-      <%= live_component @socket, DsaWeb.LogComponent, id: :log, logs: @user.group.logs %>
-    <% end %>
   </div>
 </div>

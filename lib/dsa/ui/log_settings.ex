@@ -6,12 +6,11 @@ defmodule Dsa.UI.LogSetting do
 
   embedded_schema do
     field :dice, :boolean, default: true
-    field :result, :boolean, default: true
   end
 
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:dice, :result])
-    |> validate_required([:dice, :result])
+    |> cast(attrs, [:dice])
+    |> validate_required([:dice])
   end
 end

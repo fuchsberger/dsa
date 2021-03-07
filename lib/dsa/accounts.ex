@@ -233,6 +233,7 @@ defmodule Dsa.Accounts do
 
   def activate_character(user, character) do
     user
+    |> Repo.preload(:active_character)
     |> Ecto.Changeset.change()
     |> Ecto.Changeset.put_assoc(:active_character, character)
     |> Repo.update()
