@@ -51,14 +51,13 @@ defmodule DsaWeb.Router do
       resources "/skills", SkillController, only: [:index]
       get "/skills/edit", SkillController, :edit_skills
 
-      post "skills/roll", SkillController, :roll
-
       put "/skills/update", SkillController, :update
       put "/skills/add", SkillController, :add_all
       delete "/skills/remove", SkillController, :remove_all
 
       # Roll Routes
       post "/roll/skill", RollController, :skill
+      post "/roll/trait", RollController, :trait
     end
 
     resources "/user", UserController, only: [:delete, :edit, :update]
@@ -67,13 +66,6 @@ defmodule DsaWeb.Router do
     live "/roll", DsaLive, :roll
 
     live "/spells", DsaLive, :spells
-  end
-
-  # Private Routes that require an active_character
-  scope "/", DsaWeb do
-    pipe_through [:browser, :authenticate_user, :has_active_character]
-
-    post "/roll/skill", TrialController, :skill
   end
 
   # Admin Routes

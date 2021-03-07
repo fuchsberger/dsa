@@ -20,8 +20,12 @@
           <% %Dsa.Event.SkillRoll{} -> %>
             <%= render DsaWeb.LogView, "skill_roll.html", entry: entry, show_dice?: @show_dice? %>
 
+          <% %Dsa.Event.TraitRoll{} -> %>
+            <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
+
           <% Log.Type.SpellRoll -> %>
             <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
+
 
           <% Log.Type.SimpleText -> %>
             <%= render DsaWeb.LogView, "simple_text.html", %{entry: entry, f: f} %>

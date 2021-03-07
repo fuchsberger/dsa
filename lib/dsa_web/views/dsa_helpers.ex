@@ -11,6 +11,12 @@ defmodule DsaWeb.DsaHelpers do
 
   @traits ~w(mu kl in ch ff ge ko kk)a
 
+  def trait_short(trait) when is_atom(trait) do
+    trait
+    |> Atom.to_string()
+    |> String.upcase()
+  end
+
   def traits, do: @traits
 
   def traits(probe) do

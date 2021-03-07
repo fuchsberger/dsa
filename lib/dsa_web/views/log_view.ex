@@ -2,7 +2,7 @@ defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
   alias Dsa.Data.Spell
-  alias Dsa.Event.Log
+  alias Dsa.Event.{Log, TraitRoll}
   alias Dsa.Data.Skill
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
@@ -28,6 +28,15 @@ defmodule DsaWeb.LogView do
     class: "#{@base} text-gray-500 border border-md border-gray-300 bg-gray-100 w-6 ml-1 text-center"
 
   defp tag_helper(:text, c), do: content_tag :span, c, class: "leading-6 font-bold text-gray-900"
+
+  defp result(%TraitRoll{} = roll) do
+    case {roll.success, roll.critical} do
+      {false, true} -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      {true, true} -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
+      {false, false} -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
+      {true, false} -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
+    end
+  end
 
   defp result_tag(:trait, value) do
     case value do

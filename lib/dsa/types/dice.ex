@@ -21,7 +21,7 @@ defmodule Dsa.Type.Dice do
   """
   def load(data) do
     {d3, data} = {div(data, 1024), rem(data, 1024)}
-    {d1, d2} = {div(data, 32), rem(data, 32)}
+    {d2, d1} = {div(data, 32), rem(data, 32)}
     {:ok, {d1, d2, d3}}
   end
 

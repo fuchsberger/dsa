@@ -29,4 +29,17 @@ defmodule DsaWeb.RollController do
         redirect(conn, to: Routes.character_skill_path(conn, :index, character))
     end
   end
+
+  def trait(conn, %{"trait_roll" => roll_params}, group, character) do
+    case Event.create_trait_roll(character, group, roll_params) do
+      {:ok, trait_roll} ->
+        trait_roll = Dsa.Repo.preload(trait_roll, :character)
+        broadcast(group.id, {:log, trait_roll})
+        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn inspect changeset
+        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+    end
+  end
 end

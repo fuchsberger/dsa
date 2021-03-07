@@ -83,6 +83,15 @@ defmodule Dsa.Trial do
     end
   end
 
+  def perform_trait_trial(trait, modifier, [{_, d1}, {_, d2}]) do
+    cond do
+      d1 == 1 && d2 <= (trait + modifier) -> {true, true}
+      d1 == 20 && d2 > (trait + modifier) -> {false, true}
+      d1 <= (trait + modifier) -> {true, false}
+      true -> {false, false}
+    end
+  end
+
   @doc """
   Performs a trial on a character (skills or magic)
   Returns a tuple {quality, cricitcally?}
@@ -97,6 +106,17 @@ defmodule Dsa.Trial do
     critically? = criticality([d1, d2, d3])
 
     {{d1, d2, d2}, quality, critically?}
+  end
+  require Logger
+  def handle_trait_event(%Character{} = character, trait, modifier) do
+    dices = Dsa.Trial.roll_dices(20, 2)
+    [{_, d1}, {_, d2}] = dices
+
+    Logger.warn inspect {d1, d2}
+    {success?, critical?} =
+      Dsa.Trial.perform_trait_trial(Map.get(character, trait), modifier, dices)
+
+    {{d1, d2, 0}, success?, critical?}
   end
 
   def handle_trial_event(traits, level, modifier, group_id, character_id, type, skill_id) do

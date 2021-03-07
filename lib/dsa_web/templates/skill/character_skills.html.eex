@@ -1,3 +1,8 @@
+<%= render DsaWeb.SkillView, "trait_roll_form.html",
+  action: Routes.character_roll_path(@conn, :trait, @character),
+  changeset: @trait_changeset,
+  character: @character %>
+
 <%= form_for @changeset, Routes.character_roll_path(@conn, :skill, @character), [], fn f -> %>
 <div class='sticky top-0 bg-gray-100 py-3'>
   <div class='flex justify-between pb-1'>
@@ -30,8 +35,6 @@
       <% end %>
     </div>
   </div>
-
-  <%# render DsaWeb.SkillView, "traits.html", conn: @conn %>
 </div>
 
 <table class="table text-center">
