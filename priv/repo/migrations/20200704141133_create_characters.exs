@@ -23,7 +23,7 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
 
       # skills
       Enum.each(combat_fields(), & add(&1, :integer))
-      Enum.each(Skill.fields(), & add(&1, :integer))
+      Enum.each(1..59, & add(String.to_atom("t#{&1}"), :integer))
 
       # combat
       add :at, :integer
