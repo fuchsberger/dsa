@@ -46,7 +46,7 @@ defmodule Dsa.Accounts.User do
   # used to reset tokens (should never be handled via web form)
   def manage_changeset(user, params) do
     user
-    |> cast(params, [:confirmed, :reset, :token])
+    |> cast(params, [:confirmed, :reset, :token, :admin])
   end
 
   # used for reset password (part 1) and registration
