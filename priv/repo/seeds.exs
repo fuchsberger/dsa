@@ -13,5 +13,3 @@
 # This will update / insert all DSA data elements
 # Alternatively Data elements are automatically inserted via migration.
 Dsa.Repo.Seeder.seed()
-
-Dsa.Accounts.create_group(%{name: "Völs"})
