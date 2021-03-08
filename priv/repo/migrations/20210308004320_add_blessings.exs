@@ -13,7 +13,7 @@ defmodule Dsa.Repo.Migrations.AddBlessings do
       add :cast_time, :smallint # in actions (blessing) or minutes (ceremony)
       add :cost, :smallint # initial cost only
 
-      # TODO: Perhaps implementated later
+      # TODO: Perhaps implement later
       # add :category, :string
       # add :duration, :smallint
       # add :range, :smallint

@@ -1,6 +1,6 @@
-defmodule DsaWeb.RollController do
+defmodule DsaWeb.LogController do
   @moduledoc """
-  Handles user actions that result in trials
+  Handles user actions that result in log entries.
   """
   use DsaWeb, :controller
 
@@ -17,7 +17,7 @@ defmodule DsaWeb.RollController do
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def skill(conn, %{"skill_roll" => roll_params}, group, character) do
+  def skill_roll(conn, %{"skill_roll" => roll_params}, group, character) do
     case Event.create_skill_roll(character, group, roll_params) do
       {:ok, skill_roll} ->
         skill_roll = Dsa.Repo.preload(skill_roll, [:character, :skill])
@@ -30,7 +30,7 @@ defmodule DsaWeb.RollController do
     end
   end
 
-  def trait(conn, %{"trait_roll" => roll_params}, group, character) do
+  def trait_roll(conn, %{"trait_roll" => roll_params}, group, character) do
     case Event.create_trait_roll(character, group, roll_params) do
       {:ok, trait_roll} ->
         trait_roll = Dsa.Repo.preload(trait_roll, :character)

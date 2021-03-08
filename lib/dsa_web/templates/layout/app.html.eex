@@ -1,13 +1,13 @@
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show variable page content %>
-  <div class='block lg:block px-2 lg:px-3 max-h-full overflow-y-auto'>
+  <div class='block lg:block px-2 lg:pr-1 py-3 max-h-full overflow-y-auto'>
     <%= unless %{} == get_flash(@conn) do %>
       <%= render "flash.html", conn: @conn %>
     <% end %>
     <%= @inner_content %>
   </div>
   <%# In right column always show log / group stuff %>
-  <div class='hidden lg:block px-2 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
+  <div class='hidden lg:block px-2 lg:pl-1 py-3 lg:px-3 lg:py-4 max-h-full overflow-y-scroll'>
     <%= unless is_nil(@current_user.group_id) do %>
       <%= live_render(@conn, DsaWeb.LogLive, session: %{"group_id" => @current_user.group_id} ) %>
     <% else %>

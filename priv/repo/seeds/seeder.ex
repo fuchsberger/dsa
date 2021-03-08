@@ -3,11 +3,12 @@ defmodule Dsa.Repo.Seeder do
   This file allows to update all DSA static Data.
   """
   alias Dsa.Accounts
-  alias Dsa.Repo.Seeds.SkillSeeder
+  alias Dsa.Repo.Seeds.{BlessingSeeder, SkillSeeder}
 
   require Logger
 
   def seed do
+    BlessingSeeder.reseed()
     SkillSeeder.reseed()
   end
 

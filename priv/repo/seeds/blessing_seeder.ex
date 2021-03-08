@@ -58,18 +58,20 @@ defmodule Dsa.Repo.Seeds.BlessingSeeder do
     }
   end
 
-  def seed, do: Enum.each(@blessings, & Data.create_blessing!(to_map(&1)))
+  # def seed, do: Enum.each(@blessings, & Data.create_blessing!(to_map(&1)))
+
+  def seed, do: nil
 
   def reseed do
-    blessings = Data.list_blessings()
+    # blessings = Data.list_blessings()
 
-    Enum.each(@blessings, fn blessing ->
-      attrs = to_map(blessing)
+    # Enum.each(@blessings, fn blessing ->
+    #   attrs = to_map(blessing)
 
-      case Enum.find(blessings, & &1.id == attrs.id) do
-        nil -> Data.create_blessing!(attrs)
-        blessing -> Data.update_blessing!(blessing, attrs)
-      end
-    end)
+    #   case Enum.find(blessings, & &1.id == attrs.id) do
+    #     nil -> Data.create_blessing!(attrs)
+    #     blessing -> Data.update_blessing!(blessing, attrs)
+    #   end
+    # end)
   end
 end
