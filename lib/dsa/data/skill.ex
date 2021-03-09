@@ -1,7 +1,6 @@
 defmodule Dsa.Data.Skill do
   use Ecto.Schema
   import Ecto.Changeset
-  import DsaWeb.DsaHelpers, only: [traits: 0]
 
   alias Dsa.Type.{SkillCategory, Probe}
 
