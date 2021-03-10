@@ -5,7 +5,7 @@ defmodule DsaWeb.CharacterController do
   use DsaWeb, :controller
 
   alias Dsa.Accounts
-  alias Dsa.Accounts.Character
+  alias Dsa.Accounts.{Character, User}
 
   plug :assign_character when action in [:edit, :update, :delete, :activate, :toggle_visible]
 
@@ -13,6 +13,13 @@ defmodule DsaWeb.CharacterController do
     args = [conn, conn.params, conn.assigns.current_user]
     apply(__MODULE__, action_name(conn), args)
   end
+
+  @doc """
+  Redirects to index if user is authenticated, otherwise to login page
+  """
+  def home(conn, _, nil), do: redirect(conn, to: Routes.session_path(conn, :new))
+
+  def home(conn, _, %User{}), do: redirect(conn, to: Routes.character_path(conn, :index))
 
   @doc """
   Lists all characters that belong to current user (dashboard).
@@ -34,7 +41,7 @@ defmodule DsaWeb.CharacterController do
       nil ->
         conn
         |> put_flash(:info, gettext("Character does not exist."))
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> redirect(to: Routes.character_path(conn, :home))
 
       character ->
         user_character_ids = Enum.map(current_user.characters, fn {id, _name} -> id end)
@@ -45,7 +52,7 @@ defmodule DsaWeb.CharacterController do
         else
           conn
           |> put_flash(:info, gettext("This character is hidden by the user."))
-          |> redirect(to: Routes.page_path(conn, :index))
+          |> redirect(to: Routes.character_path(conn, :home))
         end
     end
   end

@@ -74,10 +74,10 @@ defmodule Dsa.AccountsTest do
 
     setup do
       confirmed_user =
-        user_fixtures(password: @pass, password_confirm: @pass)
+        user_fixture(password: @pass, password_confirm: @pass)
         |> Accounts.manage_user!(%{confirmed: true, token: nil})
 
-      unconfirmed_user = user_fixtures(
+      unconfirmed_user = user_fixture(
         email: "test2@test.de",
         password: @pass,
         password_confirm: @pass

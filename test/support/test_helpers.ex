@@ -2,14 +2,14 @@ defmodule Dsa.TestHelpers do
 
   alias Dsa.Accounts
 
-  def user_fixtures(attrs \\ %{}) do
+  def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
       |> Enum.into(%{
         email: "test@test.abc",
         username: "user#{System.unique_integer([:positive])}",
         password: attrs[:password] || "Supersecret123",
-        password_confirm: attrs[:password_confirm] || "Supersecret123"
+        password_confirm: attrs[:password_confirm] || attrs[:password] || "Supersecret123"
       })
       |> Accounts.register_user()
 

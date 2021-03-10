@@ -27,6 +27,8 @@ defmodule DsaWeb.ConnCase do
 
       alias DsaWeb.Router.Helpers, as: Routes
 
+      require Logger
+
       # The default endpoint for testing
       @endpoint DsaWeb.Endpoint
     end

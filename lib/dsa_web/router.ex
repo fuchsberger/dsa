@@ -23,11 +23,12 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", CharacterController, :home
     resources "/sessions", SessionController, only: [:new, :create, :delete]
 
-    # user registration
     resources "/character", CharacterController, only: [:show]
+
+    # user registration
     resources "/user", UserController, only: [:new, :create]
     get "/user/confirm/:token", UserController, :confirm
 
@@ -48,7 +49,7 @@ defmodule DsaWeb.Router do
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
-    resources "/character", CharacterController, except: [:show] do
+    resources "/characters", CharacterController, except: [:show] do
       # get "skills", SkillController, :index
       resources "/skills", SkillController, only: [:index]
       get "/skills/edit", SkillController, :edit_skills
