@@ -1,6 +1,6 @@
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show variable page content %>
-  <div class='block lg:block px-2 lg:pr-1 py-3 max-h-full overflow-y-auto'>
+  <div class='block lg:block px-2 lg:pr-1 pb-3 max-h-full overflow-y-auto'>
     <%= unless %{} == get_flash(@conn) do %>
       <%= render "flash.html", conn: @conn %>
     <% end %>
