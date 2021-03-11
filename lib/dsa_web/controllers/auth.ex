@@ -42,6 +42,16 @@ defmodule DsaWeb.Auth do
     end
   end
 
+  def match_user_id(conn, id) do
+    case conn.assigns do
+      %{current_user: nil} ->
+        {:error, :unauthorized}
+
+      %{current_user: user} ->
+        if user.id == String.to_integer(id), do: :ok, else: {:error, :forbidden}
+    end
+  end
+
   def admin(conn, _opts) do
     if conn.assigns.current_user.admin do
       conn

@@ -24,7 +24,9 @@ defmodule DsaWeb.Router do
     pipe_through :browser
 
     get "/", CharacterController, :home
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    delete "/logout/:user_id", SessionController, :delete
 
     resources "/character", CharacterController, only: [:show]
 
@@ -42,7 +44,6 @@ defmodule DsaWeb.Router do
   # Private Routes
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
-
 
     resources "/skills", SkillController, only: [:index]
 

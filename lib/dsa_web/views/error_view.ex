@@ -1,6 +1,8 @@
 defmodule DsaWeb.ErrorView do
   use DsaWeb, :view
 
+  import Phoenix.Controller, only: [get_flash: 2]
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.html", _assigns) do

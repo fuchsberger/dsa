@@ -98,11 +98,11 @@ defmodule Dsa.Accounts do
         end
 
       user ->
-        {:error, :unauthorized}
+        {:error, :invalid_credentials}
 
       true ->
         Pbkdf2.no_user_verify()
-        {:error, :not_found}
+        {:error, :invalid_credentials}
     end
   end
 
