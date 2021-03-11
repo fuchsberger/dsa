@@ -22,7 +22,6 @@ defmodule Dsa.Data.Spell do
 
   @doc false
   def changeset(spell, attrs) do
-    IO.inspect(attrs)
     spell
     |> cast(attrs, @fields)
     |> validate_required(@fields)
@@ -34,7 +33,6 @@ defmodule Dsa.Data.Spell do
     |> validate_inclusion(:sf, @sf_values)
     |> validate_probe()
     |> unique_constraint(:name)
-    |> IO.inspect
   end
 
   defp validate_probe(changeset) do
