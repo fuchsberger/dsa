@@ -3,5 +3,7 @@
   <th scope='row'>BE</th>
   <th scope="row"><%= @probe %></th>
   <th scope="row">FW</th>
-  <th scope="row"></th>
+  <%= if @group_id do %>
+    <th scope="row"></th>
+  <% end %>
 </tr>

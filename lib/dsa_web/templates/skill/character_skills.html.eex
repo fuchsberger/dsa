@@ -1,21 +1,21 @@
-<%= render DsaWeb.SkillView, "trait_roll_form.html",
-  action: Routes.character_roll_path(@conn, :trait, @character),
-  changeset: @trait_changeset,
-  character: @character %>
+<%= form_for @changeset, Routes.character_log_path(@conn, :skill_roll, @character), [], fn f -> %>
 
-<%= form_for @changeset, Routes.character_roll_path(@conn, :skill, @character), [], fn f -> %>
-<div class='sticky top-0 bg-gray-100 py-3'>
-  <div class='flex justify-between pb-1'>
-    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
+<div class='grid grid-cols-4 md:grid-cols-8 gap-2 bg-gray-100 pt-3'>
+  <%= for trait <- traits() do %>
+    <%= if @current_user.group_id do %>
+      <%= submit "#{trait_short(trait)} #{Map.get(@character, trait)}",
+        class: "button gray leading-7 h-7",
+        name: input_name(:trait_roll, :trait),
+        value: trait %>
+      <% else %>
+        <span class='button gray leading-7 h-7'><%= "#{trait_short(trait)} #{Map.get(@character, trait)}"%></span>
+      <% end %>
+  <% end %>
+</div>
 
-    <%= for {title, short} <- categories() do %>
-      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
-    <% end %>
 
-    <%= link gettext("Edit Skills"), to: Routes.character_skill_path(@conn, :edit_skills, @character), class: "button" %>
-  </div>
-
-  <div id='modifier-component' class='grid grid-cols-4 md:grid-cols-8 pb-1 gap-x-4 gap-y-1 font-bold text-sm text-center leading-6'>
+<div class='sticky top-0 bg-gray-100 pt-3'>
+  <div id='modifier-component' class='grid grid-cols-4 md:grid-cols-8 pb-1 gap-x-4 gap-y-1 font-bold text-sm text-center leading-6 pb-2'>
     <h3 class='leading-6'><%= gettext "Modifier" %></h3>
 
     <div class="col-span-3 grid grid-cols-6">
@@ -35,13 +35,21 @@
       <% end %>
     </div>
   </div>
+
+  <div class='flex flex-col-3 lg:flex-col-6 justify-around pb-2'>
+    <%= for {title, short} <- categories() do %>
+      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <% end %>
+
+    <%= link gettext("Edit Skills"), to: Routes.character_skill_path(@conn, :edit_skills, @character), class: "button" %>
+  </div>
 </div>
 
 <table class="table text-center">
   <tbody class="bg-white divide-y divide-gray-200">
     <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "roll_header.html", header_assigns(category) %>
-      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn %>
+      <%= render DsaWeb.SkillView, "roll_header.html", Keyword.put(header_assigns(category), :group_id, @current_user.group_id) %>
+      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
     <% end %>
   </tbody>
 </table>

@@ -17,19 +17,19 @@
             <%= if @current_user.active_character_id == character.id do %>
               <%= icon @conn, "star-solid" %>
             <% else %>
-              <%= link icon(@conn, "star"), to: Routes.character_path(@conn, :activate, character), method: :put %>
+              <%= link icon(@conn, "star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
             <% end %>
           </td>
           <td class="py-1 whitespace-nowrap text-gray-900 text-bold"><%= character.name %></td>
           <td class='hidden lg:table-cell text-gray-700'><%= character.profession %></td>
           <td class='text-center'>
-            <%= link icon(@conn, (if character.visible, do: "eye", else: "eye-off")), to: Routes.character_path(@conn, :toggle_visible, character), method: :put %>
+            <%= link icon(@conn, (if character.visible, do: "eye", else: "eye-off")), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
           </td>
           <td class='text-center'>
-            <%= link icon(@conn, "pencil"), to: Routes.character_path(@conn, :edit, character) %>
+            <%= link icon(@conn, "pencil"), to: Routes.character_path(@conn, :edit, character.id) %>
           </td>
           <td class='text-center'>
-            <%= link icon(@conn, "x"), to: Routes.character_path(@conn, :delete, character), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
+            <%= link icon(@conn, "x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
           </td>
         </tr>
       <% end %>

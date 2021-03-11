@@ -73,15 +73,14 @@ defmodule Dsa.AccountsTest do
     @unknow_user_email "unknow_user@user.com"
 
     setup do
-      confirmed_user =
-        user_fixtures(password: @pass, password_confirm: @pass)
-        |> Accounts.manage_user!(%{confirmed: true, token: nil})
+      confirmed_user = user_fixture(%{password: @pass, password_confirm: @pass})
 
-      unconfirmed_user = user_fixtures(
+      unconfirmed_user = user_fixture(%{
+        confirmed: false,
         email: "test2@test.de",
         password: @pass,
         password_confirm: @pass
-      )
+      })
 
       {:ok,
         user: confirmed_user,
@@ -102,12 +101,12 @@ defmodule Dsa.AccountsTest do
     end
 
     test "returns unauthorized error with invalid password", %{user: user} do
-      assert {:error, :unauthorized} =
+      assert {:error, :invalid_credentials} =
         Accounts.authenticate_by_email_and_password(user.email, @bad_pass)
     end
 
     test "returns not found error with no matching user for email" do
-      assert {:error, :not_found} =
+      assert {:error, :invalid_credentials} =
         Accounts.authenticate_by_email_and_password(@unknow_user_email, @pass)
     end
   end

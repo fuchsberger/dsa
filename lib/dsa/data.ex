@@ -36,6 +36,9 @@ defmodule Dsa.Data do
     {:ok, "In-Memory database created and filled."}
   end
 
+  # Skills
+
+
   def list_skills do
     from(s in Skill, order_by: [s.category, s.name])
     |> Repo.all()
@@ -70,4 +73,5 @@ defmodule Dsa.Data do
   def delete_skill(%Skill{} = skill), do: Repo.delete(skill)
 
   def change_skill(%Skill{} = skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
+
 end

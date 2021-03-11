@@ -24,8 +24,11 @@ defmodule DsaWeb.ConnCase do
       import Phoenix.ConnTest
       import DsaWeb.ConnCase
       import Dsa.TestHelpers
+      import DsaWeb.Gettext
 
       alias DsaWeb.Router.Helpers, as: Routes
+
+      require Logger
 
       # The default endpoint for testing
       @endpoint DsaWeb.Endpoint

@@ -23,8 +23,12 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
-    resources "/sessions", SessionController, only: [:new, :create, :delete]
+    get "/", CharacterController, :home
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    delete "/logout/:user_id", SessionController, :delete
+
+    resources "/character", CharacterController, only: [:show]
 
     # user registration
     resources "/user", UserController, only: [:new, :create]
@@ -43,10 +47,12 @@ defmodule DsaWeb.Router do
 
     resources "/skills", SkillController, only: [:index]
 
-    put "/character/:character_id/activate", CharacterController, :activate
+    put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
-    resources "/character", CharacterController do
+    delete "/group/leave", GroupController, :leave
+
+    resources "/characters", CharacterController, except: [:show] do
       # get "skills", SkillController, :index
       resources "/skills", SkillController, only: [:index]
       get "/skills/edit", SkillController, :edit_skills
@@ -56,8 +62,8 @@ defmodule DsaWeb.Router do
       delete "/skills/remove", SkillController, :remove_all
 
       # Roll Routes
-      post "/roll/skill", RollController, :skill
-      post "/roll/trait", RollController, :trait
+      post "/roll/skill", LogController, :skill_roll
+      post "/roll/trait", LogController, :trait_roll
     end
 
     resources "/user", UserController, only: [:delete, :edit, :update]

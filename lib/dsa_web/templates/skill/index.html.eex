@@ -1,4 +1,4 @@
-<div class='sticky top-0 bg-gray-100 py-2'>
+<div class='sticky top-0 bg-gray-100 py-3'>
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
 
@@ -18,7 +18,7 @@
     <%= for category <- Dsa.Type.SkillCategory.list() do  %>
       <%= render DsaWeb.SkillView, "skill_header_row.html",
         Keyword.put(header_assigns(category), :admin, @current_user.admin) %>
-      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row2.html", as: :skill, conn: @conn, admin: @current_user.admin %>
+      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
     <% end %>
   </tbody>
 </table>

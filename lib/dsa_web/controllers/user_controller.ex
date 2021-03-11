@@ -63,10 +63,10 @@ defmodule DsaWeb.UserController do
 
   def update(conn, %{"user" => user_params}, current_user) do
     case Accounts.update_user(current_user, user_params) do
-      {:ok, _user} ->
+      {:ok, user} ->
         conn
         |> put_flash(:info, "Account updated successfully.")
-        |> redirect(to: Routes.character_path(conn, :index))
+        |> redirect(to: Routes.user_path(conn, :edit, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         group_options = Accounts.list_group_options()

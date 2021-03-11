@@ -56,6 +56,11 @@ defmodule Dsa.Accounts do
     logs: from(l in Log, preload: :character, order_by: {:desc, l.inserted_at})
   ]
 
+  ##########################################################
+  # User related APIs
+
+  def list_users, do: Repo.all(User)
+
   def admin?(user_id), do: Repo.get(from(u in User, select: u.admin), user_id)
 
   def get_user!(id), do: Repo.get!(User, id)
@@ -69,10 +74,13 @@ defmodule Dsa.Accounts do
     |> Repo.get(id)
   end
 
+  @doc """
+  Always assigned to conn, and thus available through entire app if user is logged in.
+  Also preloads character names and ids for menu.
+  """
   def get_user(id) do
-    from(u in User, preload: [
-      characters: ^(from(c in Character, select: {c.id, c.name}))
-    ]) |> Repo.get(id)
+    character_query = from(c in Character, select: {c.id, c.name})
+    Repo.get(from(u in User, preload: [ characters: ^character_query]), id)
   end
 
   def get_user_by(params), do: Repo.get_by(user_query(), params)
@@ -90,32 +98,41 @@ defmodule Dsa.Accounts do
         end
 
       user ->
-        {:error, :unauthorized}
+        {:error, :invalid_credentials}
 
       true ->
         Pbkdf2.no_user_verify()
-        {:error, :not_found}
+        {:error, :invalid_credentials}
     end
   end
 
-  def list_users, do: Repo.all(User)
-  def list_user_options, do: Repo.all(from(u in User, select: {u.name, u.id}, order_by: u.name))
-
-
-  def list_user_characters!(user_id) do
-    from(c in Character,
-      select: map(c, [:id, :name, :profession]),
-      order_by: c.name,
-      where: c.user_id == ^user_id
-    )
-    |> Repo.all()
+  def leave_group(%User{} = user) do
+    user
+    |> User.changeset(%{group_id: nil})
+    |> Repo.update()
   end
 
+  def preload_characters(%User{} = user) do
+    Repo.preload(user, characters: from(c in Character, order_by: c.name))
+  end
+
+  ##########################################################
+  # Character related APIs
+
+  @doc """
+  Lists a user's characters (limited info, for dashboard only)
+  """
   def list_user_characters(%User{} = user) do
-    Character
+    from(c in Character, order_by: c.name, select: map(c, [:id, :name, :profession, :visible]))
     |> user_characters_query(user)
     |> Repo.all()
   end
+
+  @doc """
+  Gets any character; used for character overview page (public).
+  TODO: May want to preload more info
+  """
+  def get_character!(id), do: Repo.get!(Character, id)
 
   def get_user_character!(%User{} = user, id) do
     Character
@@ -137,10 +154,7 @@ defmodule Dsa.Accounts do
       where: c.user_id == ^user_id)
   end
 
-  # TODO: Remove params
-  def change_user(%User{} = user, params \\ %{}) do
-    User.changeset(user, params)
-  end
+  def change_user(%User{} = user, params \\ %{}), do: User.changeset(user, params)
 
   def create_user(attrs \\ %{}) do
     %User{}
@@ -190,21 +204,6 @@ defmodule Dsa.Accounts do
   end
 
   def delete_user(%User{} = user), do: Repo.delete(user)
-
-  def list_characters, do: Repo.all(from(c in Character, preload: :user))
-
-  def list_characters(list_of_ids) do
-    from(c in Character, where: c.id in ^list_of_ids, select: {c.id, c})
-    |> Repo.all()
-    |> Map.new()
-  end
-
-  def get_character!(id), do: Repo.get!(Character, id)
-
-  def get_character(id, :skills) do
-    fields = [:id] ++ Skill.fields()
-    Repo.get(from(c in Character, select: ^fields), id)
-  end
 
   def get_visible_characters do
     from(c in Character, where: c.visible == true, order_by: [desc: c.ini, asc: c.name])
@@ -276,6 +275,9 @@ defmodule Dsa.Accounts do
   end
 
   def delete_character(%Character{} = character), do: Repo.delete(character)
+
+  ##########################################################
+  # Group related APIs
 
   def list_groups, do: Repo.all(from(g in Group, preload: :master))
 
