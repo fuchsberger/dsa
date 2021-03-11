@@ -10,6 +10,9 @@
 # Confirms a user:
 # Dsa.Repo.Seeder.confirm("<EMAIL>")
 
+# Create a group:
+# Dsa.Accounts.create_group(%{name: "<NAME>"})
+
 # This will update / insert all DSA data elements
 # Alternatively Data elements are automatically inserted via migration.
 Dsa.Repo.Seeder.seed()

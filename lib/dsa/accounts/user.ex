@@ -18,7 +18,7 @@ defmodule Dsa.Accounts.User do
     field :password, :string, virtual: true
     field :password_confirm, :string, virtual: true
 
-    belongs_to :group, Dsa.Accounts.Group
+    belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
     belongs_to :active_character, Dsa.Accounts.Character, on_replace: :nilify
     has_many :characters, Dsa.Accounts.Character
 

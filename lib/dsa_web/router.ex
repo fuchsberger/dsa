@@ -50,6 +50,8 @@ defmodule DsaWeb.Router do
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
+    delete "/group/leave", GroupController, :leave
+
     resources "/characters", CharacterController, except: [:show] do
       # get "skills", SkillController, :index
       resources "/skills", SkillController, only: [:index]

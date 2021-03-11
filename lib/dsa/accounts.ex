@@ -106,7 +106,11 @@ defmodule Dsa.Accounts do
     end
   end
 
-
+  def leave_group(%User{} = user) do
+    user
+    |> User.changeset(%{group_id: nil})
+    |> Repo.update()
+  end
 
   def preload_characters(%User{} = user) do
     Repo.preload(user, characters: from(c in Character, order_by: c.name))

@@ -20,6 +20,9 @@
     <% end %>
 
     <p class='p-2'><%= gettext "Other Actions:" %>
+      <%= unless is_nil(@current_user.group_id) do %>
+        <%= link gettext("Leave Group"), to: Routes.group_path(@conn, :leave), class: "pl-2", method: :delete %>
+      <% end %>
       <%= link gettext("Change Password"), to: Routes.user_path(@conn, :reset), class: "pl-2" %>
       <%= link gettext("Delete Account"), to: Routes.user_path(@conn, :delete, @current_user), class: "pl-2 text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you permanently want to delete your account and all associated data?"), method: :delete %>
     </p>
