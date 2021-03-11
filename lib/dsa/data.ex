@@ -65,7 +65,7 @@ defmodule Dsa.Data do
     |> Repo.update()
   end
 
-  def update_spell(%Spell{} = spell, attrs) do
+  def update_spell!(%Spell{} = spell, attrs) do
     spell
     |> Spell.changeset(attrs)
     |> Repo.update!()
