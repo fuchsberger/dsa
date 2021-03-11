@@ -50,6 +50,9 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
 
+    resources "/skills", SkillController, only: [:index]
+    resources "/spells", SpellController, only: [:index]
+
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
@@ -61,6 +64,8 @@ defmodule DsaWeb.Router do
       put "/skills/update", CharacterSkillController, :update_all, as: :skill
       put "/skills/add", CharacterSkillController, :add_all, as: :skill
       delete "/skills/remove", CharacterSkillController, :remove_all, as: :skill
+
+      resources "/spells", SpellController
     end
 
     # Event Routes

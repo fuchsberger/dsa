@@ -13,16 +13,7 @@
 <%= for spell <- @spells do %>
     <tr>
       <td><%= spell.name %></td>
-      <td><%= spell.be %></td>
-
-      <td>
-        <span><%= link "Show", to: Routes.skill_path(@conn, :show, spell) %></span>
-        <span><%= link "Edit", to: Routes.skill_path(@conn, :edit, spell) %></span>
-        <span><%= link "Delete", to: Routes.skill_path(@conn, :delete, spell), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
     </tr>
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Skill", to: Routes.skill_path(@conn, :new) %></span>
