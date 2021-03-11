@@ -1,14 +1,20 @@
 <%= form_for @changeset, @action, [], fn f -> %>
   <div class='grid grid-cols-4 lg:grid-cols-10 gap-2 pt-3 bg-gray-100'>
-    <h2 class='col-span-2 lg:col-span-1 leading-7 font-sans text-xl font-bold'><%= gettext "Traits" %></h2>
+    <h2 class='col-span-2 <%= if @group_id, do: "lg:col-span-1", else: "lg:col-span-2" %> leading-7 font-sans text-xl font-bold'><%= gettext "Traits" %></h2>
 
-    <%= select f, :modifier, -6..6, class: "input leading-7 h-7 col-span-2 lg:col-span-1", value: 0 %>
+    <%= if @group_id do %>
+      <%= select f, :modifier, -6..6, class: "input leading-7 h-7 col-span-2 lg:col-span-1", value: 0 %>
+    <% end %>
 
     <%= for trait <- traits() do %>
-      <%= submit "#{trait_short(trait)}:#{Map.get(@character, trait)}",
-        class: "button gray leading-7 h-7",
-        name: input_name(:trait_roll, :trait),
-        value: trait %>
+      <%= if @group_id do %>
+        <%= submit "#{trait_short(trait)}:#{Map.get(@character, trait)}",
+          class: "button gray leading-7 h-7",
+          name: input_name(:trait_roll, :trait),
+          value: trait %>
+        <% else %>
+          <span class='button gray leading-7 h-7'><%= "#{trait_short(trait)}:#{Map.get(@character, trait)}"%></span>
+        <% end %>
     <% end %>
   </div>
 <% end %>

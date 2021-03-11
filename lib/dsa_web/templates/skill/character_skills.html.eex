@@ -1,7 +1,8 @@
 <%= render DsaWeb.SkillView, "trait_roll_form.html",
   action: Routes.character_log_path(@conn, :trait_roll, @character),
   changeset: @trait_changeset,
-  character: @character %>
+  character: @character,
+  group_id: @current_user.group_id %>
 
 <%= form_for @changeset, Routes.character_log_path(@conn, :skill_roll, @character), [], fn f -> %>
 <div class='sticky top-0 bg-gray-100 py-3'>
@@ -40,8 +41,8 @@
 <table class="table text-center">
   <tbody class="bg-white divide-y divide-gray-200">
     <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "roll_header.html", header_assigns(category) %>
-      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn %>
+      <%= render DsaWeb.SkillView, "roll_header.html", Keyword.put(header_assigns(category), :group_id, @current_user.group_id) %>
+      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
     <% end %>
   </tbody>
 </table>

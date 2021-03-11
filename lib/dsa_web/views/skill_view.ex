@@ -11,7 +11,7 @@ defmodule DsaWeb.SkillView do
     crafting: [probe: "FF/FF/KO", pages: "206-213", title: "Handwerkstalente", short: "Handwerk"]
   ]
 
-  def header_assigns(category), do: Keyword.get(@header, category)
+  def header_assigns(category, group_id \\ nil), do: Keyword.get(@header, category)
 
   def be_options do
     [

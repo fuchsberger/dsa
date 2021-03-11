@@ -3,10 +3,12 @@
   <td><%= be(@entry.skill.be) %></td>
   <td><%= probe(@entry.skill.probe) %></td>
   <td class="px-1 font-bold"><%= @entry.level %></td>
-  <td>
-    <%= submit icon(@conn, "cube"),
-      class: "text-indigo-600 hover:text-indigo-400",
-      name: input_name(:skill_roll, :skill_id),
-      value: @entry.skill_id %>
-  </td>
+  <%= if @group_id do %>
+    <td>
+      <%= submit icon(@conn, "cube"),
+        class: "text-indigo-600 hover:text-indigo-400",
+        name: input_name(:skill_roll, :skill_id),
+        value: @entry.skill_id %>
+    </td>
+  <% end %>
 </tr>
