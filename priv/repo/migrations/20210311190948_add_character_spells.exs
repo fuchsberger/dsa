@@ -11,7 +11,7 @@ defmodule Dsa.Repo.Migrations.AddCharacterSpells do
     create index :character_spells, [:character_id, :spell_id]
 
     alter table(:characters) do
-      Enum.each(1..51, & remove(String.to_atom("s#{&1}"), :integer))
+      Enum.each(1..51, & remove_if_exists(String.to_atom("s#{&1}"), :integer))
     end
   end
 end
