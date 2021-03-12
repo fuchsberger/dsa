@@ -1,0 +1,474 @@
+[
+  {
+    "id": 1,
+    "sf": "B",
+    "category": "body",
+    "probe": "MU/IN/GE",
+    "name": "Fliegen",
+    "be": true
+  },
+  {
+    "id": 2,
+    "sf": "A",
+    "category": "body",
+    "probe": "MU/CH/FF",
+    "name": "Gaukeleien",
+    "be": true
+  },
+  {
+    "id": 3,
+    "sf": "B",
+    "category": "body",
+    "probe": "MU/GE/KK",
+    "name": "Klettern",
+    "be": true
+  },
+  {
+    "id": 4,
+    "sf": "D",
+    "category": "body",
+    "probe": "GE/GE/KO",
+    "name": "Körperbeherrschung",
+    "be": true
+  },
+  {
+    "id": 5,
+    "sf": "B",
+    "category": "body",
+    "probe": "KO/KK/KK",
+    "name": "Kraftakt",
+    "be": true
+  },
+  {
+    "id": 6,
+    "sf": "B",
+    "category": "body",
+    "probe": "CH/GE/KK",
+    "name": "Reiten",
+    "be": true
+  },
+  {
+    "id": 7,
+    "sf": "B",
+    "category": "body",
+    "probe": "GE/KO/KK",
+    "name": "Schwimmen",
+    "be": true
+  },
+  {
+    "id": 8,
+    "sf": "D",
+    "category": "body",
+    "probe": "MU/MU/KO",
+    "name": "Selbstbeherrschung",
+    "be": false
+  },
+  {
+    "id": 9,
+    "sf": "A",
+    "category": "body",
+    "probe": "KL/CH/KO",
+    "name": "Singen",
+    "be": null
+  },
+  {
+    "id": 10,
+    "sf": "D",
+    "category": "body",
+    "probe": "KL/IN/IN",
+    "name": "Sinnesschärfe",
+    "be": null
+  },
+  {
+    "id": 11,
+    "sf": "A",
+    "category": "body",
+    "probe": "KL/CH/GE",
+    "name": "Tanzen",
+    "be": true
+  },
+  {
+    "id": 12,
+    "sf": "B",
+    "category": "body",
+    "probe": "MU/FF/GE",
+    "name": "Taschendiebstahl",
+    "be": true
+  },
+  {
+    "id": 13,
+    "sf": "C",
+    "category": "body",
+    "probe": "MU/IN/GE",
+    "name": "Verbergen",
+    "be": true
+  },
+  {
+    "id": 14,
+    "sf": "A",
+    "category": "body",
+    "probe": "KL/KO/KK",
+    "name": "Zechen",
+    "be": false
+  },
+  {
+    "id": 15,
+    "sf": "B",
+    "category": "social",
+    "probe": "MU/KL/CH",
+    "name": "Bekehren / Überzeugen",
+    "be": false
+  },
+  {
+    "id": 16,
+    "sf": "B",
+    "category": "social",
+    "probe": "MU/CH/CH",
+    "name": "Betören",
+    "be": null
+  },
+  {
+    "id": 17,
+    "sf": "B",
+    "category": "social",
+    "probe": "MU/IN/CH",
+    "name": "Einschüchtern",
+    "be": false
+  },
+  {
+    "id": 18,
+    "sf": "B",
+    "category": "social",
+    "probe": "KL/IN/CH",
+    "name": "Etikette",
+    "be": null
+  },
+  {
+    "id": 19,
+    "sf": "C",
+    "category": "social",
+    "probe": "KL/IN/CH",
+    "name": "Gassenwissen",
+    "be": null
+  },
+  {
+    "id": 20,
+    "sf": "C",
+    "category": "social",
+    "probe": "KL/IN/CH",
+    "name": "Menschenkenntnis",
+    "be": false
+  },
+  {
+    "id": 21,
+    "sf": "C",
+    "category": "social",
+    "probe": "MU/IN/CH",
+    "name": "Überreden",
+    "be": false
+  },
+  {
+    "id": 22,
+    "sf": "B",
+    "category": "social",
+    "probe": "IN/CH/GE",
+    "name": "Verkleiden",
+    "be": null
+  },
+  {
+    "id": 23,
+    "sf": "D",
+    "category": "social",
+    "probe": "MU/IN/CH",
+    "name": "Willenskraft",
+    "be": false
+  },
+  {
+    "id": 24,
+    "sf": "C",
+    "category": "nature",
+    "probe": "MU/IN/CH",
+    "name": "Fährtensuchen",
+    "be": true
+  },
+  {
+    "id": 25,
+    "sf": "A",
+    "category": "nature",
+    "probe": "KL/FF/KK",
+    "name": "Fesseln",
+    "be": null
+  },
+  {
+    "id": 26,
+    "sf": "A",
+    "category": "nature",
+    "probe": "FF/GE/KO",
+    "name": "Fischen & Angeln",
+    "be": null
+  },
+  {
+    "id": 27,
+    "sf": "B",
+    "category": "nature",
+    "probe": "KL/IN/IN",
+    "name": "Orientierung",
+    "be": false
+  },
+  {
+    "id": 28,
+    "sf": "C",
+    "category": "nature",
+    "probe": "KL/FF/KO",
+    "name": "Pflanzenkunde",
+    "be": null
+  },
+  {
+    "id": 29,
+    "sf": "C",
+    "category": "nature",
+    "probe": "MU/MU/CH",
+    "name": "Tierkunde",
+    "be": true
+  },
+  {
+    "id": 30,
+    "sf": "C",
+    "category": "nature",
+    "probe": "MU/GE/KO",
+    "name": "Wildnisleben",
+    "be": true
+  },
+  {
+    "id": 31,
+    "sf": "A",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Brett- & Glücksspiel",
+    "be": false
+  },
+  {
+    "id": 32,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Geographie",
+    "be": false
+  },
+  {
+    "id": 33,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Geschichtswissen",
+    "be": false
+  },
+  {
+    "id": 34,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Götter & Kulte",
+    "be": false
+  },
+  {
+    "id": 35,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "MU/KL/IN",
+    "name": "Kriegskunst",
+    "be": false
+  },
+  {
+    "id": 36,
+    "sf": "C",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Magiekunde",
+    "be": false
+  },
+  {
+    "id": 37,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/FF",
+    "name": "Mechanik",
+    "be": false
+  },
+  {
+    "id": 38,
+    "sf": "A",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Rechnen",
+    "be": false
+  },
+  {
+    "id": 39,
+    "sf": "A",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Rechtskunde",
+    "be": false
+  },
+  {
+    "id": 40,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Sagen & Legenden",
+    "be": false
+  },
+  {
+    "id": 41,
+    "sf": "B",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Sphärenkunde",
+    "be": false
+  },
+  {
+    "id": 42,
+    "sf": "A",
+    "category": "knowledge",
+    "probe": "KL/KL/IN",
+    "name": "Sternkunde",
+    "be": false
+  },
+  {
+    "id": 43,
+    "sf": "C",
+    "category": "crafting",
+    "probe": "MU/KL/FF",
+    "name": "Alchimie",
+    "be": true
+  },
+  {
+    "id": 44,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "FF/GE/KK",
+    "name": "Boote & Schiffe",
+    "be": true
+  },
+  {
+    "id": 45,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "CH/FF/KO",
+    "name": "Fahrzeuge",
+    "be": true
+  },
+  {
+    "id": 46,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "KL/IN/CH",
+    "name": "Handel",
+    "be": false
+  },
+  {
+    "id": 47,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "MU/KL/IN",
+    "name": "Heilkunde Gift",
+    "be": true
+  },
+  {
+    "id": 48,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "MU/IN/KO",
+    "name": "Heilkunde Krankheiten",
+    "be": true
+  },
+  {
+    "id": 49,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "IN/CH/KO",
+    "name": "Heilkunde Seele",
+    "be": false
+  },
+  {
+    "id": 50,
+    "sf": "D",
+    "category": "crafting",
+    "probe": "KL/FF/FF",
+    "name": "Heilkunde Wunden",
+    "be": true
+  },
+  {
+    "id": 51,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "FF/GE/KK",
+    "name": "Holzbearbeitung",
+    "be": true
+  },
+  {
+    "id": 52,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "IN/FF/FF",
+    "name": "Lebensmittelbearbeitung",
+    "be": true
+  },
+  {
+    "id": 53,
+    "sf": "B",
+    "category": "crafting",
+    "probe": "FF/GE/KO",
+    "name": "Lederbearbeitung",
+    "be": true
+  },
+  {
+    "id": 54,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "IN/FF/FF",
+    "name": "Malen & Zeichnen",
+    "be": true
+  },
+  {
+    "id": 55,
+    "sf": "C",
+    "category": "crafting",
+    "probe": "FF/KO/KK",
+    "name": "Metallbearbeitung",
+    "be": true
+  },
+  {
+    "id": 56,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "CH/FF/KO",
+    "name": "Musizieren",
+    "be": true
+  },
+  {
+    "id": 57,
+    "sf": "C",
+    "category": "crafting",
+    "probe": "IN/FF/FF",
+    "name": "Schlösserknacken",
+    "be": true
+  },
+  {
+    "id": 58,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "FF/FF/KK",
+    "name": "Steinbearbeitung",
+    "be": true
+  },
+  {
+    "id": 59,
+    "sf": "A",
+    "category": "crafting",
+    "probe": "KL/FF/FF",
+    "name": "Stoffbearbeitung",
+    "be": true
+  }
+]

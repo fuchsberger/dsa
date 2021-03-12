@@ -3,7 +3,7 @@ defmodule Dsa.Repo.Migrations.AddCharacterSkills do
 
   def change do
     create table(:character_skills, primary_key: false) do
-      add :level, :smallint, null: false
+      add :level, :smallint
       add :character_id, references(:characters, on_delete: :nilify_all), primary_key: true
       add :skill_id, references(:skills, on_delete: :nilify_all), primary_key: true
     end

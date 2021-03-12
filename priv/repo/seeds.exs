@@ -4,11 +4,8 @@
 # Also some admin conviencences are now supported via the interactive shell:
 # iex -S mix
 
-# Make a user an administrator:
-# Dsa.Repo.Seeder.make_admin("<EMAIL>")
-
-# Confirms a user:
-# Dsa.Repo.Seeder.confirm("<EMAIL>")
+# Create an admin user:
+# Dsa.Repo.Seeder.create_admin(email, password, username)
 
 # Create a group:
 # Dsa.Accounts.create_group(%{name: "<NAME>"})

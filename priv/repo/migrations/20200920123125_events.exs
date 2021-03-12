@@ -4,7 +4,7 @@ defmodule Dsa.Repo.Migrations.Events do
   def change do
     create table(:logs) do
       add :data, :map, default: %{}
-      add :group_id, references(:groups, on_delete: :nilify_all)
+      add :group_id, references(:groups, on_delete: :nilify_all), null: false
       add :character_id, references(:characters, on_delete: :nilify_all)
       add :type, :integer
       timestamps()
