@@ -9,9 +9,5 @@ defmodule Dsa.Repo.Migrations.AddCharacterSkills do
     end
 
     create index :character_skills, [:character_id, :skill_id]
-
-    alter table(:characters) do
-      Enum.each(1..59, & remove(String.to_atom("t#{&1}"), :integer))
-    end
   end
 end

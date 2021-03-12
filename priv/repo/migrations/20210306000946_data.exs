@@ -1,4 +1,4 @@
-defmodule Dsa.Repo.Migrations.CreateSkills do
+defmodule Dsa.Repo.Migrations.Data do
   use Ecto.Migration
 
   alias Dsa.Repo.Seeds.SkillSeeder
