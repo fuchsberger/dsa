@@ -1,13 +1,9 @@
 defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
-  alias Dsa.Data.{Skill, Spell}
   alias Dsa.Event.{Log, TraitRoll}
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
-
-  defp skill_name(entry), do: Skill.name(entry)
-  defp spell_name(entry), do: Spell.name(entry)
 
   defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
 

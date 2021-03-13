@@ -24,6 +24,7 @@ defmodule DsaWeb.Router do
     pipe_through :browser
 
     get "/", CharacterController, :home
+
     get "/login", SessionController, :new
     post "/login", SessionController, :create
     delete "/logout/:user_id", SessionController, :delete

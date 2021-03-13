@@ -7,7 +7,7 @@ defmodule DsaWeb.SessionController do
 
   def new(conn, _) do
     conn
-    |> put_layout("wide.html")
+    |> put_layout("flipped.html")
     |> render("new.html")
   end
 

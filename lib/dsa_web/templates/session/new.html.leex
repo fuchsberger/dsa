@@ -3,7 +3,7 @@
 
     <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
 
-    <h2 class="text-center text-3xl font-extrabold text-gray-900"><%= gettext("Welcome in Aventuria!") %></h2>
+    <h2 class="text-center text-3xl font-extrabold text-gray-900"><%= gettext("Enter Aventuria") %></h2>
 
     <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
       <div class='mt-8 space-y-4'>

@@ -2,8 +2,8 @@
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
 
-    <%= for {title, %{short: short}} <- SkillCategory.list() do %>
-      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <%= for %{short: short, id: id} <- SkillCategory.list() do %>
+      <%= link short, to: "##{id}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
     <%= if @current_user && @current_user.admin do %>
@@ -14,10 +14,10 @@
 
 <table class="table text-center">
   <tbody>
-    <%= for {c, category} <- SkillCategory.list() do  %>
+    <%= for category <- SkillCategory.list() do  %>
       <%= render DsaWeb.SkillView, "skill_header_row.html", category: category,
         admin: @current_user && @current_user.admin %>
-      <%= render_many Enum.filter(@skills, & &1.category == c), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
+      <%= render_many Enum.filter(@skills, & &1.category == category.id), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
     <% end %>
   </tbody>
 </table>
