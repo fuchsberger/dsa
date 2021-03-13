@@ -1,11 +1,11 @@
-defmodule Dsa.Accounts.CharacterSkill do
+defmodule Dsa.Characters.CharacterSkill do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
   schema "character_skills" do
     field :level, :integer
-    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+    belongs_to :character, Dsa.Characters.Character, primary_key: true
     belongs_to :skill, Dsa.Data.Skill, primary_key: true
   end
 

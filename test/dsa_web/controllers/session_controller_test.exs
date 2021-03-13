@@ -33,7 +33,7 @@ defmodule DsaWeb.SessionControllerTest do
     conn = post conn, "/login", session: %{email: "test@test.de", password: "invalid"}
 
     assert get_flash(conn, :error) == gettext("Invalid Login Data.")
-    assert html_response(conn, 200) =~ "<form action=\"/login\""
+    assert redirected_to(conn) =~ "/login"
   end
 
   test "DELETE /logout/:user_id when authenticated", %{conn: conn} do

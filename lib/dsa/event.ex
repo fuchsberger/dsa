@@ -4,10 +4,10 @@ defmodule Dsa.Event do
   """
   import Ecto.Changeset, only: [get_field: 2, put_assoc: 3, put_change: 3]
   import Ecto.Query, warn: false
-  import DsaWeb.DsaHelpers
 
-  alias Dsa.{Data, Repo}
-  alias Dsa.Accounts.{Character, Group}
+  alias Dsa.Repo
+  alias Dsa.Accounts.Group
+  alias Dsa.Characters.Character
   alias Dsa.Event.{Setting, SkillRoll, TraitRoll, Log}
 
   require Logger

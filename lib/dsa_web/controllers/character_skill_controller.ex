@@ -4,68 +4,74 @@ defmodule DsaWeb.CharacterSkillController do
   """
   use DsaWeb, :controller
 
-  alias Dsa.Accounts
+  alias Dsa.{Characters, Event}
 
-  @doc """
-  Lists characters skills for talent and trait rolls.
-  """
-  def index(conn, %{"character_id" => id}) do
-    render conn, "character_skills.html",
-      character: Accounts.get_user_character!(conn.assigns.current_user, id),
-      changeset: Dsa.Event.change_skill_roll(%{}),
-      trait_changeset: Dsa.Event.change_trait_roll(%{})
+  action_fallback DsaWeb.ErrorController
+  plug :assign_character
+
+  def index(conn, _params, character) do
+    conn
+    |> assign(:character, character)
+    |> assign(:changeset, Event.change_skill_roll(%{}))
+    |> assign(:trait_changeset, Event.change_trait_roll(%{}))
+    |> render("index.html")
   end
 
-  def edit(conn, %{"character_id" => id}) do
-    character = Accounts.get_user_character!(conn.assigns.current_user, id)
-    changeset = Accounts.change_character(character)
-    render(conn, "character_edit_skills.html", character: character, changeset: changeset)
+  def edit(conn, _params, character) do
+    conn
+    |> assign(:character, character)
+    |> assign(:changeset, Characters.change(character))
+    |> render("character_edit_skills.html")
   end
 
-  def update(conn, %{"character_id" => id, "character" => character_params}) do
-    character = Accounts.get_user_character!(conn.assigns.current_user, id)
-
-    Logger.warn inspect character
-
-    case Accounts.update_character(character, character_params) do
+  def update(conn, %{"character" => params}, character) do
+    case Characters.update(character, params) do
       {:ok, character} ->
         conn
         |> put_flash(:info, "Character updated successfully.")
         |> redirect(to: Routes.character_skill_path(conn, :index, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
-        render(conn, "character_edit_skills.html", character: character, changeset: changeset)
+        conn
+        |> assign(:character, character)
+        |> assign(:changeset, changeset)
+        |> render("character_edit_skills.html")
     end
   end
 
-  def add_all(conn, %{"character_id" => id}) do
-    character = Accounts.get_user_character!(conn.assigns.current_user, id)
-
-    case Accounts.add_skills(character) do
+  def add_all(conn, _params, character) do
+    case Characters.add_skills(character) do
       {:ok, character} ->
         conn
         |> put_flash(:info, gettext("Skills updated successfully."))
         |> redirect(to: Routes.character_skill_path(conn, :edit_skills, character))
 
       {:error, changeset} ->
-        Logger.warn inspect changeset
-        render(conn, "character_edit_skills.html", character: character, changeset: changeset)
+        conn
+        |> assign(:character, character)
+        |> assign(:changeset, changeset)
+        |> render("character_edit_skills.html")
     end
   end
 
-  def remove_all(conn, %{"character_id" => id}) do
-    character = Accounts.get_user_character!(conn.assigns.current_user, id)
-
-    case Accounts.remove_skills(character) do
+  def remove_all(conn, _params, character) do
+    case Characters.remove_skills(character) do
       {:ok, character} ->
         conn
         |> put_flash(:info, gettext("Skills updated successfully."))
         |> redirect(to: Routes.character_skill_path(conn, :edit_skills, character))
 
       {:error, changeset} ->
-        Logger.warn inspect changeset
-        render(conn, "character_edit_skills.html", character: character, changeset: changeset)
+        conn
+        |> assign(:character, character)
+        |> assign(:changeset, changeset)
+        |> render("character_edit_skills.html")
+    end
+  end
+
+  defp assign_character(conn, _opts) do
+    with {:ok, c} <- Characters.get!(conn.assigns.current_user, conn.params["character_id"]) do
+      assign(conn, :character, c)
     end
   end
 end

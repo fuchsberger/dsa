@@ -53,14 +53,12 @@ defmodule DsaWeb.DsaLive do
     |> assign(:show_log?, false)
     |> assign(:reset_user, nil)
     |> assign(:token, Map.get(params, "token"))
-    |> assign(:user, user)
-    |> assign(:visible_characters, Accounts.get_visible_characters())}
+    |> assign(:user, user)}
   end
 
   def handle_info(:update_user, socket) do
     {:noreply, socket
-    |> assign(:user, Accounts.get_user!(socket.assigns.user.id))
-    |> assign(:visible_characters, Accounts.get_visible_characters())}
+    |> assign(:user, Accounts.get_user!(socket.assigns.user.id))}
   end
 
   def handle_info({:log, entry}, socket) do
@@ -127,11 +125,5 @@ defmodule DsaWeb.DsaLive do
 
   def handle_event("toggle-menu", _params, socket) do
     {:noreply, assign(socket, :menu_open?, !socket.assigns.menu_open?)}
-  end
-
-  def handle_event("update_character", params, socket) do
-    Accounts.update_character!(socket.assigns.user.active_character, params)
-    broadcast(:update_user)
-    {:noreply, socket}
   end
 end

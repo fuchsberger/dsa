@@ -258,7 +258,7 @@ defmodule DsaWeb.CharacterLive do
   end
 
   def handle_event("change", %{"character" => params}, socket) do
-    case Accounts.update_character(socket.assigns.changeset.data, params) do
+    case Characters.update(socket.assigns.changeset.data, params) do
       {:ok, character} ->
         Logger.debug("Held verändert.")
         {:noreply, assign(socket, :changeset, Accounts.change_character(character))}

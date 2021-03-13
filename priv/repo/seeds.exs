@@ -8,7 +8,7 @@
 # {:ok, user} = Dsa.Accounts.register_user(%{username: "Username", password: "password", password_confirm: "password", email: "test@test.com"})
 
 # Make user an admin
-# Accounts.manage_user!(user, %{admin: true, confirmed: true, token: nil})
+# Dsa.Accounts.manage_user!(user, %{admin: true, confirmed: true, token: nil})
 
 # Create a group:
 # Dsa.Accounts.create_group(%{name: "group_name"})

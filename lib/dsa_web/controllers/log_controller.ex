@@ -6,11 +6,11 @@ defmodule DsaWeb.LogController do
 
   import DsaWeb.LogLive, only: [broadcast: 2]
 
-  alias Dsa.{Accounts, Event}
+  alias Dsa.{Accounts, Characters, Event}
 
   def action(conn, _) do
     character_id = conn.params["character_id"]
-    character = Accounts.get_user_character!(conn.assigns.current_user, character_id)
+    character = Characters.get!(conn.assigns.current_user, character_id)
     group = Accounts.get_user_group!(conn.assigns.current_user)
 
     args = [conn, conn.params, group, character]
