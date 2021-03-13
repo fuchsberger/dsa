@@ -2,12 +2,11 @@
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
 
-    <%= for category <- Dsa.Type.SkillCategory.list() do %>
-      <% [probe: _, pages: _, title: title, short: short] = header_assigns(category) %>
-      <%= link short, to: "##{category}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <%= for {title, %{short: short}} <- SkillCategory.list() do %>
+      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
-    <%= if @current_user.admin do %>
+    <%= if @current_user && @current_user.admin do %>
       <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button" %>
     <% end %>
   </div>
@@ -15,10 +14,10 @@
 
 <table class="table text-center">
   <tbody>
-    <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "skill_header_row.html",
-        Keyword.put(header_assigns(category), :admin, @current_user.admin) %>
-      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
+    <%= for {c, category} <- SkillCategory.list() do  %>
+      <%= render DsaWeb.SkillView, "skill_header_row.html", category: category,
+        admin: @current_user && @current_user.admin %>
+      <%= render_many Enum.filter(@skills, & &1.category == c), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
     <% end %>
   </tbody>
 </table>

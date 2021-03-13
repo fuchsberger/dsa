@@ -6,9 +6,6 @@ defmodule DsaWeb.DsaHelpers do
 
   import DsaWeb.Gettext
 
-  alias Dsa.Accounts.Character
-  alias Dsa.Type.Probe
-
   @traits ~w(mu kl in ch ff ge ko kk)a
 
   def trait_short(trait) when is_atom(trait) do
@@ -112,6 +109,8 @@ defmodule DsaWeb.DsaHelpers do
       true -> 1
     end
   end
+
+
 
   def category_name(category) do
     case category do

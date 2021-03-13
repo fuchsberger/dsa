@@ -4,8 +4,8 @@
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Skills" %></h2>
 
-    <%= for {title, short} <- categories() do %>
-      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <%= for %{short: short, id: id} <- SkillCategory.list() do %>
+      <%= link short, to: "##{id}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
     <%= submit gettext("Save Skills"), class: "button" %>

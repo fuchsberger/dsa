@@ -14,7 +14,7 @@
 
     <div class='col-span-3'>
       <%= label f, :category, gettext("Category"), class: "label" %>
-      <%= select f, :category, category_options(), class: "input" %>
+      <%= select f, :category, SkillCategory.options(), class: "input" %>
       <%= error_tag f, :category %>
     </div>
 

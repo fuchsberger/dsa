@@ -30,6 +30,9 @@ defmodule DsaWeb.Router do
 
     resources "/character", CharacterController, only: [:show]
 
+    # Public Data Routes
+    resources "/skills", SkillController, only: [:index]
+
     # user registration
     resources "/user", UserController, only: [:new, :create]
     get "/user/confirm/:token", UserController, :confirm
@@ -45,16 +48,15 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
 
-    resources "/skills", SkillController, only: [:index]
-
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
     delete "/group/leave", GroupController, :leave
 
     resources "/characters", CharacterController, except: [:show] do
-      # get "skills", SkillController, :index
-      resources "/skills", SkillController, only: [:index]
+
+      resources "/skills", CharacterSkillController, only: [:index]
+
       get "/skills/edit", SkillController, :edit_skills
 
       put "/skills/update", SkillController, :update

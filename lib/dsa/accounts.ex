@@ -24,13 +24,9 @@ defmodule Dsa.Accounts do
     MWeapon,
     Prayer,
     Script,
-    Skill,
-    # Spell,
     SpellTrick,
     StaffSpell
   }
-
-  alias Dsa.Event.{Log, SkillRoll}
 
   @character_preloads [
     :user,
@@ -50,10 +46,6 @@ defmodule Dsa.Accounts do
     scripts: from(s in Script, order_by: s.script_id),
     spell_tricks: from(s in SpellTrick, order_by: s.id),
     staff_spells: from(s in StaffSpell, order_by: s.id)
-  ]
-
-  @group_preloads [
-    logs: from(l in Log, preload: :character, order_by: {:desc, l.inserted_at})
   ]
 
   ##########################################################

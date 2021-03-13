@@ -24,26 +24,8 @@ defmodule DsaWeb.DsaLive do
 
       <% :roll -> %>
         <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
-        <%= live_component @socket, DsaWeb.TraitComponent,
-          id: :traits,
-          character: @user.active_character,
-          modifier: @modifier
-        %>
         <%= live_component @socket, DsaWeb.RollComponent,
           id: :roll,
-          character: @user.active_character,
-          modifier: @modifier
-        %>
-
-      <% :spells -> %>
-        <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
-        <%= live_component @socket, DsaWeb.TraitComponent,
-          id: :traits,
-          character: @user.active_character,
-          modifier: @modifier
-        %>
-        <%= live_component @socket, DsaWeb.SpellComponent,
-          id: :spells,
           character: @user.active_character,
           modifier: @modifier
         %>
