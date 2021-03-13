@@ -5,17 +5,31 @@ defmodule DsaWeb.SessionController do
 
   action_fallback DsaWeb.ErrorController
 
-  def new(conn, _) do
-    conn
-    |> put_layout("wide.html")
-    |> render("new.html")
+  @doc """
+  Redirects to index if user is authenticated, otherwise to login page
+  """
+  def index(conn, _) do
+    case conn.assigns.current_user do
+      nil -> redirect(conn, to: Routes.session_path(conn, :new))
+      _user -> redirect(conn, to: Routes.character_path(conn, :index))
+    end
   end
 
-  def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
+  def new(conn, _) do
+    if conn.assigns.current_user do
+      redirect(conn, to: Routes.character_path(conn, :index))
+    else
+      conn
+      |> put_layout("flipped.html")
+      |> render("new.html")
+    end
+  end
+
+  def create(conn, %{"session" => %{"email" => email, "password" => pass, "redirect" => path}}) do
     with {:ok, user} <- Dsa.Accounts.authenticate_by_email_and_password(email, pass) do
       conn
       |> DsaWeb.Auth.login(user)
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> redirect(to: path)
     end
   end
 

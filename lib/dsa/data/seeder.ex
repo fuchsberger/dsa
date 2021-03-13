@@ -1,12 +1,12 @@
-defmodule Dsa.Repo.Seeder do
+defmodule Dsa.Data.Seeder do
   @moduledoc """
   This file allows to update all static DSA Data.
   """
-  alias Dsa.{Accounts, Data}
+  alias Dsa.Data
 
   require Logger
 
-  @data_path "priv/repo/seeds/data"
+  @data_path "priv/repo/data"
 
   def seed do
     seed(:skills)
@@ -42,23 +42,5 @@ defmodule Dsa.Repo.Seeder do
     filename
     |> File.read!()
     |> Jason.decode!()
-  end
-
-  @doc """
-  Creates a confirmed user with admin privileges.
-  Execute this function via an interactive shell (iex).
-  Example: Dsa.Repo.Seeder("test@test.de", "Passwort123", "Username")
-  """
-  def create_admin(email, password, username \\ "Admin") do
-    params = %{email: email, username: username, password: password, password_confirm: password}
-
-    case Accounts.register_user(params) do
-      {:ok, user} ->
-        Accounts.manage_user!(user, %{admin: true, confirmed: true, token: nil})
-        Logger.info("Created admin user: #{inspect (user)}")
-
-      {:error, changeset} ->
-        Logger.error("Error creating admin user: #{inspect(changeset.errors)}")
-    end
   end
 end

@@ -1,14 +1,9 @@
 defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
-  alias Dsa.Data.Spell
   alias Dsa.Event.{Log, TraitRoll}
-  alias Dsa.Data.Skill
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
-
-  defp spell_name(entry), do: Spell.name(entry)
-  defp skill_name(entry), do: Skill.name(entry)
 
   defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
 
@@ -48,21 +43,21 @@ defmodule DsaWeb.LogView do
     end
   end
 
-  defp result_tag_trial(quality, critical?) do
-    case {quality, critical?} do
-      {0, true} -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
-      {_, true} -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
-      {0, false} -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
-      {q, false} -> content_tag :span, "✓ #{q}", class: "#{@base} bg-green-50 text-green-500"
-    end
-  end
-
   defp result_tag(:talent, value) do
     case value do
       10 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
       -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
       -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       x -> content_tag :span, "✓ #{x}", class: "#{@base} bg-green-50 text-green-500"
+    end
+  end
+
+  defp result_tag_trial(quality, critical?) do
+    case {quality, critical?} do
+      {0, true} -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
+      {_, true} -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
+      {0, false} -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
+      {q, false} -> content_tag :span, "✓ #{q}", class: "#{@base} bg-green-50 text-green-500"
     end
   end
 

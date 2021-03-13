@@ -1,7 +1,7 @@
 defmodule Dsa.Repo.Migrations.Data do
   use Ecto.Migration
 
-  alias Dsa.Repo.Seeder
+  alias Dsa.Data.Seeder
 
   def up do
     create table(:skills) do

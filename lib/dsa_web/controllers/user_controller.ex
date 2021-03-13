@@ -13,7 +13,7 @@ defmodule DsaWeb.UserController do
     changeset = Accounts.change_registration(%User{}, %{})
 
     conn
-    |> put_layout("wide.html")
+    |> put_layout("flipped.html")
     |> render("new.html", changeset: changeset)
   end
 
@@ -48,7 +48,7 @@ defmodule DsaWeb.UserController do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
-        |> put_layout("wide.html")
+        |> put_layout("flipped.html")
         |> render("new.html", changeset: changeset)
     end
   end
@@ -85,7 +85,7 @@ defmodule DsaWeb.UserController do
 
   def reset(conn, _params, _current_user) do
     conn
-    |> put_layout("wide.html")
+    |> put_layout("flipped.html")
     |> render("reset.html", changeset: Accounts.change_email(%{}))
   end
 
@@ -95,7 +95,7 @@ defmodule DsaWeb.UserController do
         Pbkdf2.no_user_verify()
         conn
         |> put_flash(:error, gettext("The given email is not registered."))
-        |> put_layout("wide.html")
+        |> put_layout("flipped.html")
         |> render("reset.html", changeset: Accounts.change_email(params))
 
       user ->
@@ -106,7 +106,7 @@ defmodule DsaWeb.UserController do
 
         conn
         |> put_flash(:info, gettext("A link to reset your password was sent to the email."))
-        |> put_layout("wide.html")
+        |> put_layout("flipped.html")
         |> render("reset.html", changeset: Accounts.change_email(params))
     end
   end
@@ -122,7 +122,7 @@ defmodule DsaWeb.UserController do
         changeset = Accounts.change_password(user, %{})
 
         conn
-        |> put_layout("wide.html")
+        |> put_layout("flipped.html")
         |> render("reset_password.html", changeset: changeset, token: token)
     end
   end
@@ -147,7 +147,7 @@ defmodule DsaWeb.UserController do
 
           {:error, %Ecto.Changeset{} = changeset} ->
             conn
-            |> put_layout("wide.html")
+            |> put_layout("flipped.html")
             |> render("reset_password.html", changeset: changeset, token: token)
         end
     end

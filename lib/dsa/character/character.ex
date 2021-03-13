@@ -1,0 +1,64 @@
+defmodule Dsa.Characters.Character do
+  use Ecto.Schema
+
+  import Ecto.Changeset
+
+  schema "characters" do
+    field :name, :string
+    field :profession, :string
+    field :visible, :boolean, default: false
+
+    field :mu, :integer, default: 8
+    field :kl, :integer, default: 8
+    field :in, :integer, default: 8
+    field :ch, :integer, default: 8
+    field :ff, :integer, default: 8
+    field :ge, :integer, default: 8
+    field :ko, :integer, default: 8
+    field :kk, :integer, default: 8
+
+    field :le_max, :integer, default: 0
+    field :ae_max, :integer, default: 0
+    field :ke_max, :integer, default: 0
+    field :le, :integer
+    field :ke, :integer
+    field :ae, :integer
+    field :sk, :integer
+    field :zk, :integer
+    field :sp, :integer
+
+    belongs_to :user, Dsa.Accounts.User
+
+    has_many :character_skills, Dsa.Characters.CharacterSkill, on_replace: :delete
+
+    timestamps()
+  end
+
+  @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk sk zk sp)a
+  @optional ~w(profession visible le ae ke sk zk sp)a
+
+  def changeset(character, attrs) do
+    character
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
+    |> validate_length(:name, min: 2, max: 25)
+    |> validate_length(:profession, min: 2, max: 80)
+    |> validate_number(:mu, greater_than_or_equal_to: 0)
+    |> validate_number(:kl, greater_than_or_equal_to: 0)
+    |> validate_number(:in, greater_than_or_equal_to: 0)
+    |> validate_number(:ch, greater_than_or_equal_to: 0)
+    |> validate_number(:ff, greater_than_or_equal_to: 0)
+    |> validate_number(:ge, greater_than_or_equal_to: 0)
+    |> validate_number(:ko, greater_than_or_equal_to: 0)
+    |> validate_number(:kk, greater_than_or_equal_to: 0)
+    |> validate_number(:le_max, greater_than_or_equal_to: 0, less_than: 1000)
+    |> validate_number(:ae_max, greater_than_or_equal_to: 0, less_than: 1000)
+    |> validate_number(:ke_max, greater_than_or_equal_to: 0, less_than: 1000)
+    |> validate_number(:le, greater_than_or_equal_to: -50, less_than: 1000)
+    |> validate_number(:ae, greater_than_or_equal_to: -50, less_than: 1000)
+    |> validate_number(:ke, greater_than_or_equal_to: -50, less_than: 1000)
+    |> validate_number(:sk, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
+    |> validate_number(:zk, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
+    |> validate_number(:sp, greater_than_or_equal_to: 0, less_than_or_equal_to: 6)
+  end
+end

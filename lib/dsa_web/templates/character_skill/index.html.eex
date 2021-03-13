@@ -13,9 +13,8 @@
   <% end %>
 </div>
 
-
 <div class='sticky top-0 bg-gray-100 pt-3'>
-  <div id='modifier-component' class='grid grid-cols-4 md:grid-cols-8 pb-1 gap-x-4 gap-y-1 font-bold text-sm text-center leading-6 pb-2'>
+  <div id='modifier-component' class='grid grid-cols-4 md:grid-cols-8 gap-x-4 gap-y-1 font-bold text-sm text-center leading-6 pb-2'>
     <h3 class='leading-6'><%= gettext "Modifier" %></h3>
 
     <div class="col-span-3 grid grid-cols-6">
@@ -37,7 +36,7 @@
   </div>
 
   <div class='flex flex-col-3 lg:flex-col-6 justify-around pb-2'>
-    <%= for {title, short} <- categories() do %>
+    <%= for {title, %{short: short}} <- SkillCategory.list() do %>
       <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
@@ -47,9 +46,10 @@
 
 <table class="table text-center">
   <tbody class="bg-white divide-y divide-gray-200">
-    <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "roll_header.html", Keyword.put(header_assigns(category), :group_id, @current_user.group_id) %>
-      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == category), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
+    <%= for {title, category} <- SkillCategory.list() do  %>
+      <%= render DsaWeb.SkillView, "roll_header.html",
+        category: category, group_id: @current_user.group_id %>
+      <%= render_many Enum.filter(@character.character_skills, & &1.skill.category == title), DsaWeb.SkillView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
     <% end %>
   </tbody>
 </table>

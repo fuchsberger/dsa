@@ -4,7 +4,7 @@ defmodule DsaWeb.CombatComponent do
   """
   use DsaWeb, :live_component
 
-  alias Dsa.Accounts
+  alias Dsa.Characters
 
   def render(assigns) do
     ~L"""
@@ -81,7 +81,7 @@ defmodule DsaWeb.CombatComponent do
     character_id = params |> Map.get("character_id") |> String.to_integer()
     character = Enum.find(socket.assigns.visible_characters, & &1.id == character_id)
 
-    case Accounts.update_character(character, params) do
+    case Characters.update(character, params) do
       {:ok, _character} ->
         broadcast :update_user
         {:noreply, socket}

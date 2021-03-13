@@ -1,0 +1,13 @@
+<div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
+  <%# In left column show about page %>
+  <div class='hidden lg:block px-2 lg:pr-1 max-h-full overflow-y-auto'>
+    <%= render DsaWeb.LayoutView, "about.html"%>
+  </div>
+  <%# In right column show variable page content %>
+  <div class='block px-2 lg:pl-1 max-h-full overflow-y-scroll'>
+    <%= unless %{} == get_flash(@conn) do %>
+      <%= render "flash.html", conn: @conn %>
+    <% end %>
+    <%= @inner_content %>
+  </div>
+</div>

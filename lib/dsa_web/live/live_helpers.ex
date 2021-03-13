@@ -36,11 +36,6 @@ defmodule DsaWeb.LiveHelpers do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def edit(type, socket) do
-    changeset = Accounts.change_character_assoc(socket.assigns.character, %{}, type)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
-
   def cancel(socket), do: {:noreply, assign(socket, :changeset, nil)}
 
   def remove(type, %{"id" => id}, socket) do
@@ -53,26 +48,6 @@ defmodule DsaWeb.LiveHelpers do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def validate(type, %{"character" => params}, socket) do
-    changeset = Accounts.change_character_assoc(socket.assigns.character, params, type)
-    {:noreply, assign(socket, :changeset, changeset)}
-  end
-
-  # def save(type, %{"character" => params}, socket) do
-  #   params = if Map.has_key?(params, Atom.to_string(type)), do: params, else: nil
-
-  #   case Accounts.update_character_assocs(socket.assigns.character, params, type) do
-  #     {:ok, character} ->
-  #       Logger.debug("#{String.capitalize(Atom.to_string(type))} updated.")
-  #       send self(), {:updated_character, Accounts.preload(character)}
-  #       {:noreply, assign(socket, changeset: nil)}
-
-  #     {:error, changeset} ->
-  #       Logger.debug("#{String.capitalize(Atom.to_string(type))} error: #{inspect(changeset)}")
-  #       {:noreply, assign(socket, changeset: changeset)}
-  #   end
-  # end
-
   def id_field(type) do
     type
     |> Atom.to_string()
@@ -80,17 +55,4 @@ defmodule DsaWeb.LiveHelpers do
     |> Kernel.<>("_id")
     |> String.to_atom()
   end
-
-  # def buttons(target) do
-  #   ~E"""
-  #     <div class="buttons are-small is-centered">
-  #       <button type='submit' class='button is-info py-0 mb-1 h-auto'>
-  #         <span class='icon mr-1'><i class='icon-ok'></i></span> speichern
-  #       </button>
-  #       <button class='button is-light py-0 mb-1 h-auto' phx-click='cancel' phx-target='<%= target %>' type='button'>
-  #         <span class='icon mr-1'><i class='icon-cancel'></i></span> abbrechen
-  #       </button>
-  #     </div>
-  #   """
-  # end
 end

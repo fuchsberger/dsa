@@ -1,24 +1,20 @@
-<div class='sticky top-0 bg-gray-100 py-3'>
-  <div class='flex justify-between pb-1'>
-    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Skills" %></h2>
+<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around' data-turbo='false'>
+  <%= if admin?(@conn) do %>
+    <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button gray leading-6 h-6 mt-1" %>
+  <% else %>
+    <h2 class='leading-8 text-xl font-bold'><%= gettext "Skills" %></h2>
+  <% end %>
 
-    <%= for category <- Dsa.Type.SkillCategory.list() do %>
-      <% [probe: _, pages: _, title: title, short: short] = header_assigns(category) %>
-      <%= link short, to: "##{category}", data_turbo: false, class: "hidden lg:block leading-8" %>
-    <% end %>
-
-    <%= if @current_user.admin do %>
-      <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button" %>
-    <% end %>
-  </div>
+  <%= for %{short: short, id: id} <- SkillCategory.list() do %>
+    <%= link short, to: "##{id}", data_turbo: false, class: "/skills/new\">" %>
+  <% end %>
 </div>
 
-<table class="table text-center">
+<table id='skill-table' class="table text-center mb-3">
   <tbody>
-    <%= for category <- Dsa.Type.SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "skill_header_row.html",
-        Keyword.put(header_assigns(category), :admin, @current_user.admin) %>
-      <%= render_many Enum.filter(@skills, & &1.category == category), DsaWeb.SkillView, "skill_row.html", as: :skill, conn: @conn, admin: @current_user.admin %>
+    <%= for category <- SkillCategory.list() do  %>
+      <%= render DsaWeb.SkillView, "header.html", category: category, admin: admin?(@conn) %>
+      <%= render_many Enum.filter(@skills, & &1.category == category.id), DsaWeb.SkillView, "row.html", as: :skill, conn: @conn %>
     <% end %>
   </tbody>
 </table>

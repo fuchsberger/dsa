@@ -34,11 +34,20 @@ defmodule DsaWeb.ErrorController do
   def call(conn, {:error, :invalid_credentials}) do
     conn
     |> put_flash(:error, gettext("Invalid Login Data."))
-    # |> redirect(to: Routes.session_path(conn, :new))
+    |> put_layout("flipped.html")
     |> render("new.html")
   end
 
+  def call(conn, {:error, Ecto.NoResultsError}) do
+    conn
+    |> put_status(:not_found)
+    |> render(:"404")
+  end
 
-
-
+  def call(conn, error) do
+    Logger.error inspect error
+    conn
+    |> put_status(:unknown_error)
+    |> render(:"500")
+  end
 end

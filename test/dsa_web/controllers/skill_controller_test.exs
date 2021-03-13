@@ -1,5 +1,5 @@
-# defmodule DsaWeb.SkillControllerTest do
-#   use DsaWeb.ConnCase
+defmodule DsaWeb.SkillControllerTest do
+  use DsaWeb.ConnCase
 
 #   alias Dsa.Data
 
@@ -12,12 +12,20 @@
 #     skill
 #   end
 
-#   describe "index" do
-#     test "lists all skills", %{conn: conn} do
-#       conn = get(conn, Routes.skill_path(conn, :index))
-#       assert html_response(conn, 200) =~ "Listing Skills"
-#     end
-#   end
+  describe "GET /skills" do
+    test "lists all skills", %{conn: conn} do
+      conn = get conn, "/skills"
+      assert html_response(conn, 200) =~ "<h2 class='leading-8 text-xl font-bold'>Talente</h2>"
+    end
+
+    test "shows new skill button for admins", %{conn: conn} do
+      user = user_fixture(%{admin: true})
+      conn = assign conn, :current_user, user
+      conn = get conn, "/skills"
+
+      assert html_response(conn, 200) =~ "/skills/new"
+    end
+  end
 
 #   describe "new skill" do
 #     test "renders form", %{conn: conn} do
@@ -85,4 +93,4 @@
 #     skill = fixture(:skill)
 #     %{skill: skill}
 #   end
-# end
+end

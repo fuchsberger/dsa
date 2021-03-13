@@ -11,6 +11,8 @@ defmodule DsaWeb.ViewHelpers do
     String.to_atom("#{action}_#{struct_name(changeset.data)}")
   end
 
+  def admin?(conn), do: conn.assigns.current_user && conn.assigns.current_user.admin
+
   def icon(socket, name, class \\ "inline-block w-5 h-5") do
     content_tag :svg, class: class do
       tag(:use, href: Routes.static_path(socket, "/images/icons.svg#" <> name))
