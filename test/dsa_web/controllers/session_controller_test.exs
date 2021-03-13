@@ -16,6 +16,11 @@ defmodule DsaWeb.SessionControllerTest do
     assert redirected_to(conn) =~ "/characters"
   end
 
+  test "GET /login", %{conn: conn} do
+    conn = get conn, "/login"
+    assert html_response(conn, 200) =~ "<form action=\"/login\""
+  end
+
   test "POST /login with valid attributes", %{conn: conn} do
     user_fixture(@valid_attributes)
     conn = post conn, "/login", session: @valid_attributes
@@ -33,7 +38,7 @@ defmodule DsaWeb.SessionControllerTest do
     conn = post conn, "/login", session: %{email: "test@test.de", password: "invalid"}
 
     assert get_flash(conn, :error) == gettext("Invalid Login Data.")
-    assert redirected_to(conn) =~ "/login"
+    assert html_response(conn, 200) =~ "<form action=\"/login\""
   end
 
   test "DELETE /logout/:user_id when authenticated", %{conn: conn} do
