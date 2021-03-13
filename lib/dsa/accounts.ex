@@ -19,18 +19,27 @@ defmodule Dsa.Accounts do
 
   def get_user!(id), do: Repo.get!(User, id)
 
-  @doc """
-  Always assigned to conn, and thus available through entire app if user is logged in.
-  Also preloads character names and ids for menu.
-  """
   def get_user(id) do
-    character_query = from(c in Character, select: {c.id, c.name})
-    Repo.get(from(u in User, preload: [ characters: ^character_query]), id)
+    User
+    |> preload_characters()
+    |> Repo.get(id)
   end
 
-  def get_user_by(params), do: Repo.get_by(user_query(), params)
+  def get_user_by(params) do
+    User
+    |> preload_characters()
+    |> Repo.get_by(params)
+  end
 
-  defp user_query, do: from(u in User, preload: [:active_character, :characters])
+  def preload_characters(%User{} = user) do
+    Repo.preload user, [characters: character_query()]
+  end
+
+  def preload_characters(query) do
+    preload query, [characters: ^character_query()]
+  end
+
+  defp character_query, do: from(c in Character, select: {c.id, c.name}, order_by: c.name)
 
   def authenticate_by_email_and_password(email, given_pass) do
     user = get_user_by(email: email)
@@ -55,10 +64,6 @@ defmodule Dsa.Accounts do
     user
     |> User.changeset(%{group_id: nil})
     |> Repo.update()
-  end
-
-  def preload_characters(%User{} = user) do
-    Repo.preload(user, characters: from(c in Character, order_by: c.name))
   end
 
   ##########################################################

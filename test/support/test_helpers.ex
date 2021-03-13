@@ -14,22 +14,25 @@ defmodule Dsa.TestHelpers do
   end
 
   def user_fixture(attrs \\ %{}) do
+    id = System.unique_integer([:positive])
+
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        email: "test@test.abc",
-        username: "user#{System.unique_integer([:positive])}",
+        email: attrs[:email] || "test#{id}@test.abc",
+        username: attrs[:username] || "user#{id}",
         password: attrs[:password] || "Supersecret123",
         password_confirm: attrs[:password_confirm] || attrs[:password] || "Supersecret123"
       })
       |> Accounts.register_user()
 
-    # use a confirmed user for test cases by default
-    confirmed = Map.get(attrs, :confirmed, true)
+    user = Accounts.preload_characters(user)
 
-    case confirmed do
-      true -> Accounts.manage_user!(user, %{confirmed: true, token: nil})
-      false -> user
+    case {Map.get(attrs, :confirmed, true), Map.get(attrs, :admin, false)} do
+      {true, true} -> Accounts.manage_user!(user, %{confirmed: true, token: nil, admin: true})
+      {true, false} -> Accounts.manage_user!(user, %{confirmed: true, token: nil})
+      {false, true} -> Accounts.manage_user!(user, %{admin: true})
+      _ -> user
     end
   end
 

@@ -1,4 +1,4 @@
-<tr class='bg-gray-200'>
+<tr id='<%= @category.id %>' class='bg-gray-200'>
   <th scope="col" class='text-left'><%= @category.title %> (<%= @category.pages %>)</th>
   <th scope="col"><%= gettext "BE" %></th>
   <th scope="col"><%= @category.probe %></th>

@@ -58,7 +58,7 @@
 
         <div class="hidden lg:inline-block menu-item dropdown group">
           <button class='text-sm flex items-center min-w-32 focus:outline-none'>
-            <span class="pr-1 font-semibold flex-1"><%= active_character_name(@current_user) %></span>
+            <span class="pr-1 font-semibold flex-1"><%= @current_user.active_character_id && active_character_name(@current_user) %></span>
             <%= icon @conn, "chevron-down-solid", "fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out" %>
           </button>
           <div
