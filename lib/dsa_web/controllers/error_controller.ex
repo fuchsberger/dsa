@@ -34,11 +34,6 @@ defmodule DsaWeb.ErrorController do
   def call(conn, {:error, :invalid_credentials}) do
     conn
     |> put_flash(:error, gettext("Invalid Login Data."))
-    # |> redirect(to: Routes.session_path(conn, :new))
-    |> render("new.html")
+    |> redirect(to: Routes.session_path(conn, :new))
   end
-
-
-
-
 end

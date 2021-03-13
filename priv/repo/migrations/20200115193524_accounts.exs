@@ -24,14 +24,10 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
     create index(:groups, :master_id)
 
     create table(:characters) do
-
-      # general
       add :name, :string
       add :profession, :string
       add :visible, :boolean, default: false, null: false
 
-
-      # base values
       add :mu, :smallint
       add :kl, :smallint
       add :in, :smallint
@@ -41,25 +37,15 @@ defmodule Dsa.Repo.Migrations.CreateAccounts do
       add :ko, :smallint
       add :kk, :smallint
 
-      # combat values
       add :le_max, :smallint
       add :ae_max, :smallint
       add :ke_max, :smallint
-      add :at, :smallint
-      add :pa, :smallint
-      add :aw, :smallint
-      add :rs, :smallint
-      add :be, :smallint
       add :le, :smallint
       add :ke, :smallint
       add :ae, :smallint
       add :sk, :smallint
       add :zk, :smallint
-      add :ini, :smallint
-      add :gs, :smallint
       add :sp, :smallint
-      add :tp_dice, :smallint
-      add :tp_bonus, :smallint
 
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
