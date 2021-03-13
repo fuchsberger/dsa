@@ -13,7 +13,7 @@
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div class="relative flex items-center justify-between h-16">
           <%# Profilbild / Logo %>
-          <%= link class: "flex-shrink-0 flex items-center text-gray-200 hover:text-white", to: Routes.character_path(@conn, :home) do %>
+          <%= link class: "flex-shrink-0 flex items-center text-gray-200 hover:text-white", to: Routes.session_path(@conn, :index) do %>
             <%= icon @conn, "eye", "block w-8 h-8" %>
             <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl'><%= gettext("DSA Tool") %></span>
           <% end %>
@@ -26,7 +26,7 @@
       <h2 class='font-sans font-medium text-2xl mb-3'><%= gettext "Forbidden" %></h2>
       <p>
         <%= get_flash(@conn, :error) || gettext "You do not have access rights to the requested content." %><br>
-        <%= link gettext("back to Home"), to: Routes.character_path(@conn, :home) %>
+        <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
       </p>
     </div>
   </body>

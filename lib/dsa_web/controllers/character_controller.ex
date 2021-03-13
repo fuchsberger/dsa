@@ -5,7 +5,7 @@ defmodule DsaWeb.CharacterController do
   use DsaWeb, :controller
 
   alias Dsa.Accounts
-  alias Dsa.Accounts.{Character, User}
+  alias Dsa.Accounts.Character
 
   plug :assign_character when action in [:edit, :update, :delete, :activate, :toggle_visible]
 
@@ -13,13 +13,6 @@ defmodule DsaWeb.CharacterController do
     args = [conn, conn.params, conn.assigns.current_user]
     apply(__MODULE__, action_name(conn), args)
   end
-
-  @doc """
-  Redirects to index if user is authenticated, otherwise to login page
-  """
-  def home(conn, _, nil), do: redirect(conn, to: Routes.session_path(conn, :new))
-
-  def home(conn, _, %User{}), do: redirect(conn, to: Routes.character_path(conn, :index))
 
   @doc """
   Lists all characters that belong to current user (dashboard).
@@ -41,7 +34,7 @@ defmodule DsaWeb.CharacterController do
       nil ->
         conn
         |> put_flash(:info, gettext("Character does not exist."))
-        |> redirect(to: Routes.character_path(conn, :home))
+        |> redirect(to: Routes.session_path(conn, :index))
 
       character ->
         user_character_ids = Enum.map(current_user.characters, fn {id, _name} -> id end)
@@ -52,7 +45,7 @@ defmodule DsaWeb.CharacterController do
         else
           conn
           |> put_flash(:info, gettext("This character is hidden by the user."))
-          |> redirect(to: Routes.character_path(conn, :home))
+          |> redirect(to: Routes.session_path(conn, :index))
         end
     end
   end
@@ -75,13 +68,13 @@ defmodule DsaWeb.CharacterController do
     end
   end
 
-  def edit(conn, %{"id" => _id}, current_user) do
+  def edit(conn, %{"id" => _id}, _current_user) do
     conn
     |> assign(:changeset, Accounts.change_character(conn.assigns.character))
     |> render("edit.html")
   end
 
-  def update(conn, %{"id" => _id, "character" => params}, current_user) do
+  def update(conn, %{"id" => _id, "character" => params}, _current_user) do
     case Accounts.update_character(conn.assigns.character, params) do
       {:ok, character} ->
         conn
@@ -95,7 +88,7 @@ defmodule DsaWeb.CharacterController do
     end
   end
 
-  def delete(conn, %{"id" => _id}, current_user) do
+  def delete(conn, %{"id" => _id}, _current_user) do
     {:ok, _character} = Accounts.delete_character(conn.assigns.character)
 
     conn
@@ -117,7 +110,7 @@ defmodule DsaWeb.CharacterController do
     end
   end
 
-  def toggle_visible(conn, %{"id" => _id}, current_user) do
+  def toggle_visible(conn, %{"id" => _id}, _current_user) do
     params = %{visible: !conn.assigns.character.visible}
     case Accounts.update_character(conn.assigns.character, params) do
       {:ok, _character} ->

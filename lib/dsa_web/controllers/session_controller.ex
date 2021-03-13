@@ -5,6 +5,16 @@ defmodule DsaWeb.SessionController do
 
   action_fallback DsaWeb.ErrorController
 
+  @doc """
+  Redirects to index if user is authenticated, otherwise to login page
+  """
+  def index(conn, _) do
+    case conn.assigns.current_user do
+      nil -> redirect(conn, to: Routes.session_path(conn, :new))
+      _user -> redirect(conn, to: Routes.character_path(conn, :index))
+    end
+  end
+
   def new(conn, _) do
     conn
     |> put_layout("flipped.html")
