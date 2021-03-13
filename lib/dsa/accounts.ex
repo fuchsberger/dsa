@@ -64,12 +64,6 @@ defmodule Dsa.Accounts do
   ##########################################################
   # Character related APIs
 
-  @doc """
-  Gets any character; used for character overview page (public).
-  TODO: May want to preload more info
-  """
-  def get_character!(id), do: Repo.get!(Character, id)
-
   def get_user_group!(%User{} = user) do
     user
     |> Repo.preload(:group)
@@ -126,11 +120,6 @@ defmodule Dsa.Accounts do
   end
 
   def delete_user(%User{} = user), do: Repo.delete(user)
-
-  def get_visible_characters do
-    from(c in Character, where: c.visible == true, order_by: [desc: c.ini, asc: c.name])
-    |> Repo.all()
-  end
 
   ##########################################################
   # Group related APIs

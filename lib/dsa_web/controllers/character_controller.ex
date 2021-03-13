@@ -30,7 +30,7 @@ defmodule DsaWeb.CharacterController do
   necessarily want to share NPC's stats with the players or the public.
   """
   def show(conn, %{"id" => id}, current_user) do
-    case Accounts.get_character!(id) do
+    case Characters.get!(id) do
       nil ->
         conn
         |> put_flash(:info, gettext("Character does not exist."))
