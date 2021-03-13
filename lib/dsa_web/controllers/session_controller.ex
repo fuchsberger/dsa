@@ -16,16 +16,20 @@ defmodule DsaWeb.SessionController do
   end
 
   def new(conn, _) do
-    conn
-    |> put_layout("flipped.html")
-    |> render("new.html")
+    if conn.assigns.current_user do
+      redirect(conn, to: Routes.character_path(conn, :index))
+    else
+      conn
+      |> put_layout("flipped.html")
+      |> render("new.html")
+    end
   end
 
-  def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
+  def create(conn, %{"session" => %{"email" => email, "password" => pass, "redirect" => path}}) do
     with {:ok, user} <- Dsa.Accounts.authenticate_by_email_and_password(email, pass) do
       conn
       |> DsaWeb.Auth.login(user)
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> redirect(to: path)
     end
   end
 

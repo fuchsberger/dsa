@@ -1,9 +1,9 @@
 <tr class='bg-gray-200'>
-  <th scope="col" class='text-left'><%= @title %></th>
+  <th scope="col" class='text-left'><%= @category.title %> (<%= @category.pages %>)</th>
   <th scope="col"><%= gettext "BE" %></th>
-  <th scope="col"><%= @probe %></th>
+  <th scope="col"><%= @category.probe %></th>
   <th scope="col"><%= gettext "SF" %></th>
   <%= if @admin do %>
-    <th scope="col"><%= @pages %></th>
+    <th scope="col"></th>
   <% end %>
 </tr>

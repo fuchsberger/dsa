@@ -3,7 +3,7 @@
   <td><%= be(@skill.be) %></td>
   <td><%= probe(@skill.probe) %></td>
   <td><%= @skill.sf %></td>
-  <%= if @admin do %>
+  <%= if admin?(@conn) do %>
     <td>
       <%= link icon(@conn, "pencil-solid"), to: Routes.skill_path(@conn, :edit, @skill) %>
       <%= link icon(@conn, "x"),

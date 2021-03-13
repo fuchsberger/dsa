@@ -6,6 +6,8 @@
     <h2 class="text-center text-3xl font-extrabold text-gray-900"><%= gettext("Enter Aventuria") %></h2>
 
     <%= form_for @conn, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+      <%= hidden_input f, :redirect, value: current_path(@conn) %>
+
       <div class='mt-8 space-y-4'>
         <p class="mt-2 text-center text-sm text-gray-600">
           <%= live_patch gettext("Not yet registered?"), to: Routes.user_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
