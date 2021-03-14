@@ -1,11 +1,6 @@
 defmodule DsaWeb.CharacterControllerTest do
   use DsaWeb.ConnCase
 
-  test "GET / redirects to login page if not authenticated", %{conn: conn} do
-    conn = get conn, "/"
-    assert redirected_to(conn) =~ "/login"
-  end
-
   test "requires user authentication on all actions", %{conn: conn} do
     Enum.each([
       get(conn, Routes.character_path(conn, :index)),

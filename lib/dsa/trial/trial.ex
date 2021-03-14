@@ -3,7 +3,7 @@ defmodule Dsa.Trial do
   This module handles all logic regarding trialing
   """
 
-  alias Dsa.Accounts.Character
+  alias Dsa.Characters.Character
 
   def roll(maxnumber), do: roll(maxnumber, &:rand.uniform(&1))
 
@@ -140,9 +140,8 @@ defmodule Dsa.Trial do
     }
   end
 
-  @doc """
-  Given a character and a probe (Example: {:mu, :kl, :ch}), returns the characters traits for it
-  """
+  # Given a character and a probe, returns the characters traits for it.
+  # Example: {:mu, :kl, :ch} -> [12, 13, 13]
   defp get_character_trait_values(%Character{} = character, {t1, t2, t3}) do
     [Map.get(character, t1), Map.get(character, t2), Map.get(character, t3)]
   end

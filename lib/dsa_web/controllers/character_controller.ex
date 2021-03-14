@@ -4,7 +4,6 @@ defmodule DsaWeb.CharacterController do
   """
   use DsaWeb, :controller
 
-  alias Dsa.Accounts
   alias Dsa.Characters
 
   plug :assign_character when action in [:edit, :update, :delete, :activate, :toggle_visible]
