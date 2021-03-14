@@ -25,6 +25,7 @@ defmodule DsaWeb.ConnCase do
       import DsaWeb.ConnCase
       import Dsa.TestHelpers
       import DsaWeb.Gettext
+      import DsaWeb.Auth, only: [authenticate_user: 1]
 
       alias DsaWeb.Router.Helpers, as: Routes
 

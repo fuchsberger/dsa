@@ -17,10 +17,7 @@ defmodule Dsa.Event do
   TODO: Make query more efficient (limit)
   """
   def list_logs(group_id) do
-    group = Repo.get!(from(g in Group, preload: [
-      skill_rolls: [:character, :skill],
-      trait_rolls: [:character]
-    ]), group_id)
+    group = Repo.get!(from(g in Group, preload: :logs), group_id)
 
     # TODO: add other types of logs (all logs require inserted_at timestamps)
     entries = Enum.concat(group.skill_rolls, group.trait_rolls)

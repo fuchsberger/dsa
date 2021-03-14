@@ -52,7 +52,8 @@ defmodule DsaWeb.Router do
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
-    delete "/group/leave", GroupController, :leave
+
+
 
     resources "/characters", CharacterController, except: [:show] do
 
@@ -69,6 +70,11 @@ defmodule DsaWeb.Router do
     end
 
     resources "/user", UserController, only: [:delete, :edit, :update]
+
+    # Groups
+    resources "/groups", GroupController, only: [:create]
+    put "/group/join/:id", GroupController, :join
+    delete "/group/leave", GroupController, :leave
 
     live "/combat", DsaLive, :combat
     live "/roll", DsaLive, :roll

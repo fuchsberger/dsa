@@ -60,20 +60,10 @@ defmodule Dsa.Accounts do
     end
   end
 
-  def leave_group(%User{} = user) do
-    user
-    |> User.changeset(%{group_id: nil})
-    |> Repo.update()
-  end
+
 
   ##########################################################
   # Character related APIs
-
-  def get_user_group!(%User{} = user) do
-    user
-    |> Repo.preload(:group)
-    |> Map.get(:group)
-  end
 
   def change_user(%User{} = user, params \\ %{}), do: User.changeset(user, params)
 
@@ -133,6 +123,14 @@ defmodule Dsa.Accounts do
 
   def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))
 
+  def get_user_group!(%User{} = user) do
+    user
+    |> Repo.preload(:group)
+    |> Map.get(:group)
+  end
+
+  def get_group!(id), do: Repo.get!(Group, id)
+
   def create_group(attrs) do
     %Group{}
     |> Group.changeset(attrs)
@@ -142,4 +140,18 @@ defmodule Dsa.Accounts do
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
   def delete(struct), do: Repo.delete(struct)
+
+  def join_group(%User{} = user, %Group{} = group) do
+    user
+    |> Repo.preload(:group)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:group, group)
+    |> Repo.update()
+  end
+
+  def leave_group(%User{} = user) do
+    user
+    |> User.changeset(%{group_id: nil})
+    |> Repo.update()
+  end
 end
