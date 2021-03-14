@@ -7,7 +7,7 @@ defmodule Dsa.TestHelpers do
   def group_fixture(attrs \\ %{}) do
     {:ok, group} =
       attrs
-      |> Enum.into(%{name: "Group#{System.unique_integer([:positive])}"})
+      |> Enum.into(%{name: (attrs[:name] || "Testgroup")})
       |> Accounts.create_group()
 
     group
