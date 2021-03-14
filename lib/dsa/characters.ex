@@ -10,6 +10,8 @@ defmodule Dsa.Characters do
   alias Dsa.Characters.{Character, CharacterSkill}
   alias Dsa.Accounts.User
 
+  def list, do: Repo.all(Character)
+
   def list(%User{} = user) do
     from(c in Character, order_by: c.name, select: map(c, [:id, :name, :profession, :visible]))
     |> user_characters_query(user)

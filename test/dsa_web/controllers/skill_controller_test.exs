@@ -19,7 +19,7 @@ defmodule DsaWeb.SkillControllerTest do
     end
 
     test "shows new skill button for admins", %{conn: conn} do
-      user = user_fixture(%{admin: true})
+      user = user_fixture(admin: true)
       conn = assign conn, :current_user, user
       conn = get conn, "/skills"
 

@@ -1,8 +1,8 @@
 defmodule DsaWeb.SessionControllerTest do
   use DsaWeb.ConnCase
 
-  @valid_attributes %{email: "test@test.de", password: "Supersecret123", redirect: "/login"}
-  @invalid_attributes %{confirmed: false, email: "test2@test.de", password: "Supersecret123", redirect: "/login"}
+  @valid_attributes [email: "test@test.de", password: "Supersecret123", redirect: "/login"]
+  @invalid_attributes [confirmed: false, email: "test2@test.de", password: "Supersecret123", redirect: "/login"]
 
   test "GET / without authentication", %{conn: conn} do
     conn = get conn, "/"

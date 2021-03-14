@@ -14,6 +14,9 @@ iframe { display: none; }
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-16 overflow-hidden; }
 
+  /* Headings */
+  .page-heading { @apply font-bold text-xl leading-8; }
+
   /* Links */
   a.negative { @apply text-red-800; }
   a.negative:hover { @apply text-red-500; }
