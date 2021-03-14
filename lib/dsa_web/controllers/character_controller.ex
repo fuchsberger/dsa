@@ -63,6 +63,7 @@ defmodule DsaWeb.CharacterController do
         |> redirect(to: Routes.character_path(conn, :edit, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn inspect changeset.errors
         render(conn, "new.html", changeset: changeset)
     end
   end
