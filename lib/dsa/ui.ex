@@ -2,7 +2,7 @@ defmodule Dsa.UI do
   @moduledoc """
   The Event context.
   """
-  alias Dsa.UI.{LogSetting, Roll, SkillRoll}
+  alias Dsa.UI.{LogSetting, Roll}
 
   def change_logsetting(attrs \\ %{}), do: LogSetting.changeset(%LogSetting{}, attrs)
 

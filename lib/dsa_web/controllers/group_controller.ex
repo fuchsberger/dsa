@@ -1,8 +1,6 @@
 defmodule DsaWeb.GroupController do
   use DsaWeb, :controller
 
-  import DsaWeb.Auth, only: [match_user_id: 2]
-
   alias Dsa.Accounts
 
   action_fallback DsaWeb.ErrorController
