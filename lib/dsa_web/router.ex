@@ -56,13 +56,12 @@ defmodule DsaWeb.Router do
 
     resources "/characters", CharacterController, except: [:show] do
 
-      resources "/skills", CharacterSkillController, only: [:index]
-
-      get "/skills/edit", SkillController, :edit_skills
-
-      put "/skills/update", SkillController, :update
-      put "/skills/add", SkillController, :add_all
-      delete "/skills/remove", SkillController, :remove_all
+      # Character Skills
+      resources "/skills", CharacterSkillController, only: [:index], as: :skill
+      get "/skills/edit", CharacterSkillController, :edit_all, as: :skill
+      put "/skills/update", CharacterSkillController, :update_all, as: :skill
+      put "/skills/add", CharacterSkillController, :add_all, as: :skill
+      delete "/skills/remove", CharacterSkillController, :remove_all, as: :skill
 
       # Roll Routes
       post "/roll/skill", LogController, :skill_roll
