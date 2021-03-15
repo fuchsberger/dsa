@@ -5,6 +5,12 @@ defmodule DsaWeb.GroupController do
 
   action_fallback DsaWeb.ErrorController
 
+  def index(conn, _params) do
+    conn
+    |> assign(:groups, Accounts.list_groups())
+    |> render("index.html")
+  end
+
   def new(conn, _params) do
     conn
     |> assign(:changeset, Accounts.change_group(%Accounts.Group{}))
@@ -23,6 +29,24 @@ defmodule DsaWeb.GroupController do
     end
   end
 
+  @doc """
+  Allows to delete a group if user is the master or an admin.
+  # TODO: change so users can only delete if master or admin
+  """
+  def delete(conn, %{"id" => id}) do
+    with group <- Accounts.get_group!(id),
+      {:ok, _group} = Accounts.delete_group(group)
+    do
+      conn
+      |> put_flash(:info, gettext("Group deleted successfully."))
+      |> redirect(to: Routes.group_path(conn, :index))
+    end
+  end
+
+  @doc """
+  TODO: if logged in and member of group show group actions.
+  Otherwise redirect to groups page, Future: show group without actions (observer mode)
+  """
   def show(conn, %{"id" => id}) do
     with group <- Accounts.get_group!(id) do
       render(conn, "show.html", group: group)
@@ -40,13 +64,13 @@ defmodule DsaWeb.GroupController do
   end
 
   @doc """
-  Allows a user to leave a group
+  Allows a user to leave a group.
   """
   def leave(conn, _parms) do
     with {:ok, _user} <- Accounts.leave_group(conn.assigns.current_user) do
       conn
       |> put_flash(:info, gettext("You have left the group."))
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> redirect(to: Routes.group_path(conn, :index))
     end
   end
 end

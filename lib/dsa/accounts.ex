@@ -143,7 +143,7 @@ defmodule Dsa.Accounts do
 
   def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
 
-  def delete(struct), do: Repo.delete(struct)
+  def delete_group(%Group{} = group), do: Repo.delete(group)
 
   def join_group(%User{} = user, %Group{} = group) do
     user
@@ -160,4 +160,10 @@ defmodule Dsa.Accounts do
     |> Ecto.Changeset.put_assoc(:group, nil)
     |> Repo.update()
   end
+
+
+
+
+
+  def delete(struct), do: Repo.delete(struct)
 end
