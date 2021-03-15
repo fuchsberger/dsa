@@ -40,7 +40,7 @@
       <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
     <% end %>
 
-    <%= link gettext("Edit Skills"), to: Routes.character_skill_path(@conn, :edit_skills, @character), class: "button" %>
+    <%= link gettext("Edit Skills"), to: Routes.character_skill_path(@conn, :edit_all, @character), class: "button" %>
   </div>
 </div>
 
