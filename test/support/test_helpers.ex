@@ -4,11 +4,9 @@ defmodule Dsa.TestHelpers do
 
   import Phoenix.ConnTest, only: [html_response: 2]
 
-  def group_fixture(attrs \\ %{}) do
-    {:ok, group} =
-      attrs
-      |> Enum.into(%{name: (attrs[:name] || "Testgroup")})
-      |> Accounts.create_group()
+  def group_fixture(%Accounts.User{} = user, attrs \\ %{}) do
+    attrs = Enum.into(attrs, %{name: (attrs[:name] || "Testgroup")})
+    {:ok, group} = Accounts.create_group(user, attrs)
 
     group
   end

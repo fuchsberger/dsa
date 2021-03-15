@@ -110,4 +110,25 @@ defmodule Dsa.AccountsTest do
         Accounts.authenticate_by_email_and_password(@unknow_user_email, @pass)
     end
   end
+
+  describe "groups" do
+    alias Dsa.Accounts.Group
+
+    @valid_attrs %{name: "TestGroup"}
+    @invalid_attrs %{name: nil}
+
+    setup do
+      {:ok, user: user_fixture()}
+    end
+
+    test "create_group/2 with valid data creates a group", %{user: user} do
+      assert {:ok, %Group{} = group} = Accounts.create_group(user, @valid_attrs)
+      assert group.name == "TestGroup"
+      assert group.master_id == user.id
+    end
+
+    test "create_group/2 with invalid data returns error changeset", %{user: user} do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_group(user, @invalid_attrs)
+    end
+  end
 end
