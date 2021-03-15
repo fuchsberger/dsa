@@ -151,7 +151,9 @@ defmodule Dsa.Accounts do
 
   def leave_group(%User{} = user) do
     user
-    |> User.changeset(%{group_id: nil})
+    |> Repo.preload(:group)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:group, nil)
     |> Repo.update()
   end
 end

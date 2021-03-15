@@ -12,9 +12,8 @@ defmodule Dsa.Accounts.Group do
 
   def changeset(group, attrs) do
     group
-    |> cast(attrs, [:name, :master_id])
+    |> cast(attrs, [:name])
     |> validate_required([:name])
     |> validate_length(:name, max: 10)
-    |> foreign_key_constraint(:master_id)
   end
 end

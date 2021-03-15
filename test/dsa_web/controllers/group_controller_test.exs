@@ -19,13 +19,13 @@ defmodule DsaWeb.GroupControllerTest do
     conn = assign(conn, :current_user, user)
     conn = delete conn, "/group/leave"
     assert user.group_id == id
-    assert redirected_to(conn) =~ "/user/#{user.id}/edit"
+    assert redirected_to(conn) =~ "/characters"
   end
 
   test "DELETE /group/leave when user has not joined a group", %{conn: conn} do
     user = user_fixture()
     conn = assign(conn, :current_user, user)
     conn = delete conn, "/group/leave"
-    assert redirected_to(conn) =~ "/user/#{user.id}/edit"
+    assert redirected_to(conn) =~ "/characters"
   end
 end
