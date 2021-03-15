@@ -1,7 +1,69 @@
 defmodule DsaWeb.GroupControllerTest do
-  use DsaWeb.ConnCase
+  use DsaWeb.ConnCase, async: true
 
-  alias Dsa.Accounts
+  describe "with a logged-in user" do
+    alias Dsa.Accounts
+
+    @create_attrs %{name: "TestGroup"}
+    @invalid_attrs %{name: nil}
+
+    setup %{conn: conn, login_as: username} do
+      user = user_fixture(username: username)
+      {:ok, conn: authenticate_user(assign(conn, :current_user, user)), user: user}
+    end
+
+    defp group_count, do: Enum.count(Accounts.list_groups())
+
+    @tag login_as: "max"
+    test "create group and redirect", %{conn: conn, user: %{id: user_id}} do
+
+      create_conn = post conn, Routes.group_path(conn, :create), group: @create_attrs
+
+      assert %{id: group_id} = redirected_params(create_conn)
+      assert redirected_to(create_conn) == Routes.group_path(create_conn, :show, group_id)
+
+      conn = get conn, Routes.group_path(conn, :show, group_id)
+      assert html_response(conn, 200) =~ "Show Group"
+
+      assert Accounts.get_group!(group_id).master_id == user_id
+    end
+
+    @tag login_as: "max"
+    test "does not create group, renders errors when invalid", %{conn: conn} do
+      count_before = group_count()
+      conn = post conn, Routes.group_path(conn, :create), group: @invalid_attrs
+      assert html_response(conn, 200) # TODO: verify content =~ "check the errors"
+      assert group_count() == count_before
+    end
+
+    @tag login_as: "max"
+    test "delete group if master or admin", %{conn: _conn, user: _user} do
+      # TODO
+
+    end
+
+    @tag login_as: "max"
+    test "join group and redirect", %{conn: conn, user: user} do
+
+      group = group_fixture(user, @create_attrs)
+
+      conn = put conn, Routes.group_path(conn, :join, group)
+      assert redirected_to(conn) =~ "/groups/#{group.id}"
+
+      assert Accounts.get_user!(user.id).group_id == group.id
+    end
+
+    @tag login_as: "max"
+    test "leave group and redirect", %{conn: conn, user: user} do
+      group = group_fixture(user)
+      {:ok, user} = Accounts.join_group(user, group)
+      assert user.group_id == group.id
+
+      conn = delete conn, "/group/leave"
+      assert conn.assigns.current_user.group_id == nil
+      assert redirected_to(conn) =~ "/characters"
+    end
+  end
 
   test "requires user authentication on all actions", %{conn: conn} do
     Enum.each([
@@ -12,20 +74,7 @@ defmodule DsaWeb.GroupControllerTest do
     end)
   end
 
-  test "DELETE /group/leave when user has joined a group", %{conn: conn} do
-    %{id: id} = group_fixture()
-    user = user_fixture()
-    {:ok, user} = Accounts.update_user(user, %{group_id: id})
-    conn = assign(conn, :current_user, user)
-    conn = delete conn, "/group/leave"
-    assert user.group_id == id
-    assert redirected_to(conn) =~ "/characters"
-  end
 
-  test "DELETE /group/leave when user has not joined a group", %{conn: conn} do
-    user = user_fixture()
-    conn = assign(conn, :current_user, user)
-    conn = delete conn, "/group/leave"
-    assert redirected_to(conn) =~ "/characters"
-  end
+
+
 end

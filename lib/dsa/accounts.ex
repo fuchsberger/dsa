@@ -131,9 +131,13 @@ defmodule Dsa.Accounts do
 
   def get_group!(id), do: Repo.get!(Group, id)
 
-  def create_group(attrs) do
+  @doc """
+  Creating a group makes creator the master automatically.
+  """
+  def create_group(%User{} = user, attrs) do
     %Group{}
     |> Group.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:master, user)
     |> Repo.insert()
   end
 

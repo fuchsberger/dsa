@@ -30,6 +30,7 @@ defmodule DsaWeb.Router do
     delete "/logout/:user_id", SessionController, :delete
 
     resources "/character", CharacterController, only: [:show]
+    resources "/group", CharacterController, only: [:show]
 
     # Public Data Routes
     resources "/skills", SkillController, only: [:index]
@@ -52,9 +53,6 @@ defmodule DsaWeb.Router do
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
-
-
-
     resources "/characters", CharacterController, except: [:show] do
 
       # Character Skills
@@ -72,7 +70,7 @@ defmodule DsaWeb.Router do
     resources "/user", UserController, only: [:delete, :edit, :update]
 
     # Groups
-    resources "/groups", GroupController, only: [:create]
+    resources "/groups", GroupController, only: [:new, :create, :show]
     put "/group/join/:id", GroupController, :join
     delete "/group/leave", GroupController, :leave
 

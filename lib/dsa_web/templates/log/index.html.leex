@@ -1,42 +1,43 @@
 <%= f = form_for @changeset, "#", phx_change: :change, phx_submit: nil %>
-  <div class='mb-3 flex justify-between'>
+  <div class='mt-3 mb-2 flex justify-between'>
     <button phx-click="clear-log" type="button" class="button leading-5 gray mr-2">Log leeren</button>
     <div class="flex items-center align-middle">
       <%= checkbox f, :dice, class: "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-1" %>
       <%= label f, :dice, "Würfel", class: "font-medium text-gray-700" %>
     </div>
   </div>
-  <div id='log-<%= @log_resetcount %>' phx-update='prepend'>
-    <%= for entry <- @entries do %>
-      <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
-        <%= case entry do %>
-          <% Log.Type.QuickRoll -> %>
-            <%= render DsaWeb.LogView, "quick_roll.html", %{entry: entry, f: f} %>
-          <% Log.Type.BaseRoll -> %>
-            <%= render DsaWeb.LogView, "base_roll.html", %{entry: entry, f: f} %>
-          <% Log.Type.CustomTalentRoll -> %>
-            <%= render DsaWeb.LogView, "custom_talent_roll.html", %{entry: entry, f: f} %>
-
-          <% %Dsa.Event.SkillRoll{} -> %>
-            <%= render DsaWeb.LogView, "skill_roll.html", entry: entry, show_dice?: @show_dice? %>
-
-          <% %Dsa.Event.TraitRoll{} -> %>
-            <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
-
-          <% Log.Type.SpellRoll -> %>
-            <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
-
-
-          <% Log.Type.SimpleText -> %>
-            <%= render DsaWeb.LogView, "simple_text.html", %{entry: entry, f: f} %>
-
-          <% _ -> %>
-            <%= render DsaWeb.LogView, "unknown.html", %{entry: entry, f: f} %>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-  <div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
-    <%= render DsaWeb.LogView, "empty.html" %>
-  </div>
 </form>
+
+<div id='log-<%= @log_resetcount %>' phx-update='prepend'>
+  <%= for entry <- @entries do %>
+    <div id='log-<%= entry.id %>' class='rounded-md bg-white shadow-md my-2 py-1 px-2 flex justify-between'>
+      <%= case entry do %>
+        <% Log.Type.QuickRoll -> %>
+          <%= render DsaWeb.LogView, "quick_roll.html", entry: entry, show_dice?: @show_dice? %>
+        <% Log.Type.BaseRoll -> %>
+          <%= render DsaWeb.LogView, "base_roll.html", entry: entry, show_dice?: @show_dice? %>
+        <% Log.Type.CustomTalentRoll -> %>
+          <%= render DsaWeb.LogView, "custom_talent_roll.html", entry: entry, show_dice?: @show_dice? %>
+
+        <% %Dsa.Event.SkillRoll{} -> %>
+          <%= render DsaWeb.LogView, "skill_roll.html", entry: entry, show_dice?: @show_dice? %>
+
+        <% %Dsa.Event.TraitRoll{} -> %>
+          <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
+
+        <% Log.Type.SpellRoll -> %>
+          <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
+
+
+        <% Log.Type.SimpleText -> %>
+          <%= render DsaWeb.LogView, "simple_text.html", entry: entry, show_dice?: @show_dice? %>
+
+        <% _ -> %>
+          <%= render DsaWeb.LogView, "unknown.html", entry: entry, show_dice?: @show_dice? %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class='rounded-md bg-white shadow-md my-2 p-1 text-center<%= unless @log_empty?, do: " hidden" %>'>
+  <%= render DsaWeb.LogView, "empty.html" %>
+</div>

@@ -12,16 +12,20 @@ defmodule DsaWeb.GroupController do
   end
 
   def create(conn, %{"group" => group_params}) do
-    case Accounts.create_group(group_params) do
-      {:ok, _group} ->
+    case Accounts.create_group(conn.assigns.current_user, group_params) do
+      {:ok, group} ->
         conn
         |> put_flash(:info, gettext("Group was created."))
-        |> redirect(to: group_params["redirect"])
+        |> redirect(to: Routes.group_path(conn, :show, group))
 
-      {:error, _changeset} ->
-        conn
-        |> put_flash(:error, gettext("Group name was invalid."))
-        |> redirect(to: group_params["redirect"])
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
+  end
+
+  def show(conn, %{"id" => id}) do
+    with group <- Accounts.get_group!(id) do
+      render(conn, "show.html", group: group)
     end
   end
 
@@ -31,7 +35,7 @@ defmodule DsaWeb.GroupController do
     do
       conn
       |> put_flash(:info, gettext("You have joined the group."))
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> redirect(to: Routes.group_path(conn, :show, group))
     end
   end
 
