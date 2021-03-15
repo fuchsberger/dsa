@@ -4,7 +4,7 @@
 # Also some admin conviencences are now supported via the interactive shell:
 # iex -S mix
 
-# Create an user:
+# Create a user:
 # {:ok, user} = Dsa.Accounts.register_user(%{username: "Username", password: "password", password_confirm: "password", email: "test@test.com"})
 
 # Make user an admin

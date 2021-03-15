@@ -7,8 +7,6 @@ defmodule Dsa.Application do
 
   def start(_type, _args) do
     children = [
-      # ETS Lore Data
-      Dsa.Data,
       # Start the Ecto repository
       Dsa.Repo,
       # Start the PubSub system

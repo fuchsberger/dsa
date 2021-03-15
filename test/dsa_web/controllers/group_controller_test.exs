@@ -74,7 +74,4 @@ defmodule DsaWeb.GroupControllerTest do
     end)
   end
 
-
-
-
 end
