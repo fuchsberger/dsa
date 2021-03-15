@@ -4,6 +4,7 @@ defmodule DsaWeb.Auth do
   import Phoenix.Controller
   import DsaWeb.Gettext
 
+  alias Dsa.Accounts
   alias DsaWeb.Router.Helpers, as: Routes
   require Logger
 
@@ -14,7 +15,7 @@ defmodule DsaWeb.Auth do
 
     cond do
       conn.assigns[:current_user] -> conn
-      user = user_id && Dsa.Accounts.get_user(user_id) ->
+      user = user_id && Accounts.get_user(user_id) ->
         assign(conn, :current_user, user)
       true ->
         assign(conn, :current_user, nil)
@@ -31,9 +32,19 @@ defmodule DsaWeb.Auth do
     configure_session(conn, drop: true)
   end
 
-  def authenticate_user(conn, _opts) do
+  @doc """
+  Results in a redirect to login if the user is not authenticated.
+  Further, if a user is authenticated but without group, assign groups and group changeset.
+  """
+  def authenticate_user(conn, _opts \\ []) do
     if conn.assigns.current_user do
-      conn
+      if is_nil(conn.assigns.current_user.group_id) do
+        conn
+        |> assign(:groups, Accounts.list_groups())
+        |> assign(:group_changeset, Accounts.change_group(%Accounts.Group{}))
+      else
+        conn
+      end
     else
       conn
       |> put_flash(:error, gettext("You must be logged in to access this page."))

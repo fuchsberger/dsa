@@ -12,7 +12,8 @@
       <%= if @current_user.group_id do %>
         <%= live_render(@conn, DsaWeb.LogLive, session: %{"group_id" => @current_user.group_id} ) %>
       <% else %>
-        <p><%= gettext "You must join a DSA group (under Settings) before the log can be displayed." %></p>
+        <%= render DsaWeb.GroupView, "manage.html",
+          conn: @conn, groups: @conn.assigns.groups, changeset: @conn.assigns.group_changeset %>
       <% end %>
     <% else %>
       <%= render DsaWeb.SessionView, "new.html", conn: @conn %>

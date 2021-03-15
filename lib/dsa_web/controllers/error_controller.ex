@@ -47,7 +47,9 @@ defmodule DsaWeb.ErrorController do
   def call(conn, error) do
     Logger.error inspect error
     conn
-    |> put_status(:unknown_error)
+    |> put_status(:internal_server_error)
+    |> put_layout(false)
+    |> put_view(DsaWeb.ErrorView)
     |> render(:"500")
   end
 end

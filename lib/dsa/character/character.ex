@@ -23,9 +23,9 @@ defmodule Dsa.Characters.Character do
     field :le, :integer
     field :ke, :integer
     field :ae, :integer
-    field :sk, :integer
-    field :zk, :integer
-    field :sp, :integer
+    field :sk, :integer, default: 0
+    field :zk, :integer, default: 0
+    field :sp, :integer, default: 3
 
     belongs_to :user, Dsa.Accounts.User
 
@@ -34,7 +34,7 @@ defmodule Dsa.Characters.Character do
     timestamps()
   end
 
-  @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk sk zk sp)a
+  @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk)a
   @optional ~w(profession visible le ae ke sk zk sp)a
 
   def changeset(character, attrs) do

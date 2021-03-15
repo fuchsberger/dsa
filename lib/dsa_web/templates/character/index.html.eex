@@ -1,4 +1,10 @@
-<div class="shadow-xl overflow-hidden border-b sm:rounded-lg">
+<div class="flex justify-between mt-3 mb-2">
+  <h1 class='page-heading'><%= gettext "Characters" %></h1>
+  <%= link gettext("New Character"), to: Routes.character_path(@conn, :new),
+   class: "button gray leading-8 h-8" %>
+</div>
+
+<div class="shadow-xl overflow-hidden border-b sm:rounded-lg mb-3">
   <table class="w-full border-gray-200 divide-y divide-gray-200">
     <thead class="leading-8 text-gray-900 bg-gray-300 font-medium text-left">
       <tr>
@@ -7,7 +13,7 @@
         <th scope="col" class='hidden lg:table-cell'>Profession</th>
         <th scope="col" class='text-center'><%= icon @conn, "eye-solid" %></th>
         <th scope="col" class='text-center'><%= icon @conn, "pencil-solid" %></th>
-        <th scope="col" class="text-center"><%= link icon(@conn, "plus"), to: Routes.character_path(@conn, :new) %></th>
+        <th scope="col" class="text-center"><%= icon @conn, "x" %></th>
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">

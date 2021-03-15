@@ -1,13 +1,18 @@
 <%= form_for @changeset, @action, fn f -> %>
-  <div class='mt-3 px-3 grid grid-cols-1 lg:grid-cols-2 gap-6'>
-    <div class="">
+  <div class='mt-3 px-3 grid grid-cols-3 lg:grid-cols-6 gap-3'>
+    <div class="col-span-3">
       <%= label f, :name, "Name", class: "block text-sm font-medium text-gray-700" %>
       <%= text_input f, :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: "Name" %>
     </div>
 
-    <div class="">
+    <div class="col-span-2">
       <%= label f, :profession, "Profession", class: "block text-sm font-medium text-gray-700" %>
       <%= text_input f, :profession, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: "Profession" %>
+    </div>
+
+    <div class="">
+      <%= label f, :sp, gettext("SP"), class: "block text-sm text-center font-medium text-gray-700" %>
+      <%= number_input f, :sp, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", placeholder: gettext("SP") %>
     </div>
   </div>
 
@@ -46,7 +51,7 @@
     </div>
   </div>
 
-  <div class='mt-3 px-3 grid grid-cols-3 gap-2 lg:gap-3'>
+  <div class='mt-3 px-3 grid grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-3'>
     <div>
       <%= label f, :le_max, "LE (Max)", class: "block text-center text-sm font-medium text-gray-700" %>
       <%= number_input f, :le_max, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "LE" %>
@@ -60,6 +65,16 @@
     <div>
       <%= label f, :ke_max, "KE (Max)", class: "block text-center text-sm font-medium text-gray-700" %>
       <%= number_input f, :ke_max, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: "KE" %>
+    </div>
+
+    <div>
+      <%= label f, :sk, gettext("SK"), class: "block text-center text-sm font-medium text-gray-700" %>
+      <%= number_input f, :sk, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: gettext("SK") %>
+    </div>
+
+    <div>
+      <%= label f, :zk, gettext("ZK"), class: "block text-center text-sm font-medium text-gray-700" %>
+      <%= number_input f, :zk, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: gettext("ZK") %>
     </div>
   </div>
 

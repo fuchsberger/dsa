@@ -52,17 +52,17 @@ defmodule DsaWeb.Router do
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible
 
-    delete "/group/leave", GroupController, :leave
+
+
 
     resources "/characters", CharacterController, except: [:show] do
 
-      resources "/skills", CharacterSkillController, only: [:index]
-
-      get "/skills/edit", SkillController, :edit_skills
-
-      put "/skills/update", SkillController, :update
-      put "/skills/add", SkillController, :add_all
-      delete "/skills/remove", SkillController, :remove_all
+      # Character Skills
+      resources "/skills", CharacterSkillController, only: [:index], as: :skill
+      get "/skills/edit", CharacterSkillController, :edit_all, as: :skill
+      put "/skills/update", CharacterSkillController, :update_all, as: :skill
+      put "/skills/add", CharacterSkillController, :add_all, as: :skill
+      delete "/skills/remove", CharacterSkillController, :remove_all, as: :skill
 
       # Roll Routes
       post "/roll/skill", LogController, :skill_roll
@@ -70,6 +70,11 @@ defmodule DsaWeb.Router do
     end
 
     resources "/user", UserController, only: [:delete, :edit, :update]
+
+    # Groups
+    resources "/groups", GroupController, only: [:create]
+    put "/group/join/:id", GroupController, :join
+    delete "/group/leave", GroupController, :leave
 
     live "/combat", DsaLive, :combat
     live "/roll", DsaLive, :roll

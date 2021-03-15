@@ -6,28 +6,18 @@ defmodule Dsa.Event do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
-  alias Dsa.Accounts.Group
   alias Dsa.Characters.Character
   alias Dsa.Event.{Setting, Log, SkillRoll, TraitRoll}
 
   require Logger
 
-  @doc """
-  Lists the latest 30 log entries of all types and merges them in a single list sorted by date (desc).
-  TODO: Make query more efficient (limit)
-  """
   def list_logs(group_id) do
-    group = Repo.get!(from(g in Group, preload: [
-      skill_rolls: [:character, :skill],
-      trait_rolls: [:character]
-    ]), group_id)
-
-    # TODO: add other types of logs (all logs require inserted_at timestamps)
-    entries = Enum.concat(group.skill_rolls, group.trait_rolls)
-
-    entries
-    |> Enum.sort(&(&1.inserted_at >= &2.inserted_at))
-    |> Enum.take(30)
+    from(l in Log,
+      limit: 200,
+      order_by: [desc: l.inserted_at],
+      preload: [:character],
+      where: l.group_id == ^group_id)
+    |> Repo.all()
   end
 
   def change_log(attrs \\ %{}), do: Log.changeset(%Log{}, attrs)
