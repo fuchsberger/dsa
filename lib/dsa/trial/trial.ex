@@ -38,7 +38,11 @@ defmodule Dsa.Trial do
     remaining = remaining - max(0, d2 - t2 - modifier)
     remaining = remaining - max(0, d3 - t3 - modifier)
 
-    quality = if remaining >= 0, do: min(6, div(remaining, 3) + 1), else: 0
+    quality =
+      if remaining >= 0 && Enum.count(dices, &(&1 == 20)) < 2,
+        do: min(6, div(remaining, 3) + 1),
+        else: 0
+
     critical? = Enum.count(dices, &(&1 == 1)) >= 2 || Enum.count(dices, &(&1 == 20)) >= 2
 
     {quality, critical?}
