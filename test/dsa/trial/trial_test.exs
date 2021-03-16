@@ -1,6 +1,32 @@
-# # Unit Test
-# defmodule Dsa.TrialTest do
-#   use ExUnit.Case
+# Unit Test
+defmodule Dsa.TrialTest do
+  use ExUnit.Case
+
+  alias Dsa.Trial
+
+  require Logger
+
+  test "roll/2 gives proper number of dice and non is above max" do
+    count = Enum.random(1..6)
+    max = Enum.random(1..20)
+    dice = Trial.roll(count, max)
+    assert Enum.count(dice) == count
+    Enum.each(dice, & assert &1 <=max && &1 > 0)
+  end
+
+  test "rolling a critical success" do
+    dice = 907696060
+    assert [1, 4, 1] = Trial.roll(3, 20, dice)
+    assert {2, true} = Trial.result(dice, 10, 10, 10, 3, 0)
+  end
+
+  test "rolling a critical failure" do
+    dice = 1703079995
+    assert [20, 20, 16] = Trial.roll(3, 20, dice)
+    assert {0, true} = Trial.result(dice, 25, 25, 25, 25, 6)
+  end
+
+
 
 #   test "sanity check for non randomized version" do
 #     Dsa.Trial.roll(10)
@@ -245,4 +271,4 @@
 #              {20, 10}
 #            ]) == 6
 #   end
-# end
+end
