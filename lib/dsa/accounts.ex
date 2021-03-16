@@ -119,7 +119,13 @@ defmodule Dsa.Accounts do
   ##########################################################
   # Group related APIs
 
-  def list_groups, do: Repo.all(from(g in Group, preload: :master))
+  def list_groups do
+    from(g in Group, preload: [
+      master: ^from(u in User, select: map(u, [:id, :username])),
+      users: ^from(u in User, select: u.id)
+    ])
+    |> Repo.all()
+  end
 
   def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))
 

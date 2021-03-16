@@ -80,7 +80,7 @@ defmodule DsaWeb.Router do
     resources "/user", UserController, only: [:delete, :edit, :update]
 
     # Groups
-    resources "/groups", GroupController, except: [:index, :update, :edit]
+    resources "/groups", GroupController, except: [:index, :update]
     put "/groups/join/:id", GroupController, :join
     delete "/group/leave", GroupController, :leave
 

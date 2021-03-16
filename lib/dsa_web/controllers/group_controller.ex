@@ -29,6 +29,14 @@ defmodule DsaWeb.GroupController do
     end
   end
 
+  def edit(conn, %{"id" => id}) do
+    group = Data.get_group!(id)
+    conn
+    |> assign(:changeset, Accounts.change_group(group))
+    |> assign(:group, group)
+    |> render("edit.html")
+  end
+
   @doc """
   Allows to delete a group if user is the master or an admin.
   # TODO: change so users can only delete if master or admin
