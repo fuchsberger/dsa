@@ -1,4 +1,4 @@
-defmodule Dsa.Repo.Migrations.AddSkillRolls do
+defmodule Dsa.Repo.Migrations.SkillRolls do
   use Ecto.Migration
 
   def change do
