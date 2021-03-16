@@ -7,7 +7,7 @@ defmodule Dsa.Characters do
   import Ecto.Query, warn: false
 
   alias Dsa.{Data, Repo}
-  alias Dsa.Characters.{Character, CharacterSkill}
+  alias Dsa.Characters.{Character, CharacterSkill, CharacterSpell}
   alias Dsa.Accounts.User
 
   def list, do: Repo.all(Character)
@@ -42,6 +42,7 @@ defmodule Dsa.Characters do
     character
     |> Character.changeset(attrs)
     |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
+    |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
     |> Repo.update()
   end
 
@@ -78,6 +79,25 @@ defmodule Dsa.Characters do
     |> Repo.update()
   end
 
+  def add_spells(%Character{} = character) do
+    character_spell_ids = Enum.map(character.character_spells, & &1.spell_id)
+
+    character_spells =
+      Data.list_spells()
+      |> Enum.reject(& Enum.member?(character_spell_ids, &1.id))
+      |> Enum.map(& %CharacterSpell{
+        character_id: character.id,
+        spell_id: &1.id,
+        level: 0
+      })
+      |> Enum.concat(character.character_spells)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_spells, character_spells)
+    |> Repo.update()
+  end
+
   def remove_skills(%Character{} = character) do
     character_skills = Enum.reject(character.character_skills, & &1.level == 0)
 
@@ -87,9 +107,19 @@ defmodule Dsa.Characters do
     |> Repo.update()
   end
 
+  def remove_spells(%Character{} = character) do
+    character_spells = Enum.reject(character.character_spells, & &1.level == 0)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_spells, character_spells)
+    |> Repo.update()
+  end
+
   defp preload_assocs(query) do
     character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
-    from(c in query, preload: [character_skills: ^character_skill_query])
+    character_spell_query = from(s in CharacterSpell, preload: :spell, order_by: s.spell_id)
+    from(c in query, preload: [character_skills: ^character_skill_query, character_spells: ^character_spell_query])
   end
 
   defp user_characters_query(query, %User{id: user_id}) do

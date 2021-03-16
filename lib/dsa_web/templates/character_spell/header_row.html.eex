@@ -1,0 +1,7 @@
+<tr id='<%= @title %>'>
+  <th scope="row" class="px-2 text-left text-base"><%= @title %></th>
+  <th scope='row'></th>
+  <th scope="row" class="px-1"><%= @pages %></th>
+  <th scope="row"></th>
+  <th scope="row" colspan='13'><%= @ap %> AP</th>
+</tr>

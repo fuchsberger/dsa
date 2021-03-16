@@ -1,0 +1,39 @@
+<%= form_for @changeset, Routes.character_spell_path(@conn, :update_all, @character), [method: :put], fn f -> %>
+
+<div class='sticky top-0 bg-gray-100 py-3'>
+  <div class='flex justify-between pb-1'>
+    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Spells" %></h2>
+
+    <%= for %{short: short, id: id} <- SpellTradition.list() do %>
+      <%= link short, to: "##{id}", data_turbo: false, class: "hidden lg:block leading-8" %>
+    <% end %>
+
+    <%= submit gettext("Save Spells"), class: "button" %>
+  </div>
+
+  <div class='grid lg:grid-cols-3 lg:gap-x-5 gap-y-2'>
+    <%= link gettext("Add remaining spells"),
+      to: Routes.character_spell_path(@conn, :add_all, @character), method: :put,
+      class: "button gray text-center leading-7" %>
+    <%= link gettext("Remove Spells at 0"),
+      to: Routes.character_spell_path(@conn, :remove_all, @character), method: :delete,
+      class: "button gray text-center leading-7" %>
+  </div>
+</div>
+
+<table class="table text-center">
+  <thead>
+    <tr class='header-row'>
+      <th scope="col" class="text-left"><%= gettext "Spell" %></th>
+      <th scope="col" class="hidden md:table-cell"><%= gettext "Probe" %></th>
+      <th scope="col" class="hidden sm:table-cell"><%= gettext "SF" %></th>
+      <th scope="col"><%= gettext "FW" %></th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <%= for f_cs <- inputs_for(f, :character_spells) do %>
+      <%= render "edit_row.html", f: f_cs %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

@@ -1,0 +1,7 @@
+<tr id='<%= @tradition.id %>' class='header-row'>
+  <th scope="row" class="text-left"><%= @tradition.title %> (<%= @tradition.pages %>)</th>
+  <th scope='row'>BE</th>
+  <th scope="row"><%= @tradition.probe %></th>
+  <th scope="row">FW</th>
+  <th scope="row">P</th>
+</tr>

@@ -7,7 +7,7 @@ defmodule Dsa.Event do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Event.{Setting, Log, SkillRoll, TraitRoll}
+  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, TraitRoll}
 
   require Logger
 
@@ -39,6 +39,7 @@ defmodule Dsa.Event do
   def delete_logs!(group_id) do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
     Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
+    Repo.delete_all(from(r in SpellRoll, where: r.group_id == ^group_id))
     # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
 
@@ -52,8 +53,9 @@ defmodule Dsa.Event do
   # Skill Rolls
   def change_skill_roll(attrs \\ %{}), do: SkillRoll.changeset(%SkillRoll{}, attrs)
 
-  def create_skill_roll(character, group, attrs) do
+  def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
 
+  def create_skill_roll(character, group, attrs) do
     changeset = change_skill_roll(attrs)
 
     if changeset.valid? do

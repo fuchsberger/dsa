@@ -108,6 +108,7 @@ defmodule Dsa.Accounts.Character do
     # belongs_to :armor, Armor
 
     has_many :character_skills, Dsa.Accounts.CharacterSkill, on_replace: :delete
+    has_many :character_spells, Dsa.Accounts.CharacterSpell, on_replace: :delete
 
     # has_many :advantages, Advantage, on_replace: :delete
     # has_many :armors, Armor, on_replace: :delete

@@ -1,0 +1,9 @@
+<tr>
+  <th scope='row' class="text-left"><%= @f.data.spell.name %></td>
+  <td class="hidden md:table-cell"><%= probe(@f.data.spell.probe) %></td>
+  <td class="hidden sm:table-cell w-10"><%= @f.data.spell.sf %></td>
+  <td class="w-14">
+    <%= hidden_inputs_for(@f) %>
+    <%= number_input @f, :level, class: "small text-right px-1 pr-0" %>
+  </td>
+</tr>

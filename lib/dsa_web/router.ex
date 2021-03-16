@@ -65,11 +65,17 @@ defmodule DsaWeb.Router do
       put "/skills/add", CharacterSkillController, :add_all, as: :skill
       delete "/skills/remove", CharacterSkillController, :remove_all, as: :skill
 
-      resources "/spells", SpellController
+      # Character Spells
+      resources "/spells", CharacterSpellController, only: [:index], as: :spell
+      get "/spells/edit", CharacterSpellController, :edit_all, as: :spell
+      put "/spells/update", CharacterSpellController, :update_all, as: :spell
+      put "/spells/add", CharacterSpellController, :add_all, as: :spell
+      delete "/spells/remove", CharacterSpellController, :remove_all, as: :spell
     end
 
     # Event Routes
     post "/characters/:character_id/skill_roll", EventController, :skill_roll
+    post "/characters/:character_id/spell_roll", EventController, :spell_roll
 
     resources "/user", UserController, only: [:delete, :edit, :update]
 
