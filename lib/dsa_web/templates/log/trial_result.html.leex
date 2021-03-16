@@ -1,6 +1,6 @@
 <div class='flex'>
   <%= if @show_dice? do %>
-    <% {d1, d2, d3} = @entry.dice %>
+    <% [d1, d2, d3] = roll(3, 20, @entry.roll) %>
     <%= tag_helper :dice, d1 %>
     <%= tag_helper :dice, d2 %>
     <%= tag_helper :dice, d3 %>

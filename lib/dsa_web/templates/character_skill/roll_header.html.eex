@@ -1,9 +1,7 @@
-<tr id='<%= @title %>' class='header-row'>
-  <th scope="row" class="text-left"><%= @title %> (<%= @pages %>)</th>
+<tr id='<%= @category.id %>' class='header-row'>
+  <th scope="row" class="text-left"><%= @category.title %> (<%= @category.pages %>)</th>
   <th scope='row'>BE</th>
-  <th scope="row"><%= @probe %></th>
+  <th scope="row"><%= @category.probe %></th>
   <th scope="row">FW</th>
-  <%= if @group_id do %>
-    <th scope="row"></th>
-  <% end %>
+  <th scope="row">P</th>
 </tr>

@@ -10,7 +10,7 @@ defmodule Dsa.Data.GeneralTrait do
   schema "general_traits" do
     field :general_trait_id, :integer
     field :details, :string
-    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :character, Dsa.Characters.Character
   end
 
   def changeset(general_trait, params \\ %{}) do

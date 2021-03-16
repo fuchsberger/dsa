@@ -12,7 +12,7 @@ defmodule Dsa.Data.FWeapon do
   schema "fweapons" do
     field :dmg, :integer, default: 0
     field :id, :integer, primary_key: true
-    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+    belongs_to :character, Dsa.Characters.Character, primary_key: true
   end
 
   @fields ~w(character_id id dmg)a

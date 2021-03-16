@@ -11,7 +11,7 @@ defmodule Dsa.Data.SpellTrick do
   @primary_key false
   schema "spell_tricks" do
     field :id, :integer, primary_key: true
-    belongs_to :character, Dsa.Accounts.Character, primary_key: true
+    belongs_to :character, Dsa.Characters.Character, primary_key: true
   end
 
   @fields ~w(id character_id)a

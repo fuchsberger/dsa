@@ -153,42 +153,42 @@ defmodule Dsa.TrialTest do
   end
 
   test "skill roll: failure" do
-    Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    Dsa.Trial.quality([10, 10, 10], 4, 0, [
       {20, :not_rolled},
       {20, :not_rolled},
       {20, :not_rolled}
     ])
 
     # too little, single
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 15},
              {20, 10}
            ]) == 0
 
     # too little, split
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 12},
              {20, 13}
            ]) == 0
 
     # with modifier
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -1, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, -1, [
              {20, 10},
              {20, 12},
              {20, 10}
            ]) == 0
 
     # with modifier, split
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -1, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, -1, [
              {20, 10},
              {20, 11},
              {20, 11}
            ]) == 0
 
     # modifier only
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -2, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, -2, [
              {20, 10},
              {20, 10},
              {20, 10}
@@ -197,49 +197,49 @@ defmodule Dsa.TrialTest do
 
   test "skill roll: success" do
     # all dice below or equal
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 1, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 1, [
              {20, 10},
              {20, 10},
              {20, 10}
            ]) == 2
 
     # negative modifier
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, -1, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, -1, [
              {20, 10},
              {20, 10},
              {20, 10}
            ]) == 1
 
     # positive modifier
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 6, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 6, [
              {20, 10},
              {20, 10},
              {20, 10}
            ]) == 2
 
     # 1 skill point used
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 11},
              {20, 10}
            ]) == 2
 
     # 2 skill points used
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 12},
              {20, 10}
            ]) == 1
 
     # 4 skill points used
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 4, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 4, 0, [
              {20, 10},
              {20, 14},
              {20, 10}
            ]) == 1
 
     # don't allow quality above 6
-    assert Dsa.Trial.perform_talent_trial([10, 10, 10], 25, 0, [
+    assert Dsa.Trial.quality([10, 10, 10], 25, 0, [
              {20, 10},
              {20, 10},
              {20, 10}

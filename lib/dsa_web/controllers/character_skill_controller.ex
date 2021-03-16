@@ -17,19 +17,18 @@ defmodule DsaWeb.CharacterSkillController do
 
   def index(conn, _params, character) do
     conn
-    |> assign(:changeset, Event.change_skill_roll(%{}))
-    |> assign(:trait_changeset, Event.change_trait_roll(%{}))
+    |> assign(:changeset, Event.change_skill_roll())
     |> render("index.html")
   end
 
-  def edit(conn, _params, character) do
+  def edit_all(conn, _params, character) do
     conn
     |> assign(:character, character)
     |> assign(:changeset, Characters.change(character))
     |> render("edit.html")
   end
 
-  def update(conn, %{"character" => params}, character) do
+  def update_all(conn, %{"character" => params}, character) do
     case Characters.update(character, params) do
       {:ok, character} ->
         conn
@@ -73,10 +72,4 @@ defmodule DsaWeb.CharacterSkillController do
         |> render("edit.html")
     end
   end
-
-  # defp assign_character(conn, _opts) do
-  #   with character <- Characters.get!(conn.assigns.current_user, conn.params["character_id"]) do
-  #     assign(conn, :character, character)
-  #   end
-  # end
 end
