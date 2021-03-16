@@ -38,10 +38,12 @@
 
 <table class="table text-center">
   <tbody class="bg-white divide-y divide-gray-200">
-    <%= for tradition <- SpellTradition.list() do %>
-      <%= render "roll_header.html", tradition: tradition, group_id: @current_user.group_id %>
-      <%= render_many Enum.filter(@character.character_spells, & &1.spell.traditions |> Enum.member?(tradition.id)), DsaWeb.CharacterSpellView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
-    <% end %>
+      <%= render_many @character.character_spells, DsaWeb.CharacterSpellView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
+
+    <%# for tradition <- SpellTradition.list() do %>
+      <%# render "roll_header.html", tradition: tradition, group_id: @current_user.group_id %>
+      <%# render_many Enum.filter(@character.character_spells, & &1.spell.traditions |> Enum.member?(tradition.id)), DsaWeb.CharacterSpellView, "roll_row.html", as: :entry, conn: @conn, group_id: @current_user.group_id %>
+    <%# end %>
   </tbody>
 </table>
 <% end %>

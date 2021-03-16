@@ -25,7 +25,7 @@
         <% %Dsa.Event.TraitRoll{} -> %>
           <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
 
-        <% Log.Type.SpellRoll -> %>
+        <% %Dsa.Event.SpellRoll{} -> %>
           <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
 
 

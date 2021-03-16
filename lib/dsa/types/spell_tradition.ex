@@ -5,7 +5,7 @@ defmodule Dsa.Type.SpellTradition do
 
   @traditions [
     %{
-      id: :super,
+      id: :A,
       order: 0,
       title: gettext("SuperMagie"),
       short: gettext("Suer"),
@@ -13,7 +13,7 @@ defmodule Dsa.Type.SpellTradition do
       probe: "MU/GE/KK"
     },
     %{
-      id: :mega,
+      id: :B,
       order: 1,
       title: gettext("MegaMagie"),
       short: gettext("Mega"),
@@ -21,7 +21,7 @@ defmodule Dsa.Type.SpellTradition do
       probe: "IN/CH/CH"
     },
     %{
-      id: :ultra,
+      id: :C,
       order: 2,
       title: gettext("UltraMagie"),
       short: gettext("Ultra"),

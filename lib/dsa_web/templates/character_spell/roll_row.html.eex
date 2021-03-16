@@ -1,6 +1,5 @@
 <tr>
   <td class="text-left"><%= @entry.spell.name %></td>
-  <td><%= be(@entry.spell.be) %></td>
   <td><%= probe(@entry.spell.probe) %></td>
   <td class="px-1 font-bold"><%= @entry.level %></td>
   <%= if @group_id do %>
