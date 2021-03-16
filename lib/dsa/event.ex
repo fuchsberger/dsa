@@ -53,6 +53,8 @@ defmodule Dsa.Event do
   # Skill Rolls
   def change_skill_roll(attrs \\ %{}), do: SkillRoll.changeset(%SkillRoll{}, attrs)
 
+
+  # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
 
   def create_skill_roll(character, group, attrs) do
