@@ -30,6 +30,7 @@ defmodule Dsa.Characters.Character do
     belongs_to :user, Dsa.Accounts.User
 
     has_many :character_skills, Dsa.Characters.CharacterSkill, on_replace: :delete
+    has_many :character_spells, Dsa.Characters.CharacterSpell, on_replace: :delete
 
     timestamps()
   end

@@ -35,8 +35,8 @@
                 to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
-              <%# menu_link @conn, gettext("Spells"),
-                to: Routes.dsa_path(@conn, :spells),
+              <%= menu_link @conn, gettext("Spells"),
+                to: Routes.character_spell_path(@conn, :index, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
               <%# menu_link @conn, gettext("Combat"),

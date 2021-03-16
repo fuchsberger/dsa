@@ -1,0 +1,19 @@
+<h1>Listing Spells</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Be</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for spell <- @spells do %>
+    <tr>
+      <td><%= spell.name %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

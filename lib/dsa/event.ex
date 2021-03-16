@@ -7,7 +7,7 @@ defmodule Dsa.Event do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Event.{Setting, Log, SkillRoll, TraitRoll}
+  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, TraitRoll}
 
   require Logger
 
@@ -19,10 +19,12 @@ defmodule Dsa.Event do
   """
   def list_logs(group_id) do
     # TODO: Optimize query (limit, only load required fields, load as map)
-    group = Repo.get!(from(g in Dsa.Accounts.Group, preload: [skill_rolls: [:character, :skill]]), group_id)
+    group = Repo.get!(from(g in Dsa.Accounts.Group, preload: [skill_rolls: [:character, :skill],
+spell_rolls: [:character, :spell]
+    ]), group_id)
 
     # TODO: add other types of logs (all logs require inserted_at timestamps)
-    entries = group.skill_rolls
+    entries = group.skill_rolls ++ group.spell_rolls
 
     entries
     |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
@@ -39,6 +41,7 @@ defmodule Dsa.Event do
   def delete_logs!(group_id) do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
     Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
+    Repo.delete_all(from(r in SpellRoll, where: r.group_id == ^group_id))
     # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
 
@@ -52,8 +55,11 @@ defmodule Dsa.Event do
   # Skill Rolls
   def change_skill_roll(attrs \\ %{}), do: SkillRoll.changeset(%SkillRoll{}, attrs)
 
-  def create_skill_roll(character, group, attrs) do
 
+  # Spell Rolls
+  def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
+
+  def create_skill_roll(character, group, attrs) do
     changeset = change_skill_roll(attrs)
 
     if changeset.valid? do
@@ -67,6 +73,39 @@ defmodule Dsa.Event do
         |> Repo.preload(character_skills: [:skill])
         |> Map.get(:character_skills)
         |> Enum.find(& &1.skill_id == skill_id)
+
+      dice = Trial.roll()
+      [t1, t2, t3 ] = get_character_trait_values(character, probe)
+
+      # produce roll results
+      {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
+
+      changeset
+      |> put_change(:roll, dice)
+      |> put_change(:quality, quality)
+      |> put_change(:critical, critical?)
+      |> put_assoc(:character, character)
+      |> put_assoc(:group, group)
+      |> Repo.insert()
+    else
+      changeset
+    end
+  end
+
+  def create_spell_roll(character, group, attrs) do
+    changeset = change_spell_roll(attrs)
+
+    if changeset.valid? do
+      modifier = get_field(changeset, :modifier)
+      spell_id = get_field(changeset, :spell_id)
+
+      # get required inputs
+
+      %{level: level, spell: %{probe: probe}} =
+        character
+        |> Repo.preload(character_spells: [:spell])
+        |> Map.get(:character_spells)
+        |> Enum.find(& &1.spell_id == spell_id)
 
       dice = Trial.roll()
       [t1, t2, t3 ] = get_character_trait_values(character, probe)
