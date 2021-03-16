@@ -5,12 +5,12 @@ defmodule Dsa.Event.TraitRoll do
   import DsaWeb.DsaHelpers, only: [traits: 0]
 
   schema "trait_rolls" do
+    field :roll, :integer
     field :trait, Ecto.Enum, values: traits()
     field :modifier, :integer, default: 0
-    field :dice, Dsa.Type.Dice
     field :success, :boolean, default: false
     field :critical, :boolean, default: false
-    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :character, Dsa.Characters.Character
     belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end

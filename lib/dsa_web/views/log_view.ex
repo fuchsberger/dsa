@@ -1,6 +1,9 @@
 defmodule DsaWeb.LogView do
   use DsaWeb, :view
 
+  import Dsa.Trial, only: [roll: 3]
+
+  alias Dsa.Trial
   alias Dsa.Event.{Log, TraitRoll}
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
@@ -60,7 +63,4 @@ defmodule DsaWeb.LogView do
       {q, false} -> content_tag :span, "✓ #{q}", class: "#{@base} bg-green-50 text-green-500"
     end
   end
-
-  # defp trial_result(_form, _entry) do
-  # end
 end

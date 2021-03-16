@@ -7,24 +7,28 @@ defmodule DsaWeb.CharacterSkillController do
   alias Dsa.{Characters, Event}
 
   action_fallback DsaWeb.ErrorController
-  plug :assign_character
+
+  def action(conn, _) do
+    with character <- Characters.get!(conn.assigns.current_user, conn.params["character_id"]) do
+      conn = assign(conn, :character, character)
+      apply(__MODULE__, action_name(conn), [conn, conn.params, character])
+    end
+  end
 
   def index(conn, _params, character) do
     conn
-    |> assign(:character, character)
-    |> assign(:changeset, Event.change_skill_roll(%{}))
-    |> assign(:trait_changeset, Event.change_trait_roll(%{}))
+    |> assign(:changeset, Event.change_skill_roll())
     |> render("index.html")
   end
 
-  def edit(conn, _params, character) do
+  def edit_all(conn, _params, character) do
     conn
     |> assign(:character, character)
     |> assign(:changeset, Characters.change(character))
-    |> render("character_edit_skills.html")
+    |> render("edit.html")
   end
 
-  def update(conn, %{"character" => params}, character) do
+  def update_all(conn, %{"character" => params}, character) do
     case Characters.update(character, params) do
       {:ok, character} ->
         conn
@@ -35,7 +39,7 @@ defmodule DsaWeb.CharacterSkillController do
         conn
         |> assign(:character, character)
         |> assign(:changeset, changeset)
-        |> render("character_edit_skills.html")
+        |> render("edit.html")
     end
   end
 
@@ -44,13 +48,13 @@ defmodule DsaWeb.CharacterSkillController do
       {:ok, character} ->
         conn
         |> put_flash(:info, gettext("Skills updated successfully."))
-        |> redirect(to: Routes.character_skill_path(conn, :edit_skills, character))
+        |> redirect(to: Routes.character_skill_path(conn, :edit_all, character))
 
       {:error, changeset} ->
         conn
         |> assign(:character, character)
         |> assign(:changeset, changeset)
-        |> render("character_edit_skills.html")
+        |> render("edit.html")
     end
   end
 
@@ -59,19 +63,13 @@ defmodule DsaWeb.CharacterSkillController do
       {:ok, character} ->
         conn
         |> put_flash(:info, gettext("Skills updated successfully."))
-        |> redirect(to: Routes.character_skill_path(conn, :edit_skills, character))
+        |> redirect(to: Routes.character_skill_path(conn, :edit_all, character))
 
       {:error, changeset} ->
         conn
         |> assign(:character, character)
         |> assign(:changeset, changeset)
-        |> render("character_edit_skills.html")
-    end
-  end
-
-  defp assign_character(conn, _opts) do
-    with {:ok, c} <- Characters.get!(conn.assigns.current_user, conn.params["character_id"]) do
-      assign(conn, :character, c)
+        |> render("edit.html")
     end
   end
 end

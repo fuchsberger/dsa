@@ -1,4 +1,4 @@
-<%= form_for @changeset, Routes.character_skill_path(@conn, :update, @character), [method: :put], fn f -> %>
+<%= form_for @changeset, Routes.character_skill_path(@conn, :update_all, @character), [method: :put], fn f -> %>
 
 <div class='sticky top-0 bg-gray-100 py-3'>
   <div class='flex justify-between pb-1'>
@@ -33,7 +33,7 @@
   </thead>
   <tbody class="bg-white divide-y divide-gray-200">
     <%= for f_cs <- inputs_for(f, :character_skills) do %>
-      <%= render DsaWeb.SkillView, "edit_row.html", f: f_cs %>
+      <%= render "edit_row.html", f: f_cs %>
     <% end %>
   </tbody>
 </table>

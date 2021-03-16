@@ -61,11 +61,10 @@ defmodule DsaWeb.Router do
       put "/skills/update", CharacterSkillController, :update_all, as: :skill
       put "/skills/add", CharacterSkillController, :add_all, as: :skill
       delete "/skills/remove", CharacterSkillController, :remove_all, as: :skill
-
-      # Roll Routes
-      post "/roll/skill", LogController, :skill_roll
-      post "/roll/trait", LogController, :trait_roll
     end
+
+    # Event Routes
+    post "/characters/:character_id/skill_roll", EventController, :skill_roll
 
     resources "/user", UserController, only: [:delete, :edit, :update]
 
@@ -75,7 +74,6 @@ defmodule DsaWeb.Router do
     delete "/group/leave", GroupController, :leave
 
     live "/combat", DsaLive, :combat
-    live "/roll", DsaLive, :roll
 
     live "/spells", DsaLive, :spells
   end

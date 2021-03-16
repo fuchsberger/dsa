@@ -12,7 +12,7 @@ defmodule Dsa.Data.MagicTrait do
     field :magic_trait_id, :integer
     field :details, :string
     field :ap, :integer
-    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :character, Dsa.Characters.Character
   end
 
   @fields ~w(magic_trait_id character_id ap)a

@@ -17,7 +17,7 @@ defmodule Dsa.Event.Log do
   schema "logs" do
     field :data, :map
     field :type, Type, default: NotSpecified
-    belongs_to :character, Dsa.Accounts.Character
+    belongs_to :character, Dsa.Characters.Character
     belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end

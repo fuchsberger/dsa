@@ -5,8 +5,8 @@ defmodule Dsa.Accounts.Group do
   schema "groups" do
     field :name, :string
     belongs_to :master, Dsa.Accounts.User
-    has_many :logs, Dsa.Event.Log
     has_many :users, Dsa.Accounts.User
+    has_many :skill_rolls, Dsa.Event.SkillRoll
     timestamps()
   end
 

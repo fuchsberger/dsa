@@ -22,14 +22,6 @@ defmodule DsaWeb.DsaLive do
           visible_characters: @visible_characters
         %>
 
-      <% :roll -> %>
-        <%= live_component @socket, DsaWeb.ModifierComponent, modifier: @modifier %>
-        <%= live_component @socket, DsaWeb.RollComponent,
-          id: :roll,
-          character: @user.active_character,
-          modifier: @modifier
-        %>
-
       <% _ -> %>
         <%= live_component @socket, DsaWeb.ErrorComponent, type: 404 %>
     <% end %>

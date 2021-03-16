@@ -1,4 +1,4 @@
-defmodule DsaWeb.LogController do
+defmodule DsaWeb.EventController do
   @moduledoc """
   Handles user actions that result in log entries.
   """
@@ -30,16 +30,16 @@ defmodule DsaWeb.LogController do
     end
   end
 
-  def trait_roll(conn, %{"trait_roll" => roll_params}, group, character) do
-    case Event.create_trait_roll(character, group, roll_params) do
-      {:ok, trait_roll} ->
-        trait_roll = Dsa.Repo.preload(trait_roll, :character)
-        broadcast(group.id, {:log, trait_roll})
-        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+  # def trait_roll(conn, %{"trait_roll" => roll_params}, group, character) do
+  #   case Event.create_trait_roll(character, group, roll_params) do
+  #     {:ok, trait_roll} ->
+  #       trait_roll = Dsa.Repo.preload(trait_roll, :character)
+  #       broadcast(group.id, {:log, trait_roll})
+  #       redirect(conn, to: Routes.character_skill_path(conn, :index, character))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
-        redirect(conn, to: Routes.character_skill_path(conn, :index, character))
-    end
-  end
+  #     {:error, %Ecto.Changeset{} = changeset} ->
+  #       Logger.warn inspect changeset
+  #       redirect(conn, to: Routes.character_skill_path(conn, :index, character))
+  #   end
+  # end
 end

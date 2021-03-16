@@ -5,19 +5,28 @@ defmodule Dsa.Event do
   import Ecto.Changeset, only: [get_field: 2, put_assoc: 3, put_change: 3]
   import Ecto.Query, warn: false
 
-  alias Dsa.Repo
+  alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
   alias Dsa.Event.{Setting, Log, SkillRoll, TraitRoll}
 
   require Logger
 
+  # LOGS
+
+  @doc """
+  Lists the latest 200 log entries of all types and merges them in a single list sorted by date (desc).
+
+  """
   def list_logs(group_id) do
-    from(l in Log,
-      limit: 200,
-      order_by: [desc: l.inserted_at],
-      preload: [:character],
-      where: l.group_id == ^group_id)
-    |> Repo.all()
+    # TODO: Optimize query (limit, only load required fields, load as map)
+    group = Repo.get!(from(g in Dsa.Accounts.Group, preload: [skill_rolls: [:character, :skill]]), group_id)
+
+    # TODO: add other types of logs (all logs require inserted_at timestamps)
+    entries = group.skill_rolls
+
+    entries
+    |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
+    |> Enum.take(200)
   end
 
   def change_log(attrs \\ %{}), do: Log.changeset(%Log{}, attrs)
@@ -30,7 +39,7 @@ defmodule Dsa.Event do
   def delete_logs!(group_id) do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
     Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
-    Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
+    # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
 
   # Settings (Group View, does not persist in database)
@@ -41,27 +50,36 @@ defmodule Dsa.Event do
   end
 
   # Skill Rolls
-  def change_skill_roll(attrs), do: SkillRoll.changeset(%SkillRoll{}, attrs)
+  def change_skill_roll(attrs \\ %{}), do: SkillRoll.changeset(%SkillRoll{}, attrs)
 
   def create_skill_roll(character, group, attrs) do
 
-    changeset =
-      %SkillRoll{}
-      |> SkillRoll.changeset(attrs)
-      |> put_assoc(:character, character)
-      |> put_assoc(:group, group)
+    changeset = change_skill_roll(attrs)
 
     if changeset.valid? do
-      skill_id = get_field(changeset, :skill_id)
       modifier = get_field(changeset, :modifier)
+      skill_id = get_field(changeset, :skill_id)
 
-      {dices, quality, critically?} = Dsa.Trial.handle_skill_event(character, skill_id, modifier)
+      # get required inputs
 
+      %{level: level, skill: %{probe: probe}} =
+        character
+        |> Repo.preload(character_skills: [:skill])
+        |> Map.get(:character_skills)
+        |> Enum.find(& &1.skill_id == skill_id)
+
+      dice = Trial.roll()
+      [t1, t2, t3 ] = get_character_trait_values(character, probe)
+
+      # produce roll results
+      {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
 
       changeset
-      |> put_change(:dice, dices)
+      |> put_change(:roll, dice)
       |> put_change(:quality, quality)
-      |> put_change(:critical, critically?)
+      |> put_change(:critical, critical?)
+      |> put_assoc(:character, character)
+      |> put_assoc(:group, group)
       |> Repo.insert()
     else
       changeset
@@ -69,29 +87,35 @@ defmodule Dsa.Event do
   end
 
   # Trait Rolls
-  def change_trait_roll(attrs), do: TraitRoll.changeset(%TraitRoll{}, attrs)
+  # def change_trait_roll(attrs), do: TraitRoll.changeset(%TraitRoll{}, attrs)
 
-  def create_trait_roll(character, group, attrs) do
+  # def create_trait_roll(character, group, attrs) do
 
-    changeset =
-      %TraitRoll{}
-      |> TraitRoll.changeset(attrs)
-      |> put_assoc(:character, character)
-      |> put_assoc(:group, group)
+  #   changeset =
+  #     %TraitRoll{}
+  #     |> TraitRoll.changeset(attrs)
+  #     |> put_assoc(:character, character)
+  #     |> put_assoc(:group, group)
 
-    if changeset.valid? do
-      trait = get_field(changeset, :trait)
-      modifier = get_field(changeset, :modifier)
+  #   if changeset.valid? do
+  #     trait = get_field(changeset, :trait)
+  #     modifier = get_field(changeset, :modifier)
 
-      {dices, success?, critically?} = Dsa.Trial.handle_trait_event(character, trait, modifier)
+  #     {dices, success?, critically?} = Dsa.Trial.handle_trait_event(character, trait, modifier)
 
-      changeset
-      |> put_change(:dice, dices)
-      |> put_change(:success, success?)
-      |> put_change(:critical, critically?)
-      |> Repo.insert()
-    else
-      changeset
-    end
+  #     changeset
+  #     |> put_change(:dice, dices)
+  #     |> put_change(:success, success?)
+  #     |> put_change(:critical, critically?)
+  #     |> Repo.insert()
+  #   else
+  #     changeset
+  #   end
+  # end
+
+  # Given a character and a probe, returns the characters traits for it.
+  # Example: {:mu, :kl, :ch} -> [12, 13, 13]
+  defp get_character_trait_values(%Character{} = character, {t1, t2, t3}) do
+    [Map.get(character, t1), Map.get(character, t2), Map.get(character, t3)]
   end
 end
