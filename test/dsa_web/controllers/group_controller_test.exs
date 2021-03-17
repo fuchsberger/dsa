@@ -1,6 +1,13 @@
 defmodule DsaWeb.GroupControllerTest do
   use DsaWeb.ConnCase, async: true
 
+  test "index/2 should show list of groups", %{conn: conn} do
+    conn = get conn, "/groups"
+    assert html_response(conn, 200) =~ gettext("Groups")
+    refute html_response(conn, 200) =~ gettext("New Group")
+  end
+
+
   describe "with a logged-in user" do
     alias Dsa.Accounts
 
@@ -13,6 +20,41 @@ defmodule DsaWeb.GroupControllerTest do
     end
 
     defp group_count, do: Enum.count(Accounts.list_groups())
+
+    @tag login_as: "max"
+    test "index/2 should show New Group button if user is not part of a group", %{conn: conn} do
+      user2 = user_fixture()
+      group_fixture(user2, name: "Wraiths")
+
+      conn = get conn, "/groups"
+      assert html_response(conn, 200) =~ gettext("Groups")
+      assert html_response(conn, 200) =~ gettext("New Group")
+      assert html_response(conn, 200) =~ gettext("Wraiths")
+      assert html_response(conn, 200) =~ gettext("Join")
+    end
+
+    @tag login_as: "max"
+    test "index/2 should not show New Group button if user is part of a group", %{conn: conn, user: user} do
+      group = group_fixture(user, @create_attrs)
+      {:ok, user} = Accounts.join_group(user, group)
+
+      conn = assign(conn, :current_user, user)
+      conn = get conn, "/groups"
+      assert html_response(conn, 200) =~ gettext("Groups")
+      assert html_response(conn, 200) =~ gettext("Edit")
+      refute html_response(conn, 200) =~ gettext("New Group")
+    end
+
+    @tag login_as: "max"
+    test "index/2 should not show leave button if user is part of group but not master", %{conn: conn, user: user} do
+      user2 = user_fixture()
+      group = group_fixture(user2, @create_attrs)
+      {:ok, user} = Accounts.join_group(user, group)
+
+      conn = assign(conn, :current_user, user)
+      conn = get conn, "/groups"
+      assert html_response(conn, 200) =~ gettext("Leave")
+    end
 
     @tag login_as: "max"
     test "create group and redirect", %{conn: conn, user: %{id: user_id}} do
@@ -65,13 +107,16 @@ defmodule DsaWeb.GroupControllerTest do
     # end
   end
 
-  test "requires user authentication on all actions", %{conn: conn} do
+  test "requires user authentication on most actions", %{conn: conn} do
     Enum.each([
+      get(conn, Routes.group_path(conn, :new)),
+      post(conn, Routes.group_path(conn, :create)),
       delete(conn, Routes.group_path(conn, :leave)),
+      get(conn, Routes.group_path(conn, :edit, 123)),
+      put(conn, Routes.group_path(conn, :join, 123))
     ], fn conn ->
       assert html_response(conn, 302)
       assert conn.halted
     end)
   end
-
 end

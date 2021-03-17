@@ -38,13 +38,7 @@ defmodule DsaWeb.Auth do
   """
   def authenticate_user(conn, _opts \\ []) do
     if conn.assigns.current_user do
-      if is_nil(conn.assigns.current_user.group_id) do
-        conn
-        |> assign(:groups, Accounts.list_groups())
-        |> assign(:group_changeset, Accounts.change_group(%Accounts.Group{}))
-      else
-        conn
-      end
+      conn
     else
       conn
       |> put_flash(:error, gettext("You must be logged in to access this page."))

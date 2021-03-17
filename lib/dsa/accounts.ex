@@ -119,7 +119,13 @@ defmodule Dsa.Accounts do
   ##########################################################
   # Group related APIs
 
-  def list_groups, do: Repo.all(from(g in Group, preload: :master))
+  def list_groups do
+    from(g in Group, preload: [
+      master: ^from(u in User, select: u.username),
+      users: ^from(u in User, select: u.id)
+    ])
+    |> Repo.all()
+  end
 
   def list_group_options, do: Repo.all(from(g in Group, select: {g.name, g.id}, order_by: g.name))
 
@@ -160,10 +166,6 @@ defmodule Dsa.Accounts do
     |> Ecto.Changeset.put_assoc(:group, nil)
     |> Repo.update()
   end
-
-
-
-
 
   def delete(struct), do: Repo.delete(struct)
 end
