@@ -8,6 +8,7 @@ defmodule Dsa.Accounts.Group do
     has_many :users, Dsa.Accounts.User
     has_many :skill_rolls, Dsa.Event.SkillRoll
     has_many :spell_rolls, Dsa.Event.SpellRoll
+    has_many :main_logs, Dsa.Event.MainLog
     timestamps()
   end
 
