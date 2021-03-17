@@ -1,6 +1,6 @@
 <div class="flex justify-between mt-3 mb-2">
   <h1 class='page-heading'><%= gettext "Groups" %></h1>
-  <%= if @current_user do %>
+  <%= if @current_user && is_nil(@current_user.group_id) do %>
     <%= link gettext("New Group"), to: Routes.group_path(@conn, :new),
     class: "button gray leading-8 h-8" %>
   <% end %>
@@ -39,14 +39,15 @@
           <%= if @current_user do %>
             <td class='text-center'>
               <%= cond do %>
-                <% @current_user.group_id == group.master.id -> %>
+                <% is_nil(@current_user.group_id) -> %>
+                  <%= link gettext("Join"), to: Routes.group_path(@conn, :join, group), method: :put %>
+
+                <% @current_user.id == group.master_id -> %>
                   <%= link gettext("Edit"), to: Routes.group_path(@conn, :edit, group) %>
 
                 <% Enum.member?(group.users, @current_user.id) -> %>
                   <%= link gettext("Leave"), to: Routes.group_path(@conn, :leave), method: :delete %>
 
-                <% is_nil(@current_user.group_id) -> %>
-                  <%= link gettext("Join"), to: Routes.group_path(@conn, :join, group), method: :put %>
                 <% true -> %>
               <% end %>
             </td>

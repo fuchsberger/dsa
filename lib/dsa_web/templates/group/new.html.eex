@@ -1,0 +1,11 @@
+<%= form_for @changeset, Routes.group_path(@conn, :create), fn f -> %>
+  <%= hidden_input f, :redirect, value: current_path(@conn) %>
+  <div class='lg:grid lg:grid-cols-4 gap-x-3'>
+    <div class='lg:col-span-3'>
+      <%= label f, :name, gettext("Group Name"), class: "label" %>
+      <%= text_input f, :name, class: "input", placeholder: gettext("Name") %>
+      <%= error_tag f, :name %>
+    </div>
+    <%= submit gettext("Create Group"), class: "button primary h-7 leading-7 mt-5" %>
+  </div>
+<% end %>

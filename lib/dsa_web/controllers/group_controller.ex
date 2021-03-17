@@ -30,7 +30,7 @@ defmodule DsaWeb.GroupController do
   end
 
   def edit(conn, %{"id" => id}) do
-    group = Data.get_group!(id)
+    group = Accounts.get_group!(id)
     conn
     |> assign(:changeset, Accounts.change_group(group))
     |> assign(:group, group)

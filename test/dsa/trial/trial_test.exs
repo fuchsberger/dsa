@@ -8,7 +8,7 @@ defmodule Dsa.TrialTest do
 
   test "roll/2 gives proper number of dice and non is above max" do
     count = Enum.random(1..6)
-    max = Enum.random(1..20)
+    max = Enum.random(2..20)
     dice = Trial.roll(count, max)
     assert Enum.count(dice) == count
     Enum.each(dice, & assert &1 <=max && &1 > 0)

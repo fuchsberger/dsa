@@ -12,8 +12,18 @@
       <%= if @current_user.group_id do %>
         <%= live_render(@conn, DsaWeb.LogLive, session: %{"group_id" => @current_user.group_id} ) %>
       <% else %>
-        <%= render DsaWeb.GroupView, "manage.html",
-          conn: @conn, groups: @conn.assigns.groups, changeset: @conn.assigns.group_changeset %>
+        <div class='flex justify-center'>
+          <div class='alert info my-3'>
+            <%= icon @conn, "exclamation-circle", "absolute left-3 top-3 w-5 h-5" %>
+            <%= gettext "You must join a DSA group before the log can be displayed." %>
+          </div>
+        </div>
+
+        <div class='flex justify-center'>
+          <%= link gettext("Create Group"), to: Routes.group_path(@conn, :new), class: "button gray h-7 leading-7 mr-2" %>
+
+          <%= link gettext("List existing Groups"), to: Routes.group_path(@conn, :index), class: "button gray h-7 leading-7 ml-2" %>
+        </div>
       <% end %>
     <% else %>
       <%= render DsaWeb.SessionView, "new.html", conn: @conn %>

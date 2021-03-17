@@ -83,10 +83,6 @@ defmodule DsaWeb.Router do
     resources "/groups", GroupController, except: [:index, :update]
     put "/groups/join/:id", GroupController, :join
     delete "/group/leave", GroupController, :leave
-
-    live "/combat", DsaLive, :combat
-
-    live "/spells", DsaLive, :spells
   end
 
   # Admin Routes

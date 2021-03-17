@@ -167,9 +167,5 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-
-
-
-
   def delete(struct), do: Repo.delete(struct)
 end
