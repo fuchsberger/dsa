@@ -23,11 +23,8 @@
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
       <h1 class='font-sans font-bold text-3xl'>Error 500</h1>
       <hr>
-      <h2 class='font-sans font-medium text-2xl mb-3'><%= gettext "Internal Server Error" %></h2>
-      <p>
-        <%= gettext "The server has encountered a situation it doesn't know how to handle." %><br>
-        <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
-      </p>
+      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Internal Server Error" %></h2>
+      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
     </div>
   </body>
 </html>

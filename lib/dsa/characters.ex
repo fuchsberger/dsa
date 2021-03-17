@@ -18,6 +18,13 @@ defmodule Dsa.Characters do
     |> Repo.all()
   end
 
+  def fetch(id) do
+    case Character |> preload_assocs() |> Repo.get(id) do
+      nil -> {:error, :character_not_found}
+      character -> {:ok, character}
+    end
+  end
+
   def get!(id) do
     Character
     |> preload_assocs()
@@ -144,4 +151,43 @@ defmodule Dsa.Characters do
   # def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
   # def add_spell_trick(params), do: SpellTrick.changeset(%SpellTrick{}, params) |> Repo.insert()
   # def add_staff_spell(params), do: StaffSpell.changeset(%StaffSpell{}, params) |> Repo.insert()
+
+  alias Dsa.Characters.CombatSet
+
+  def list_combat_sets(%Character{} = character) do
+    CombatSet
+    |> character_combat_set_query(character)
+    |> Repo.all()
+  end
+
+  def get_combat_set!(%Character{} = character, id) do
+    CombatSet
+    |> character_combat_set_query(character)
+    |> Repo.get!(id)
+  end
+
+  defp character_combat_set_query(query, %Character{id: character_id}) do
+    from(c in query, order_by: c.name, where: c.character_id == ^character_id)
+  end
+
+  def create_combat_set(character, attrs \\ %{}) do
+    %CombatSet{}
+    |> CombatSet.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:character, character)
+    |> Repo.insert()
+  end
+
+  def update_combat_set(%CombatSet{} = combat_set, attrs) do
+    combat_set
+    |> CombatSet.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_combat_set(%CombatSet{} = combat_set) do
+    Repo.delete(combat_set)
+  end
+
+  def change_combat_set(%CombatSet{} = combat_set, attrs \\ %{}) do
+    CombatSet.changeset(combat_set, attrs)
+  end
 end

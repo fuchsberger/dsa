@@ -1,0 +1,42 @@
+<h1>Listing Combat sets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>At</th>
+      <th>Pa</th>
+      <th>Aw</th>
+      <th>Rs</th>
+      <th>Be</th>
+      <th>Base ini</th>
+      <th>Gs</th>
+      <th>Tp dice</th>
+      <th>Tp bonus</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for combat_set <- @combat_sets do %>
+    <tr>
+      <td><%= combat_set.at %></td>
+      <td><%= combat_set.pa %></td>
+      <td><%= combat_set.aw %></td>
+      <td><%= combat_set.rs %></td>
+      <td><%= combat_set.be %></td>
+      <td><%= combat_set.base_ini %></td>
+      <td><%= combat_set.gs %></td>
+      <td><%= combat_set.tp_dice %></td>
+      <td><%= combat_set.tp_bonus %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.character_combat_set_path(@conn, :show, @character, combat_set) %></span>
+        <span><%= link "Edit", to: Routes.character_combat_set_path(@conn, :edit, @character, combat_set) %></span>
+        <span><%= link "Delete", to: Routes.character_combat_set_path(@conn, :delete, @character, combat_set), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Combat set", to: Routes.character_combat_set_path(@conn, :new, @character) %></span>

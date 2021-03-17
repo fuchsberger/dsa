@@ -1,0 +1,47 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :at %>
+  <%= number_input f, :at, class: "" %>
+  <%= error_tag f, :at %>
+
+  <%= label f, :pa %>
+  <%= number_input f, :pa, class: "" %>
+  <%= error_tag f, :pa %>
+
+  <%= label f, :aw %>
+  <%= number_input f, :aw, class: "" %>
+  <%= error_tag f, :aw %>
+
+  <%= label f, :rs %>
+  <%= number_input f, :rs, class: "" %>
+  <%= error_tag f, :rs %>
+
+  <%= label f, :be %>
+  <%= number_input f, :be, class: "" %>
+  <%= error_tag f, :be %>
+
+  <%= label f, :base_ini %>
+  <%= number_input f, :base_ini, class: "" %>
+  <%= error_tag f, :base_ini %>
+
+  <%= label f, :gs %>
+  <%= number_input f, :gs, class: "" %>
+  <%= error_tag f, :gs %>
+
+  <%= label f, :tp_dice %>
+  <%= number_input f, :tp_dice, class: "" %>
+  <%= error_tag f, :tp_dice %>
+
+  <%= label f, :tp_bonus %>
+  <%= number_input f, :tp_bonus, class: "" %>
+  <%= error_tag f, :tp_bonus %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+<% end %>

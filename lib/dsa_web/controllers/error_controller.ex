@@ -31,6 +31,15 @@ defmodule DsaWeb.ErrorController do
     |> render(:"404")
   end
 
+  def call(conn, {:error, :character_not_found}) do
+    conn
+    |> put_flash(:error, gettext("The given character was not found."))
+    |> put_status(:not_found)
+    |> put_layout(false)
+    |> put_view(DsaWeb.ErrorView)
+    |> render(:"404")
+  end
+
   def call(conn, {:error, :invalid_credentials}) do
     conn
     |> put_flash(:error, gettext("Invalid Login Data."))
@@ -52,4 +61,9 @@ defmodule DsaWeb.ErrorController do
     |> put_view(DsaWeb.ErrorView)
     |> render(:"500")
   end
+
+  # defp render_error(conn, status) do
+  #   conn
+
+  # end
 end
