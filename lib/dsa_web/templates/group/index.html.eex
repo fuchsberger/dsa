@@ -28,7 +28,7 @@
       <%= for group <- @groups do %>
         <tr>
           <td class="py-1 whitespace-nowrap text-gray-900 text-bold"><%= group.name %></td>
-          <td class='hidden lg:table-cell text-gray-700'><%= group.master.username %></td>
+          <td class='hidden lg:table-cell text-gray-700'><%= group.master %></td>
           <td class='text-center'><%= Enum.count(group.users) %></td>
           <%= if admin?(@conn) do %>
             <td class='text-center'>

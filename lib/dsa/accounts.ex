@@ -121,7 +121,7 @@ defmodule Dsa.Accounts do
 
   def list_groups do
     from(g in Group, preload: [
-      master: ^from(u in User, select: map(u, [:id, :username])),
+      master: ^from(u in User, select: u.username),
       users: ^from(u in User, select: u.id)
     ])
     |> Repo.all()
