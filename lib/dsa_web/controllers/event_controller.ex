@@ -32,7 +32,6 @@ defmodule DsaWeb.EventController do
   def spell_roll(conn, %{"spell_roll" => roll_params}, group, character) do
     case Event.create_spell_roll(character, group, roll_params) do
       {:ok, spell_roll} ->
-        spell_roll = Dsa.Repo.preload(spell_roll, [:character, :spell])
         broadcast(group.id, {:log, spell_roll})
         redirect(conn, to: Routes.character_spell_path(conn, :index, character))
 

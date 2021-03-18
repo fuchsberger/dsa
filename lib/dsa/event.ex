@@ -66,6 +66,22 @@ defmodule Dsa.Event do
   # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
 
+  defp trial_result_type(quality, critical?) do
+    case {quality, critical?} do
+      {0, true} ->
+        {"✗ K!", MainLog.ResultType.Failure}
+
+      {_, true} ->
+        {"✓ K!", MainLog.ResultType.Success}
+
+      {0, false} ->
+        {"✗", MainLog.ResultType.Failure}
+
+      {q, false} ->
+        {"✓ #{quality}", MainLog.ResultType.Success}
+    end
+  end
+
   def create_skill_roll(character, group, attrs) do
     changeset = change_skill_roll(attrs)
 
@@ -87,21 +103,7 @@ defmodule Dsa.Event do
       # produce roll results
       {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
 
-      {result, result_type} =
-        case {quality, critical?} do
-          {0, true} ->
-            {"✗ K!", MainLog.ResultType.Failure}
-
-          {_, true} ->
-            {"✓ K!", MainLog.ResultType.Success}
-
-          {0, false} ->
-            {"✗", MainLog.ResultType.Failure}
-
-          {q, false} ->
-            {"✓ #{quality}", MainLog.ResultType.Success}
-        end
-
+      {result, result_type} = trial_result_type(quality, critical?)
       skill_name = Dsa.Repo.get!(Dsa.Data.Skill, skill_id).name
 
       change = %{
@@ -119,7 +121,6 @@ defmodule Dsa.Event do
       MainLog.changeset(%MainLog{}, change)
       |> put_assoc(:group, group)
       |> put_assoc(:character, character)
-      |> IO.inspect()
       |> Repo.insert()
     else
       changeset
@@ -147,12 +148,24 @@ defmodule Dsa.Event do
       # produce roll results
       {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
 
-      changeset
-      |> put_change(:roll, dice)
-      |> put_change(:quality, quality)
-      |> put_change(:critical, critical?)
-      |> put_assoc(:character, character)
+      {result, result_type} = trial_result_type(quality, critical?)
+      spell_name = Dsa.Repo.get!(Dsa.Data.Spell, spell_id).name
+
+      change = %{
+        left: "#{spell_name}",
+        right: "#{modifier}",
+        result: "#{result}",
+        roll: dice,
+        character: character,
+        character_name: character.name,
+        type: MainLog.Type.SpellRoll,
+        result_type: result_type,
+        group_id: group.id
+      }
+
+      MainLog.changeset(%MainLog{}, change)
       |> put_assoc(:group, group)
+      |> put_assoc(:character, character)
       |> Repo.insert()
     else
       changeset

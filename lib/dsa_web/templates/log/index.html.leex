@@ -33,6 +33,8 @@
           <%= case entry.type do %>
             <% Dsa.Event.MainLog.Type.SkillRoll -> %>
               <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
+            <% Dsa.Event.MainLog.Type.SpellRoll -> %>
+              <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
             <% _ -> %>
               <%= render DsaWeb.LogView, "simple_text.html", entry: entry %>
           <% end %>
