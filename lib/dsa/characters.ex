@@ -86,6 +86,27 @@ defmodule Dsa.Characters do
     |> Repo.update()
   end
 
+  def remove_skills(%Character{} = character) do
+    character_skills = Enum.reject(character.character_skills, & &1.level == 0)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_skills, character_skills)
+    |> Repo.update()
+  end
+
+  defp preload_assocs(query) do
+    character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
+    character_spell_query = from(s in CharacterSpell, preload: :spell, order_by: s.spell_id)
+    from(c in query, preload: [character_skills: ^character_skill_query, character_spells: ^character_spell_query])
+  end
+
+  defp user_characters_query(query, %User{id: user_id}) do
+    from(c in query, where: c.user_id == ^user_id)
+  end
+
+  # SPELLS
+
   def add_spells(%Character{} = character) do
     character_spell_ids = Enum.map(character.character_spells, & &1.spell_id)
 
@@ -105,15 +126,6 @@ defmodule Dsa.Characters do
     |> Repo.update()
   end
 
-  def remove_skills(%Character{} = character) do
-    character_skills = Enum.reject(character.character_skills, & &1.level == 0)
-
-    character
-    |> Ecto.Changeset.change()
-    |> put_assoc(:character_skills, character_skills)
-    |> Repo.update()
-  end
-
   def remove_spells(%Character{} = character) do
     character_spells = Enum.reject(character.character_spells, & &1.level == 0)
 
@@ -123,34 +135,7 @@ defmodule Dsa.Characters do
     |> Repo.update()
   end
 
-  defp preload_assocs(query) do
-    character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
-    character_spell_query = from(s in CharacterSpell, preload: :spell, order_by: s.spell_id)
-    from(c in query, preload: [character_skills: ^character_skill_query, character_spells: ^character_spell_query])
-  end
-
-  defp user_characters_query(query, %User{id: user_id}) do
-    from(c in query, where: c.user_id == ^user_id)
-  end
-
-  # TODO: Recycle:
-
-  # def add_advantage(params), do: Advantage.changeset(%Advantage{}, params) |> Repo.insert()
-  # def add_armor(params), do: Armor.changeset(%Armor{}, params) |> Repo.insert()
-  # def add_blessing(params), do: Blessing.changeset(%Blessing{}, params) |> Repo.insert()
-  # def add_combat_trait(params), do: CombatTrait.changeset(%CombatTrait{}, params) |> Repo.insert()
-  # def add_disadvantage(params), do: Disadvantage.changeset(%Disadvantage{}, params) |> Repo.insert()
-  # def add_fate_trait(params), do: FateTrait.changeset(%FateTrait{}, params) |> Repo.insert()
-  # def add_fweapon(params), do: FWeapon.changeset(%FWeapon{}, params) |> Repo.insert()
-  # def add_general_trait(params), do: GeneralTrait.changeset(%GeneralTrait{}, params) |> Repo.insert()
-  # def add_karmal_trait(params), do: KarmalTrait.changeset(%KarmalTrait{}, params) |> Repo.insert()
-  # def add_language(params), do: Language.changeset(%Language{}, params) |> Repo.insert()
-  # def add_magic_trait(params), do: MagicTrait.changeset(%MagicTrait{}, params) |> Repo.insert()
-  # def add_mweapon(params), do: MWeapon.changeset(%MWeapon{}, params) |> Repo.insert()
-  # def add_prayer(params), do: Prayer.changeset(%Prayer{}, params) |> Repo.insert()
-  # def add_script(params), do: Script.changeset(%Script{}, params) |> Repo.insert()
-  # def add_spell_trick(params), do: SpellTrick.changeset(%SpellTrick{}, params) |> Repo.insert()
-  # def add_staff_spell(params), do: StaffSpell.changeset(%StaffSpell{}, params) |> Repo.insert()
+  # COMBAT SETS
 
   alias Dsa.Characters.CombatSet
 

@@ -7,9 +7,10 @@ defmodule Dsa.Data.Spell do
   alias Dsa.Type.Probe
 
   @sf_values ~w(A B C D E)a
-  @fields ~w(name sf traditions t1 t2 t3)a
+  @fields ~w(ritual name sf traditions t1 t2 t3)a
 
   schema "spells" do
+    field :ritual, :boolean, default: false
     field :name, :string
     field :sf, Ecto.Enum, values: @sf_values
     field :traditions, {:array, :integer }
