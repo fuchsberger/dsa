@@ -67,9 +67,9 @@ defmodule Dsa.DataTest do
   describe "spells" do
     alias Dsa.Data.Spell
 
-    # @valid_attrs %{name: "Zauber", traditions: [1], sf: :A, t1: :mu, t2: :kl, t3: :in}
-    # @update_attrs %{name: "Zauber2", ritual: true, sf: :B, traditions: [2, 3], t1: :ch, t2: :ko, t3: :kk}
-    # @invalid_attrs %{name: nil, traditions: nil, sf: nil, t1: nil, t2: nil, t3: nil}
+    @valid_attrs %{name: "Zauber", traditions: [1], sf: :A, t1: :mu, t2: :kl, t3: :in}
+    @update_attrs %{name: "Zauber2", ritual: true, sf: :B, traditions: [2, 3], t1: :ch, t2: :ko, t3: :kk}
+    @invalid_attrs %{name: nil, traditions: nil, sf: nil, t1: nil, t2: nil, t3: nil}
 
     test "list_spells/0 returns all spells in correct order" do
       %Spell{id: id1} = spell_fixture()
@@ -84,53 +84,47 @@ defmodule Dsa.DataTest do
       assert index2 < index1
     end
 
-    # test "get_spell!/2 returns the spell with given id", %{character: character} do
-    #   %Spell{id: id} = spell_fixture(character)
-    #   assert %Spell{id: ^id} = Data.get_spell!(character, id)
-    # end
+    test "get_spell!/1 returns the spell with given id" do
+      %Spell{id: id} = spell_fixture()
+      assert %Spell{id: ^id} = Data.get_spell!(id)
+    end
 
-    # test "create_spell/2 with valid data creates a spell", %{character: c} do
-    #   assert {:ok, %Spell{} = spell} = Data.create_spell(c, @valid_attrs)
-    #   assert spell.name == "TestSet"
-    #   assert spell.at == 10
-    #   assert spell.pa == 10
-    #   assert spell.tp_bonus == 0
-    #   assert spell.tp_dice == 1
-    #   assert spell.tp_type == 6
-    # end
+    test "create_spell/1 with valid data creates a spell" do
+      assert {:ok, %Spell{} = spell} = Data.create_spell(@valid_attrs)
+      assert spell.name == "Zauber"
+      assert spell.traditions == [1]
+      assert spell.sf == :A
+      assert spell.probe == {:mu, :kl, :in}
+    end
 
-    # test "create_spell/2 with invalid data returns error changeset", %{character: c} do
-    #   assert {:error, %Ecto.Changeset{}} = Data.create_spell(c, @invalid_attrs)
-    # end
+    test "create_spell/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Data.create_spell(@invalid_attrs)
+    end
 
-    # test "update_spell/2 with valid data updates the spell", %{character: c} do
-    #   spell = spell_fixture(c)
-    #   assert {:ok, %Spell{} = spell} =
-    #     Data.update_spell(spell, @update_attrs)
-    #   assert spell.name == "TestSet2"
-    #   assert spell.at == 11
-    #   assert spell.pa == 11
-    #   assert spell.tp_bonus == 1
-    #   assert spell.tp_dice == 2
-    #   assert spell.tp_type == 7
-    # end
+    test "update_spell/1 with valid data updates the spell" do
+      spell = spell_fixture()
+      assert {:ok, %Spell{} = spell} = Data.update_spell(spell, @update_attrs)
+      assert spell.name == "Zauber2"
+      assert spell.traditions == [2, 3]
+      assert spell.sf == :B
+      assert spell.probe == {:ch, :ko, :kk}
+    end
 
-    # test "update_spell/2 with invalid data returns error changeset", %{character: c} do
-    #   %Spell{id: id} = spell = spell_fixture(c)
-    #   assert {:error, %Ecto.Changeset{}} =
-    #     Data.update_spell(spell, @invalid_attrs)
-    #   assert %Spell{id: ^id} = Data.get_spell!(c, id)
-    # end
+    test "update_spell/1 with invalid data returns error changeset" do
+      %Spell{id: id} = spell = spell_fixture()
+      assert {:error, %Ecto.Changeset{}} = Data.update_spell(spell, @invalid_attrs)
+      assert %Spell{id: ^id} = Data.get_spell!(id)
+    end
 
-    # test "delete_spell/1 deletes the spell", %{character: character} do
-    #   spell = spell_fixture(character)
-    #   assert {:ok, %Spell{}} = Data.delete_spell(spell)
-    #   assert Data.list_spells(character) == []
-    # end
+    test "delete_spell/1 deletes the spell" do
+      spell = spell_fixture()
+      assert {:ok, %Spell{id: id}} = Data.delete_spell(spell)
+      assert catch_error Data.get_spell!(id)
+    end
 
-    # test "change_spell/1 returns a spell changeset", %{character: character} do
-    #   spell = spell_fixture(character)
-    #   assert %Ecto.Changeset{} = Data.change_spell(spell)
-    # end
+    test "change_spell/1 returns a spell changeset" do
+      spell = spell_fixture()
+      assert %Ecto.Changeset{} = Data.change_spell(spell)
+    end
   end
 end
