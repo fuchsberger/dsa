@@ -20,7 +20,6 @@ defmodule DsaWeb.EventController do
   def skill_roll(conn, %{"skill_roll" => roll_params}, group, character) do
     case Event.create_skill_roll(character, group, roll_params) do
       {:ok, skill_roll} ->
-        skill_roll = Dsa.Repo.preload(skill_roll, [:character, :skill])
         broadcast(group.id, {:log, skill_roll})
         redirect(conn, to: Routes.character_skill_path(conn, :index, character))
 

@@ -15,11 +15,22 @@ defmodule Dsa.Event.MainLog do
     default NotSpecified
   end
 
+  defenum ResultType, :integer do
+    value Neutral, 0
+    value Success, 1
+    value Failure, 2
+
+    default Neutral
+  end
+
   schema "main_log" do
     field :type, Type, default: Type.NotSpecified
+    field :result_type, ResultType, default: ResultType.Neutral
     field :character_name, :string
     field :left, :string
     field :right, :string
+    field :result, :string
+    field :roll, :integer
 
     belongs_to :character, Dsa.Characters.Character
     belongs_to :group, Dsa.Accounts.Group
@@ -29,7 +40,7 @@ defmodule Dsa.Event.MainLog do
 
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:type, :character_name, :left, :right, :group_id, :character_id])
+    |> cast(attrs, [:type, :roll, :character_name, :left, :right, :result, :result_type, :group_id, :character_id])
     |> validate_required([:type, :group_id, :left, :right])
   end
 end

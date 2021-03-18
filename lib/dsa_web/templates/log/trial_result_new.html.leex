@@ -1,0 +1,10 @@
+<div class='flex'>
+  <%= if @show_dice? do %>
+    <% [d1, d2, d3] = roll(3, 20, @entry.roll) %>
+    <%= tag_helper :dice, d1 %>
+    <%= tag_helper :dice, d2 %>
+    <%= tag_helper :dice, d3 %>
+    <%= separator() %>
+  <% end %>
+  <%= content_tag :span, @entry.result, class: result_tag(@entry.result_type) %>
+</div>

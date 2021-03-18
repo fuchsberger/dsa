@@ -31,10 +31,7 @@ defmodule Dsa.Event do
         group_id
       )
 
-    # TODO: add other types of logs (all logs require inserted_at timestamps)
     entries = group.skill_rolls ++ group.spell_rolls ++ group.main_logs
-    IO.inspect("MAINLOG")
-    IO.inspect(group.main_logs)
 
     entries
     |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
@@ -52,6 +49,7 @@ defmodule Dsa.Event do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
     Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
     Repo.delete_all(from(r in SpellRoll, where: r.group_id == ^group_id))
+    Repo.delete_all(from(l in MainLog, where: l.group_id == ^group_id))
     # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
 
@@ -71,21 +69,6 @@ defmodule Dsa.Event do
   def create_skill_roll(character, group, attrs) do
     changeset = change_skill_roll(attrs)
 
-      change = %{
-        left: "hello!",
-        right: "hello right",
-        character: character,
-        type: MainLog.Type.NotSpecified,
-        group_id: 1,
-      }
-      MainLog.changeset(%MainLog{}, change)
-      |> put_assoc(:group, group)
-      |> put_assoc(:character, character)
-      |> IO.inspect()
-      |> Repo.insert()
-
-
-
     if changeset.valid? do
       modifier = get_field(changeset, :modifier)
       skill_id = get_field(changeset, :skill_id)
@@ -104,14 +87,40 @@ defmodule Dsa.Event do
       # produce roll results
       {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
 
-      changeset
-      |> put_change(:roll, dice)
-      |> put_change(:quality, quality)
-      |> put_change(:critical, critical?)
-      |> put_assoc(:character, character)
-      |> put_assoc(:group, group)
-      |> Repo.insert()
+      {result, result_type} =
+        case {quality, critical?} do
+          {0, true} ->
+            {"✗ K!", MainLog.ResultType.Failure}
 
+          {_, true} ->
+            {"✓ K!", MainLog.ResultType.Success}
+
+          {0, false} ->
+            {"✗", MainLog.ResultType.Failure}
+
+          {q, false} ->
+            {"✓ #{quality}", MainLog.ResultType.Success}
+        end
+
+      skill_name = Dsa.Repo.get!(Dsa.Data.Skill, skill_id).name
+
+      change = %{
+        left: "#{skill_name}",
+        right: "#{modifier}",
+        result: "#{result}",
+        roll: dice,
+        character: character,
+        character_name: character.name,
+        type: MainLog.Type.SkillRoll,
+        result_type: result_type,
+        group_id: group.id
+      }
+
+      MainLog.changeset(%MainLog{}, change)
+      |> put_assoc(:group, group)
+      |> put_assoc(:character, character)
+      |> IO.inspect()
+      |> Repo.insert()
     else
       changeset
     end

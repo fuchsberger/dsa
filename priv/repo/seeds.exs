@@ -6,6 +6,8 @@
 
 # Create a user:
 # {:ok, user} = Dsa.Accounts.register_user(%{username: "Username", password: "password", password_confirm: "password", email: "test@test.com"})
+#
+# {:ok, user} = Dsa.Accounts.register_user(%{username: "Benni", password: "Password123", password_confirm: "Password123", email: "test@test.com"})
 
 # Make user an admin
 # user = Dsa.Accounts.get_user!(1)
