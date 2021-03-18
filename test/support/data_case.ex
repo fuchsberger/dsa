@@ -25,6 +25,8 @@ defmodule Dsa.DataCase do
       import Ecto.Query
       import Dsa.DataCase
       import Dsa.TestHelpers
+
+      require Logger
     end
   end
 
