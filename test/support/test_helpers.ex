@@ -1,6 +1,6 @@
 defmodule Dsa.TestHelpers do
 
-  alias Dsa.{Accounts, Characters}
+  alias Dsa.{Accounts, Characters, Data}
 
   import Phoenix.ConnTest, only: [html_response: 2]
 
@@ -54,6 +54,14 @@ defmodule Dsa.TestHelpers do
   def combat_set_fixture(character, attrs \\ %{}) do
     {:ok, combat_set} = Characters.create_combat_set(character, Enum.into(attrs, %{name: "TestSet", at: 10, pa: 10, tp_bonus: 0, tp_dice: 1, tp_type: 6}))
     combat_set
+  end
+
+  def spell_fixture(attrs \\ %{}) do
+    {:ok, spell} =
+      attrs
+      |> Enum.into(%{name: "Spell1", traditions: [1], sf: :A, t1: :mu, t2: :kl, t3: :in})
+      |> Data.create_spell()
+    spell
   end
 
   def unauthorized_response(conn) do
