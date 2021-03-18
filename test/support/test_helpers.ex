@@ -56,6 +56,14 @@ defmodule Dsa.TestHelpers do
     combat_set
   end
 
+  def skill_fixture(attrs \\ %{}) do
+    {:ok, skill} =
+      attrs
+      |> Enum.into(%{name: "Skill", be: nil, category: :body, sf: :A, t1: :mu, t2: :kl, t3: :in})
+      |> Data.create_skill()
+    skill
+  end
+
   def spell_fixture(attrs \\ %{}) do
     {:ok, spell} =
       attrs

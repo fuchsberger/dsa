@@ -1,5 +1,6 @@
 defmodule Dsa.Data.Skill do
   use Ecto.Schema
+
   import Ecto.Changeset
   import DsaWeb.DsaHelpers, only: [traits: 0]
 
@@ -26,7 +27,7 @@ defmodule Dsa.Data.Skill do
     |> cast(attrs, [:be | @fields])
     |> validate_required(@fields)
     |> validate_length(:name, min: 5, max: 30)
-    |> validate_number(:category, greater_than_or_equal_to: 0, less_than_or_equal_to: SkillCategory.count())
+    |> validate_number(:category, greater_than_or_equal_to: 0, less_than: SkillCategory.count())
     |> validate_number(:probe, greater_than_or_equal_to: 0, less_than_or_equal_to: 512)
     |> validate_inclusion(:t1, traits())
     |> validate_inclusion(:t2, traits())
