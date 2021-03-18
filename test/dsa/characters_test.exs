@@ -18,7 +18,7 @@ defmodule Dsa.CharactersTest do
     test "list_combat_sets/1 returns all combat_sets", %{character: character} do
       %CombatSet{id: id1} = combat_set_fixture(character)
       assert [%CombatSet{id: ^id1}] = Characters.list_combat_sets(character)
-      %CombatSet{id: id2} = combat_set_fixture(character)
+      %CombatSet{id: id2} = combat_set_fixture(character, name: "TestSet2")
       assert [%CombatSet{id: ^id1}, %CombatSet{id: ^id2}] = Characters.list_combat_sets(character)
     end
 
