@@ -21,7 +21,9 @@ defmodule DsaWeb.ErrorController do
 
   def call(conn, {:error, :forbidden}) do
     conn
+    |> put_layout(false)
     |> put_status(:forbidden)
+    |> put_view(DsaWeb.ErrorView)
     |> render(:"403")
   end
 
