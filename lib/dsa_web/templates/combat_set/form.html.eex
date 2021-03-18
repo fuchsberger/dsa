@@ -5,43 +5,41 @@
     </div>
   <% end %>
 
-  <%= label f, :at %>
-  <%= number_input f, :at, class: "" %>
-  <%= error_tag f, :at %>
+  <div class='grid grid-cols-4 md:grid-cols-8 gap-2'>
+    <div class='col-span-2'>
+      <%= label f, :name, gettext("Name"), class: "label" %>
+      <%= text_input f, :name, class: "input" %>
+      <%= error_tag f, :name %>
+    </div>
+    <div class='text-center'>
+      <%= label f, :at, gettext("AT"), class: "label" %>
+      <%= number_input f, :at, class: "input" %>
+      <%= error_tag f, :at %>
+    </div>
+    <div class='text-center'>
+      <%= label f, :pa, gettext("PA"), class: "label" %>
+      <%= number_input f, :pa, class: "input" %>
+      <%= error_tag f, :pa %>
+    </div>
 
-  <%= label f, :pa %>
-  <%= number_input f, :pa, class: "" %>
-  <%= error_tag f, :pa %>
+    <div class='text-center'>
+      <%= label f, :tp_dice, gettext("#"), class: "label" %>
+      <%= number_input f, :tp_dice, class: "input" %>
+      <%= error_tag f, :tp_dice %>
+    </div>
 
-  <%= label f, :aw %>
-  <%= number_input f, :aw, class: "" %>
-  <%= error_tag f, :aw %>
+    <div class='text-center'>
+      <%= label f, :tp_type, gettext("W"), class: "label" %>
+      <%= number_input f, :tp_type, class: "input" %>
+      <%= error_tag f, :tp_type %>
+    </div>
 
-  <%= label f, :rs %>
-  <%= number_input f, :rs, class: "" %>
-  <%= error_tag f, :rs %>
+    <div class='text-center'>
+      <%= label f, :tp_bonus, gettext("+"), class: "label" %>
+      <%= number_input f, :tp_bonus, class: "input" %>
+      <%= error_tag f, :tp_bonus %>
+    </div>
 
-  <%= label f, :be %>
-  <%= number_input f, :be, class: "" %>
-  <%= error_tag f, :be %>
-
-  <%= label f, :base_ini %>
-  <%= number_input f, :base_ini, class: "" %>
-  <%= error_tag f, :base_ini %>
-
-  <%= label f, :gs %>
-  <%= number_input f, :gs, class: "" %>
-  <%= error_tag f, :gs %>
-
-  <%= label f, :tp_dice %>
-  <%= number_input f, :tp_dice, class: "" %>
-  <%= error_tag f, :tp_dice %>
-
-  <%= label f, :tp_bonus %>
-  <%= number_input f, :tp_bonus, class: "" %>
-  <%= error_tag f, :tp_bonus %>
-
-  <div>
-    <%= submit "Save" %>
+    <%= submit submit_button_text(@changeset), class: "button primary mt-5 h-7 leading-7" %>
   </div>
 <% end %>

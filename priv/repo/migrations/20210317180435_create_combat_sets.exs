@@ -6,11 +6,6 @@ defmodule Dsa.Repo.Migrations.CreateCombatSets do
       add :name, :string
       add :at, :smallint
       add :pa, :smallint
-      add :aw, :smallint
-      add :rs, :smallint
-      add :be, :smallint
-      add :base_ini, :smallint
-      add :gs, :smallint
       add :tp_dice, :smallint
       add :tp_bonus, :smallint
       add :tp_type, :smallint
