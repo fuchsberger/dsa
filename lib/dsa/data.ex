@@ -55,7 +55,7 @@ defmodule Dsa.Data do
     |> Repo.insert()
   end
 
-  def create_spell(attrs) do
+  def create_spell!(attrs) do
     %Spell{}
     |> Spell.changeset(attrs)
     |> Repo.insert!()

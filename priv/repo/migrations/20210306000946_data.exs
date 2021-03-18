@@ -1,8 +1,6 @@
 defmodule Dsa.Repo.Migrations.Data do
   use Ecto.Migration
 
-  alias Dsa.Data.Seeder
-
   def up do
     create table(:skills) do
       add :name, :string, null: false
@@ -17,14 +15,24 @@ defmodule Dsa.Repo.Migrations.Data do
       add :name, :string, null: false
       add :sf, :char, size: 1
       add :probe, :smallint
-      add :ceremony, :boolean
+      add :ceremony, :boolean, null: false
       add :cast_time, :smallint
       add :cost, :smallint
     end
     create unique_index(:blessings, :name)
 
+    create table(:spells) do
+      add :name, :string
+      add :sf, :char, size: 1
+      add :probe, :smallint
+      add :ritual, :boolean, null: false
+      add :traditions, {:array, :smallint}
+    end
+
+    create unique_index(:spells, [:name])
+
     flush()
-    Seeder.seed(:skills)
+    Dsa.Data.Seeder.seed()
   end
 
   def down do
@@ -33,5 +41,8 @@ defmodule Dsa.Repo.Migrations.Data do
 
     drop index(:blessings, :name)
     drop table(:blessings)
+
+    drop index(:spells, [:name])
+    drop table(:spells)
   end
 end
