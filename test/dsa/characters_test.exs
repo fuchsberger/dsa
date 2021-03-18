@@ -15,11 +15,6 @@ defmodule Dsa.CharactersTest do
       {:ok, character: character}
     end
 
-    def combat_set_fixture(character, attrs \\ %{}) do
-      {:ok, combat_set} = Characters.create_combat_set(character, Enum.into(attrs, @valid_attrs))
-      combat_set
-    end
-
     test "list_combat_sets/1 returns all combat_sets", %{character: character} do
       %CombatSet{id: id1} = combat_set_fixture(character)
       assert [%CombatSet{id: ^id1}] = Characters.list_combat_sets(character)

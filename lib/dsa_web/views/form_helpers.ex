@@ -33,7 +33,6 @@ defmodule DsaWeb.FormHelpers do
   end
 
   def submit_button_text(changeset) do
-    Logger.warn inspect changeset.data
     if is_nil(changeset.data.id), do: gettext("Create"), else: gettext("Update")
   end
 
