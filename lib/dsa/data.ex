@@ -40,8 +40,10 @@ defmodule Dsa.Data do
 
   def change_skill(%Skill{} = skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
 
+  # SPELLS
+
   def list_spells do
-    from(s in Spell, order_by: [s.traditions, s.name])
+    from(s in Spell, order_by: [s.ritual, s.traditions, s.name])
     |> Repo.all()
   end
 
