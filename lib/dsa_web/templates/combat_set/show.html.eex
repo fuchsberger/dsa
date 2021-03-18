@@ -1,0 +1,53 @@
+<h1>Show Combat set</h1>
+
+<ul>
+
+  <li>
+    <strong>At:</strong>
+    <%= @combat_set.at %>
+  </li>
+
+  <li>
+    <strong>Pa:</strong>
+    <%= @combat_set.pa %>
+  </li>
+
+  <li>
+    <strong>Aw:</strong>
+    <%= @combat_set.aw %>
+  </li>
+
+  <li>
+    <strong>Rs:</strong>
+    <%= @combat_set.rs %>
+  </li>
+
+  <li>
+    <strong>Be:</strong>
+    <%= @combat_set.be %>
+  </li>
+
+  <li>
+    <strong>Base ini:</strong>
+    <%= @combat_set.base_ini %>
+  </li>
+
+  <li>
+    <strong>Gs:</strong>
+    <%= @combat_set.gs %>
+  </li>
+
+  <li>
+    <strong>Tp dice:</strong>
+    <%= @combat_set.tp_dice %>
+  </li>
+
+  <li>
+    <strong>Tp bonus:</strong>
+    <%= @combat_set.tp_bonus %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.character_combat_set_path(@conn, :edit, @character, @combat_set) %></span>
+<span><%= link "Back", to: Routes.character_combat_set_path(@conn, :index, @character) %></span>

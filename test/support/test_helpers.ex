@@ -51,6 +51,11 @@ defmodule Dsa.TestHelpers do
     character
   end
 
+  def combat_set_fixture(character, attrs \\ %{}) do
+    {:ok, combat_set} = Characters.create_combat_set(character, Enum.into(attrs, %{name: "TestSet", at: 10, pa: 10, tp_bonus: 0, tp_dice: 1, tp_type: 6}))
+    combat_set
+  end
+
   def unauthorized_response(conn) do
     html_response(conn, 401) =~ "You must authenticate to access the requested response."
   end

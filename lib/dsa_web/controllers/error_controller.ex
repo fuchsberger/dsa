@@ -21,13 +21,24 @@ defmodule DsaWeb.ErrorController do
 
   def call(conn, {:error, :forbidden}) do
     conn
+    |> put_layout(false)
     |> put_status(:forbidden)
+    |> put_view(DsaWeb.ErrorView)
     |> render(:"403")
   end
 
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
+    |> render(:"404")
+  end
+
+  def call(conn, {:error, :character_not_found}) do
+    conn
+    |> put_flash(:error, gettext("The given character was not found."))
+    |> put_status(:not_found)
+    |> put_layout(false)
+    |> put_view(DsaWeb.ErrorView)
     |> render(:"404")
   end
 
@@ -52,4 +63,9 @@ defmodule DsaWeb.ErrorController do
     |> put_view(DsaWeb.ErrorView)
     |> render(:"500")
   end
+
+  # defp render_error(conn, status) do
+  #   conn
+
+  # end
 end

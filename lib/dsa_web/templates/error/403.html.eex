@@ -23,11 +23,8 @@
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
       <h1 class='font-sans font-bold text-3xl'>Error 403</h1>
       <hr>
-      <h2 class='font-sans font-medium text-2xl mb-3'><%= gettext "Forbidden" %></h2>
-      <p>
-        <%= get_flash(@conn, :error) || gettext "You do not have access rights to the requested content." %><br>
-        <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
-      </p>
+      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Forbidden" %></h2>
+      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
     </div>
   </body>
 </html>

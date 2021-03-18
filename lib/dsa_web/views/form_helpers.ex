@@ -6,6 +6,8 @@ defmodule DsaWeb.FormHelpers do
 
   alias Phoenix.HTML.Form
 
+  import DsaWeb.Gettext
+
   require Logger
 
   # Add HTML5 validations to fields
@@ -28,6 +30,10 @@ defmodule DsaWeb.FormHelpers do
 
   def select(form, field, options, opts \\ []) do
     Form.select(form, field, options, expand(form, field, opts))
+  end
+
+  def submit_button_text(changeset) do
+    if is_nil(changeset.data.id), do: gettext("Create"), else: gettext("Update")
   end
 
   def submit_button(modified?) do

@@ -23,11 +23,8 @@
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
       <h1 class='font-sans font-bold text-3xl'>Error 404</h1>
       <hr>
-      <h2 class='font-sans font-medium text-2xl mb-3'><%= gettext "Page was not found" %></h2>
-      <p>
-        <%= gettext "The server could not find the requested resource." %><br>
-        <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
-      </p>
+      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "The server could not find the requested resource." %></h2>
+      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
     </div>
   </body>
 </html>

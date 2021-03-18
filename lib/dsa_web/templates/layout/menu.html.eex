@@ -31,6 +31,10 @@
                 to: Routes.character_path(@conn, :edit, @current_user.active_character_id),
                 class: "menu-item text-sm" %>
 
+              <%= menu_link @conn, gettext("Combat Sets"),
+                to: Routes.character_combat_set_path(@conn, :index, @current_user.active_character_id),
+                class: "menu-item text-sm" %>
+
               <%= menu_link @conn, gettext("Skills"),
                 to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
                 class: "menu-item text-sm" %>

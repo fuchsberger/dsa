@@ -1,0 +1,45 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class='grid grid-cols-4 md:grid-cols-8 gap-2'>
+    <div class='col-span-2'>
+      <%= label f, :name, gettext("Name"), class: "label" %>
+      <%= text_input f, :name, class: "input" %>
+      <%= error_tag f, :name %>
+    </div>
+    <div class='text-center'>
+      <%= label f, :at, gettext("AT"), class: "label" %>
+      <%= number_input f, :at, class: "input" %>
+      <%= error_tag f, :at %>
+    </div>
+    <div class='text-center'>
+      <%= label f, :pa, gettext("PA"), class: "label" %>
+      <%= number_input f, :pa, class: "input" %>
+      <%= error_tag f, :pa %>
+    </div>
+
+    <div class='text-center'>
+      <%= label f, :tp_dice, gettext("#"), class: "label" %>
+      <%= number_input f, :tp_dice, class: "input" %>
+      <%= error_tag f, :tp_dice %>
+    </div>
+
+    <div class='text-center'>
+      <%= label f, :tp_type, gettext("W"), class: "label" %>
+      <%= number_input f, :tp_type, class: "input" %>
+      <%= error_tag f, :tp_type %>
+    </div>
+
+    <div class='text-center'>
+      <%= label f, :tp_bonus, gettext("+"), class: "label" %>
+      <%= number_input f, :tp_bonus, class: "input" %>
+      <%= error_tag f, :tp_bonus %>
+    </div>
+
+    <%= submit submit_button_text(@changeset), class: "button primary mt-5 h-7 leading-7" %>
+  </div>
+<% end %>
