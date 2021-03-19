@@ -47,10 +47,6 @@ iframe { display: none; }
     @apply outline-none ring-2 ring-offset-2 ring-indigo-500;
   }
 
-  /* Mobile buttons used in menu */
-  button.mobile { @apply p-1 rounded-full text-gray-400; }
-  button.mobile:focus { @apply outline-none; }
-  button.mobile.active { @apply bg-gray-700 ring-1 ring-offset-1 ring-gray-100 text-gray-50; }
 
   h2.main { @apply mt-6 text-center text-3xl font-extrabold text-gray-900; }
 
@@ -76,21 +72,37 @@ iframe { display: none; }
 
   input.error { @apply border-red-800 !important; }
 
+  /* Mobile button used in menu */
+  #mobile-button { @apply text-gray-400 text-center rounded-md; }
+  #mobile-button:focus { @apply outline-none; }
+  #mobile-button.active { @apply bg-gray-700 text-gray-50; }
+
+  #mobile-button:not(.active) svg:first-of-type { @apply inline-block; }
+  #mobile-button:not(.active) svg:last-of-type { @apply hidden; }
+  #mobile-button.active svg:first-of-type { @apply hidden; }
+  #mobile-button.active svg:last-of-type { @apply inline-block; }
+
   /* Menu Items */
-  .menu-item { @apply text-gray-300 px-3 py-2 rounded-md font-medium; }
+  .menu-item { @apply text-gray-300 rounded-md font-medium leading-10 px-2;}
   .menu-item:hover { @apply bg-gray-700 text-white; }
   .menu-item.active { @apply bg-gray-900 !important text-white !important; }
 
-  .menu-item.dropdown li>ul { transform: translatex(100%) scale(0) }
-  .menu-item.dropdown li:hover>ul { transform: translatex(101%) scale(1) }
-  .menu-item.dropdown li > button svg { transform: rotate(-90deg) }
-  .menu-item.dropdown li:hover > button svg { transform: rotate(-270deg) }
-
+  .menu-item.dropdown { @apply  group; }
   .menu-item.dropdown:hover .group-hover\:scale-100 { transform: scale(1) }
   .menu-item.dropdown:hover .group-hover\:-rotate-180 { transform: rotate(180deg) }
 
-  .menu-item.dropdown a { @apply block px-4 py-1 text-sm text-gray-700; }
-  .menu-item.dropdown a:hover { @apply bg-gray-100; }
+  .menu-item.dropdown button { @apply flex items-center; }
+  .menu-item.dropdown button:focus { @apply outline-none; }
+  .menu-item.dropdown button span { @apply pr-1 font-semibold flex-1; }
+  .menu-item.dropdown button svg { @apply fill-current h-4 w-4 transform transition duration-150 ease-in-out; }
+
+  .menu-item.dropdown div { @apply absolute w-40 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 transition duration-150 ease-in-out text-gray-800 z-50; }
+
+  .menu-item.dropdown a { @apply block px-3 leading-7 text-gray-500 border-solid border-gray-300 border-b; }
+  .menu-item.dropdown a:hover { @apply bg-gray-100 text-black; }
+  .menu-item.dropdown a:last-of-type { @apply border-0; }
+
+  .menu-item.dropdown a svg { @apply inline-block w-4 h-4 mr-2; }
 
   /* Inputs */
   .input { @apply w-full px-2 py-0 leading-7 shadow-sm border-gray-300 rounded-md; }
@@ -152,3 +164,6 @@ iframe { display: none; }
   .table th:first-child, .table td:first-child { @apply pl-2; }
   .table th:last-child, .table td:last-child { @apply pr-2; }
 }
+
+
+

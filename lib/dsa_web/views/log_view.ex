@@ -3,7 +3,6 @@ defmodule DsaWeb.LogView do
 
   import Dsa.Trial, only: [roll: 3]
 
-  alias Dsa.Trial
   alias Dsa.Event.{Log, TraitRoll}
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
