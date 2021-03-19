@@ -12,7 +12,7 @@ iframe { display: none; }
 }
 
 @layer components {
-  #main-wrapper { @apply fixed inset-0 top-16 overflow-hidden; }
+  #main-wrapper { @apply fixed inset-0 top-12 overflow-hidden; }
 
   /* Headings */
   .page-heading { @apply font-bold text-xl leading-8; }
@@ -73,14 +73,14 @@ iframe { display: none; }
   input.error { @apply border-red-800 !important; }
 
   /* Mobile button used in menu */
-  #mobile-button { @apply text-gray-400 text-center rounded-md; }
-  #mobile-button:focus { @apply outline-none; }
-  #mobile-button.active { @apply bg-gray-700 text-gray-50; }
+  .mobile-button { @apply text-gray-400 text-center rounded-md; }
+  .mobile-button:focus { @apply outline-none; }
+  .mobile-button.active { @apply bg-gray-700 text-gray-50; }
 
-  #mobile-button:not(.active) svg:first-of-type { @apply inline-block; }
-  #mobile-button:not(.active) svg:last-of-type { @apply hidden; }
-  #mobile-button.active svg:first-of-type { @apply hidden; }
-  #mobile-button.active svg:last-of-type { @apply inline-block; }
+  .mobile-button:not(.active) svg:first-of-type { @apply inline-block; }
+  .mobile-button:not(.active) svg:last-of-type { @apply hidden; }
+  .mobile-button.active svg:first-of-type { @apply hidden; }
+  .mobile-button.active svg:last-of-type { @apply inline-block; }
 
   /* Menu Items */
   .menu-item { @apply text-gray-300 rounded-md font-medium leading-10 px-2;}

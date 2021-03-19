@@ -3,7 +3,7 @@
     <div class='flex-grow space-y-2 lg:space-y-0 lg:inline-flex lg:space-x-3 my-1'>
       <div class='flex items-center'>
         <!-- Mobile menu button-->
-        <button type='button' id='mobile-button' class='lg:hidden' aria-controls="mobile-menu" aria-expanded="false">
+        <button type='button' id='mobile-button' class='mobile-button lg:hidden' aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only"><%= gettext("Open main menu") %></span>
           <%= icon @conn, "menu", "h-6 w-6 m-2" %>
           <%= icon @conn, "x", "h-6 w-6 m-2" %>
@@ -93,6 +93,11 @@
       <% end %>
     </div>
     <div class='inline-flex space-x-3 my-1'>
+      <button type='button' id='log-button' class='mobile-button inline-block lg:hidden'>
+        <%= icon @conn, "clipboard-list", "h-6 w-6 m-2" %>
+        <%= icon @conn, "x", "h-6 w-6 m-2" %>
+      </button>
+
       <%= if auth?(@conn) do %>
         <div class="menu-item dropdown relative px-0 lg:px-2">
           <button>
