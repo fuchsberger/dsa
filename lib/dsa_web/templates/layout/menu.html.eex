@@ -1,132 +1,127 @@
 <nav class="fixed w-full bg-gray-800 z-40">
-  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-    <div class="relative flex items-center justify-between h-16">
+  <div class="relative mx-auto max-w-7xl flex px-3">
+    <div class='flex-grow space-y-2 lg:space-y-0 lg:inline-flex lg:space-x-3 my-1'>
+      <div class='flex items-center'>
+        <!-- Mobile menu button-->
+        <button type='button' id='mobile-button' class='mobile-button lg:hidden' aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only"><%= gettext("Open main menu") %></span>
+          <%= icon @conn, "menu", "h-6 w-6 m-2" %>
+          <%= icon @conn, "x", "h-6 w-6 m-2" %>
+        </button>
 
-      <!-- Mobile menu button-->
-      <button type='button' id='mobile-button' class="mobile sm:hidden"" aria-controls="mobile-menu" aria-expanded="false">
-        <span class="sr-only"><%= gettext("Open main menu") %></span>
-        <!-- Icon when menu is closed. -->
-        <%= icon @conn, "menu", "block h-6 w-6" %>
-        <!-- Icon when menu is open. -->
-        <%= icon @conn, "x", "hidden h-6 w-6" %>
-      </button>
+        <%= link gettext("DSA Tool"),
+          to: Routes.session_path(@conn, :index),
+          class: "lg:ml-0 font-bold text-2xl text-gray-200 hover:text-white ml-1 lg:ml-0" %>
+      </div>
 
-      <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-        <%# Profilbild / Logo %>
-        <%= link class: "flex-shrink-0 flex items-center", to: Routes.session_path(@conn, :index) do %>
-          <img class="block w-8 h-8 rounded-full" src="<%= gravatar_url(@current_user) %>" alt="Profil">
-          <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl text-gray-200'><%= gettext("DSA Tool") %></span>
-        <% end %>
+      <%= if auth?(@conn) do %>
+        <div class="menu-item dropdown hidden lg:inline-block relative">
+          <button>
+            <span>Characters</span>
+            <%= icon @conn, "chevron-down-solid", "hidden lg:inline-block group-hover:-rotate-180" %>
+          </button>
 
-        <div class="hidden sm:block sm:ml-6">
-          <div class="flex space-x-4">
-            <%= if @current_user do %>
-              <%= menu_link @conn, gettext("Characters"),
-                to: Routes.character_path(@conn, :index),
-                class: "menu-item text-sm" %>
-            <% end %>
+          <div class="group-hover:scale-100">
+            <%= link [icon(@conn, "view-list"), gettext("List Characters")],
+              to: Routes.character_path(@conn, :index) %>
 
-            <%= if @current_user && @current_user.active_character_id do %>
-              <%= menu_link @conn, gettext("Hero"),
-                to: Routes.character_path(@conn, :edit, @current_user.active_character_id),
-                class: "menu-item text-sm" %>
+            <%= link [icon(@conn, "plus-sm"), gettext("New Character")],
+              to: Routes.character_path(@conn, :new) %>
 
-              <%= menu_link @conn, gettext("Combat Sets"),
-                to: Routes.character_combat_set_path(@conn, :index, @current_user.active_character_id),
-                class: "menu-item text-sm" %>
-
-              <%= menu_link @conn, gettext("Skills"),
-                to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
-                class: "menu-item text-sm" %>
-
-              <%= menu_link @conn, gettext("Spells"),
-                to: Routes.character_spell_path(@conn, :index, @current_user.active_character_id),
-                class: "menu-item text-sm" %>
-
-              <%# menu_link @conn, gettext("Combat"),
-                to: Routes.dsa_path(@conn, :combat),
-                class: "menu-item text-sm" %>
-
-              <%# menu_link @conn, gettext("Roll"),
-                to: Routes.dsa_path(@conn, :roll),
-                class: "menu-item text-sm" %>
+            <%= for {id, name} <- @current_user.characters do %>
+              <%= link [icon(@conn, "pencil-solid"), name],
+                to: Routes.character_path(@conn, :edit, id) %>
             <% end %>
           </div>
         </div>
-      </div>
-      <%= if @current_user do %>
-        <button id='log-button' type='button' class="mobile lg:hidden">
-          <span class="sr-only"><%= gettext("View Log") %></span>
-          <%= icon @conn, "clipboard-list", "h-6 w-6" %>
-        </button>
+      <% end %>
 
-        <div class="hidden lg:inline-block menu-item dropdown group">
-          <button class='text-sm flex items-center min-w-32 focus:outline-none'>
-            <span class="pr-1 font-semibold flex-1"><%= @current_user.active_character_id && active_character_name(@current_user) %></span>
-            <%= icon @conn, "chevron-down-solid", "fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out" %>
+      <%= if auth?(@conn) do %>
+        <div class="menu-item dropdown hidden lg:inline-block relative">
+          <button>
+            <span><%= gettext "Skills" %></span>
+            <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
           </button>
-          <div
-            class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 group-hover:scale-100
-          transition duration-150 ease-in-out text-gray-800"
-          >
-            <h4 class='text-center text-gray-500 bg-gray-100 border-solid border-gray-300 border-b'><%= gettext "Characters" %></h4>
+
+          <div class="origin-bottom-left left-0 group-hover:scale-100">
+            <%= link [icon(@conn, "view-list"), gettext("List Skills")],
+              to: Routes.skill_path(@conn, :index) %>
+
+            <%= if admin?(@conn) do %>
+              <%= link [icon(@conn, "plus-sm"), gettext("New Skill")],
+                to: Routes.skill_path(@conn, :new) %>
+            <% end %>
 
             <%= for {id, name} <- @current_user.characters do %>
-              <%= link to: Routes.character_path(@conn, :activate, id), method: :put do %>
-                <%= if id == @current_user.active_character_id do %>
-                  <%= icon @conn, "star-solid" %>
-                <% else %>
-                  <%= icon @conn, "star" %>
-                <% end %>
-                <%= name %>
-              <% end %>
+              <%= link [icon(@conn, "pencil-solid"), name],
+                to: Routes.character_skill_path(@conn, :index, id) %>
             <% end %>
-            <%= link to: Routes.character_path(@conn, :new) do %>
-              <%= icon @conn, "plus" %>
-              <%= gettext "New Character" %>
-            <% end %>
-
-            <h4 class='text-center bg-gray-100 text-gray-500 border-solid border-gray-300 border-b border-t'><%= @current_user.username %></h4>
-
-            <%= link to: Routes.user_path(@conn, :edit, @current_user) do %>
-              <%= icon @conn, "cog-solid" %>
-              <%= gettext "Settings" %>
-            <% end %>
-
-            <%= link to: Routes.session_path(@conn, :delete, @current_user), method: :delete do %>
-              <%= icon @conn, "lock-closed-solid" %>
-              <%= gettext "Logout" %>
-            <% end %>
-          </ul>
+          </div>
         </div>
+      <% else %>
+        <%= link @conn, gettext("Skills"),
+          to: Routes.skill_path(@conn, :index),
+          class: "menu-item hidden lg:inline-block" %>
+      <% end %>
+
+      <%= if auth?(@conn) do %>
+        <div class="menu-item dropdown hidden lg:inline-block relative">
+          <button>
+            <span><%= gettext "Spells" %></span>
+            <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
+          </button>
+
+          <div class="origin-bottom-left left-0 group-hover:scale-100">
+            <%= link [icon(@conn, "view-list"), gettext("List Spells")],
+              to: Routes.spell_path(@conn, :index) %>
+
+            <%= if admin?(@conn) do %>
+              <%# link [icon(@conn, "plus-sm"), gettext("New Spell")],
+                to: Routes.spell_path(@conn, :new) %>
+            <% end %>
+
+            <%= for {id, name} <- @current_user.characters do %>
+              <%= link [icon(@conn, "pencil-solid"), name],
+                to: Routes.character_spell_path(@conn, :index, id) %>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <%= link @conn, gettext("Spells"),
+          to: Routes.spell_path(@conn, :index),
+          class: "menu-item hidden lg:inline-block" %>
       <% end %>
     </div>
-  </div>
+    <div class='inline-flex space-x-3 my-1'>
+      <button type='button' id='log-button' class='mobile-button inline-block lg:hidden'>
+        <%= icon @conn, "clipboard-list", "h-6 w-6 m-2" %>
+        <%= icon @conn, "x", "h-6 w-6 m-2" %>
+      </button>
 
-  <!-- Mobile menu, toggle classes based on menu state. -->
-  <div id='mobile-menu' class="hidden sm:hidden">
-    <div class="px-2 pt-2 pb-3 space-y-1">
-      <%= if @current_user do %>
-        <%= menu_link @conn, gettext("Characters"), to: Routes.character_path(@conn, :index), class: "menu-item block text-base" %>
-      <% end %>
+      <%= if auth?(@conn) do %>
+        <div class="menu-item dropdown relative px-0 lg:px-2">
+          <button>
+            <img class="inline-block w-8 h-8 my-1 rounded-full lg:mr-2" src="<%= gravatar_url(@current_user) %>" alt="Profil">
 
-      <%= if @current_user && @current_user.active_character_id do %>
+            <span class='hidden lg:inline-block'><%= @current_user.username %></span>
+            <%= icon @conn, "chevron-down-solid", "hidden lg:inline-block group-hover:-rotate-180" %>
+          </button>
 
-        <%= menu_link @conn, gettext("Hero"),
-          to: Routes.character_path(@conn, :edit, @current_user.active_character_id),
-          class: "menu-item block text-base" %>
+          <div class="origin-bottom-right right-0 group-hover:scale-100">
+            <%= link [icon(@conn, "view-list"), gettext("Groups")],
+              to: Routes.group_path(@conn, :index) %>
 
-        <%= menu_link @conn, gettext("Skills"),
-          to: Routes.character_skill_path(@conn, :index, @current_user.active_character_id),
-          class: "menu-item block text-base" %>
+            <%= link [icon(@conn, "cog-solid"), gettext("Settings")],
+              to: Routes.user_path(@conn, :edit, @current_user) %>
 
-        <%# menu_link @conn, gettext("Spells"), to: Routes.dsa_path(@conn, :spells), class: "menu-item block text-base" %>
-        <%# menu_link @conn, gettext("Combat"), to: Routes.dsa_path(@conn, :combat), class: "menu-item block text-base" %>
-        <%# menu_link @conn, gettext("Roll"), to: Routes.dsa_path(@conn, :roll), class: "menu-item block text-base" %>
-      <% end %>
-      <%= unless is_nil(@current_user) do %>
-        <%= menu_link @conn, gettext("Settings"), to: Routes.user_path(@conn, :edit, @current_user), class: "menu-item block text-base" %>
-        <%= menu_link @conn, gettext("Logout"), to: Routes.session_path(@conn, :delete, @current_user), class: "menu-item block text-base", method: :delete %>
+            <%= link [icon(@conn, "logout-solid"), gettext("Logout")],
+              to: Routes.session_path(@conn, :delete, @current_user), method: :delete %>
+          </div>
+        </div>
+      <% else %>
+        <%= link @conn, gettext("Skills"),
+          to: Routes.skill_path(@conn, :index),
+          class: "menu-item hidden lg:inline-block" %>
       <% end %>
     </div>
   </div>

@@ -20,14 +20,13 @@ document.addEventListener("turbo:load", function() {
 
   mobile_button.addEventListener('click', () => {
 
-    for(let svg of mobile_button.getElementsByTagName("svg")){
-      svg.classList.toggle("block")
-      svg.classList.toggle("hidden")
-    }
+    mobile_button.classList.toggle("active")
 
-    let menu = document.getElementById("mobile-menu")
-    menu.classList.toggle("hidden")
-    menu.classList.toggle("block")
+    for(let item of document.getElementsByClassName("menu-item")){
+      console.log(item)
+      item.classList.toggle("hidden")
+      item.classList.toggle("block")
+    }
   })
 
   // Enable log button
