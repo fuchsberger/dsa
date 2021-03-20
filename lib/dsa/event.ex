@@ -18,20 +18,17 @@ defmodule Dsa.Event do
 
   """
   def list_logs(group_id) do
-    # TODO: Optimize query (limit, only load required fields, load as map)
     group =
       Repo.get!(
         from(g in Dsa.Accounts.Group,
           preload: [
-            skill_rolls: [:character, :skill],
-            spell_rolls: [:character, :spell],
             main_logs: []
           ]
         ),
         group_id
       )
 
-    entries = group.skill_rolls ++ group.spell_rolls ++ group.main_logs
+    entries = group.main_logs
 
     entries
     |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
@@ -47,8 +44,6 @@ defmodule Dsa.Event do
   """
   def delete_logs!(group_id) do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
-    Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
-    Repo.delete_all(from(r in SpellRoll, where: r.group_id == ^group_id))
     Repo.delete_all(from(l in MainLog, where: l.group_id == ^group_id))
     # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
@@ -167,6 +162,15 @@ defmodule Dsa.Event do
       |> put_assoc(:group, group)
       |> put_assoc(:character, character)
       |> Repo.insert()
+
+      changeset
+      |> put_change(:roll, dice)
+      |> put_change(:quality, quality)
+      |> put_change(:critical, critical?)
+      |> put_assoc(:character, character)
+      |> put_assoc(:group, group)
+      |> Repo.insert()
+
     else
       changeset
     end

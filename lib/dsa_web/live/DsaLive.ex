@@ -58,10 +58,10 @@ defmodule DsaWeb.DsaLive do
     {:noreply, assign(socket, :log_open?, true)}
   end
 
-  def handle_info(:clear_logs, socket) do
-    send_update(DsaWeb.LogComponent, id: :log, action: :clear)
-    {:noreply, socket}
-  end
+#  def handle_info(:clear_logs, socket) do
+#    send_update(DsaWeb.LogComponent, id: :log, action: :clear)
+#    {:noreply, socket}
+#  end
 
   def handle_info({:update_character, character}, socket) do
     {:noreply, assign(socket, :user, Map.put(socket.assigns.user, :active_character, character))}

@@ -19,15 +19,8 @@
         <% Log.Type.CustomTalentRoll -> %>
           <%= render DsaWeb.LogView, "custom_talent_roll.html", entry: entry, show_dice?: @show_dice? %>
 
-        <% %Dsa.Event.SkillRoll{} -> %>
-          <%= render DsaWeb.LogView, "skill_roll.html", entry: entry, show_dice?: @show_dice? %>
-
         <% %Dsa.Event.TraitRoll{} -> %>
           <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
-
-        <% %Dsa.Event.SpellRoll{} -> %>
-          <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
-
 
         <% %Dsa.Event.MainLog{} -> %>
           <%= case entry.type do %>
