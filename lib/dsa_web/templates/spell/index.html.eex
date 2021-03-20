@@ -4,6 +4,7 @@
       <th><%= gettext "Ritual" %></th>
       <th><%= gettext "SF" %></th>
       <th><%= gettext "Roll" %></th>
+      <th><%= gettext "Spread" %></th>
     </tr>
     <%= render_many @rituals, DsaWeb.SpellView, "row.html", conn: @conn %>
 
@@ -11,6 +12,7 @@
       <th><%= gettext "Spell" %></th>
       <th><%= gettext "SF" %></th>
       <th><%= gettext "Roll" %></th>
+      <th><%= gettext "Spread" %></th>
     </tr>
     <%= render_many @spells, DsaWeb.SpellView, "row.html", conn: @conn %>
   </tbody>

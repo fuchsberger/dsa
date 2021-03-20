@@ -28,10 +28,6 @@
   </div>
 
   <div class='flex flex-col-3 lg:flex-col-6 justify-around pb-2'>
-    <%= for {title, %{short: short}} <- SpellTradition.list() do %>
-      <%= link short, to: "##{title}", data_turbo: false, class: "hidden lg:block leading-8" %>
-    <% end %>
-
     <%= link gettext("Edit Spells"), to: Routes.character_spell_path(@conn, :edit_all, @character), class: "button" %>
   </div>
 </div>
