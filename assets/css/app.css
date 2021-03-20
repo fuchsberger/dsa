@@ -2,6 +2,7 @@
 
 @import "tailwindcss/components";
 @import "components/menu.css";
+@import "components/table.css";
 
 @import "tailwindcss/utilities";
 /* @tailwind screens; */
@@ -126,14 +127,6 @@ iframe { display: none; }
   #modifier-component input[type="radio"]:checked+label.positive {
     @apply border-2 border-green-400 bg-green-200;
   }
-
-  /* Tables */
-  .table {@apply w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200;}
-
-  .table .header-row { @apply bg-gray-200; }
-  .table th, .table td { @apply px-1 leading-6; }
-  .table th:first-child, .table td:first-child { @apply pl-2; }
-  .table th:last-child, .table td:last-child { @apply pr-2; }
 }
 
 
