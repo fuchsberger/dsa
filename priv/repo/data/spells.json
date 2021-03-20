@@ -5,15 +5,15 @@
     "probe": "KL/IN/FF",
     "name": "Adlerauge",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 2,
     "sf": "D",
     "probe": "KL/IN/FF",
     "name": "Arcanovi",
-    "ritual": false,
-    "traditions": [1]
+    "ritual": true,
+    "spread": [1]
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "probe": "KL/KL/IN",
     "name": "Analys Arkanstruktur",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 4,
@@ -29,7 +29,7 @@
     "probe": "KL/IN/FF",
     "name": "Armatrutz",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 5,
@@ -37,7 +37,7 @@
     "probe": "KL/IN/FF",
     "name": "Axxeleratus",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 6,
@@ -45,7 +45,7 @@
     "probe": "KL/IN/FF",
     "name": "Balsam Salabunde",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 7,
@@ -53,7 +53,7 @@
     "probe": "MU/IN/CH",
     "name": "Bannbaladin",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 8,
@@ -61,7 +61,7 @@
     "probe": "MU/KL/IN",
     "name": "Blick in die Gedanken",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 9,
@@ -69,7 +69,7 @@
     "probe": "MU/IN/CH",
     "name": "Blitz dich find",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 10,
@@ -77,7 +77,7 @@
     "probe": "KL/IN/KO",
     "name": "Corpofesso",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 11,
@@ -85,7 +85,7 @@
     "probe": "MU/KL/CH",
     "name": "Disruptivo",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 12,
@@ -93,7 +93,7 @@
     "probe": "MU/CH/KO",
     "name": "Dschinnenruf",
     "ritual": true,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 13,
@@ -101,7 +101,7 @@
     "probe": "KL/IN/CH",
     "name": "Duplicatus",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 14,
@@ -109,7 +109,7 @@
     "probe": "MU/CH/KO",
     "name": "Elementarer Diener",
     "ritual": true,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 15,
@@ -117,7 +117,7 @@
     "probe": "MU/KL/IN",
     "name": "Falkenauge",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 16,
@@ -125,7 +125,7 @@
     "probe": "MU/KL/CH",
     "name": "Flim Flam",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 17,
@@ -133,7 +133,7 @@
     "probe": "KL/IN/KO",
     "name": "Fulminictus",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 18,
@@ -141,7 +141,7 @@
     "probe": "MU/KL/CH",
     "name": "Gardianum",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 19,
@@ -149,7 +149,7 @@
     "probe": "MU/IN/CH",
     "name": "Große Gier",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 20,
@@ -157,7 +157,7 @@
     "probe": "KL/IN/CH",
     "name": "Harmlose Gestalt",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 21,
@@ -165,7 +165,7 @@
     "probe": "KL/IN/KO",
     "name": "Hexengalle",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 22,
@@ -173,7 +173,7 @@
     "probe": "KL/IN/KO",
     "name": "Hexenkrallen",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 23,
@@ -181,7 +181,7 @@
     "probe": "MU/IN/CH",
     "name": "Horriphobus",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 24,
@@ -189,23 +189,23 @@
     "probe": "MU/KL/CH",
     "name": "Ignifaxius",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 25,
     "sf": "C",
     "probe": "MU/CH/KO",
     "name": "Invocatio Maior",
-    "ritual": false,
-    "traditions": [2, 4]
+    "ritual": true,
+    "spread": [2, 4]
   },
   {
     "id": 26,
     "sf": "A",
     "probe": "MU/CH/KO",
     "name": "Invocatio Minima",
-    "ritual": false,
-    "traditions": [2, 4]
+    "ritual": true,
+    "spread": [2, 4]
   },
   {
     "id": 27,
@@ -213,7 +213,7 @@
     "probe": "MU/CH/KO",
     "name": "Invocatio Minor",
     "ritual": false,
-    "traditions": [2, 4]
+    "spread": [2, 4]
   },
   {
     "id": 28,
@@ -221,7 +221,7 @@
     "probe": "KL/IN/KO",
     "name": "Katzenaugen",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 29,
@@ -229,7 +229,7 @@
     "probe": "KL/IN/KO",
     "name": "Krötensprung",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 30,
@@ -237,7 +237,7 @@
     "probe": "MU/KL/CH",
     "name": "Manifesto",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 31,
@@ -245,7 +245,7 @@
     "probe": "KL/FF/KK",
     "name": "Manus Miracula",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 32,
@@ -253,7 +253,7 @@
     "probe": "KL/FF/KK",
     "name": "Motoricus",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 33,
@@ -261,7 +261,7 @@
     "probe": "MU/KL/CH",
     "name": "Nebelwand",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 34,
@@ -269,7 +269,7 @@
     "probe": "KL/IN/CH",
     "name": "Oculus Illusionis",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 35,
@@ -277,7 +277,7 @@
     "probe": "KL/IN/IN",
     "name": "Odem Arcanum",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 36,
@@ -285,7 +285,7 @@
     "probe": "KL/IN/KO",
     "name": "Paralysis",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 37,
@@ -293,7 +293,7 @@
     "probe": "MU/KL/IN",
     "name": "Penetrizzel",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 38,
@@ -301,7 +301,7 @@
     "probe": "KL/IN/FF",
     "name": "Psychostabilis",
     "ritual": false,
-    "traditions": [1]
+    "spread": [1]
   },
   {
     "id": 39,
@@ -309,7 +309,7 @@
     "probe": "KL/FF/KK",
     "name": "Radau",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 40,
@@ -317,7 +317,7 @@
     "probe": "MU/IN/CH",
     "name": "Respondami",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 41,
@@ -325,7 +325,7 @@
     "probe": "KL/IN/KO",
     "name": "Salander",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 42,
@@ -333,7 +333,7 @@
     "probe": "MU/IN/CH",
     "name": "Sanftmut",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 43,
@@ -341,7 +341,7 @@
     "probe": "KL/IN/KO",
     "name": "Satuarias Herrlichkeit",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 44,
@@ -349,7 +349,7 @@
     "probe": "KL/FF/KK",
     "name": "Silentium",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 45,
@@ -357,7 +357,7 @@
     "probe": "MU/IN/CH",
     "name": "Somnigravis",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 46,
@@ -365,7 +365,7 @@
     "probe": "KL/IN/KK",
     "name": "Spinnenlauf",
     "ritual": false,
-    "traditions": [4]
+    "spread": [4]
   },
   {
     "id": 47,
@@ -373,7 +373,7 @@
     "probe": "KL/FF/KK",
     "name": "Spurlos",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 48,
@@ -381,7 +381,7 @@
     "probe": "MU/CH/KO",
     "name": "Transversalis",
     "ritual": false,
-    "traditions": [2]
+    "spread": [2]
   },
   {
     "id": 49,
@@ -389,7 +389,7 @@
     "probe": "KL/IN/KO",
     "name": "Visibili",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 50,
@@ -397,14 +397,14 @@
     "probe": "KL/IN/KO",
     "name": "Wasseratem",
     "ritual": false,
-    "traditions": [3]
+    "spread": [3]
   },
   {
     "id": 51,
     "sf": "D",
     "probe": "KL/IN/FF",
     "name": "Zauberklinge Geisterspeer",
-    "ritual": false,
-    "traditions": [1]
+    "ritual": true,
+    "spread": [1]
   }
 ]

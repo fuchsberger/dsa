@@ -2,7 +2,7 @@ defmodule DsaWeb.CombatSetController do
   use DsaWeb, :controller
 
   alias Dsa.Characters
-  alias Dsa.Characters.{Character, CombatSet}
+  alias Dsa.Characters.CombatSet
 
   action_fallback DsaWeb.ErrorController
 

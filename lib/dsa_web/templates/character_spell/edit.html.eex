@@ -3,11 +3,6 @@
 <div class='sticky top-0 bg-gray-100 py-3'>
   <div class='flex justify-between pb-1'>
     <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Spells" %></h2>
-
-    <%= for %{short: short, id: id} <- SpellTradition.list() do %>
-      <%= link short, to: "##{id}", data_turbo: false, class: "hidden lg:block leading-8" %>
-    <% end %>
-
     <%= submit gettext("Save Spells"), class: "button" %>
   </div>
 

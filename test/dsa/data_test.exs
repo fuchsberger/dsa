@@ -72,9 +72,9 @@ defmodule Dsa.DataTest do
   describe "spells" do
     alias Dsa.Data.Spell
 
-    @valid_attrs %{name: "Zauber", traditions: [1], sf: :A, t1: :mu, t2: :kl, t3: :in}
-    @update_attrs %{name: "Zauber2", ritual: true, sf: :B, traditions: [2, 3], t1: :ch, t2: :ko, t3: :kk}
-    @invalid_attrs %{name: nil, traditions: nil, sf: nil, t1: nil, t2: nil, t3: nil}
+    @valid_attrs %{name: "Zauber", spread: [1], sf: :A, t1: :mu, t2: :kl, t3: :in}
+    @update_attrs %{name: "Zauber2", ritual: true, sf: :B, spread: [2, 3], t1: :ch, t2: :ko, t3: :kk}
+    @invalid_attrs %{name: nil, spread: nil, sf: nil, t1: nil, t2: nil, t3: nil}
 
     test "list_spells/0 returns all spells in correct order" do
       %Spell{id: id1} = spell_fixture()
@@ -97,7 +97,7 @@ defmodule Dsa.DataTest do
     test "create_spell/1 with valid data creates a spell" do
       assert {:ok, %Spell{} = spell} = Data.create_spell(@valid_attrs)
       assert spell.name == "Zauber"
-      assert spell.traditions == [1]
+      assert spell.spread == [1]
       assert spell.sf == :A
       assert spell.probe == {:mu, :kl, :in}
     end
@@ -110,7 +110,7 @@ defmodule Dsa.DataTest do
       spell = spell_fixture()
       assert {:ok, %Spell{} = spell} = Data.update_spell(spell, @update_attrs)
       assert spell.name == "Zauber2"
-      assert spell.traditions == [2, 3]
+      assert spell.spread == [2, 3]
       assert spell.sf == :B
       assert spell.probe == {:ch, :ko, :kk}
     end

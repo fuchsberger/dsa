@@ -119,8 +119,8 @@
           </div>
         </div>
       <% else %>
-        <%= link @conn, gettext("Skills"),
-          to: Routes.skill_path(@conn, :index),
+        <%= link @conn, [icon(@conn, "login", "inline-block w-5 h-5 mr-1"), gettext("Login")],
+          to: Routes.session_path(@conn, :new),
           class: "menu-item hidden lg:inline-block" %>
       <% end %>
     </div>

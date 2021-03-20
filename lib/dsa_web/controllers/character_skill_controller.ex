@@ -15,7 +15,7 @@ defmodule DsaWeb.CharacterSkillController do
     end
   end
 
-  def index(conn, _params, character) do
+  def index(conn, _params, _character) do
     conn
     |> assign(:changeset, Event.change_skill_roll())
     |> render("index.html")

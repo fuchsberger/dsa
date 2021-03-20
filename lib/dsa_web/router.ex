@@ -30,10 +30,11 @@ defmodule DsaWeb.Router do
     delete "/logout/:user_id", SessionController, :delete
 
     resources "/character", CharacterController, only: [:show]
-    resources "/groups", GroupController, only: [:index]
 
     # Public Data Routes
+    resources "/groups", GroupController, only: [:index]
     resources "/skills", SkillController, only: [:index]
+    resources "/spells", SpellController, only: [:index]
 
     # user registration
     resources "/user", UserController, only: [:new, :create]
@@ -49,9 +50,6 @@ defmodule DsaWeb.Router do
   # Private Routes
   scope "/", DsaWeb do
     pipe_through [:browser, :authenticate_user]
-
-    resources "/skills", SkillController, only: [:index]
-    resources "/spells", SpellController, only: [:index]
 
     put "/character/:id/activate", CharacterController, :activate
     put "/character/:id/toggle_visible", CharacterController, :toggle_visible

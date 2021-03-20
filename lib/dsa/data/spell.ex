@@ -3,17 +3,16 @@ defmodule Dsa.Data.Spell do
   import Ecto.Changeset
   import DsaWeb.DsaHelpers, only: [traits: 0]
 
-  alias Dsa.Type.SpellTradition
   alias Dsa.Type.Probe
 
   @sf_values ~w(A B C D E)a
-  @fields ~w(ritual name sf traditions t1 t2 t3)a
+  @fields ~w(ritual name sf spread t1 t2 t3)a
 
   schema "spells" do
     field :ritual, :boolean, default: false
     field :name, :string
     field :sf, Ecto.Enum, values: @sf_values
-    field :traditions, {:array, :integer }
+    field :spread, {:array, :integer }
 
     field :probe, Probe
     field :t1, Ecto.Enum, values: traits(), virtual: true

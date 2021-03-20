@@ -50,7 +50,7 @@ defmodule Dsa.Data.Seeder do
         sf: entry["sf"],
         name: entry["name"],
         ritual: entry["ritual"],
-        traditions: entry["traditions"],
+        spread: entry["spread"],
         t1: t1,
         t2: t2,
         t3: t3

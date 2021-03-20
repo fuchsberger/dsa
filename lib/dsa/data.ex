@@ -43,7 +43,7 @@ defmodule Dsa.Data do
   # SPELLS
 
   def list_spells do
-    from(s in Spell, order_by: [desc: s.ritual, asc: s.traditions, asc: s.name])
+    from(s in Spell, order_by: [desc: s.ritual, asc: s.name])
     |> Repo.all()
   end
 

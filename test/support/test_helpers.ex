@@ -67,7 +67,7 @@ defmodule Dsa.TestHelpers do
   def spell_fixture(attrs \\ %{}) do
     {:ok, spell} =
       attrs
-      |> Enum.into(%{name: "Spell1", traditions: [1], sf: :A, t1: :mu, t2: :kl, t3: :in})
+      |> Enum.into(%{name: "Spell1", spread: [1], sf: :A, t1: :mu, t2: :kl, t3: :in})
       |> Data.create_spell()
     spell
   end

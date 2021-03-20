@@ -1,0 +1,6 @@
+<tr>
+  <td><%= @spell.name %></td>
+  <td class='small'><%= @spell.sf %></td>
+  <td class='small'><%= probe(@spell.probe) %></td>
+  <td class='small'><%= spread(@spell.spread) %></td>
+</tr>

@@ -1,10 +1,10 @@
 <tr id='<%= @skill.category %>' class='border-solid border-b border-gray-300'>
   <td class='leading-6 text-left'><%= @skill.name %></td>
-  <td class='text-center'><%= be(@skill.be) %></td>
-  <td class='text-center'><%= probe(@skill.probe) %></td>
-  <td class='text-center'><%= @skill.sf %></td>
+  <td class='small'><%= be(@skill.be) %></td>
+  <td class='small'><%= probe(@skill.probe) %></td>
+  <td class='small'><%= @skill.sf %></td>
   <%= if admin?(@conn) do %>
-    <td class='text-center'>
+    <td>
       <%= link icon(@conn, "pencil-solid"), to: Routes.skill_path(@conn, :edit, @skill) %>
       <%= link icon(@conn, "x"),
         to: Routes.skill_path(@conn, :delete, @skill),
