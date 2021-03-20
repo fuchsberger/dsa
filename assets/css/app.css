@@ -1,7 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@tailwind screens;
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+@import "components/menu.css";
+@import "components/table.css";
+
+@import "tailwindcss/utilities";
+/* @tailwind screens; */
 
 /* hide live-refresh iframe (dev only) */
 iframe { display: none; }
@@ -72,38 +76,6 @@ iframe { display: none; }
 
   input.error { @apply border-red-800 !important; }
 
-  /* Mobile button used in menu */
-  .mobile-button { @apply text-gray-400 text-center rounded-md; }
-  .mobile-button:focus { @apply outline-none; }
-  .mobile-button.active { @apply bg-gray-700 text-gray-50; }
-
-  .mobile-button:not(.active) svg:first-of-type { @apply inline-block; }
-  .mobile-button:not(.active) svg:last-of-type { @apply hidden; }
-  .mobile-button.active svg:first-of-type { @apply hidden; }
-  .mobile-button.active svg:last-of-type { @apply inline-block; }
-
-  /* Menu Items */
-  .menu-item { @apply text-gray-300 rounded-md font-medium leading-10 px-2;}
-  .menu-item:hover { @apply bg-gray-700 text-white; }
-  .menu-item.active { @apply bg-gray-900 !important text-white !important; }
-
-  .menu-item.dropdown { @apply  group; }
-  .menu-item.dropdown:hover .group-hover\:scale-100 { transform: scale(1) }
-  .menu-item.dropdown:hover .group-hover\:-rotate-180 { transform: rotate(180deg) }
-
-  .menu-item.dropdown button { @apply flex items-center; }
-  .menu-item.dropdown button:focus { @apply outline-none; }
-  .menu-item.dropdown button span { @apply pr-1 font-semibold flex-1; }
-  .menu-item.dropdown button svg { @apply fill-current h-4 w-4 transform transition duration-150 ease-in-out; }
-
-  .menu-item.dropdown div { @apply absolute w-40 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 transition duration-150 ease-in-out text-gray-800 z-50; }
-
-  .menu-item.dropdown a { @apply block px-3 leading-7 text-gray-500 border-solid border-gray-300 border-b; }
-  .menu-item.dropdown a:hover { @apply bg-gray-100 text-black; }
-  .menu-item.dropdown a:last-of-type { @apply border-0; }
-
-  .menu-item.dropdown a svg { @apply inline-block w-4 h-4 mr-2; }
-
   /* Inputs */
   .input { @apply w-full px-2 py-0 leading-7 shadow-sm border-gray-300 rounded-md; }
   .input:focus { @apply ring-indigo-500 border-indigo-500; }
@@ -155,14 +127,6 @@ iframe { display: none; }
   #modifier-component input[type="radio"]:checked+label.positive {
     @apply border-2 border-green-400 bg-green-200;
   }
-
-  /* Tables */
-  .table {@apply w-full shadow-xl border-gray-200 rounded-lg text-sm divide-y divide-gray-200;}
-
-  .table .header-row { @apply bg-gray-200; }
-  .table th, .table td { @apply px-1 leading-6; }
-  .table th:first-child, .table td:first-child { @apply pl-2; }
-  .table th:last-child, .table td:last-child { @apply pr-2; }
 }
 
 

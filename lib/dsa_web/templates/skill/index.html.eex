@@ -1,4 +1,4 @@
-<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around' data-turbo='false'>
+<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around'>
   <%= if admin?(@conn) do %>
     <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button gray leading-6 h-6 mt-1" %>
   <% else %>
@@ -10,7 +10,7 @@
   <% end %>
 </div>
 
-<table id='skill-table' class="table text-center mb-3">
+<table class="table">
   <tbody>
     <%= for category <- SkillCategory.list() do  %>
       <%= render DsaWeb.SkillView, "header.html", category: category, admin: admin?(@conn) %>

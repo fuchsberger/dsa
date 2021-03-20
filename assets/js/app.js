@@ -1,5 +1,6 @@
-import * as Turbo from "@hotwired/turbo"
 import "../css/app.css"
+
+import * as Turbo from "@hotwired/turbo"
 import "phoenix_html"
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
