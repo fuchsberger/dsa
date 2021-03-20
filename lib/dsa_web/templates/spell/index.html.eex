@@ -8,13 +8,13 @@
     </tr>
   </thead>
   <tbody>
-<%= for spell <- @spells do %>
+  <%= for spell <- @spells do %>
     <tr>
       <td><%= spell.name %></td>
       <td class='text-center'><%= if spell.ritual, do: "✓" %></td>
       <td class='text-center'><%= spell.sf %></td>
       <td class='text-center'><%= probe(spell.probe) %></td>
     </tr>
-<% end %>
+  <% end %>
   </tbody>
 </table>

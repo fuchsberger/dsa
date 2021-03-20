@@ -1,12 +1,7 @@
-<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around'>
-  <%= if admin?(@conn) do %>
-    <%= link gettext("New Skill"), to: Routes.skill_path(@conn, :new), class: "button gray leading-6 h-6 mt-1" %>
-  <% else %>
-    <h2 class='leading-8 text-xl font-bold'><%= gettext "Skills" %></h2>
-  <% end %>
-
+<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around' data-turbo='false'>
+  <h2 class='leading-8 text-xl font-bold'><%= gettext "Skills" %></h2>
   <%= for %{short: short, id: id} <- SkillCategory.list() do %>
-    <%= link short, to: "##{id}", data_turbo: false, class: "/skills/new\">" %>
+    <%= link short, to: "##{id}" %>
   <% end %>
 </div>
 
