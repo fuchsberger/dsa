@@ -1,20 +1,17 @@
-<table class='table'>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>R</th>
-      <th>SF</th>
-      <th>Probe</th>
-    </tr>
-  </thead>
+<table class="table">
   <tbody>
-  <%= for spell <- @spells do %>
-    <tr>
-      <td><%= spell.name %></td>
-      <td class='text-center'><%= if spell.ritual, do: "✓" %></td>
-      <td class='text-center'><%= spell.sf %></td>
-      <td class='text-center'><%= probe(spell.probe) %></td>
+    <tr id='rituals' class='header-row'>
+      <th><%= gettext "Ritual" %></th>
+      <th><%= gettext "SF" %></th>
+      <th><%= gettext "Roll" %></th>
     </tr>
-  <% end %>
+    <%= render_many @rituals, DsaWeb.SpellView, "row.html", conn: @conn %>
+
+    <tr id='spells' class='header-row'>
+      <th><%= gettext "Spell" %></th>
+      <th><%= gettext "SF" %></th>
+      <th><%= gettext "Roll" %></th>
+    </tr>
+    <%= render_many @spells, DsaWeb.SpellView, "row.html", conn: @conn %>
   </tbody>
 </table>

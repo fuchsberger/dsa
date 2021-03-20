@@ -1,0 +1,5 @@
+<tr>
+  <td><%= @spell.name %></td>
+  <td class='text-center'><%= @spell.sf %></td>
+  <td class='text-center'><%= probe(@spell.probe) %></td>
+</tr>
