@@ -71,43 +71,4 @@ defmodule DsaWeb.LogLive do
     broadcast(socket.assigns.group_id, :clear_logs)
     {:noreply, socket}
   end
-
-  # defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
-
-  # import Phoenix.HTML.Tag, except: [tag: 2]
-
-  # @base "inline-block font-semibold leading-6 px-1 rounded"
-
-  # defp clabel(:blue, c), do: content_tag :span, c,
-  #   class: "#{@base} text-blue-500 bg-blue-50 border border-blue-200"
-
-  # defp clabel(:green, c), do: content_tag :span, c, class: "#{@base} bg-green-50 text-green-500"
-
-  # defp clabel(:red, c), do: content_tag :span, c, class: "#{@base} bg-red-50 text-red-500"
-
-  # defp clabel(:yellow, c), do: content_tag :span, c,
-  #   class: "#{@base} bg-yellow-50 text-yellow-600 border border-yellow-200"
-
-  # defp clabel(:dice, c), do: content_tag :span, c,
-  #   class: "#{@base} text-gray-500 border border-md border-gray-300 bg-gray-100 w-6 ml-1 text-center"
-
-  # defp clabel(:text, c), do: content_tag :span, c, class: "leading-6 font-bold text-gray-900"
-
-  # defp result_clabel(:trait, value) do
-  #   case value do
-  #     2 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
-  #     1 -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
-  #     -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
-  #     -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
-  #   end
-  # end
-
-  # defp result_clabel(:talent, value) do
-  #   case value do
-  #     10 -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
-  #     -2 -> content_tag :span, "✗ K!", class: "#{@base} bg-red-50 text-red-500"
-  #     -1 -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
-  #     x -> content_tag :span, "✓ #{x}", class: "#{@base} bg-green-50 text-green-500"
-  #   end
-  # end
 end

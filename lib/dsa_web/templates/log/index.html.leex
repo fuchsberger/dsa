@@ -19,21 +19,21 @@
         <% Log.Type.CustomTalentRoll -> %>
           <%= render DsaWeb.LogView, "custom_talent_roll.html", entry: entry, show_dice?: @show_dice? %>
 
-        <% %Dsa.Event.SkillRoll{} -> %>
-          <%= render DsaWeb.LogView, "skill_roll.html", entry: entry, show_dice?: @show_dice? %>
-
         <% %Dsa.Event.TraitRoll{} -> %>
           <%= render DsaWeb.LogView, "trait_roll.html", entry: entry, show_dice?: @show_dice? %>
 
-        <% %Dsa.Event.SpellRoll{} -> %>
-          <%= render DsaWeb.LogView, "spell_roll.html", entry: entry, show_dice?: @show_dice? %>
-
-
-        <% Log.Type.SimpleText -> %>
-          <%= render DsaWeb.LogView, "simple_text.html", entry: entry, show_dice?: @show_dice? %>
+        <% %Dsa.Event.MainLog{} -> %>
+          <%= case entry.type do %>
+            <% Dsa.Event.MainLog.Type.SkillRoll -> %>
+              <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
+            <% Dsa.Event.MainLog.Type.SpellRoll -> %>
+              <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
+            <% _ -> %>
+              <%= render DsaWeb.LogView, "simple_text.html", entry: entry %>
+          <% end %>
 
         <% _ -> %>
-          <%= render DsaWeb.LogView, "unknown.html", entry: entry, show_dice?: @show_dice? %>
+          <%= render DsaWeb.LogView, "unknown.html", entry: entry %>
       <% end %>
     </div>
   <% end %>

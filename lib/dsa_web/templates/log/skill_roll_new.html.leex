@@ -1,0 +1,15 @@
+<div class='mr-3'>
+  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= @entry.character_name %></span>
+  <span class='mx-1 lg:mx-2'>»</span>
+  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
+    <%= @entry.left %>
+    <%=
+      cond do
+        @entry.right == 0 -> nil
+        @entry.right > 0 -> "+#{@entry.right}"
+        true -> @entry.right
+      end
+    %>
+  </span>
+</div>
+<%= render DsaWeb.LogView, "trial_result_new.html", entry: @entry, show_dice?: @show_dice? %>

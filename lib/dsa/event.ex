@@ -7,7 +7,7 @@ defmodule Dsa.Event do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll}
+  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, TraitRoll, MainLog}
 
   require Logger
 
@@ -18,13 +18,17 @@ defmodule Dsa.Event do
 
   """
   def list_logs(group_id) do
-    # TODO: Optimize query (limit, only load required fields, load as map)
-    group = Repo.get!(from(g in Dsa.Accounts.Group, preload: [skill_rolls: [:character, :skill],
-spell_rolls: [:character, :spell]
-    ]), group_id)
+    group =
+      Repo.get!(
+        from(g in Dsa.Accounts.Group,
+          preload: [
+            main_logs: []
+          ]
+        ),
+        group_id
+      )
 
-    # TODO: add other types of logs (all logs require inserted_at timestamps)
-    entries = group.skill_rolls ++ group.spell_rolls
+    entries = group.main_logs
 
     entries
     |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
@@ -40,8 +44,7 @@ spell_rolls: [:character, :spell]
   """
   def delete_logs!(group_id) do
     Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
-    Repo.delete_all(from(r in SkillRoll, where: r.group_id == ^group_id))
-    Repo.delete_all(from(r in SpellRoll, where: r.group_id == ^group_id))
+    Repo.delete_all(from(l in MainLog, where: l.group_id == ^group_id))
     # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
   end
 
@@ -55,9 +58,24 @@ spell_rolls: [:character, :spell]
   # Skill Rolls
   def change_skill_roll(attrs \\ %{}), do: SkillRoll.changeset(%SkillRoll{}, attrs)
 
-
   # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
+
+  defp trial_result_type(quality, critical?) do
+    case {quality, critical?} do
+      {0, true} ->
+        {"✗ K!", MainLog.ResultType.Failure}
+
+      {_, true} ->
+        {"✓ K!", MainLog.ResultType.Success}
+
+      {0, false} ->
+        {"✗", MainLog.ResultType.Failure}
+
+      {q, false} ->
+        {"✓ #{quality}", MainLog.ResultType.Success}
+    end
+  end
 
   def create_skill_roll(character, group, attrs) do
     changeset = change_skill_roll(attrs)
@@ -72,20 +90,32 @@ spell_rolls: [:character, :spell]
         character
         |> Repo.preload(character_skills: [:skill])
         |> Map.get(:character_skills)
-        |> Enum.find(& &1.skill_id == skill_id)
+        |> Enum.find(&(&1.skill_id == skill_id))
 
       dice = Trial.roll()
-      [t1, t2, t3 ] = get_character_trait_values(character, probe)
+      [t1, t2, t3] = get_character_trait_values(character, probe)
 
       # produce roll results
       {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
 
-      changeset
-      |> put_change(:roll, dice)
-      |> put_change(:quality, quality)
-      |> put_change(:critical, critical?)
-      |> put_assoc(:character, character)
+      {result, result_type} = trial_result_type(quality, critical?)
+      skill_name = Dsa.Repo.get!(Dsa.Data.Skill, skill_id).name
+
+      change = %{
+        left: "#{skill_name}",
+        right: "#{modifier}",
+        result: "#{result}",
+        roll: dice,
+        character: character,
+        character_name: character.name,
+        type: MainLog.Type.SkillRoll,
+        result_type: result_type,
+        group_id: group.id
+      }
+
+      MainLog.changeset(%MainLog{}, change)
       |> put_assoc(:group, group)
+      |> put_assoc(:character, character)
       |> Repo.insert()
     else
       changeset
@@ -105,13 +135,33 @@ spell_rolls: [:character, :spell]
         character
         |> Repo.preload(character_spells: [:spell])
         |> Map.get(:character_spells)
-        |> Enum.find(& &1.spell_id == spell_id)
+        |> Enum.find(&(&1.spell_id == spell_id))
 
       dice = Trial.roll()
-      [t1, t2, t3 ] = get_character_trait_values(character, probe)
+      [t1, t2, t3] = get_character_trait_values(character, probe)
 
       # produce roll results
       {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
+
+      {result, result_type} = trial_result_type(quality, critical?)
+      spell_name = Dsa.Repo.get!(Dsa.Data.Spell, spell_id).name
+
+      change = %{
+        left: "#{spell_name}",
+        right: "#{modifier}",
+        result: "#{result}",
+        roll: dice,
+        character: character,
+        character_name: character.name,
+        type: MainLog.Type.SpellRoll,
+        result_type: result_type,
+        group_id: group.id
+      }
+
+      MainLog.changeset(%MainLog{}, change)
+      |> put_assoc(:group, group)
+      |> put_assoc(:character, character)
+      |> Repo.insert()
 
       changeset
       |> put_change(:roll, dice)
@@ -120,6 +170,7 @@ spell_rolls: [:character, :spell]
       |> put_assoc(:character, character)
       |> put_assoc(:group, group)
       |> Repo.insert()
+
     else
       changeset
     end
