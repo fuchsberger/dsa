@@ -36,11 +36,12 @@ module.exports = (env, options) => ({
         use: { loader: 'babel-loader' }
       },
       {
-        test: /\.[s]?css$/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,  // extract CSS into separate file
           'css-loader',                 // translates CSS into CommonJS
           'postcss-loader'              // CSS postprocessing
+
         ]
       },
       {
