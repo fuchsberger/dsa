@@ -25,12 +25,11 @@ defmodule DsaWeb.UserController do
         |> redirect(to: Routes.session_path(conn, :new))
 
       user ->
-        user = Accounts.manage_user!(user, %{confirmed: true, token: nil})
+        Accounts.manage_user!(user, %{confirmed: true, token: nil})
 
         conn
-        |> DsaWeb.Auth.login(user)
-        |> put_flash(:info, "Activation complete. Welcome to DSA Tool!")
-        |> redirect(to: Routes.character_path(conn, :index))
+        |> put_flash(:info, "Activation complete. You can login now.")
+        |> redirect(to: Routes.session_path(conn, :new))
     end
   end
 
