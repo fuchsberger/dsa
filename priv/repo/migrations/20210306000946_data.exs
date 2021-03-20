@@ -26,7 +26,7 @@ defmodule Dsa.Repo.Migrations.Data do
       add :sf, :char, size: 1
       add :probe, :smallint
       add :ritual, :boolean, null: false
-      add :traditions, {:array, :smallint}
+      add :spread, {:array, :smallint}
     end
 
     create unique_index(:spells, [:name])
