@@ -15,6 +15,12 @@
       </div>
 
       <%= if auth?(@conn) do %>
+        <%= if @current_user.group_id do %>
+          <%= link @conn, gettext("Group"),
+            to: Routes.group_path(@conn, :show, @current_user.group_id),
+            class: "menu-item hidden lg:inline-block" %>
+        <% end %>
+
         <div class="menu-item dropdown hidden lg:inline-block relative">
           <button>
             <span>Characters</span>
