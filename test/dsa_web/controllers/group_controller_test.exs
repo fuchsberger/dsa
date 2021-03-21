@@ -65,7 +65,7 @@ defmodule DsaWeb.GroupControllerTest do
       assert redirected_to(create_conn) == "/groups/#{group_id}"
 
       conn = get conn, "/groups/#{group_id}"
-      assert html_response(conn, 200) =~ "Show Group"
+      assert html_response(conn, 200)
 
       assert Accounts.get_group!(group_id).master_id == user_id
     end

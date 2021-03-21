@@ -1,9 +1,9 @@
 
-<h1 class='page-heading text-center mt-3 mb-2'><%= gettext "Combat Sets" %></h1>
-
-<div class='mb-3'>
-  <%= render "form.html",
-    Map.put(assigns, :action, Routes.character_combat_set_path(@conn, :create, @character)) %>
+<div class="flex justify-between mt-3 mb-2">
+  <h1 class='page-heading'><%= @character.name %>: <%= gettext "Combat Sets" %></h1>
+  <%= link gettext("New Combat Set"),
+    to: Routes.character_combat_set_path(@conn, :new, @character),
+    class: "button gray leading-8 h-8" %>
 </div>
 
 <div class="shadow-xl overflow-hidden border-b sm:rounded-lg mb-3">
@@ -26,12 +26,12 @@
       <td><%= combat_set.tp_dice %>W<%= combat_set.tp_type %> + <%= combat_set.tp_bonus %></td>
 
       <td>
-        <%= link icon(@conn, "pencil"),
+        <%= link icon(@conn, "pencil-solid"),
           to: Routes.character_combat_set_path(@conn, :edit, @character, combat_set) %>
         <%= link icon(@conn, "x"),
           to: Routes.character_combat_set_path(@conn, :delete, @character, combat_set),
           method: :delete, class: "negative",
-          data: [confirm: "Are you sure?"] %>
+          data: [confirm: gettext("Are you sure?")] %>
       </td>
     </tr>
   <% end %>

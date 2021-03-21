@@ -22,7 +22,7 @@
 .menu-item.dropdown button span { @apply pr-1 font-semibold flex-1; }
 .menu-item.dropdown button svg { @apply fill-current h-4 w-4 transform transition duration-150 ease-in-out; }
 
-.menu-item.dropdown div { @apply absolute w-40 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 transition duration-150 ease-in-out text-gray-800 z-50; }
+.menu-item.dropdown div { @apply absolute w-48 rounded-md shadow-lg py-2 bg-white ring-1 ring-black ring-opacity-5 transform scale-0 transition duration-150 ease-in-out text-gray-800 z-50; }
 
 .menu-item.dropdown a { @apply block px-3 leading-7 text-gray-500 border-solid border-gray-300 border-b; }
 .menu-item.dropdown a:hover { @apply bg-gray-100 text-black; }

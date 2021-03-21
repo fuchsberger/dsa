@@ -1,1 +1,1 @@
-Show Group
+<%= live_render(@conn, DsaWeb.GroupLive, session: %{"group_id" => @group.id}) %>

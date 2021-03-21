@@ -8,7 +8,7 @@ defmodule DsaWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_live_flash
+    plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :put_root_layout, {DsaWeb.LayoutView, :root}
@@ -57,7 +57,7 @@ defmodule DsaWeb.Router do
     resources "/characters", CharacterController, except: [:show] do
 
       # Combat Sets
-      resources "/combat_sets", CombatSetController
+      resources "/combat_sets", CombatSetController, except: [:show]
 
       # Character Skills
       resources "/skills", CharacterSkillController, only: [:index], as: :skill
