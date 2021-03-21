@@ -57,7 +57,7 @@ defmodule DsaWeb.Router do
     resources "/characters", CharacterController, except: [:show] do
 
       # Combat Sets
-      resources "/combat_sets", CombatSetController
+      resources "/combat_sets", CombatSetController, except: [:show]
 
       # Character Skills
       resources "/skills", CharacterSkillController, only: [:index], as: :skill

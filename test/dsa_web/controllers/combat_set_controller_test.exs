@@ -50,7 +50,7 @@ defmodule DsaWeb.CombatSetControllerTest do
       count_before = combat_set_count(c)
       conn = post conn, Routes.character_combat_set_path(conn, :create, c),
         combat_set: @invalid_attrs
-      assert html_response(conn, 200) =~ "check the errors"
+      assert html_response(conn, 200) =~ gettext "Oops, something went wrong! Please check the errors below."
       assert combat_set_count(c) == count_before
     end
   end

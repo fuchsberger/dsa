@@ -1,5 +1,8 @@
-<h1 class='page-heading text-center mt-3 mb-2'><%= gettext "Edit Combat Set" %></h1>
+<div class="flex justify-between mt-3 mb-2">
+  <h1 class='page-heading'><%= @character.name %>: <%= gettext "Edit Combat Set" %></h1>
+  <%= link gettext("Back"),
+    to: Routes.character_combat_set_path(@conn, :index, @character),
+    class: "button gray leading-8 h-8" %>
+</div>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.character_combat_set_path(@conn, :update, @character, @combat_set)) %>
-
-<p class='text-center mt-3'><%= link "Back", to: Routes.character_combat_set_path(@conn, :index, @character) %></p>

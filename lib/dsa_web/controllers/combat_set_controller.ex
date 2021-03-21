@@ -22,7 +22,6 @@ defmodule DsaWeb.CombatSetController do
 
   def index(conn, _params, character) do
     conn
-    |> assign(:changeset, Characters.change_combat_set(%CombatSet{}))
     |> assign(:combat_sets, Characters.list_combat_sets(character))
     |> render("index.html")
   end
@@ -43,8 +42,7 @@ defmodule DsaWeb.CombatSetController do
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> assign(:changeset, changeset)
-        |> assign(:combat_sets, Characters.list_combat_sets(character))
-        |> render("index.html")
+        |> render("new.html")
     end
   end
 
@@ -75,8 +73,7 @@ defmodule DsaWeb.CombatSetController do
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> assign(:changeset, changeset)
-        |> assign(:combat_sets, Characters.list_combat_sets(character))
-        |> render("index.html")
+        |> render("edit.html")
     end
   end
 
