@@ -7,7 +7,7 @@ defmodule Dsa.Event do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, TraitRoll, MainLog}
+  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, MainLog}
 
   require Logger
 
@@ -72,7 +72,7 @@ defmodule Dsa.Event do
       {0, false} ->
         {"✗", MainLog.ResultType.Failure}
 
-      {q, false} ->
+      {_, false} ->
         {"✓ #{quality}", MainLog.ResultType.Success}
     end
   end

@@ -105,6 +105,11 @@ defmodule Dsa.Characters do
     from(c in query, where: c.user_id == ^user_id)
   end
 
+  @doc """
+  Used for preloading in group live view
+  """
+  def character_query, do: from(c in Character, preload: :combat_sets, where: c.visible == true)
+
   # SPELLS
 
   def add_spells(%Character{} = character) do

@@ -27,10 +27,14 @@ defmodule Dsa.Characters.Character do
     field :zk, :integer, default: 0
     field :sp, :integer, default: 3
 
+    field :ini_basis, :integer, default: 0
+    field :ini, :integer
+
     belongs_to :user, Dsa.Accounts.User
 
     has_many :character_skills, Dsa.Characters.CharacterSkill, on_replace: :delete
     has_many :character_spells, Dsa.Characters.CharacterSpell, on_replace: :delete
+    has_many :combat_sets, Dsa.Characters.CombatSet, on_replace: :delete
 
     timestamps()
   end
