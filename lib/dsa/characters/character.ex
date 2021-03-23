@@ -39,8 +39,8 @@ defmodule Dsa.Characters.Character do
     timestamps()
   end
 
-  @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk)a
-  @optional ~w(profession visible le ae ke sk zk sp)a
+  @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk ini_basis)a
+  @optional ~w(profession visible le ae ke sk zk sp ini)a
 
   def changeset(character, attrs) do
     character
@@ -65,5 +65,6 @@ defmodule Dsa.Characters.Character do
     |> validate_number(:sk, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
     |> validate_number(:zk, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
     |> validate_number(:sp, greater_than_or_equal_to: 0, less_than_or_equal_to: 6)
+    |> validate_number(:ini_basis, greater_than_or_equal_to: 0, less_than_or_equal_to: 30)
   end
 end
