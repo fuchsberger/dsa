@@ -35,6 +35,7 @@ defmodule Dsa.Characters.Character do
 
     has_many :character_skills, Dsa.Characters.CharacterSkill, on_replace: :delete
     has_many :character_spells, Dsa.Characters.CharacterSpell, on_replace: :delete
+    has_many :character_blessings, Dsa.Characters.CharacterBlessing, on_replace: :delete
     has_many :combat_sets, Dsa.Characters.CombatSet, on_replace: :delete
 
     timestamps()

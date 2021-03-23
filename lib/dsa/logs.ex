@@ -7,7 +7,7 @@ defmodule Dsa.Logs do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, Event}
+  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, BlessingRoll, MainLog, Event}
 
   require Logger
 
@@ -46,6 +46,9 @@ defmodule Dsa.Logs do
 
   # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
+
+  # Blessing Rolls
+  def change_blessing_roll(attrs \\ %{}), do: BlessingRoll.changeset(%BlessingRoll{}, attrs)
 
   def trial_result_type(success?, critical?) when is_boolean(success?) do
     case {success?, critical?} do

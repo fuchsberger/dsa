@@ -86,12 +86,14 @@ defmodule Dsa.Characters do
 
     character_skills =
       Data.list_skills()
-      |> Enum.reject(& Enum.member?(character_skill_ids, &1.id))
-      |> Enum.map(& %CharacterSkill{
-        character_id: character.id,
-        skill_id: &1.id,
-        level: 0
-      })
+      |> Enum.reject(&Enum.member?(character_skill_ids, &1.id))
+      |> Enum.map(
+        &%CharacterSkill{
+          character_id: character.id,
+          skill_id: &1.id,
+          level: 0
+        }
+      )
       |> Enum.concat(character.character_skills)
 
     character
@@ -101,7 +103,7 @@ defmodule Dsa.Characters do
   end
 
   def remove_skills(%Character{} = character) do
-    character_skills = Enum.reject(character.character_skills, & &1.level == 0)
+    character_skills = Enum.reject(character.character_skills, &(&1.level == 0))
 
     character
     |> Ecto.Changeset.change()
@@ -112,7 +114,17 @@ defmodule Dsa.Characters do
   defp preload_assocs(query) do
     character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
     character_spell_query = from(s in CharacterSpell, preload: :spell, order_by: s.spell_id)
-    from(c in query, preload: [character_skills: ^character_skill_query, character_spells: ^character_spell_query])
+
+    character_blessing_query =
+      from(s in CharacterSpell, preload: :blessing, order_by: s.blessing_id)
+
+    from(c in query,
+      preload: [
+        character_skills: ^character_skill_query,
+        character_spells: ^character_spell_query,
+        character_blessings: ^character_blessing_query
+      ]
+    )
   end
 
   defp user_characters_query(query, %User{id: user_id}) do
@@ -126,12 +138,14 @@ defmodule Dsa.Characters do
 
     character_spells =
       Data.list_spells()
-      |> Enum.reject(& Enum.member?(character_spell_ids, &1.id))
-      |> Enum.map(& %CharacterSpell{
-        character_id: character.id,
-        spell_id: &1.id,
-        level: 0
-      })
+      |> Enum.reject(&Enum.member?(character_spell_ids, &1.id))
+      |> Enum.map(
+        &%CharacterSpell{
+          character_id: character.id,
+          spell_id: &1.id,
+          level: 0
+        }
+      )
       |> Enum.concat(character.character_spells)
 
     character
@@ -141,7 +155,7 @@ defmodule Dsa.Characters do
   end
 
   def remove_spells(%Character{} = character) do
-    character_spells = Enum.reject(character.character_spells, & &1.level == 0)
+    character_spells = Enum.reject(character.character_spells, &(&1.level == 0))
 
     character
     |> Ecto.Changeset.change()

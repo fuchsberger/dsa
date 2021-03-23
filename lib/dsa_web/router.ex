@@ -34,7 +34,8 @@ defmodule DsaWeb.Router do
     # Public Data Routes
     resources "/groups", GroupController, only: [:index]
     resources "/skills", SkillController, only: [:index]
-    resources "/spells", SpellController, only: [:index]
+    resources "/spells", BlessingController, only: [:index]
+    resources "/blessings", BlessingController, only: [:index]
 
     # user registration
     resources "/user", UserController, only: [:new, :create]
@@ -72,11 +73,19 @@ defmodule DsaWeb.Router do
       put "/spells/update", CharacterSpellController, :update_all, as: :spell
       put "/spells/add", CharacterSpellController, :add_all, as: :spell
       delete "/spells/remove", CharacterSpellController, :remove_all, as: :spell
+
+      # Character Blessings
+      resources "/blessings", CharacterBlessingController, only: [:index], as: :blessing
+      get "/blessings/edit", CharacterBlessingController, :edit_all, as: :blessing
+      put "/blessings/update", CharacterBlessingController, :update_all, as: :blessing
+      put "/blessings/add", CharacterBlessingController, :add_all, as: :blessing
+      delete "/blessings/remove", CharacterBlessingController, :remove_all, as: :blessing
     end
 
     # Event Routes
     post "/characters/:character_id/skill_roll", EventController, :skill_roll
     post "/characters/:character_id/spell_roll", EventController, :spell_roll
+    post "/characters/:character_id/blessing_roll", EventController, :blessing_roll
 
     resources "/user", UserController, only: [:delete, :edit, :update]
 

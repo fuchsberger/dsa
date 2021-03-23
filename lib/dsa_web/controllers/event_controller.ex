@@ -41,6 +41,18 @@ defmodule DsaWeb.EventController do
     end
   end
 
+  def blessing_roll(conn, %{"blessing_roll" => roll_params}, group, character) do
+    case Event.create_blessing_roll(character, group, roll_params) do
+      {:ok, blessing_roll} ->
+        broadcast(group.id, {:log, blessing_roll})
+        redirect(conn, to: Routes.character_blessing_path(conn, :index, character))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn inspect changeset
+        redirect(conn, to: Routes.character_blessing_path(conn, :index, character))
+    end
+  end
+
   # def trait_roll(conn, %{"trait_roll" => roll_params}, group, character) do
   #   case Event.create_trait_roll(character, group, roll_params) do
   #     {:ok, trait_roll} ->

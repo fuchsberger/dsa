@@ -1,0 +1,34 @@
+<%= form_for @changeset, Routes.character_blessing_path(@conn, :update_all, @character), [method: :put], fn f -> %>
+
+<div class='sticky top-0 bg-gray-100 py-3'>
+  <div class='flex justify-between pb-1'>
+    <h2 class='leading-8 font-sans text-xl font-bold'><%= gettext "Edit Blessings" %></h2>
+    <%= submit gettext("Save Blessings"), class: "button" %>
+  </div>
+
+  <div class='grid lg:grid-cols-3 lg:gap-x-5 gap-y-2'>
+    <%= link gettext("Add remaining blessings"),
+      to: Routes.character_blessing_path(@conn, :add_all, @character), method: :put,
+      class: "button gray text-center leading-7" %>
+    <%= link gettext("Remove Blessings at 0"),
+      to: Routes.character_blessing_path(@conn, :remove_all, @character), method: :delete,
+      class: "button gray text-center leading-7" %>
+  </div>
+</div>
+
+<table class="table text-center">
+  <thead>
+    <tr class='header-row'>
+      <th scope="col" class="text-left"><%= gettext "Blessing" %></th>
+      <th scope="col" class="hidden md:table-cell"><%= gettext "Probe" %></th>
+      <th scope="col" class="hidden sm:table-cell"><%= gettext "SF" %></th>
+      <th scope="col"><%= gettext "FW" %></th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <%= for f_cs <- inputs_for(f, :character_blessings) do %>
+      <%= render "edit_row.html", f: f_cs %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
