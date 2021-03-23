@@ -2,7 +2,11 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   import DsaWeb.Gettext
-  alias Dsa.Accounts
+
+  alias Dsa.{Accounts, Characters, Event}
+  alias Dsa.Event.MainLog
+  alias DsaWeb.LogLive
+
   require Logger
 
   def render(assigns) do
@@ -17,7 +21,9 @@ defmodule DsaWeb.GroupLive do
       <tbody>
         <%= for character <- @characters do  %>
           <tr>
-            <td class='small'><%= character.ini || character.ini_basis %></td>
+            <td class='small'>
+              <button type='button' phx-click='roll-ini' phx-value-id='<%= character.id %>' class='button gray small'><%= character.ini || character.ini_basis %></button>
+            </td>
             <td><%= character.name %></td>
           </tr>
         <% end %>
@@ -29,8 +35,55 @@ defmodule DsaWeb.GroupLive do
   def mount(_params, %{"group_id" => group_id}, socket) do
     characters = Accounts.get_group_characters!(group_id)
 
+    DsaWeb.Endpoint.subscribe(topic(group_id))
+
     {:ok, socket
     |> assign(:group_id, group_id)
     |> assign(:characters, characters)}
+  end
+
+  defp topic(id), do: "group:#{id}"
+
+  def broadcast(group_id, message) do
+    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(group_id), message)
+  end
+
+  def handle_event("roll-ini", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    ini = if is_nil(character.ini), do: character.ini_basis + Enum.random(1..6), else: nil
+
+    case Characters.update(character, %{ini: ini}) do
+      {:ok, character} ->
+        characters = Accounts.get_group_characters!(socket.assigns.group_id)
+
+        log_params = %{
+          type: MainLog.Type.INIRoll,
+          group_id: socket.assigns.group_id,
+          character_id: character.id,
+          character_name: character.name,
+          roll: ini
+        }
+
+        case Event.create_log(log_params) do
+          {:ok, entry} ->
+            broadcast(socket.assigns.group_id, {:update, characters: characters})
+            LogLive.broadcast(socket.assigns.group_id, {:log, entry})
+
+          {:error, changeset} ->
+            Logger.error inspect changeset
+            {:noreply, socket}
+        end
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        Logger.error inspect changeset.errors
+        {:noreply, socket}
+    end
+  end
+
+  def handle_info({:update, new_assigns}, socket) do
+    {:noreply, assign(socket, new_assigns)}
   end
 end

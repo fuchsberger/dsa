@@ -1,6 +1,7 @@
 defmodule Dsa.Event.MainLog do
   use Ecto.Schema
   use EnumType
+
   import Ecto.Changeset
 
   defenum Type, :integer do
@@ -11,6 +12,7 @@ defmodule Dsa.Event.MainLog do
     value CustomTalentRoll, 3
     value SkillRoll, 4
     value SpellRoll, 5
+    value INIRoll, 6
 
     default NotSpecified
   end
@@ -38,9 +40,13 @@ defmodule Dsa.Event.MainLog do
     timestamps()
   end
 
+  @fields ~w(type roll left right character_name character_id group_id result_type result)a
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:type, :roll, :character_name, :left, :right, :result, :result_type, :group_id, :character_id])
-    |> validate_required([:type, :group_id, :left, :right])
+    |> cast(attrs, @fields)
+    |> validate_required([:group_id])
+    |> Type.validate(:type)
+    |> foreign_key_constraint(:character_id)
+    |> foreign_key_constraint(:group_id)
   end
 end

@@ -76,6 +76,11 @@
       <%= label f, :zk, gettext("ZK"), class: "block text-center text-sm font-medium text-gray-700" %>
       <%= number_input f, :zk, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md", placeholder: gettext("ZK") %>
     </div>
+
+    <div>
+      <%= label f, :ini_basis, gettext("INI Base"), class: "block text-center text-sm font-medium text-gray-700" %>
+      <%= number_input f, :ini_basis, class: "mt-1 text-center focus:ring-indigo-500 py-0 px-1 focus:border-indigo-500 block w-full shadow-sm lg:text-lg border-gray-300 rounded-md" %>
+    </div>
   </div>
 
   <div class="px-4 py-3 text-center sm:px-6">
