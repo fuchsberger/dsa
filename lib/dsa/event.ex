@@ -35,9 +35,9 @@ defmodule Dsa.Event do
     |> Enum.take(200)
   end
 
-  def change_log(attrs \\ %{}), do: Log.changeset(%Log{}, attrs)
+  def change_log(attrs \\ %{}), do: MainLog.changeset(%MainLog{}, attrs)
 
-  def create_log(attrs), do: Repo.insert(Log.changeset(%Log{}, attrs))
+  def create_log(attrs), do: Repo.insert(MainLog.changeset(%MainLog{}, attrs))
 
   @doc """
   Deletes all types of logs for a given Group

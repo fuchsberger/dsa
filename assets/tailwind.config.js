@@ -7,19 +7,7 @@ module.exports = {
     '../lib/**/*.eex',
     './js/**/*.js'
   ],
-  theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      black: colors.black,
-      white: colors.white,
-      gray: colors.coolGray,
-      red: colors.red,
-      green: colors.green,
-      blue: colors.blue,
-      indigo: colors.indigo
-    }
-  },
+  theme: {},
   variants: {},
   plugins: [
     require('@tailwindcss/forms')

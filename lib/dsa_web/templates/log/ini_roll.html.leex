@@ -1,0 +1,16 @@
+<div class='mr-3'>
+  <span class='label blue'><%= @entry.character_name %></span>
+  <span class='label transparent'>
+    <%= if is_nil(@entry.roll) do %>
+      <%= gettext "has left combat." %>
+    <% else %>
+      <%= gettext "has entered combat." %>
+    <% end %>
+  </span>
+</div>
+<%= unless is_nil(@entry.roll) do %>
+  <div>
+    <span class='label transparent'><%= gettext "INI" %></span>
+    <span class='label dice'><%= @entry.roll %></span>
+  </div>
+<% end %>

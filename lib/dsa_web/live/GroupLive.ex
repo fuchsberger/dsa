@@ -2,7 +2,11 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   import DsaWeb.Gettext
-  alias Dsa.{Accounts, Characters}
+
+  alias Dsa.{Accounts, Characters, Event}
+  alias Dsa.Event.MainLog
+  alias DsaWeb.LogLive
+
   require Logger
 
   def render(assigns) do
@@ -52,7 +56,25 @@ defmodule DsaWeb.GroupLive do
     case Characters.update(character, %{ini: ini}) do
       {:ok, character} ->
         characters = Accounts.get_group_characters!(socket.assigns.group_id)
-        broadcast(socket.assigns.group_id, {:update, characters: characters})
+
+        log_params = %{
+          type: MainLog.Type.INIRoll,
+          group_id: socket.assigns.group_id,
+          character_id: character.id,
+          character_name: character.name,
+          roll: ini
+        }
+
+        case Event.create_log(log_params) do
+          {:ok, entry} ->
+            broadcast(socket.assigns.group_id, {:update, characters: characters})
+            LogLive.broadcast(socket.assigns.group_id, {:log, entry})
+
+          {:error, changeset} ->
+            Logger.error inspect changeset
+            {:noreply, socket}
+        end
+
         {:noreply, socket}
 
       {:error, changeset} ->
