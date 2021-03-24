@@ -6,9 +6,9 @@ defmodule Dsa.Accounts.Group do
     field :name, :string
     belongs_to :master, Dsa.Accounts.User
     has_many :users, Dsa.Accounts.User
-    has_many :skill_rolls, Dsa.Event.SkillRoll
-    has_many :spell_rolls, Dsa.Event.SpellRoll
-    has_many :main_logs, Dsa.Event.MainLog
+    has_many :skill_rolls, Dsa.Logs.SkillRoll
+    has_many :spell_rolls, Dsa.Logs.SpellRoll
+    has_many :main_logs, Dsa.Logs.Event
     timestamps()
   end
 

@@ -3,8 +3,8 @@ defmodule DsaWeb.GroupLive do
 
   import DsaWeb.Gettext
 
-  alias Dsa.{Accounts, Characters, Event}
-  alias Dsa.Event.MainLog
+  alias Dsa.{Accounts, Characters, Logs}
+  alias Dsa.Logs.Event.Type.{INIRoll}
   alias DsaWeb.LogLive
 
   require Logger
@@ -58,14 +58,14 @@ defmodule DsaWeb.GroupLive do
         characters = Accounts.get_group_characters!(socket.assigns.group_id)
 
         log_params = %{
-          type: MainLog.Type.INIRoll,
+          type: INIRoll,
           group_id: socket.assigns.group_id,
           character_id: character.id,
           character_name: character.name,
           roll: ini
         }
 
-        case Event.create_log(log_params) do
+        case Logs.create_event(log_params) do
           {:ok, entry} ->
             broadcast(socket.assigns.group_id, {:update, characters: characters})
             LogLive.broadcast(socket.assigns.group_id, {:log, entry})

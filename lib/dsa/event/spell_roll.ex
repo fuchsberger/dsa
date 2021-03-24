@@ -1,4 +1,4 @@
-defmodule Dsa.Event.SpellRoll do
+defmodule Dsa.Logs.SpellRoll do
   use Ecto.Schema
 
   import Ecto.Changeset

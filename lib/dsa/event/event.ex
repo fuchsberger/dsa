@@ -1,4 +1,4 @@
-defmodule Dsa.Event.MainLog do
+defmodule Dsa.Logs.Event do
   use Ecto.Schema
   use EnumType
 

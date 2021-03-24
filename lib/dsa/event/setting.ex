@@ -1,4 +1,4 @@
-defmodule Dsa.Event.Setting do
+defmodule Dsa.Logs.Setting do
 
   use Ecto.Schema
   import Ecto.Changeset

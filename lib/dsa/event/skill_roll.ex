@@ -1,4 +1,4 @@
-defmodule Dsa.Event.SkillRoll do
+defmodule Dsa.Logs.SkillRoll do
   use Ecto.Schema
 
   import Ecto.Changeset
