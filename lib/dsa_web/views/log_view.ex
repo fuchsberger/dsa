@@ -3,7 +3,7 @@ defmodule DsaWeb.LogView do
 
   import Dsa.Trial, only: [roll: 3]
 
-  alias Dsa.Event.{Log, TraitRoll, MainLog}
+  alias Dsa.Logs.{TraitRoll, Event}
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
 
@@ -56,7 +56,7 @@ defmodule DsaWeb.LogView do
 
   def result_tag(result_type) do
     case result_type do
-      MainLog.ResultType.Failure -> "#{@base} bg-red-50 text-red-500"
+      Event.ResultType.Failure -> "#{@base} bg-red-50 text-red-500"
       _ -> "#{@base} bg-green-50 text-green-500"
     end
   end

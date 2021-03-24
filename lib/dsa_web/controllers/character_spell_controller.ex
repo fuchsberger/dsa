@@ -4,7 +4,7 @@ defmodule DsaWeb.CharacterSpellController do
   """
   use DsaWeb, :controller
 
-  alias Dsa.{Characters, Event}
+  alias Dsa.{Characters, Logs}
 
   action_fallback DsaWeb.ErrorController
 
@@ -17,7 +17,7 @@ defmodule DsaWeb.CharacterSpellController do
 
   def index(conn, _params, _character) do
     conn
-    |> assign(:changeset, Event.change_spell_roll())
+    |> assign(:changeset, Logs.change_spell_roll())
     |> render("index.html")
   end
 

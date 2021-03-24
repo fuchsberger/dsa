@@ -1,4 +1,4 @@
-defmodule Dsa.Repo.Migrations.AddMainLogTable do
+defmodule Dsa.Repo.Migrations.AddEventTable do
   use Ecto.Migration
 
   def change do

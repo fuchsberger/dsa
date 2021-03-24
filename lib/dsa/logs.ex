@@ -1,4 +1,4 @@
-defmodule Dsa.Event do
+defmodule Dsa.Logs do
   @moduledoc """
   The Event context.
   """
@@ -7,45 +7,31 @@ defmodule Dsa.Event do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Event.{Setting, Log, SkillRoll, SpellRoll, MainLog}
+  alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, Event}
 
   require Logger
 
   # LOGS
-
-  @doc """
-  Lists the latest 200 log entries of all types and merges them in a single list sorted by date (desc).
-
-  """
-  def list_logs(group_id) do
-    group =
-      Repo.get!(
-        from(g in Dsa.Accounts.Group,
-          preload: [
-            main_logs: []
-          ]
-        ),
-        group_id
-      )
-
-    entries = group.main_logs
-
-    entries
-    |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
-    |> Enum.take(200)
+  def list_events(group_id, limit) do
+    from(e in Event,
+      order_by: [desc: e.inserted_at],
+      where: e.group_id == ^group_id,
+      limit: ^limit
+    )
+    |> Repo.all()
   end
 
-  def change_log(attrs \\ %{}), do: MainLog.changeset(%MainLog{}, attrs)
+  def change_event(%Event{} = event, attrs \\ %{}), do: Event.changeset(event, attrs)
 
-  def create_log(attrs), do: Repo.insert(MainLog.changeset(%MainLog{}, attrs))
+  def create_event(attrs) do
+    %Event{}
+    |> change_event(attrs)
+    |> Repo.insert()
+  end
 
-  @doc """
-  Deletes all types of logs for a given Group
-  """
-  def delete_logs!(group_id) do
-    Repo.delete_all(from(l in Log, where: l.group_id == ^group_id))
-    Repo.delete_all(from(l in MainLog, where: l.group_id == ^group_id))
-    # Repo.delete_all(from(r in TraitRoll, where: r.group_id == ^group_id))
+  def delete_all_events!(group_id) do
+    from(l in Event, where: l.group_id == ^group_id)
+    |> Repo.delete_all()
   end
 
   # Settings (Group View, does not persist in database)
@@ -64,16 +50,16 @@ defmodule Dsa.Event do
   defp trial_result_type(quality, critical?) do
     case {quality, critical?} do
       {0, true} ->
-        {"✗ K!", MainLog.ResultType.Failure}
+        {"✗ K!", Event.ResultType.Failure}
 
       {_, true} ->
-        {"✓ K!", MainLog.ResultType.Success}
+        {"✓ K!", Event.ResultType.Success}
 
       {0, false} ->
-        {"✗", MainLog.ResultType.Failure}
+        {"✗", Event.ResultType.Failure}
 
       {_, false} ->
-        {"✓ #{quality}", MainLog.ResultType.Success}
+        {"✓ #{quality}", Event.ResultType.Success}
     end
   end
 
@@ -108,12 +94,12 @@ defmodule Dsa.Event do
         roll: dice,
         character: character,
         character_name: character.name,
-        type: MainLog.Type.SkillRoll,
+        type: Event.Type.SkillRoll,
         result_type: result_type,
         group_id: group.id
       }
 
-      MainLog.changeset(%MainLog{}, change)
+      Event.changeset(%Event{}, change)
       |> put_assoc(:group, group)
       |> put_assoc(:character, character)
       |> Repo.insert()
@@ -153,12 +139,12 @@ defmodule Dsa.Event do
         roll: dice,
         character: character,
         character_name: character.name,
-        type: MainLog.Type.SpellRoll,
+        type: Event.Type.SpellRoll,
         result_type: result_type,
         group_id: group.id
       }
 
-      MainLog.changeset(%MainLog{}, change)
+      Event.changeset(%Event{}, change)
       |> put_assoc(:group, group)
       |> put_assoc(:character, character)
       |> Repo.insert()

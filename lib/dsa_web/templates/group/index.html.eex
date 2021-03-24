@@ -1,6 +1,6 @@
 <div class="flex justify-between mt-3 mb-2">
   <h1 class='page-heading'><%= gettext "Groups" %></h1>
-  <%= if @current_user && is_nil(@current_user.group_id) do %>
+  <%= if @current_user do %>
     <%= link gettext("New Group"), to: Routes.group_path(@conn, :new),
     class: "button gray leading-8 h-8" %>
   <% end %>

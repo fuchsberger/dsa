@@ -6,7 +6,7 @@ defmodule DsaWeb.EventController do
 
   import DsaWeb.LogLive, only: [broadcast: 2]
 
-  alias Dsa.{Accounts, Characters, Event}
+  alias Dsa.{Accounts, Characters, Logs}
 
   def action(conn, _) do
     character_id = conn.params["character_id"]
@@ -18,7 +18,7 @@ defmodule DsaWeb.EventController do
   end
 
   def skill_roll(conn, %{"skill_roll" => roll_params}, group, character) do
-    case Event.create_skill_roll(character, group, roll_params) do
+    case Logs.create_skill_roll(character, group, roll_params) do
       {:ok, skill_roll} ->
         broadcast(group.id, {:log, skill_roll})
         redirect(conn, to: Routes.character_skill_path(conn, :index, character))
@@ -30,7 +30,7 @@ defmodule DsaWeb.EventController do
   end
 
   def spell_roll(conn, %{"spell_roll" => roll_params}, group, character) do
-    case Event.create_spell_roll(character, group, roll_params) do
+    case Logs.create_spell_roll(character, group, roll_params) do
       {:ok, spell_roll} ->
         broadcast(group.id, {:log, spell_roll})
         redirect(conn, to: Routes.character_spell_path(conn, :index, character))

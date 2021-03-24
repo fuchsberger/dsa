@@ -1,4 +1,4 @@
-defmodule Dsa.Event.TraitRoll do
+defmodule Dsa.Logs.TraitRoll do
   use Ecto.Schema
 
   import Ecto.Changeset

@@ -8,7 +8,7 @@
     <% end %>
   </span>
 </div>
-<%= unless is_nil(@entry.roll) do %>
+<%= if @show_dice? && not is_nil(@entry.roll)do %>
   <div>
     <span class='label transparent'><%= gettext "INI" %></span>
     <span class='label dice'><%= @entry.roll %></span>

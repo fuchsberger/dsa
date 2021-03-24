@@ -6,11 +6,13 @@ defmodule Dsa.UI.LogSetting do
 
   embedded_schema do
     field :dice, :boolean, default: true
+    field :limit, :integer, default: 20
   end
 
+  @fields ~w(dice limit)a
   def changeset(log, attrs) do
     log
-    |> cast(attrs, [:dice])
-    |> validate_required([:dice])
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
   end
 end
