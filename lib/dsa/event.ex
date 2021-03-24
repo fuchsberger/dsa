@@ -12,27 +12,13 @@ defmodule Dsa.Event do
   require Logger
 
   # LOGS
-
-  @doc """
-  Lists the latest 200 log entries of all types and merges them in a single list sorted by date (desc).
-
-  """
-  def list_logs(group_id) do
-    group =
-      Repo.get!(
-        from(g in Dsa.Accounts.Group,
-          preload: [
-            main_logs: []
-          ]
-        ),
-        group_id
-      )
-
-    entries = group.main_logs
-
-    entries
-    |> Enum.sort(&(&1.inserted_at > &2.inserted_at))
-    |> Enum.take(200)
+  def list(group_id, limit \\ 20) do
+    from(e in MainLog,
+      order_by: [desc: e.inserted_at],
+      where: e.group_id == ^group_id,
+      limit: ^limit
+    )
+    |> Repo.all()
   end
 
   def change_log(attrs \\ %{}), do: MainLog.changeset(%MainLog{}, attrs)

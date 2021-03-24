@@ -13,7 +13,8 @@ defmodule DsaWeb.LogLive do
   def render(assigns), do: Phoenix.View.render(DsaWeb.LogView, "index.html", assigns)
 
   def mount(_params, %{"group_id" => group_id}, socket) do
-    entries = Dsa.Event.list_logs(group_id)
+    limit = 20
+    entries = Dsa.Event.list(group_id)
 
     # Listens for events
     DsaWeb.Endpoint.subscribe(topic(group_id))
@@ -22,6 +23,7 @@ defmodule DsaWeb.LogLive do
     |> assign(:changeset, Dsa.UI.change_logsetting())
     |> assign(:group_id, group_id)
     |> assign(:entries, entries)
+    |> assign(:limit, limit)
     |> assign(:log_empty?, Enum.count(entries) == 0)
     |> assign(:log_resetcount, 0)
     |> assign(:show_dice?, true),
@@ -33,7 +35,7 @@ defmodule DsaWeb.LogLive do
   TODO: make more efficient
   """
   def handle_info(:reload, socket) do
-    entries = Dsa.Event.list_logs(socket.assigns.group_id)
+    entries = Dsa.Event.list(socket.assigns.group_id)
 
     {:noreply, socket
     |> assign(:entries, entries)
@@ -56,7 +58,7 @@ defmodule DsaWeb.LogLive do
 
   def handle_event("change", %{"log_setting" => params}, socket) do
     changeset = Dsa.UI.change_logsetting(params)
-    entries = Dsa.Event.list_logs(socket.assigns.group_id)
+    entries = Dsa.Event.list(socket.assigns.group_id)
 
     {:noreply, socket
     |> assign(:changeset, changeset)
