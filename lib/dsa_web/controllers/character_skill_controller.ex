@@ -4,7 +4,7 @@ defmodule DsaWeb.CharacterSkillController do
   """
   use DsaWeb, :controller
 
-  alias Dsa.{Characters, Event}
+  alias Dsa.{Characters, Logs}
 
   action_fallback DsaWeb.ErrorController
 
@@ -17,7 +17,7 @@ defmodule DsaWeb.CharacterSkillController do
 
   def index(conn, _params, _character) do
     conn
-    |> assign(:changeset, Event.change_skill_roll())
+    |> assign(:changeset, Logs.change_skill_roll())
     |> render("index.html")
   end
 

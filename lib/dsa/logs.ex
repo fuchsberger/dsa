@@ -21,7 +21,7 @@ defmodule Dsa.Logs do
     |> Repo.all()
   end
 
-  def change_event(%Event{} = event, attrs \\ %{}), do: Event.changeset(%Event{}, attrs)
+  def change_event(%Event{} = event, attrs \\ %{}), do: Event.changeset(event, attrs)
 
   def create_event(attrs) do
     %Event{}
