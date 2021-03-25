@@ -208,7 +208,6 @@ defmodule Dsa.Logs do
       Event.changeset(%Event{}, change)
       |> put_assoc(:group, group)
       |> put_assoc(:character, character)
-      |> IO.inspect
       |> Repo.insert()
 
       changeset
