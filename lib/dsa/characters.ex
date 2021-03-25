@@ -44,7 +44,7 @@ defmodule Dsa.Characters do
       where: u.group_id == ^group_id and c.visible == true,
       select: c,
       preload: [:combat_sets],
-      order_by: [desc: c.ini, desc: c.ini])
+      order_by: [desc_nulls_last: c.ini, desc: c.ini])
     |> Repo.all()
   end
 
