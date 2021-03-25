@@ -1,4 +1,4 @@
-defmodule Dsa.Event.BlessingRoll do
+defmodule Dsa.Logs.BlessingRoll do
   use Ecto.Schema
 
   import Ecto.Changeset
