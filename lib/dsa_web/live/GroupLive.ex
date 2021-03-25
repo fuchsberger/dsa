@@ -105,6 +105,7 @@ defmodule DsaWeb.GroupLive do
       character_id: character.id,
       character_name: character.name,
       roll: dice,
+      left: character.active_combat_set.name,
       right: result,
       result_type: result_type,
     }
