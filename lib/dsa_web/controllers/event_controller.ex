@@ -42,7 +42,7 @@ defmodule DsaWeb.EventController do
   end
 
   def blessing_roll(conn, %{"blessing_roll" => roll_params}, group, character) do
-    case Event.create_blessing_roll(character, group, roll_params) do
+    case Logs.create_blessing_roll(character, group, roll_params) do
       {:ok, blessing_roll} ->
         broadcast(group.id, {:log, blessing_roll})
         redirect(conn, to: Routes.character_blessing_path(conn, :index, character))

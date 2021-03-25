@@ -60,6 +60,7 @@ defmodule Dsa.Characters do
     |> Character.changeset(attrs)
     |> cast_assoc(:character_skills, with: &CharacterSkill.changeset/2)
     |> cast_assoc(:character_spells, with: &CharacterSpell.changeset/2)
+    |> cast_assoc(:character_blessings, with: &CharacterBlessing.changeset/2)
     |> Repo.update()
   end
 
@@ -158,6 +159,38 @@ defmodule Dsa.Characters do
     character
     |> Ecto.Changeset.change()
     |> put_assoc(:character_spells, character_spells)
+    |> Repo.update()
+  end
+
+  # BLESSINGS
+
+  def add_blessings(%Character{} = character) do
+    character_blessing_ids = Enum.map(character.character_blessings, & &1.blessing_id)
+
+    character_blessings =
+      Data.list_blessings()
+      |> Enum.reject(&Enum.member?(character_blessing_ids, &1.id))
+      |> Enum.map(
+        &%CharacterBlessing{
+          character_id: character.id,
+          blessing_id: &1.id,
+          level: 0
+        }
+      )
+      |> Enum.concat(character.character_blessings)
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_blessings, character_blessings)
+    |> Repo.update()
+  end
+
+  def remove_blessings(%Character{} = character) do
+    character_blessings = Enum.reject(character.character_blessings, &(&1.level == 0))
+
+    character
+    |> Ecto.Changeset.change()
+    |> put_assoc(:character_blessings, character_blessings)
     |> Repo.update()
   end
 

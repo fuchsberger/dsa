@@ -4,7 +4,7 @@ defmodule DsaWeb.CharacterBlessingController do
   """
   use DsaWeb, :controller
 
-  alias Dsa.{Characters, Event}
+  alias Dsa.{Characters, Logs}
 
   action_fallback DsaWeb.ErrorController
 
@@ -17,7 +17,7 @@ defmodule DsaWeb.CharacterBlessingController do
 
   def index(conn, _params, _character) do
     conn
-    |> assign(:changeset, Event.change_blessing_roll())
+    |> assign(:changeset, Logs.change_blessing_roll())
     |> render("index.html")
   end
 
