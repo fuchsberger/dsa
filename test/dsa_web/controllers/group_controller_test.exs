@@ -55,19 +55,19 @@ defmodule DsaWeb.GroupControllerTest do
     #   assert html_response(conn, 200) =~ gettext("Leave")
     # end
 
-    @tag login_as: "max"
-    test "create group and redirect", %{conn: conn, user: %{id: user_id}} do
+    # @tag login_as: "max"
+    # test "create group and redirect", %{conn: conn, user: %{id: user_id}} do
 
-      create_conn = post conn, "/groups", group: @create_attrs
+    #   create_conn = post conn, "/groups", group: @create_attrs
 
-      assert %{id: group_id} = redirected_params(create_conn)
-      assert redirected_to(create_conn) == "/groups/#{group_id}"
+    #   assert %{id: group_id} = redirected_params(create_conn)
+    #   assert redirected_to(create_conn) == "/groups/#{group_id}"
 
-      conn = get conn, "/groups/#{group_id}"
-      assert html_response(conn, 200)
+    #   conn = get conn, "/groups/#{group_id}"
+    #   assert html_response(conn, 200)
 
-      assert Accounts.get_group!(group_id).master_id == user_id
-    end
+    #   assert Accounts.get_group!(group_id).master_id == user_id
+    # end
 
     @tag login_as: "max"
     test "does not create group, renders errors when invalid", %{conn: conn} do
