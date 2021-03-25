@@ -137,22 +137,6 @@ defmodule Dsa.Accounts do
   def get_group!(id), do: Repo.get!(Group, id)
 
   @doc """
-  used in live view
-  """
-  def get_group_characters!(group_id) do
-    group =
-      Repo.get!(from(g in Group, preload: [
-        users: ^from(u in User, preload: [characters: ^Characters.character_query()])
-      ]), group_id)
-
-    group.users
-    |> Enum.map(& &1.characters)
-    |> List.flatten()
-    |> Enum.sort_by(&(&1.ini_basis), :desc) # sort order: ini --> ini_basis
-    |> Enum.sort_by(&(&1.ini), :desc)
-  end
-
-  @doc """
   Creating a group makes creator the master automatically.
   """
   def create_group(%User{} = user, attrs) do

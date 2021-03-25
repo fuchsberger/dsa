@@ -4,7 +4,7 @@ defmodule DsaWeb.GroupLive do
   import DsaWeb.Gettext
   import DsaWeb.GroupView
 
-  alias Dsa.{Accounts, Characters, Logs}
+  alias Dsa.{Characters, Logs}
   alias Dsa.Logs.Event.Type.{INIRoll}
   alias DsaWeb.LogLive
 
@@ -38,7 +38,7 @@ defmodule DsaWeb.GroupLive do
   end
 
   def mount(_params, %{"group_id" => group_id, "user_id" => user_id}, socket) do
-    characters = Accounts.get_group_characters!(group_id)
+    characters = Characters.get_group_characters!(group_id)
 
     DsaWeb.Endpoint.subscribe(topic(group_id))
 
@@ -61,7 +61,7 @@ defmodule DsaWeb.GroupLive do
 
     case Characters.update(character, %{ini: ini}) do
       {:ok, character} ->
-        characters = Accounts.get_group_characters!(socket.assigns.group_id)
+        characters = Characters.get_group_characters!(socket.assigns.group_id)
 
         log_params = %{
           type: INIRoll,
