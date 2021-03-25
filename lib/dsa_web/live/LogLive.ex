@@ -17,7 +17,7 @@ defmodule DsaWeb.LogLive do
   def mount(_params, %{"group_id" => group_id, "user_id" => user_id}, socket) do
 
     %{master_id: master_id} = Accounts.get_group!(group_id)
-    limit = 20
+    limit = 10
     entries = Logs.list_events(group_id, limit)
 
     # Listens for events

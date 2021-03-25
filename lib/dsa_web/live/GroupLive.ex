@@ -1,5 +1,6 @@
 defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
+  use Phoenix.HTML
 
   import DsaWeb.Gettext
   import DsaWeb.GroupView
@@ -12,11 +13,12 @@ defmodule DsaWeb.GroupLive do
 
   def render(assigns) do
     ~L"""
-    <table class="table">
+    <table class="table" data-turbo='false'>
       <thead>
         <tr>
           <th class='w-12'><%= gettext "INI" %></th>
           <th class='text-left'><%= gettext "Name" %></th>
+          <th class='w-48'><%= gettext "Combat Set" %></th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +32,12 @@ defmodule DsaWeb.GroupLive do
               <% end %>
             </td>
             <td><%= character.name %></td>
+            <td>
+              <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
+                <%= hidden_input f, :id, value: character.id %>
+                <%= select f, :set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input" %>
+              </form>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -52,6 +60,12 @@ defmodule DsaWeb.GroupLive do
 
   def broadcast(group_id, message) do
     Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(group_id), message)
+  end
+
+  def handle_event("change", %{"character" =>  %{"id" => _id, "set_id" => _set_id}}, socket) do
+    # TODO
+
+    {:noreply, socket}
   end
 
   def handle_event("roll-ini", %{"id" => id}, socket) do
