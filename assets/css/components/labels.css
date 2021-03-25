@@ -10,8 +10,11 @@
 
 button.label:focus {  @apply outline-none; }
 
+.label.red { @apply bg-red-100 text-red-800; }
+button.label.green:hover { @apply bg-red-200; }
+
 .label.gray { @apply bg-gray-50 text-gray-500; }
 button.label.gray:hover { @apply bg-gray-200; }
 
-.label.green { @apply bg-green-100 text-green-800; }
+.label.green { @apply bg-green-100 text-green-700; }
 button.label.green:hover { @apply bg-green-200; }

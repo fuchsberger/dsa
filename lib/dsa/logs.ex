@@ -47,19 +47,21 @@ defmodule Dsa.Logs do
   # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
 
-  defp trial_result_type(quality, critical?) do
+  def trial_result_type(success?, critical?) when is_boolean(success?) do
+    case {success?, critical?} do
+      {false, true}   -> {"✗ K!", Event.ResultType.Failure}
+      {_, true}       -> {"✓ K!", Event.ResultType.Success}
+      {false, false}  -> {"✗", Event.ResultType.Failure}
+      {_, false}      -> {"✓", Event.ResultType.Success}
+    end
+  end
+
+  def trial_result_type(quality, critical?) when is_integer(quality) do
     case {quality, critical?} do
-      {0, true} ->
-        {"✗ K!", Event.ResultType.Failure}
-
-      {_, true} ->
-        {"✓ K!", Event.ResultType.Success}
-
-      {0, false} ->
-        {"✗", Event.ResultType.Failure}
-
-      {_, false} ->
-        {"✓ #{quality}", Event.ResultType.Success}
+      {0, true} ->  {"✗ K!", Event.ResultType.Failure}
+      {_, true} ->  {"✓ K!", Event.ResultType.Success}
+      {0, false} -> {"✗", Event.ResultType.Failure}
+      {_, false} -> {"✓ #{quality}", Event.ResultType.Success}
     end
   end
 

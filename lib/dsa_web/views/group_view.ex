@@ -5,6 +5,14 @@ defmodule DsaWeb.GroupView do
     Enum.map(character.combat_sets, & {&1.name, &1.id})
   end
 
+  def at_button(%{id: id, active_combat_set: %{at: at}}) do
+    content_tag :button, at,
+      type: "button",
+      phx_click: "roll-at",
+      phx_value_id: id,
+      class: "label dice"
+  end
+
   def ini_button(socket, %{id: id, ini: ini}) do
     class = if is_nil(ini), do: "label link", else: "label dice"
     text = if is_nil(ini), do: icon(socket, "login"), else: ini

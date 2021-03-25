@@ -13,6 +13,7 @@ defmodule Dsa.Logs.Event do
     value SkillRoll, 4
     value SpellRoll, 5
     value INIRoll, 6
+    value ATRoll, 7
 
     default NotSpecified
   end

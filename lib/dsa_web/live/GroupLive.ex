@@ -5,8 +5,8 @@ defmodule DsaWeb.GroupLive do
   import DsaWeb.Gettext
   import DsaWeb.GroupView
 
-  alias Dsa.{Characters, Logs}
-  alias Dsa.Logs.Event.Type.{INIRoll}
+  alias Dsa.{Characters, Logs, Trial}
+  alias Dsa.Logs.Event.Type
   alias DsaWeb.LogLive
 
   require Logger
@@ -19,6 +19,9 @@ defmodule DsaWeb.GroupLive do
           <th class='w-12'><%= gettext "INI" %></th>
           <th class='text-left'><%= gettext "Name" %></th>
           <th class='w-48'><%= gettext "Combat Set" %></th>
+          <th><%= gettext "AT" %></th>
+          <th><%= gettext "PA" %></th>
+          <th><%= gettext "TP" %></th>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +41,17 @@ defmodule DsaWeb.GroupLive do
                 <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id %>
               </form>
             </td>
+            <td class='text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= at_button(character) %>
+                <% else %>
+                  <%= character.active_combat_set.at %>
+                <% end %>
+              <% end %>
+            </td>
+            <td></td>
+            <td></td>
           </tr>
         <% end %>
       </tbody>
@@ -74,6 +88,35 @@ defmodule DsaWeb.GroupLive do
     {:noreply, socket}
   end
 
+  def handle_event("roll-at", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    at = character.active_combat_set.at
+    dice = Trial.roll()
+    [first, second] = Trial.roll(2, 20, dice)
+
+    critical? = (first == 1 && second <= at) || (first == 20 && second > at)
+    success? = first <= at
+    {result, result_type} = Logs.trial_result_type(success?, critical?)
+
+    params = %{
+      type: Type.ATRoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: dice,
+      right: result,
+      result_type: result_type,
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_event("roll-ini", %{"id" => id}, socket) do
     character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
 
@@ -84,7 +127,7 @@ defmodule DsaWeb.GroupLive do
         characters = Characters.get_group_characters!(socket.assigns.group_id)
 
         log_params = %{
-          type: INIRoll,
+          type: Type.INIRoll,
           group_id: socket.assigns.group_id,
           character_id: character.id,
           character_name: character.name,

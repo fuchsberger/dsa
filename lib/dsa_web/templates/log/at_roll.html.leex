@@ -1,0 +1,22 @@
+<% [d1, _d2] = roll = Trial.roll(2, 20, @entry.roll) %>
+
+<div class='mr-3'>
+  <span class='label blue'><%= @entry.character_name %></span>
+  <span class='label transparent'>
+    <% critical_text = if d1 == 1 || d1 == 20, do: gettext(" critically") %>
+    <%= if @entry.result_type == Event.ResultType.Success do %>
+      <%= "#{gettext("attacked and hit")}#{critical_text}." %>
+    <% else %>
+      <%= "#{gettext("attacked and missed")}#{critical_text}." %>
+    <% end %>
+  </span>
+</div>
+
+<div class='flex align-middle'>
+  <%= if @show_dice? do %>
+    <%= dice(roll) %>
+    <%= separator() %>
+  <% end %>
+
+  <span class='label <%= result_class(@entry) %> text-lg leading-6'><%= @entry.right %></span>
+</div>
