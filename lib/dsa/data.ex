@@ -82,7 +82,7 @@ defmodule Dsa.Data do
   # Blessings
   #
   def list_blessings do
-    from(s in Blessing, order_by: [desc: s.ritual, asc: s.name])
+    from(s in Blessing, order_by: [desc: s.ceremony, asc: s.name])
     |> Repo.all()
   end
 

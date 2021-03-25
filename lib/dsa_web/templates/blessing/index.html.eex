@@ -3,16 +3,16 @@
     <tr id='rituals' class='header-row'>
       <th><%= gettext "Ritual" %></th>
       <th><%= gettext "SF" %></th>
-      <th><%= gettext "Roll" %></th>
-      <th><%= gettext "Spread" %></th>
+      <th><%= gettext "Cast time" %></th>
+      <th><%= gettext "Cost" %></th>
     </tr>
-    <%= render_many @rituals, DsaWeb.BlessingView, "row.html", conn: @conn %>
+    <%= render_many @ceremony, DsaWeb.BlessingView, "row.html", conn: @conn %>
 
     <tr id='blessing' class='header-row'>
       <th><%= gettext "Blessing" %></th>
       <th><%= gettext "SF" %></th>
-      <th><%= gettext "Roll" %></th>
-      <th><%= gettext "Spread" %></th>
+      <th><%= gettext "Cast time" %></th>
+      <th><%= gettext "Cost" %></th>
     </tr>
     <%= render_many @blessings, DsaWeb.BlessingView, "row.html", conn: @conn %>
   </tbody>

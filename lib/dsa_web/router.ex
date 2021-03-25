@@ -34,7 +34,7 @@ defmodule DsaWeb.Router do
     # Public Data Routes
     resources "/groups", GroupController, only: [:index]
     resources "/skills", SkillController, only: [:index]
-    resources "/spells", BlessingController, only: [:index]
+    resources "/spells", SpellController, only: [:index]
     resources "/blessings", BlessingController, only: [:index]
 
     # user registration

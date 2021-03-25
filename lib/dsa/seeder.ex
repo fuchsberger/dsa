@@ -9,6 +9,7 @@ defmodule Dsa.Data.Seeder do
   def seed do
     seed(:skills)
     seed(:spells)
+    seed(:blessings)
   end
 
   def seed(:skills) do
@@ -61,6 +62,10 @@ defmodule Dsa.Data.Seeder do
         spell -> Data.update_spell!(spell, params)
       end
     end)
+  end
+
+  def seed(:blessings) do
+    Dsa.Data.BlessingSeeds.reseed
   end
 
   defp read_file(filename) do

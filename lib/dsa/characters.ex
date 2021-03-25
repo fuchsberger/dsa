@@ -7,7 +7,7 @@ defmodule Dsa.Characters do
   import Ecto.Query, warn: false
 
   alias Dsa.{Data, Repo}
-  alias Dsa.Characters.{Character, CharacterSkill, CharacterSpell}
+  alias Dsa.Characters.{Character, CharacterSkill, CharacterSpell, CharacterBlessing}
   alias Dsa.Accounts.User
 
   def list, do: Repo.all(Character)
@@ -114,9 +114,7 @@ defmodule Dsa.Characters do
   defp preload_assocs(query) do
     character_skill_query = from(s in CharacterSkill, preload: :skill, order_by: s.skill_id)
     character_spell_query = from(s in CharacterSpell, preload: :spell, order_by: s.spell_id)
-
-    character_blessing_query =
-      from(s in CharacterSpell, preload: :blessing, order_by: s.blessing_id)
+    character_blessing_query = from(s in CharacterBlessing, preload: :blessing, order_by: s.blessing_id)
 
     from(c in query,
       preload: [

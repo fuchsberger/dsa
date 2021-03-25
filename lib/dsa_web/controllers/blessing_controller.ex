@@ -7,8 +7,8 @@ defmodule DsaWeb.BlessingController do
     entries = Data.list_blessings()
 
     conn
-    |> assign(:rituals, Enum.filter(entries, & &1.ritual == true))
-    |> assign(:blessings, Enum.filter(entries, & &1.ritual == false))
+    |> assign(:ceremony, Enum.filter(entries, & &1.ceremony == true))
+    |> assign(:blessings, Enum.filter(entries, & &1.ceremony == false))
     |> render("index.html")
   end
 end
