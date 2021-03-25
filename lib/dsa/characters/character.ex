@@ -31,6 +31,7 @@ defmodule Dsa.Characters.Character do
     field :ini, :integer
 
     belongs_to :user, Dsa.Accounts.User
+    belongs_to :active_combat_set, Dsa.Characters.CombatSet, on_replace: :nilify
 
     has_many :character_skills, Dsa.Characters.CharacterSkill, on_replace: :delete
     has_many :character_spells, Dsa.Characters.CharacterSpell, on_replace: :delete
@@ -40,7 +41,7 @@ defmodule Dsa.Characters.Character do
   end
 
   @required ~w(name le_max ae_max ke_max mu kl in ch ff ge ko kk ini_basis)a
-  @optional ~w(profession visible le ae ke sk zk sp ini)a
+  @optional ~w(profession visible le ae ke sk zk sp ini active_combat_set_id)a
 
   def changeset(character, attrs) do
     character
@@ -66,5 +67,6 @@ defmodule Dsa.Characters.Character do
     |> validate_number(:zk, greater_than_or_equal_to: -6, less_than_or_equal_to: 6)
     |> validate_number(:sp, greater_than_or_equal_to: 0, less_than_or_equal_to: 6)
     |> validate_number(:ini_basis, greater_than_or_equal_to: 0, less_than_or_equal_to: 30)
+    |> foreign_key_constraint(:active_combat_set_id)
   end
 end

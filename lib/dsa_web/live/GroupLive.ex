@@ -35,7 +35,7 @@ defmodule DsaWeb.GroupLive do
             <td>
               <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
                 <%= hidden_input f, :id, value: character.id %>
-                <%= select f, :set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input" %>
+                <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id %>
               </form>
             </td>
           </tr>
@@ -58,13 +58,19 @@ defmodule DsaWeb.GroupLive do
 
   defp topic(id), do: "group:#{id}"
 
-  def broadcast(group_id, message) do
-    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(group_id), message)
+  defp broadcast(socket, message) do
+    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(socket.assigns.group_id), message)
   end
 
-  def handle_event("change", %{"character" =>  %{"id" => _id, "set_id" => _set_id}}, socket) do
-    # TODO
+  def handle_event("change", %{"character" =>  %{"id" => id, "active_combat_set_id" => set_id}}, socket) do
 
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+    params = %{active_combat_set_id: set_id}
+
+    case Characters.update(character, params) do
+      {:ok, character} -> broadcast(socket, :update_characters)
+      {:error, changeset} -> Logger.error inspect changeset
+    end
     {:noreply, socket}
   end
 
@@ -87,23 +93,21 @@ defmodule DsaWeb.GroupLive do
 
         case Logs.create_event(log_params) do
           {:ok, entry} ->
-            broadcast(socket.assigns.group_id, {:update, characters: characters})
+            broadcast(socket, :update_characters)
             LogLive.broadcast(socket.assigns.group_id, {:log, entry})
 
           {:error, changeset} ->
             Logger.error inspect changeset
-            {:noreply, socket}
         end
 
-        {:noreply, socket}
-
       {:error, changeset} ->
-        Logger.error inspect changeset.errors
-        {:noreply, socket}
+        Logger.error inspect changeset
     end
+    {:noreply, socket}
   end
 
-  def handle_info({:update, new_assigns}, socket) do
-    {:noreply, assign(socket, new_assigns)}
+  def handle_info(:update_characters, socket) do
+    characters = Characters.get_group_characters!(socket.assigns.group_id)
+    {:noreply, assign(socket, :characters, characters)}
   end
 end
