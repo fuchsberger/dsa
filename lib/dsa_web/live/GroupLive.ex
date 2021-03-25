@@ -2,8 +2,9 @@ defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
 
   import DsaWeb.Gettext
+  import DsaWeb.GroupView
 
-  alias Dsa.{Accounts, Characters, Logs}
+  alias Dsa.{Characters, Logs}
   alias Dsa.Logs.Event.Type.{INIRoll}
   alias DsaWeb.LogLive
 
@@ -22,7 +23,11 @@ defmodule DsaWeb.GroupLive do
         <%= for character <- @characters do  %>
           <tr>
             <td class='small'>
-              <button type='button' phx-click='roll-ini' phx-value-id='<%= character.id %>' class='button gray small'><%= character.ini || character.ini_basis %></button>
+              <%= if character.user_id != @user_id do %>
+                <%= character.ini %>
+              <% else %>
+                <%= ini_button(@socket, character) %>
+              <% end %>
             </td>
             <td><%= character.name %></td>
           </tr>
@@ -32,14 +37,15 @@ defmodule DsaWeb.GroupLive do
     """
   end
 
-  def mount(_params, %{"group_id" => group_id}, socket) do
-    characters = Accounts.get_group_characters!(group_id)
+  def mount(_params, %{"group_id" => group_id, "user_id" => user_id}, socket) do
+    characters = Characters.get_group_characters!(group_id)
 
     DsaWeb.Endpoint.subscribe(topic(group_id))
 
     {:ok, socket
+    |> assign(:characters, characters)
     |> assign(:group_id, group_id)
-    |> assign(:characters, characters)}
+    |> assign(:user_id, user_id)}
   end
 
   defp topic(id), do: "group:#{id}"
@@ -55,7 +61,7 @@ defmodule DsaWeb.GroupLive do
 
     case Characters.update(character, %{ini: ini}) do
       {:ok, character} ->
-        characters = Accounts.get_group_characters!(socket.assigns.group_id)
+        characters = Characters.get_group_characters!(socket.assigns.group_id)
 
         log_params = %{
           type: INIRoll,

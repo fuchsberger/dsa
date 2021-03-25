@@ -38,6 +38,16 @@ defmodule Dsa.Characters do
     |> Repo.get!(id)
   end
 
+  def get_group_characters!(group_id) do
+    from(c in Character,
+      join: u in assoc(c, :user),
+      where: u.group_id == ^group_id and c.visible == true,
+      select: c,
+      preload: [:combat_sets],
+      order_by: [desc_nulls_last: c.ini, desc: c.ini])
+    |> Repo.all()
+  end
+
   def create(%User{} = user, attrs) do
     %Character{}
     |> Character.changeset(attrs)
@@ -104,11 +114,6 @@ defmodule Dsa.Characters do
   defp user_characters_query(query, %User{id: user_id}) do
     from(c in query, where: c.user_id == ^user_id)
   end
-
-  @doc """
-  Used for preloading in group live view
-  """
-  def character_query, do: from(c in Character, preload: :combat_sets, where: c.visible == true)
 
   # SPELLS
 

@@ -5,6 +5,9 @@
 .label.yellow{ @apply bg-yellow-50 text-yellow-600 border border-yellow-200; }
 .label.transparent{ @apply text-sm text-gray-700; }
 
+.label.link{ @apply text-indigo-600; }
+.label.link:hover { @apply text-indigo-400; }
+
 button.label:focus {  @apply outline-none; }
 
 .label.gray { @apply bg-gray-50 text-gray-500; }
