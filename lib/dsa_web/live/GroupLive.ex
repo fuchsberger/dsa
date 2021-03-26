@@ -38,7 +38,7 @@ defmodule DsaWeb.GroupLive do
             <td>
               <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
                 <%= hidden_input f, :id, value: character.id %>
-                <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id %>
+                <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id, disabled: is_nil(character.ini) %>
               </form>
             </td>
             <td class='text-center'>
