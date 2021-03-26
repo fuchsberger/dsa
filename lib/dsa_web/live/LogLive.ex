@@ -53,12 +53,10 @@ defmodule DsaWeb.LogLive do
   Only change assigns that were changed (performance friendly)
   """
   def handle_event("change", %{"log_setting" => params}, socket) do
-
     changeset = Dsa.UI.change_logsetting(params)
-    Logger.warn inspect changeset.changes
 
     socket =
-      if Map.has_key?(changeset.changes, :limit) do
+      if Map.get(changeset.changes, :limit) != socket.assigns.limit do
         limit = Ecto.Changeset.get_field(changeset, :limit)
 
         socket
@@ -69,7 +67,7 @@ defmodule DsaWeb.LogLive do
       end
 
     socket =
-      if Map.has_key?(changeset.changes, :dice) do
+      if Map.get(changeset.changes, :dice) != socket.assigns.show_dice? do
         assign(socket, :show_dice?, Ecto.Changeset.get_field(changeset, :dice))
       else
         socket
