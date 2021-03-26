@@ -41,7 +41,7 @@ defmodule DsaWeb.GroupLive do
                 <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id, disabled: is_nil(character.ini) %>
               </form>
             </td>
-            <td class='text-center'>
+            <td class='px-0 text-center'>
               <%= unless is_nil(character.active_combat_set_id) do %>
                 <%= if character.user_id == @user_id do %>
                   <%= at_button(character) %>
@@ -50,7 +50,15 @@ defmodule DsaWeb.GroupLive do
                 <% end %>
               <% end %>
             </td>
-            <td></td>
+            <td class='text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= pa_button(character) %>
+                <% else %>
+                  <%= character.active_combat_set.pa %>
+                <% end %>
+              <% end %>
+            </td>
             <td></td>
           </tr>
         <% end %>
@@ -106,6 +114,35 @@ defmodule DsaWeb.GroupLive do
       character_name: character.name,
       roll: dice,
       left: character.active_combat_set.name,
+      right: result,
+      result_type: result_type,
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("roll-pa", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    pa = character.active_combat_set.pa
+    dice = Trial.roll()
+    [first, second] = Trial.roll(2, 20, dice)
+
+    critical? = (first == 1 && second <= pa) || (first == 20 && second > pa)
+    success? = first <= pa
+    {result, result_type} = Logs.trial_result_type(success?, critical?)
+
+    params = %{
+      type: Type.PARoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: dice,
       right: result,
       result_type: result_type,
     }
