@@ -33,4 +33,17 @@ defmodule DsaWeb.GroupView do
       phx_value_id: id,
       class: class
   end
+
+  def dmg_button(%{id: id, ini: ini, active_combat_set: set}) do
+    content_tag :button, dmg(set),
+      type: "button",
+      phx_click: "roll-dmg",
+      phx_value_id: id,
+      class: "label dice",
+      disabled: is_nil(ini)
+  end
+
+  def dmg(%{tp_dice: count, tp_type: type, tp_bonus: bonus}) do
+    "#{count}W#{type}#{if bonus >= 0, do: "+"}#{bonus}"
+  end
 end

@@ -2,9 +2,9 @@
 .table { @apply min-w-full shadow-lg border-gray-200 border divide-y divide-gray-200 border-collapse; }
 
 .table thead, .table .header-row { @apply bg-gray-50; }
-.table th { @apply px-1 md:px-2 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
+.table th { @apply px-1 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
 
 .table tbody { @apply bg-white divide-y divide-gray-200; }
-.table td { @apply px-1 md:px-2 py-1 whitespace-nowrap; }
+.table td { @apply px-1 py-1 whitespace-nowrap; }
 
 .small { @apply text-xs font-medium text-gray-500 tracking-wider text-center; }

@@ -48,6 +48,9 @@
           <% Dsa.Logs.Event.Type.INIRoll -> %>
             <%= render DsaWeb.LogView, "ini_roll.html", entry: entry, show_dice?: @show_dice? %>
 
+          <% Dsa.Logs.Event.Type.DMGRoll -> %>
+            <%= render DsaWeb.LogView, "dmg_roll.html", entry: entry, show_dice?: @show_dice? %>
+
           <% _ -> %>
             <%= render DsaWeb.LogView, "simple_text.html", entry: entry %>
         <% end %>

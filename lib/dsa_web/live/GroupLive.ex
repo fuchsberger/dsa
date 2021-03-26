@@ -19,9 +19,9 @@ defmodule DsaWeb.GroupLive do
           <th class='w-12'><%= gettext "INI" %></th>
           <th class='text-left'><%= gettext "Name" %></th>
           <th class='w-48'><%= gettext "Combat Set" %></th>
-          <th><%= gettext "AT" %></th>
-          <th><%= gettext "PA" %></th>
-          <th><%= gettext "TP" %></th>
+          <th class='w-10'><%= gettext "AT" %></th>
+          <th class='w-10'><%= gettext "PA" %></th>
+          <th class='w-24'><%= gettext "TP" %></th>
         </tr>
       </thead>
       <tbody>
@@ -59,7 +59,15 @@ defmodule DsaWeb.GroupLive do
                 <% end %>
               <% end %>
             </td>
-            <td></td>
+            <td class='text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= dmg_button(character) %>
+                <% else %>
+                  <%= dmg(character.active_combat_set) %>
+                <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -184,6 +192,32 @@ defmodule DsaWeb.GroupLive do
       {:error, changeset} ->
         Logger.error inspect changeset
     end
+    {:noreply, socket}
+  end
+
+  def handle_event("roll-dmg", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    %{tp_dice: count, tp_type: type, tp_bonus: bonus} = character.active_combat_set
+
+    roll = Trial.roll()
+    dice = Trial.roll(count, type, roll)
+
+    params = %{
+      type: Type.DMGRoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: roll,
+      left: dmg(character.active_combat_set),
+      right: Integer.to_string(Enum.sum(dice) + bonus)
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
     {:noreply, socket}
   end
 
