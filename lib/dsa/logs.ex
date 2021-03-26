@@ -7,7 +7,7 @@ defmodule Dsa.Logs do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, Event}
+  alias Dsa.Logs.{Setting, Log, SkillRoll, SpellRoll, BlessingRoll, MainLog, Event}
 
   require Logger
 
@@ -46,6 +46,9 @@ defmodule Dsa.Logs do
 
   # Spell Rolls
   def change_spell_roll(attrs \\ %{}), do: SpellRoll.changeset(%SpellRoll{}, attrs)
+
+  # Blessing Rolls
+  def change_blessing_roll(attrs \\ %{}), do: BlessingRoll.changeset(%BlessingRoll{}, attrs)
 
   def trial_result_type(success?, critical?) when is_boolean(success?) do
     case {success?, critical?} do
@@ -142,6 +145,62 @@ defmodule Dsa.Logs do
         character: character,
         character_name: character.name,
         type: Event.Type.SpellRoll,
+        result_type: result_type,
+        group_id: group.id
+      }
+
+      Event.changeset(%Event{}, change)
+      |> put_assoc(:group, group)
+      |> put_assoc(:character, character)
+      |> Repo.insert()
+
+      changeset
+      |> put_change(:roll, dice)
+      |> put_change(:quality, quality)
+      |> put_change(:critical, critical?)
+      |> put_assoc(:character, character)
+      |> put_assoc(:group, group)
+      |> Repo.insert()
+
+    else
+      changeset
+    end
+  end
+
+  def create_blessing_roll(character, group, attrs) do
+    changeset = change_blessing_roll(attrs)
+
+
+    if changeset.valid? do
+
+      modifier = get_field(changeset, :modifier)
+      blessing_id = get_field(changeset, :blessing_id)
+
+      # get required inputs
+
+      %{level: level, blessing: %{probe: probe}} =
+        character
+        |> Repo.preload(character_blessings: [:blessing])
+        |> Map.get(:character_blessings)
+        |> Enum.find(&(&1.blessing_id == blessing_id))
+
+      dice = Trial.roll()
+      [t1, t2, t3] = get_character_trait_values(character, probe)
+
+      # produce roll results
+      {quality, critical?} = Trial.result(dice, t1, t2, t3, level, modifier)
+
+      {result, result_type} = trial_result_type(quality, critical?)
+      blessing_name = Dsa.Repo.get!(Dsa.Data.Blessing, blessing_id).name
+
+      change = %{
+        left: "#{blessing_name}",
+        right: "#{modifier}",
+        result: "#{result}",
+        roll: dice,
+        character: character,
+        character_name: character.name,
+        type: Event.Type.BlessingRoll,
         result_type: result_type,
         group_id: group.id
       }

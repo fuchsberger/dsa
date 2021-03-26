@@ -1,0 +1,19 @@
+<table class="table">
+  <tbody>
+    <tr id='rituals' class='header-row'>
+      <th><%= gettext "Ritual" %></th>
+      <th><%= gettext "SF" %></th>
+      <th><%= gettext "Cast time" %></th>
+      <th><%= gettext "Cost" %></th>
+    </tr>
+    <%= render_many @ceremony, DsaWeb.BlessingView, "row.html", conn: @conn %>
+
+    <tr id='blessing' class='header-row'>
+      <th><%= gettext "Blessing" %></th>
+      <th><%= gettext "SF" %></th>
+      <th><%= gettext "Cast time" %></th>
+      <th><%= gettext "Cost" %></th>
+    </tr>
+    <%= render_many @blessings, DsaWeb.BlessingView, "row.html", conn: @conn %>
+  </tbody>
+</table>

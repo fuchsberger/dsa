@@ -4,6 +4,7 @@ defmodule Dsa.Data do
   alias Dsa.Repo
   alias Dsa.Data.Skill
   alias Dsa.Data.Spell
+  alias Dsa.Data.Blessing
 
   def list_skills do
     from(s in Skill, order_by: [s.category, s.name])
@@ -76,4 +77,42 @@ defmodule Dsa.Data do
   def delete_spell(%Spell{} = spell), do: Repo.delete(spell)
 
   def change_spell(%Spell{} = spell, attrs \\ %{}), do: Spell.changeset(spell, attrs)
+
+
+  # Blessings
+  #
+  def list_blessings do
+    from(s in Blessing, order_by: [desc: s.ceremony, asc: s.name])
+    |> Repo.all()
+  end
+
+  def get_blessing!(id), do: Repo.get!(Blessing, id)
+
+  def create_blessing(attrs) do
+    %Blessing{}
+    |> Blessing.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_blessing!(attrs) do
+    %Blessing{}
+    |> Blessing.changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  def update_blessing(%Blessing{} = blessing, attrs) do
+    blessing
+    |> Blessing.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_blessing!(%Blessing{} = blessing, attrs) do
+    blessing
+    |> Blessing.changeset(attrs)
+    |> Repo.update!()
+  end
+
+  def delete_blessing(%Blessing{} = blessing), do: Repo.delete(blessing)
+
+  def change_blessing(%Blessing{} = blessing, attrs \\ %{}), do: Blessing.changeset(blessing, attrs)
 end

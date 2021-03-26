@@ -38,6 +38,8 @@
             <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
           <% Dsa.Logs.Event.Type.SpellRoll -> %>
             <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
+          <% Dsa.Logs.Event.Type.BlessingRoll -> %>
+            <%= render DsaWeb.LogView, "skill_roll_new.html", entry: entry, show_dice?: @show_dice? %>
 
           <% Dsa.Logs.Event.Type.ATRoll -> %>
             <%= render DsaWeb.LogView, "at_roll.html", entry: entry, show_dice?: @show_dice? %>

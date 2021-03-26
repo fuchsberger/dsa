@@ -1,5 +1,19 @@
-defmodule Dsa.Repo.Seeds.BlessingSeeder do
+defmodule Dsa.Data.BlessingSeeds do
   alias Dsa.Data
+
+  defp to_map({id, sf, t1, t2, t3, ceremony, cast_time, cost, name }) do
+    %{
+      id: id,
+      sf: sf,
+      t1: t1,
+      t2: t2,
+      t3: t3,
+      ceremony: ceremony,
+      cast_time: cast_time,
+      cost: cost,
+      name: name
+    }
+  end
 
   @blessings [
     # {id, sf, t1, t2, t3, ceremony, cast_time, cost, name, traditions}
@@ -45,33 +59,22 @@ defmodule Dsa.Repo.Seeds.BlessingSeeder do
     {40, :B, :kl, :kl, :in, false, 2, 8, "Wundersame Verständigung"}
   ]
 
-  defp to_map({id, sf, category, t1, t2, t3, name, be}) do
-    %{
-      id: id,
-      sf: sf,
-      category: category,
-      t1: t1,
-      t2: t2,
-      t3: t3,
-      name: name,
-      be: be
-    }
-  end
-
   # def seed, do: Enum.each(@blessings, & Data.create_blessing!(to_map(&1)))
 
   def seed, do: nil
 
   def reseed do
-    # blessings = Data.list_blessings()
+    blessings = Data.list_blessings()
 
-    # Enum.each(@blessings, fn blessing ->
-    #   attrs = to_map(blessing)
+    Enum.each(@blessings, fn blessing ->
+      attrs = to_map(blessing)
 
-    #   case Enum.find(blessings, & &1.id == attrs.id) do
-    #     nil -> Data.create_blessing!(attrs)
-    #     blessing -> Data.update_blessing!(blessing, attrs)
-    #   end
-    # end)
+      IO.inspect(attrs)
+
+      case Enum.find(blessings, &(&1.id == attrs.id)) do
+        nil -> Data.create_blessing!(attrs)
+        blessing -> Data.update_blessing!(blessing, attrs)
+      end
+    end)
   end
 end

@@ -5,52 +5,47 @@ defmodule Dsa.Data.Blessing do
   use Ecto.Schema
   use Phoenix.HTML
   import Ecto.Changeset
+  alias Dsa.Type.Probe
 
-  @table :blessings
+  import DsaWeb.DsaHelpers, only: [traits: 0]
 
-  @primary_key false
+  @sf_values ~w(A B C D E)a
+
   schema "blessings" do
-    field :id, :integer, primary_key: true
-    belongs_to :character, Dsa.Characters.Character, primary_key: true
+    field :ceremony, :boolean, default: false
+    field :name, :string
+    field :sf, Ecto.Enum, values: @sf_values
+
+    field :cost, :integer 
+    field :cast_time, :integer 
+
+    field :probe, Probe
+    field :t1, Ecto.Enum, values: traits(), virtual: true
+    field :t2, Ecto.Enum, values: traits(), virtual: true
+    field :t3, Ecto.Enum, values: traits(), virtual: true
   end
 
-  @fields ~w(id character_id)a
+  @fields ~w(id sf t1 t2 t3 ceremony cast_time cost name)a
   def changeset(blessing, params \\ %{}) do
     blessing
     |> cast(params, @fields)
     |> validate_required(@fields)
-    |> validate_number(:id, greater_than: 0, less_than_or_equal_to: count())
-    |> foreign_key_constraint(:character_id)
-    |> unique_constraint([:character_id, :id])
+    |> validate_inclusion(:t1, traits())
+    |> validate_inclusion(:t2, traits())
+    |> validate_inclusion(:t3, traits())
+    |> validate_inclusion(:sf, @sf_values)
+    |> validate_probe()
+    |> unique_constraint(:name)
   end
 
-  def count, do: 12
-  def list, do: :ets.tab2list(@table)
+  defp validate_probe(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{t1: t1, t2: t2, t3: t3}} ->
+        put_change(changeset, :probe, {t1, t2, t3})
 
-  def get(id), do: List.first(:ets.lookup(@table, id))
-
-  def options(c) do
-    character_blessing_ids = Enum.map(c.blessings, & &1.id)
-
-    1..count()
-    |> Enum.reject(& Enum.member?(character_blessing_ids, &1))
-    |> Enum.map(& {name(&1), &1})
-  end
-
-  def name(id), do: :ets.lookup_element(@table, id, 2)
-  def desc(id), do: :ets.lookup_element(@table, id, 3)
-  def range(id), do: :ets.lookup_element(@table, id, 4)
-  def duration(id), do: :ets.lookup_element(@table, id, 5)
-  def target(id), do: :ets.lookup_element(@table, id, 6)
-
-  def tooltip(id) do
-    ~E"""
-    <p class="small mb-1"><%= desc(id) %></p>
-    <p class="small mb-1"><strong>Reichweite:</strong> <%= range(id) %></p>
-    <p class="small mb-1"><strong>Wirkungsdauer:</strong> <%= duration(id) %></p>
-    <p class="small mb-1"><strong>Zielkategorie:</strong> <%= target(id) %></p>
-    <p class="small mb-0"><strong>Merkmal:</strong> allgemein</p>
-    """
+      _ ->
+        changeset
+    end
   end
 
   def seed do

@@ -16,6 +16,7 @@ defmodule Dsa.Logs.Event do
     value ATRoll, 7
     value PARoll, 8
     value DMGRoll, 9
+    value BlessingRoll, 10
 
     default NotSpecified
   end
