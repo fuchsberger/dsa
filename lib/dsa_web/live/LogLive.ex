@@ -24,7 +24,7 @@ defmodule DsaWeb.LogLive do
     DsaWeb.Endpoint.subscribe(topic(group_id))
 
     {:ok, socket
-    |> assign(:changeset, Dsa.UI.change_logsetting())
+    |> assign(:changeset, Dsa.UI.change_logsetting(%{dice: true}))
     |> assign(:group_id, group_id)
     |> assign(:entries, entries)
     |> assign(:limit, limit)
@@ -55,6 +55,7 @@ defmodule DsaWeb.LogLive do
   def handle_event("change", %{"log_setting" => params}, socket) do
 
     changeset = Dsa.UI.change_logsetting(params)
+    Logger.warn inspect changeset.changes
 
     socket =
       if Map.has_key?(changeset.changes, :limit) do
