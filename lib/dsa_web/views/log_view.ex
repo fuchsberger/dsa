@@ -3,9 +3,14 @@ defmodule DsaWeb.LogView do
 
   import Dsa.Trial, only: [roll: 3]
 
+  alias Dsa.Trial
   alias Dsa.Logs.{TraitRoll, Event}
 
   @base "inline-block font-semibold leading-6 px-1 rounded"
+
+  defp dice(list_of_dice) do
+    Enum.map(list_of_dice, & content_tag(:span, &1, class: "label dice ml-1"))
+  end
 
   defp separator, do: content_tag(:span, "»", class: "inline-block align-middle mx-1 lg:mx-2")
 
@@ -32,6 +37,14 @@ defmodule DsaWeb.LogView do
       {true, true} -> content_tag :span, "✓ K!", class: "#{@base} bg-green-50 text-green-500"
       {false, false} -> content_tag :span, "✗", class: "#{@base} bg-red-50 text-red-500"
       {true, false} -> content_tag :span, "✓", class: "#{@base} bg-green-50 text-green-500"
+    end
+  end
+
+  defp result_class(entry) do
+    case entry.result_type do
+      Event.ResultType.Failure -> "red"
+      Event.ResultType.Success -> "green"
+      _ -> "gray"
     end
   end
 

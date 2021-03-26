@@ -1,0 +1,13 @@
+<div class='mr-3'>
+  <span class='label blue'><%= @entry.character_name %></span>
+  <span class='label transparent'><%= gettext "defended" %>.</span>
+</div>
+
+<div class='flex align-middle'>
+  <%= if @show_dice? do %>
+    <% roll = Trial.roll(2, 20, @entry.roll) %>
+    <%= dice(roll) %>
+    <%= separator() %>
+  <% end %>
+  <span class='label <%= result_class(@entry) %> text-lg leading-6'><%= @entry.right %></span>
+</div>

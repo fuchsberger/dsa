@@ -1,22 +1,27 @@
 defmodule DsaWeb.GroupLive do
   use Phoenix.LiveView
+  use Phoenix.HTML
 
   import DsaWeb.Gettext
   import DsaWeb.GroupView
 
-  alias Dsa.{Characters, Logs}
-  alias Dsa.Logs.Event.Type.{INIRoll}
+  alias Dsa.{Characters, Logs, Trial}
+  alias Dsa.Logs.Event.Type
   alias DsaWeb.LogLive
 
   require Logger
 
   def render(assigns) do
     ~L"""
-    <table class="table">
+    <table class="table" data-turbo='false'>
       <thead>
         <tr>
           <th class='w-12'><%= gettext "INI" %></th>
           <th class='text-left'><%= gettext "Name" %></th>
+          <th class='w-48'><%= gettext "Combat Set" %></th>
+          <th class='w-10'><%= gettext "AT" %></th>
+          <th class='w-10'><%= gettext "PA" %></th>
+          <th class='w-24'><%= gettext "TP" %></th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +35,39 @@ defmodule DsaWeb.GroupLive do
               <% end %>
             </td>
             <td><%= character.name %></td>
+            <td>
+              <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
+                <%= hidden_input f, :id, value: character.id %>
+                <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id, disabled: is_nil(character.ini) %>
+              </form>
+            </td>
+            <td class='px-0 text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= at_button(character) %>
+                <% else %>
+                  <%= character.active_combat_set.at %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class='text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= pa_button(character) %>
+                <% else %>
+                  <%= character.active_combat_set.pa %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class='text-center'>
+              <%= unless is_nil(character.active_combat_set_id) do %>
+                <%= if character.user_id == @user_id do %>
+                  <%= dmg_button(character) %>
+                <% else %>
+                  <%= dmg(character.active_combat_set) %>
+                <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -50,8 +88,79 @@ defmodule DsaWeb.GroupLive do
 
   defp topic(id), do: "group:#{id}"
 
-  def broadcast(group_id, message) do
-    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(group_id), message)
+  defp broadcast(socket, message) do
+    Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(socket.assigns.group_id), message)
+  end
+
+  def handle_event("change", %{"character" =>  %{"id" => id, "active_combat_set_id" => set_id}}, socket) do
+
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+    params = %{active_combat_set_id: set_id}
+
+    case Characters.update(character, params) do
+      {:ok, character} -> broadcast(socket, :update_characters)
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+    {:noreply, socket}
+  end
+
+  def handle_event("roll-at", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    at = character.active_combat_set.at
+    dice = Trial.roll()
+    [first, second] = Trial.roll(2, 20, dice)
+
+    critical? = (first == 1 && second <= at) || (first == 20 && second > at)
+    success? = first <= at
+    {result, result_type} = Logs.trial_result_type(success?, critical?)
+
+    params = %{
+      type: Type.ATRoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: dice,
+      left: character.active_combat_set.name,
+      right: result,
+      result_type: result_type,
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("roll-pa", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    pa = character.active_combat_set.pa
+    dice = Trial.roll()
+    [first, second] = Trial.roll(2, 20, dice)
+
+    critical? = (first == 1 && second <= pa) || (first == 20 && second > pa)
+    success? = first <= pa
+    {result, result_type} = Logs.trial_result_type(success?, critical?)
+
+    params = %{
+      type: Type.PARoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: dice,
+      right: result,
+      result_type: result_type,
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
+    {:noreply, socket}
   end
 
   def handle_event("roll-ini", %{"id" => id}, socket) do
@@ -64,7 +173,7 @@ defmodule DsaWeb.GroupLive do
         characters = Characters.get_group_characters!(socket.assigns.group_id)
 
         log_params = %{
-          type: INIRoll,
+          type: Type.INIRoll,
           group_id: socket.assigns.group_id,
           character_id: character.id,
           character_name: character.name,
@@ -73,23 +182,47 @@ defmodule DsaWeb.GroupLive do
 
         case Logs.create_event(log_params) do
           {:ok, entry} ->
-            broadcast(socket.assigns.group_id, {:update, characters: characters})
+            broadcast(socket, :update_characters)
             LogLive.broadcast(socket.assigns.group_id, {:log, entry})
 
           {:error, changeset} ->
             Logger.error inspect changeset
-            {:noreply, socket}
         end
 
-        {:noreply, socket}
-
       {:error, changeset} ->
-        Logger.error inspect changeset.errors
-        {:noreply, socket}
+        Logger.error inspect changeset
     end
+    {:noreply, socket}
   end
 
-  def handle_info({:update, new_assigns}, socket) do
-    {:noreply, assign(socket, new_assigns)}
+  def handle_event("roll-dmg", %{"id" => id}, socket) do
+    character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
+
+    %{tp_dice: count, tp_type: type, tp_bonus: bonus} = character.active_combat_set
+
+    roll = Trial.roll()
+    dice = Trial.roll(count, type, roll)
+
+    params = %{
+      type: Type.DMGRoll,
+      group_id: socket.assigns.group_id,
+      character_id: character.id,
+      character_name: character.name,
+      roll: roll,
+      left: dmg(character.active_combat_set),
+      right: Integer.to_string(Enum.sum(dice) + bonus)
+    }
+
+    case Logs.create_event(params) do
+      {:ok, event} -> LogLive.broadcast(socket.assigns.group_id, {:log, event})
+      {:error, changeset} -> Logger.error inspect changeset
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:update_characters, socket) do
+    characters = Characters.get_group_characters!(socket.assigns.group_id)
+    {:noreply, assign(socket, :characters, characters)}
   end
 end

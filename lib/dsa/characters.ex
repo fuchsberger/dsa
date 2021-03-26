@@ -43,7 +43,7 @@ defmodule Dsa.Characters do
       join: u in assoc(c, :user),
       where: u.group_id == ^group_id and c.visible == true,
       select: c,
-      preload: [:combat_sets],
+      preload: [:active_combat_set, :combat_sets],
       order_by: [desc_nulls_last: c.ini, desc: c.ini])
     |> Repo.all()
   end
@@ -65,6 +65,10 @@ defmodule Dsa.Characters do
 
   def change(%Character{} = character \\ %Character{}, attrs \\ %{}) do
     Character.changeset(character, attrs)
+  end
+
+  def preload(%Character{} = character) do
+    Repo.preload(character, [:active_combat_set, :combat_sets])
   end
 
   def delete(%Character{} = character), do: Repo.delete(character)

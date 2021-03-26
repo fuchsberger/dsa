@@ -5,8 +5,8 @@ defmodule Dsa.UI.LogSetting do
   @primary_key false
 
   embedded_schema do
-    field :dice, :boolean, default: true
-    field :limit, :integer, default: 20
+    field :dice, :boolean
+    field :limit, :integer
   end
 
   @fields ~w(dice limit)a

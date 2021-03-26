@@ -17,14 +17,14 @@ defmodule DsaWeb.LogLive do
   def mount(_params, %{"group_id" => group_id, "user_id" => user_id}, socket) do
 
     %{master_id: master_id} = Accounts.get_group!(group_id)
-    limit = 20
+    limit = 10
     entries = Logs.list_events(group_id, limit)
 
     # Listens for events
     DsaWeb.Endpoint.subscribe(topic(group_id))
 
     {:ok, socket
-    |> assign(:changeset, Dsa.UI.change_logsetting())
+    |> assign(:changeset, Dsa.UI.change_logsetting(%{dice: true}))
     |> assign(:group_id, group_id)
     |> assign(:entries, entries)
     |> assign(:limit, limit)
@@ -53,11 +53,10 @@ defmodule DsaWeb.LogLive do
   Only change assigns that were changed (performance friendly)
   """
   def handle_event("change", %{"log_setting" => params}, socket) do
-
     changeset = Dsa.UI.change_logsetting(params)
 
     socket =
-      if Map.has_key?(changeset.changes, :limit) do
+      if Map.get(changeset.changes, :limit) != socket.assigns.limit do
         limit = Ecto.Changeset.get_field(changeset, :limit)
 
         socket
@@ -68,7 +67,7 @@ defmodule DsaWeb.LogLive do
       end
 
     socket =
-      if Map.has_key?(changeset.changes, :dice) do
+      if Map.get(changeset.changes, :dice) != socket.assigns.show_dice? do
         assign(socket, :show_dice?, Ecto.Changeset.get_field(changeset, :dice))
       else
         socket
