@@ -24,7 +24,11 @@ defmodule Dsa.Email do
   end
 
   defp url do
-    if Mix.env() == :dev, do: "http://localhost:4000", else: "https://dsa.fuchsberger.us"
+    if Application.get_env(:dsa, :environment) == :prod do
+      "https://#{System.get_env("DSA_DOMAIN")}"
+    else
+      "http://localhost:4000"
+    end
   end
 
   def test_email(user) do

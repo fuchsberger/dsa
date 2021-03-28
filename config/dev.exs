@@ -1,5 +1,7 @@
 use Mix.Config
 
+config :dsa, :environment, :dev
+
 # Configure your database
 config :dsa, Dsa.Repo,
   username: "postgres",

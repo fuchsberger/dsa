@@ -21,7 +21,7 @@ defmodule Dsa.MixProject do
     [
       # applications: [],
       mod: {Dsa.Application, []},
-      extra_applications: [:logger, :runtime_tools, :bamboo]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 

@@ -7,8 +7,7 @@
 # General application configuration
 use Mix.Config
 
-config :dsa,
-  ecto_repos: [Dsa.Repo]
+config :dsa, ecto_repos: [Dsa.Repo]
 
 # Configures the endpoint
 config :dsa, DsaWeb.Endpoint,
