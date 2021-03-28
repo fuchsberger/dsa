@@ -7,7 +7,7 @@ defmodule Dsa.Logs do
 
   alias Dsa.{Repo, Trial}
   alias Dsa.Characters.Character
-  alias Dsa.Logs.{Setting, Log, SkillRoll, SpellRoll, BlessingRoll, MainLog, Event}
+  alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, BlessingRoll, Event}
 
   require Logger
 

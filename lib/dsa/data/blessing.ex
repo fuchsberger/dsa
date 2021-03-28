@@ -9,6 +9,7 @@ defmodule Dsa.Data.Blessing do
 
   import DsaWeb.DsaHelpers, only: [traits: 0]
 
+  @table :blessings
   @sf_values ~w(A B C D E)a
 
   schema "blessings" do
@@ -16,8 +17,8 @@ defmodule Dsa.Data.Blessing do
     field :name, :string
     field :sf, Ecto.Enum, values: @sf_values
 
-    field :cost, :integer 
-    field :cast_time, :integer 
+    field :cost, :integer
+    field :cast_time, :integer
 
     field :probe, Probe
     field :t1, Ecto.Enum, values: traits(), virtual: true

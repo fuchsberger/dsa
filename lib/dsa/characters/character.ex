@@ -20,9 +20,9 @@ defmodule Dsa.Characters.Character do
     field :le_max, :integer, default: 0
     field :ae_max, :integer, default: 0
     field :ke_max, :integer, default: 0
-    field :le, :integer
-    field :ke, :integer
-    field :ae, :integer
+    field :le, :integer, default: 0
+    field :ke, :integer, default: 0
+    field :ae, :integer, default: 0
     field :sk, :integer, default: 0
     field :zk, :integer, default: 0
     field :sp, :integer, default: 3

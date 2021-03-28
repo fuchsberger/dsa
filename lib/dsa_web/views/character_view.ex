@@ -6,7 +6,6 @@ defmodule DsaWeb.CharacterView do
 
   alias Dsa.Data.{
     Armor,
-    Blessing,
     CombatTrait,
     FWeapon,
     KarmalTrait,

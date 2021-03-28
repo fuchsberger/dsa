@@ -32,6 +32,11 @@ defmodule DsaWeb.LogLive do
     |> assign(:show_dice?, true)}
   end
 
+  # not yet logged in (first mount call)
+  def mount(params, %{"group_id" => group_id}, socket) do
+    mount(params, %{"group_id" => group_id, "user_id" => nil}, socket)
+  end
+
   def handle_info({:log, entry}, socket) do
     entries =
       case Enum.count(socket.assigns.entries) < Ecto.Changeset.get_field(socket.assigns.changeset, :limit) do

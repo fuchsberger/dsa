@@ -9,8 +9,6 @@ defmodule Dsa.Email do
   import Phoenix.View, only: [render_to_string: 3]
 
   alias DsaWeb.EmailView
-  #TODO: Replace static routes with dynamic routes
-  # alias DsaWeb.Router.Helpers, as: Routes
 
   require Logger
 
