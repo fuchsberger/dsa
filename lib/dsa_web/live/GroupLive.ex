@@ -86,6 +86,11 @@ defmodule DsaWeb.GroupLive do
     |> assign(:user_id, user_id)}
   end
 
+  # not yet logged in (first mount call)
+  def mount(params, %{"group_id" => group_id}, socket) do
+    mount(params, %{"group_id" => group_id, "user_id" => nil}, socket)
+  end
+
   defp topic(id), do: "group:#{id}"
 
   defp broadcast(socket, message) do

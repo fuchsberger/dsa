@@ -46,17 +46,20 @@
         <td><%= group.name %></td>
         <td class='hidden md:table-cell'><%= group.master %></td>
         <td class='text-center'><%= Enum.count(group.users) %></td>
+
         <%= if @current_user do %>
           <%= if @current_user.id == group.master_id || @current_user.admin do %>
             <td class='text-center'>
               <%= link icon(@conn, "pencil-solid"),
-              to: Routes.group_path(@conn, :edit, group) %>
+              to: Routes.group_path(@conn, :edit, group),
+              title: gettext("Edit") %>
             </td>
             <td class='text-center'>
               <%= link icon(@conn, "x"),
                 to: Routes.group_path(@conn, :delete, group),
                 method: :delete,
                 class: "negative",
+                title: gettext("Delete"),
                 data_confirm: gettext("Are you sure you want to delete this group?") %>
             </td>
           <% else %>
