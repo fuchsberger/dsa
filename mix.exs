@@ -4,7 +4,7 @@ defmodule Dsa.MixProject do
   def project do
     [
       app: :dsa,
-      version: "0.1.16",
+      version: "0.1.17",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -21,7 +21,7 @@ defmodule Dsa.MixProject do
     [
       # applications: [],
       mod: {Dsa.Application, []},
-      extra_applications: [:logger, :runtime_tools, :bamboo_mailjet]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -45,9 +45,8 @@ defmodule Dsa.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.4.1"},
       {:pbkdf2_elixir, "~> 1.0"},
-      {:bamboo, "~> 1.7.1"},
+      {:bamboo, "~> 2.0.2"},
       {:enum_type, "~> 1.1.0"},
-      {:bamboo_mailjet, "~> 0.1.0"},
       {:floki, ">= 0.0.0", only: :test}
     ]
   end

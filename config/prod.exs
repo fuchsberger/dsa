@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :dsa, DsaWeb.Endpoint,
-  url: [host: "dsa.fuchsberger.us", port: 443],
+  url: [host: System.get_env("DSA_DOMAIN"), port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
@@ -34,11 +34,11 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-# Configures sending emails
 config :dsa, Dsa.Mailer,
-  adapter: Bamboo.MailjetAdapter,
-  api_key: System.get_env("MAILJET_PUBLIC_KEY"),
-  api_private_key: System.get_env("MAILJET_PRIVATE_KEY")
+  adapter: Bamboo.MailgunAdapter,
+  api_key: System.get_env("MAILGUN_API_KEY"),
+  domain: System.get_env("DSA_DOMAIN"),
+  hackney_opts: [recv_timeout: :timer.minutes(1)]
 
 config :dsa, DsaWeb.Endpoint,
   http: [
