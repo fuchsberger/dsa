@@ -11,17 +11,17 @@
 
     <div class="col-span-3 grid grid-cols-6">
       <%= for value <- -6..-1 do %>
-        <%= radio_button f, :modifier, value %>
+        <%= radio_button f, :modifier, value, class: "hidden" %>
         <%= label f, :modifier, value, class: "negative", for: input_id(f, :modifier, value) %>
       <% end %>
     </div>
 
-    <%= radio_button f, :modifier, 0 %>
+    <%= radio_button f, :modifier, 0, class: "hidden" %>
     <%= label f, :modifier, 0, class: "neutral", for: input_id(f, :modifier, 0) %>
 
     <div class="col-span-3 grid grid-cols-6">
       <%= for value <- 1..6 do %>
-        <%= radio_button f, :modifier, value %>
+        <%= radio_button f, :modifier, value, class: "hidden" %>
         <%= label f, :modifier, value, class: "positive", for: input_id(f, :modifier, value) %>
       <% end %>
     </div>
