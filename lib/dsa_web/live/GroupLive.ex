@@ -98,7 +98,7 @@ defmodule DsaWeb.GroupLive do
     params = %{active_combat_set_id: set_id}
 
     case Characters.update(character, params) do
-      {:ok, character} -> broadcast(socket, :update_characters)
+      {:ok, _character} -> broadcast(socket, :update_characters)
       {:error, changeset} -> Logger.error inspect changeset
     end
     {:noreply, socket}
@@ -170,8 +170,6 @@ defmodule DsaWeb.GroupLive do
 
     case Characters.update(character, %{ini: ini}) do
       {:ok, character} ->
-        characters = Characters.get_group_characters!(socket.assigns.group_id)
-
         log_params = %{
           type: Type.INIRoll,
           group_id: socket.assigns.group_id,

@@ -8,7 +8,6 @@ defmodule Dsa.Accounts do
 
   alias Dsa.Repo
   alias Dsa.Accounts.{Group, User}
-  alias Dsa.Characters
   alias Dsa.Characters.Character
 
   ##########################################################
