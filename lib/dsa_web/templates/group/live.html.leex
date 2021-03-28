@@ -1,0 +1,63 @@
+<div class='grid my-3 gap-y-2'>
+  <%= for character <- @characters do %>
+    <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
+      <%= hidden_input f, :id, value: character.id %>
+
+      <div class='grid grid-cols-6 lg:grid-cols-12 gap-1 p-1 bg-white shadow-md'>
+        <div>
+          <%= if character.user_id != @user_id do %>
+              <%= character.ini %>
+            <% else %>
+              <%= ini_button(@socket, character) %>
+            <% end %>
+        </div>
+        <div class='col-span-2'><%= character.name %></div>
+        <div>
+          <%= number_input f, :le, class: "input bg-red-100", placeholder: gettext("LE") %>
+        </div>
+        <div>
+          <%= number_input f, :ae, class: "input bg-blue-100", placeholder: gettext("AE") %>
+        </div>
+        <div>
+          <%= number_input f, :ke, class: "input bg-green-100", placeholder: gettext("KE") %>
+        </div>
+        <div class='col-span-3'>
+          <%= if character.user_id == @user_id && not is_nil(character.ini) do %>
+            <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id, disabled: is_nil(character.ini) %>
+          <% else %>
+            <%= if character.active_combat_set do %>
+              <%= character.active_combat_set.name %>
+            <% end %>
+          <% end %>
+        </div>
+        <div>
+          <%= unless is_nil(character.active_combat_set_id) do %>
+            <%= if character.user_id == @user_id && not is_nil(character.ini) do %>
+              <%= at_button(character) %>
+            <% else %>
+              <span class='label transparent truncate pt-1'>AT <%= character.active_combat_set.at %></span>
+            <% end %>
+          <% end %>
+        </div>
+        <div>
+          <%= unless is_nil(character.active_combat_set_id) do %>
+            <%= if character.user_id == @user_id && not is_nil(character.ini) do %>
+              <%= pa_button(character) %>
+            <% else %>
+              <span class='label transparent truncate pt-1'>PA <%= character.active_combat_set.pa %></span>
+            <% end %>
+          <% end %>
+        </div>
+        <div>
+          <%= unless is_nil(character.active_combat_set_id) do %>
+            <%= if character.user_id == @user_id && not is_nil(character.ini) do %>
+              <%= dmg_button(character) %>
+            <% else %>
+              <span class='label transparent truncate pt-1'><%= dmg(character.active_combat_set) %></span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </form>
+  <% end %>
+</div>

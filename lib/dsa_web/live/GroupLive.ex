@@ -11,69 +11,7 @@ defmodule DsaWeb.GroupLive do
 
   require Logger
 
-  def render(assigns) do
-    ~L"""
-    <table class="table" data-turbo='false'>
-      <thead>
-        <tr>
-          <th class='w-12'><%= gettext "INI" %></th>
-          <th class='text-left'><%= gettext "Name" %></th>
-          <th class='w-48'><%= gettext "Combat Set" %></th>
-          <th class='w-10'><%= gettext "AT" %></th>
-          <th class='w-10'><%= gettext "PA" %></th>
-          <th class='w-24'><%= gettext "TP" %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for character <- @characters do  %>
-          <tr>
-            <td class='small'>
-              <%= if character.user_id != @user_id do %>
-                <%= character.ini %>
-              <% else %>
-                <%= ini_button(@socket, character) %>
-              <% end %>
-            </td>
-            <td><%= character.name %></td>
-            <td>
-              <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
-                <%= hidden_input f, :id, value: character.id %>
-                <%= select f, :active_combat_set_id, combat_set_options(character), prompt: gettext("Choose..."), class: "input", value: character.active_combat_set_id, disabled: is_nil(character.ini) %>
-              </form>
-            </td>
-            <td class='px-0 text-center'>
-              <%= unless is_nil(character.active_combat_set_id) do %>
-                <%= if character.user_id == @user_id do %>
-                  <%= at_button(character) %>
-                <% else %>
-                  <%= character.active_combat_set.at %>
-                <% end %>
-              <% end %>
-            </td>
-            <td class='text-center'>
-              <%= unless is_nil(character.active_combat_set_id) do %>
-                <%= if character.user_id == @user_id do %>
-                  <%= pa_button(character) %>
-                <% else %>
-                  <%= character.active_combat_set.pa %>
-                <% end %>
-              <% end %>
-            </td>
-            <td class='text-center'>
-              <%= unless is_nil(character.active_combat_set_id) do %>
-                <%= if character.user_id == @user_id do %>
-                  <%= dmg_button(character) %>
-                <% else %>
-                  <%= dmg(character.active_combat_set) %>
-                <% end %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    """
-  end
+  def render(assigns), do: Phoenix.View.render(DsaWeb.GroupView, "live.html", assigns)
 
   def mount(_params, %{"group_id" => group_id, "user_id" => user_id}, socket) do
     characters = Characters.get_group_characters!(group_id)

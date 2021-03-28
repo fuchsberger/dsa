@@ -5,22 +5,20 @@ defmodule DsaWeb.GroupView do
     Enum.map(character.combat_sets, & {&1.name, &1.id})
   end
 
-  def at_button(%{id: id, ini: ini, active_combat_set: %{at: at}}) do
-    content_tag :button, at,
+  def at_button(%{id: id, active_combat_set: %{at: at}}) do
+    content_tag :button, "AT #{at}",
       type: "button",
       phx_click: "roll-at",
       phx_value_id: id,
-      class: "label dice",
-      disabled: is_nil(ini)
+      class: "label dice w-full h-7 text-xs px-0 truncate"
   end
 
-  def pa_button(%{id: id, ini: ini, active_combat_set: %{pa: pa}}) do
-    content_tag :button, pa,
+  def pa_button(%{id: id, active_combat_set: %{pa: pa}}) do
+    content_tag :button, "PA #{pa}",
       type: "button",
       phx_click: "roll-pa",
       phx_value_id: id,
-      class: "label dice",
-      disabled: is_nil(ini)
+      class: "label dice w-full h-7 text-xs px-0 truncate"
   end
 
   def ini_button(socket, %{id: id, ini: ini}) do
@@ -34,13 +32,12 @@ defmodule DsaWeb.GroupView do
       class: class
   end
 
-  def dmg_button(%{id: id, ini: ini, active_combat_set: set}) do
-    content_tag :button, dmg(set),
+  def dmg_button(%{id: id, active_combat_set: set}) do
+    content_tag :button, "W+#{set.tp_bonus}",
       type: "button",
       phx_click: "roll-dmg",
       phx_value_id: id,
-      class: "label dice",
-      disabled: is_nil(ini)
+      class: "label dice w-full h-7 text-xs px-0 truncate"
   end
 
   def dmg(%{tp_dice: count, tp_type: type, tp_bonus: bonus}) do
