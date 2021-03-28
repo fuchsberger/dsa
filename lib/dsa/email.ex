@@ -25,7 +25,12 @@ defmodule Dsa.Email do
 
   defp url do
     if Application.get_env(:dsa, :environment) == :prod do
-      "https://#{System.get_env("DSA_DOMAIN")}"
+      url =
+        Application.get_env(:dsa, DsaWeb.Endpoint)
+        |> Keyword.get(:url)
+        |> Keyword.get(:host)
+
+      "https://#{url}"
     else
       "http://localhost:4000"
     end
