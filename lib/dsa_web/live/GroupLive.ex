@@ -35,15 +35,17 @@ defmodule DsaWeb.GroupLive do
     Phoenix.PubSub.broadcast!(Dsa.PubSub, topic(socket.assigns.group_id), message)
   end
 
-  def handle_event("change", %{"character" =>  %{"id" => id, "active_combat_set_id" => set_id}}, socket) do
+  def handle_event("change", %{"character" =>  %{"id" => id} = params}, socket) do
 
     character = Enum.find(socket.assigns.characters, & &1.id == String.to_integer(id))
-    params = %{active_combat_set_id: set_id}
+
+    Logger.warn inspect Characters.change(character, params)
 
     case Characters.update(character, params) do
       {:ok, _character} -> broadcast(socket, :update_characters)
       {:error, changeset} -> Logger.error inspect changeset
     end
+
     {:noreply, socket}
   end
 

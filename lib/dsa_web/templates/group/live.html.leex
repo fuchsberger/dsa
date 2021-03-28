@@ -1,6 +1,7 @@
 <div class='grid my-3 gap-y-2'>
   <%= for character <- @characters do %>
-    <%= f = form_for :character, "#", phx_submit: nil, phx_change: :change %>
+    <% changeset = Characters.change(character) %>
+    <%= f = form_for changeset, "#", phx_submit: nil, phx_change: :change %>
       <%= hidden_input f, :id, value: character.id %>
 
       <div class='grid grid-cols-6 lg:grid-cols-12 gap-1 p-1 bg-white shadow-md'>
@@ -13,7 +14,7 @@
         </div>
         <div class='col-span-2'><%= character.name %></div>
         <div>
-          <%= number_input f, :le, class: "input bg-red-100", placeholder: gettext("LE") %>
+          <%= number_input f, :le, class: "input bg-red-100", placeholder: gettext("LE"), value: character.le %>
         </div>
         <div>
           <%= number_input f, :ae, class: "input bg-blue-100", placeholder: gettext("AE") %>

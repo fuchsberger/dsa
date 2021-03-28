@@ -1,6 +1,8 @@
 defmodule DsaWeb.GroupView do
   use DsaWeb, :view
 
+  alias Dsa.Characters
+
   def combat_set_options(character) do
     Enum.map(character.combat_sets, & {&1.name, &1.id})
   end
