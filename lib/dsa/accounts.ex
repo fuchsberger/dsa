@@ -25,12 +25,6 @@ defmodule Dsa.Accounts do
     |> Repo.get(id)
   end
 
-  def get_user_by(params) do
-    User
-    |> preload_characters()
-    |> Repo.get_by(params)
-  end
-
   def preload_characters(%User{} = user) do
     Repo.preload user, [characters: character_query()]
   end
@@ -42,16 +36,16 @@ defmodule Dsa.Accounts do
   defp character_query, do: from(c in Character, select: {c.id, c.name}, order_by: c.name)
 
   def authenticate_by_email_and_password(email, given_pass) do
-    user = get_user_by(email: email)
+    credential = get_credential_by(email: email)
 
     cond do
-      user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
-        case user.confirmed do
-          true -> {:ok, user}
+      credential && Pbkdf2.verify_pass(given_pass, credential.password_hash) ->
+        case credential.confirmed do
+          true -> {:ok, get_user!(credential.user_id)}
           false -> {:error, :unconfirmed}
         end
 
-      user ->
+      credential ->
         {:error, :invalid_credentials}
 
       true ->
@@ -116,6 +110,8 @@ defmodule Dsa.Accounts do
 
   ##########################################################
   # Credential related APIs
+
+  def get_credential_by(params), do: Repo.get_by(Credential, params)
 
   def create_credential(user, attrs \\ %{}) do
     %Credential{}

@@ -6,12 +6,13 @@ defmodule DsaWeb.SessionController do
   action_fallback DsaWeb.ErrorController
 
   @doc """
-  Redirects to index if user is authenticated, otherwise to login page
+  Home redircts to group page (if logged in and group) or group list (if logged in) or login page
   """
   def index(conn, _) do
     case conn.assigns.current_user do
-      nil -> redirect(conn, to: Routes.session_path(conn, :new))
-      _user -> redirect(conn, to: Routes.character_path(conn, :index))
+      nil ->              redirect(conn, to: Routes.session_path(conn, :new))
+      %{group_id: nil} -> redirect(conn, to: Routes.group_path(conn, :index))
+      %{group_id: id} ->  redirect(conn, to: Routes.group_path(conn, :show, id))
     end
   end
 
@@ -25,11 +26,11 @@ defmodule DsaWeb.SessionController do
     end
   end
 
-  def create(conn, %{"session" => %{"email" => email, "password" => pass, "redirect" => path}}) do
+  def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
     with {:ok, user} <- Dsa.Accounts.authenticate_by_email_and_password(email, pass) do
       conn
-      |> DsaWeb.Auth.login(user)
-      |> redirect(to: path)
+      |> DsaWeb.Auth.login(conn, user)
+      |> redirect(to: Routes.session_path(conn, :index))
     end
   end
 
