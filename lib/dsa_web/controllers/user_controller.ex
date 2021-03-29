@@ -2,7 +2,7 @@ defmodule DsaWeb.UserController do
   use DsaWeb, :controller
 
   alias Dsa.{Accounts, Email, Mailer}
-  alias Dsa.Accounts.User
+  alias Dsa.Accounts.{Credential, User}
 
   def action(conn, _) do
     args = [conn, conn.params, conn.assigns.current_user]
@@ -10,40 +10,21 @@ defmodule DsaWeb.UserController do
   end
 
   def new(conn, _params, _current_user) do
-    changeset = Accounts.change_registration(%User{}, %{})
-
     conn
     |> put_layout("flipped.html")
-    |> render("new.html", changeset: changeset)
-  end
-
-  def confirm(conn, %{"token" => token}, _current_user) do
-    case Accounts.get_user_by(confirmed: false, token: token) do
-      nil ->
-        conn
-        |> put_flash(:error, gettext("The link is invalid or expired."))
-        |> redirect(to: Routes.session_path(conn, :new))
-
-      user ->
-        Accounts.manage_user!(user, %{confirmed: true, token: nil})
-
-        conn
-        |> put_flash(:info, "Activation complete. You can login now.")
-        |> redirect(to: Routes.session_path(conn, :new))
-    end
+    |> render("new.html", changeset: Accounts.change_user(%User{}))
   end
 
   def create(conn, %{"user" => user_params}, _current_user) do
-    case Accounts.register_user(user_params) do
+    case Accounts.create_user(user_params) do
       {:ok, user} ->
-
         user
         |> Email.confirmation_email()
         |> Mailer.deliver_now()
 
         conn
         |> put_flash(:info, gettext("Account created! An email to activate your account was sent."))
-        |> redirect(to: Routes.session_path(conn, :new))
+        |> redirect(to: Routes.session_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
@@ -80,6 +61,22 @@ defmodule DsaWeb.UserController do
     |> DsaWeb.Auth.logout()
     |> put_flash(:info, "Account deleted successfully.")
     |> redirect(to: Routes.session_path(conn, :new))
+  end
+
+  def confirm(conn, %{"token" => token}, _current_user) do
+    case Accounts.get_user_by(confirmed: false, token: token) do
+      nil ->
+        conn
+        |> put_flash(:error, gettext("The link is invalid or expired."))
+        |> redirect(to: Routes.session_path(conn, :new))
+
+      user ->
+        Accounts.manage_user!(user, %{confirmed: true, token: nil})
+
+        conn
+        |> put_flash(:info, "Activation complete. You can login now.")
+        |> redirect(to: Routes.session_path(conn, :new))
+    end
   end
 
   def reset(conn, _params, _current_user) do

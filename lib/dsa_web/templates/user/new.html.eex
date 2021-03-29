@@ -27,35 +27,39 @@
         </div>
         <%= error_tag f, :username %>
 
-        <div class='relative bg-white rounded-md shadow-md'>
-          <div class="input-icon-wrapper"><%= icon @conn, "mail" %></div>
-          <%= text_input f, :email,
-            autocomplete: "email",
-            class: "normal icon relative border #{if false, do: "error" }",
-            placeholder: gettext("Email")
-          %>
-        </div>
-        <%= error_tag f, :email %>
+        <%= inputs_for f, :credential, fn cf -> %>
 
-        <div class='relative bg-white rounded-md shadow-md'>
-          <div class="input-icon-wrapper"><%= icon @conn, "lock-closed" %></div>
-          <%= password_input f, :password,
-            autocomplete: "new-password",
-            class: "normal icon relative border #{if false, do: "error" }",
-            placeholder: gettext("Password")
-          %>
-        </div>
-        <%= error_tag f, :password %>
+          <div class='relative bg-white rounded-md shadow-md'>
+            <div class="input-icon-wrapper"><%= icon @conn, "mail" %></div>
+            <%= text_input cf, :email,
+              autocomplete: "email",
+              class: "normal icon relative border #{if false, do: "error" }",
+              placeholder: gettext("Email")
+            %>
+          </div>
+          <%= error_tag cf, :email %>
 
-        <div class='relative bg-white rounded-md shadow-md'>
-          <div class="input-icon-wrapper"><%= icon @conn, "shield-check" %></div>
-          <%= password_input f, :password_confirm,
-            autocomplete: "new-password",
-            class: "normal icon relative border #{if false, do: "error" }",
-            placeholder: gettext("Confirm Password")
-          %>
-        </div>
-        <%= error_tag f, :password_confirm %>
+          <div class='relative bg-white rounded-md shadow-md'>
+            <div class="input-icon-wrapper"><%= icon @conn, "lock-closed" %></div>
+            <%= password_input cf, :password,
+              autocomplete: "new-password",
+              class: "normal icon relative border #{if false, do: "error" }",
+              placeholder: gettext("Password")
+            %>
+          </div>
+          <%= error_tag cf, :password %>
+
+          <div class='relative bg-white rounded-md shadow-md'>
+            <div class="input-icon-wrapper"><%= icon @conn, "shield-check" %></div>
+            <%= password_input cf, :password_confirm,
+              autocomplete: "new-password",
+              class: "normal icon relative border #{if false, do: "error" }",
+              placeholder: gettext("Confirm Password")
+            %>
+          </div>
+          <%= error_tag cf, :password_confirm %>
+
+        <% end %>
 
         <p>
           <%= submit class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>

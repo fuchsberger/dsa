@@ -14,18 +14,12 @@ defmodule Dsa.Repo.Migrations.CreateCredentials do
       add :confirmed, :boolean
       add :reset, :boolean
       add :token, :string, size: 64
-      add :user_id, references(:users, on_delete: :delete_all)
+      add :user_id, references(:users, on_delete: :delete_all), null: false
       timestamps()
     end
 
     create unique_index(:credentials, :email)
     create index(:credentials, :user_id)
-
-    alter table(:users) do
-      add :credential_id, references(:credentials, on_delete: :nilify_all)
-    end
-
-    create index(:users, :credential_id)
 
     flush()
 
@@ -74,7 +68,6 @@ defmodule Dsa.Repo.Migrations.CreateCredentials do
     users = Accounts.list_users()
 
     Enum.each(users, fn user ->
-      Logger.warn inspect Repo.preload(user, :credential)
       %{credential: credential} = Repo.preload(user, :credential)
 
       # To downgrade make sure to add the fields back to user in struct first.
@@ -88,12 +81,8 @@ defmodule Dsa.Repo.Migrations.CreateCredentials do
       |> Repo.update!()
     end)
 
-    #  remove credentials
-    drop index(:users, :credential_id)
-
     alter table(:users) do
       modify :email, :string, null: false
-      remove :credential_id
     end
 
     drop index(:credentials, :email)
