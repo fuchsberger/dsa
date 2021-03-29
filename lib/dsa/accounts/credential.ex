@@ -16,36 +16,37 @@ defmodule Dsa.Accounts.Credential do
     field :password, :string, virtual: true
     field :password_confirm, :string, virtual: true
 
-    belongs_to :user, Dsa.Accounts.User, on_replace: :delete
+    belongs_to :user, Dsa.Accounts.User
     timestamps()
   end
 
-  def registration_changeset(credential, params) do
+  # used for registration
+  def changeset(credential, params) do
     credential
     |> email_changeset(params, true)
     |> password_changeset(params, true)
     |> put_pass_hash()
     |> put_token()
-    |> unique_constraint(:email)
   end
 
   # used to reset tokens (should never be handled via web form)
-  def manage_changeset(user, params) do
-    cast(user, params, [:confirmed, :reset, :token])
+  def manage_changeset(credential, params) do
+    cast(credential, params, [:confirmed, :reset, :token])
   end
 
   # used for reset password (part 1), reset email and registration
-  def email_changeset(user, params, bypass_security? \\ false) do
-    user
+  def email_changeset(changeset, params, bypass_security? \\ false) do
+    changeset
     |> cast(params, [:email, :password_old])
     |> validate_required([:email])
     |> validate_email(:email)
     |> validate_old_password(bypass_security?)
+    |> unique_constraint(:email)
   end
 
   # used for reset password (part 2) and registration
-  def password_changeset(user, params, bypass_security? \\ false) do
-    user
+  def password_changeset(changeset, params, bypass_security? \\ false) do
+    changeset
     |> cast(params, [:password, :password_confirm, :password_old])
     |> validate_required([:password, :password_confirm])
     |> validate_old_password(bypass_security?)

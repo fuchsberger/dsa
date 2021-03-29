@@ -25,6 +25,22 @@ defmodule Dsa.Accounts do
     |> Repo.get(id)
   end
 
+  def change_user(%User{} = user, params \\ %{}), do: User.changeset(user, params)
+
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
+    |> Repo.insert()
+  end
+
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
+    |> Repo.update()
+  end
+
   def preload_characters(%User{} = user) do
     Repo.preload user, [characters: character_query()]
   end
@@ -57,13 +73,6 @@ defmodule Dsa.Accounts do
   ##########################################################
   # Character related APIs
 
-  def change_user(%User{} = user, params \\ %{}), do: User.changeset(user, params)
-
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
-  end
 
   def change_registration(%User{} = user, params) do
     User.registration_changeset(user, params)
@@ -100,11 +109,7 @@ defmodule Dsa.Accounts do
     |> Repo.update()
   end
 
-  def update_user(%User{} = user, params \\ %{}) do
-    user
-    |> User.changeset(params)
-    |> Repo.update()
-  end
+
 
   def delete_user(%User{} = user), do: Repo.delete(user)
 
@@ -113,9 +118,13 @@ defmodule Dsa.Accounts do
 
   def get_credential_by(params), do: Repo.get_by(Credential, params)
 
+  def change_credential(%Credential{} = credential, attrs \\ %{}) do
+    Credential.changeset(credential, attrs)
+  end
+
   def create_credential(user, attrs \\ %{}) do
     %Credential{}
-    |> Credential.registration_changeset(attrs)
+    |> change_credential(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end

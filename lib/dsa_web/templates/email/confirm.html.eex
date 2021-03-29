@@ -12,7 +12,7 @@
 		<p><%= gettext "The Twelve Divines greet you!" %></p>
 		<p><%= @user.username %><%= gettext ", welcome to the DSA Tool!" %></p>
 		<p><%= gettext "To be able to login you first must activate your account:" %></p>
-		<p><a href="<%= @url %>/user/confirm/<%= @user.token %>" target="_blank"><%= gettext "Activate" %></a></p>
+		<p><a href="<%= @url %>/user/confirm/<%= @user.credential.token %>" target="_blank"><%= gettext "Activate" %></a></p>
 		<p><%= gettext "May Phex bring you luck when you roll your dice!" %></p>
 		<p><%= gettext "Cheers," %><br/>Alex</p>
 	</body>
