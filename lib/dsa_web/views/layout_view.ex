@@ -24,9 +24,4 @@ defmodule DsaWeb.LayoutView do
       {_id, name} -> name
     end
   end
-
-  def gravatar_url(user) do
-    email = if is_nil(user), do: "unknown", else: user.email
-    "https://s.gravatar.com/avatar/#{:erlang.md5(email) |> Base.encode16(case: :lower)}?s=32"
-  end
 end
