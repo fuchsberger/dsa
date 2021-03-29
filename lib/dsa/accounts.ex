@@ -7,7 +7,7 @@ defmodule Dsa.Accounts do
   require Logger
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Group, User}
+  alias Dsa.Accounts.{Credential, Group, User}
   alias Dsa.Characters.Character
 
   ##########################################################
@@ -113,6 +113,16 @@ defmodule Dsa.Accounts do
   end
 
   def delete_user(%User{} = user), do: Repo.delete(user)
+
+  ##########################################################
+  # Credential related APIs
+
+  def create_credential(user, attrs \\ %{}) do
+    %Credential{}
+    |> Credential.registration_changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
 
   ##########################################################
   # Group related APIs
