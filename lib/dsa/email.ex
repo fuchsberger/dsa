@@ -12,7 +12,7 @@ defmodule Dsa.Email do
 
   require Logger
 
-  @sender %Dsa.Accounts.User{email: "noreply@fuchsberger.us", username: "DSA Tool"}
+  @sender {"DSA Tool", "noreply@fuchsberger.us"}
 
   defimpl Bamboo.Formatter, for: Dsa.Accounts.User do
     # Used by `to`, `bcc`, `cc` and `from`
