@@ -1,3 +1,4 @@
+<%= render DsaWeb.LayoutView, "menu.html", conn: @conn, current_user: @current_user %>
 <div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl overflow-y-auto'>
   <%# In left column show about page %>
   <div class='hidden lg:block px-2 lg:pr-1 max-h-full overflow-y-auto'>
