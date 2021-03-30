@@ -10,14 +10,8 @@
   </head>
   <body class='bg-gray-100'>
     <nav class="w-full bg-gray-800">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div class="relative flex items-center justify-between h-16">
-          <%# Profilbild / Logo %>
-          <%= link class: "flex-shrink-0 flex items-center text-gray-200 hover:text-white", to: Routes.session_path(@conn, :index) do %>
-            <%= icon @conn, "eye", "block w-8 h-8" %>
-            <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl'><%= gettext("DSA Tool") %></span>
-          <% end %>
-        </div>
+      <div class="relative mx-auto max-w-7xl px-3 h-12 flex items-center">
+        <%= link gettext("DSA Tool"), to: Routes.session_path(@conn, :index), class: "brand" %>
       </div>
     </nav>
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
