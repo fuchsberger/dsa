@@ -10,7 +10,7 @@
         </button>
 
         <%= link gettext("DSA Tool"),
-          to: Routes.session_path(@conn, :index),
+          to: Routes.page_path(@conn, :index),
           class: "lg:ml-0 font-bold text-2xl text-gray-200 hover:text-white ml-1 lg:ml-0" %>
       </div>
 
@@ -163,7 +163,7 @@
         </div>
       <% else %>
         <%= link @conn, [icon(@conn, "login", "inline-block w-5 h-5 mr-1"), gettext("Login")],
-          to: Routes.session_path(@conn, :new),
+          to: Routes.user_session_path(@conn, :new),
           class: "menu-item hidden lg:inline-block" %>
       <% end %>
     </div>

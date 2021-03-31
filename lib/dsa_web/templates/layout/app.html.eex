@@ -27,7 +27,7 @@
         </div>
       <% end %>
     <% else %>
-      <%= render DsaWeb.SessionView, "new.html", conn: @conn %>
+      <%= render DsaWeb.UserSessionView, "new.html", conn: @conn, error_message: nil %>
     <% end %>
   </div>
 </div>

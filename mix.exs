@@ -34,6 +34,7 @@ defmodule Dsa.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.8"},
       {:phoenix_ecto, "~> 4.2.1"},
       {:ecto_sql, "~> 3.5.4"},
@@ -44,7 +45,7 @@ defmodule Dsa.MixProject do
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.4.1"},
-      {:pbkdf2_elixir, "~> 1.0"},
+      {:phx_gen_auth, "~> 0.7.0", only: [:dev], runtime: false},
       {:bamboo, "~> 2.0.2"},
       {:enum_type, "~> 1.1.0"},
       {:floki, ">= 0.0.0", only: :test}

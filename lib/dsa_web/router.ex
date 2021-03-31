@@ -1,6 +1,8 @@
 defmodule DsaWeb.Router do
   use DsaWeb, :router
 
+  import DsaWeb.UserAuth
+
   if Application.get_env(:dsa, :environment) == :dev do
     forward "/sent_emails", Bamboo.SentEmailViewerPlug
   end
@@ -11,8 +13,9 @@ defmodule DsaWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
     plug :put_root_layout, {DsaWeb.LayoutView, :root}
-    plug DsaWeb.Auth
+    # plug DsaWeb.Auth
   end
 
   pipeline :api do
@@ -24,10 +27,10 @@ defmodule DsaWeb.Router do
     pipe_through :browser
 
     # Authentication
-    resources "/", SessionController, only: [:index]
-    get "/login", SessionController, :new
-    post "/login", SessionController, :create
-    delete "/logout/:user_id", SessionController, :delete
+    get "/", PageController, :index
+    # get "/login", SessionController, :new
+    # post "/login", SessionController, :create
+    # delete "/logout/:user_id", SessionController, :delete
 
     resources "/character", CharacterController, only: [:show]
 
@@ -38,14 +41,14 @@ defmodule DsaWeb.Router do
     resources "/blessings", BlessingController, only: [:index]
 
     # user registration
-    resources "/user", UserController, only: [:new, :create]
-    get "/user/confirm/:token", UserController, :confirm
+    # resources "/user", UserController, only: [:new, :create]
+    # get "/user/confirm/:token", UserController, :confirm
 
     # reset password logic
-    get "/user/reset", UserController, :reset
-    post "/user/reset", UserController, :send_reset_link
-    get "/user/reset/:token", UserController, :reset_password
-    put "/user/reset/:token", UserController, :update_password
+    # get "/user/reset", UserController, :reset
+    # post "/user/reset", UserController, :send_reset_link
+    # get "/user/reset/:token", UserController, :reset_password
+    # put "/user/reset/:token", UserController, :update_password
   end
 
   # Private Routes
@@ -87,7 +90,7 @@ defmodule DsaWeb.Router do
     post "/characters/:character_id/spell_roll", EventController, :spell_roll
     post "/characters/:character_id/blessing_roll", EventController, :blessing_roll
 
-    resources "/user", UserController, only: [:delete, :edit, :update]
+    # resources "/user", UserController, only: [:delete, :edit, :update]
 
     # Groups
     put "/groups/join/:id", GroupController, :join
@@ -100,5 +103,37 @@ defmodule DsaWeb.Router do
     pipe_through [:browser, :authenticate_user, :admin]
 
     resources "/skills", SkillController, except: [:index, :show]
+  end
+
+  ## Authentication routes
+
+  scope "/", DsaWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/users/register", UserRegistrationController, :new
+    post "/users/register", UserRegistrationController, :create
+    get "/login", UserSessionController, :new
+    post "/login", UserSessionController, :create
+    get "/users/reset_password", UserResetPasswordController, :new
+    post "/users/reset_password", UserResetPasswordController, :create
+    get "/users/reset_password/:token", UserResetPasswordController, :edit
+    put "/users/reset_password/:token", UserResetPasswordController, :update
+  end
+
+  scope "/", DsaWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/users/settings", UserSettingsController, :edit
+    put "/users/settings", UserSettingsController, :update
+    get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+  end
+
+  scope "/", DsaWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+    get "/users/confirm", UserConfirmationController, :new
+    post "/users/confirm", UserConfirmationController, :create
+    get "/users/confirm/:token", UserConfirmationController, :confirm
   end
 end
