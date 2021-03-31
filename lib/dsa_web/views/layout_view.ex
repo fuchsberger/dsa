@@ -17,11 +17,4 @@ defmodule DsaWeb.LayoutView do
   def link(:auth, conn, text, opts) do
     if auth?(conn), do: link(conn, text, opts), else: nil
   end
-
-  def active_character_name(%User{active_character_id: character_id} = user) do
-    case Enum.find(user.characters, fn {id, _name} -> id == character_id end) do
-      nil -> nil
-      {_id, name} -> name
-    end
-  end
 end

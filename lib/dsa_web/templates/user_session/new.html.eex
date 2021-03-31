@@ -1,0 +1,59 @@
+<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+  <div class="max-w-sm mx-auto my-3 space-y-3" data-turbo="false">
+
+    <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
+
+    <h2 class="text-center text-3xl font-extrabold"><%= gettext("Enter Aventuria") %></h2>
+
+    <%= if @error_message do %>
+      <div class='text-center'>
+        <div class="inline-block alert error"><%= @error_message %></div>
+      </div>
+    <% end %>
+
+    <div class="flex justify-between text-sm">
+      <%= link gettext("Not yet registered?"),
+        to: Routes.user_registration_path(@conn, :new),
+        class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+
+      <%= link gettext("Forgot your password?"),
+            to: Routes.user_reset_password_path(@conn, :new),
+            class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
+    </div>
+
+    <div class="rounded-md shadow-sm -space-y-px">
+      <div>
+        <%= label f, :email, gettext("Email"), class: "sr-only" %>
+        <%= email_input f, :email,
+          autocomplete: "email",
+          required: true,
+          class: "input rounded-none rounded-t-md leading-8",
+          placeholder: gettext("Email")
+        %>
+      </div>
+      <div>
+        <%= label f, :password, gettext("Password"), class: "sr-only" %>
+        <%= password_input f, :password,
+          required: true,
+          autocomplete: "current-password",
+          class: "input rounded-none rounded-b-md leading-8",
+          placeholder: gettext("Password")
+        %>
+      </div>
+    </div>
+
+    <p class='text-center'>
+      <%= checkbox f, :remember_me, class: "form-checkbox rounded " %>
+      <%= label f, :remember_me, gettext("Keep me logged in for 60 days") %>
+    </p>
+
+    <div class='text-center'>
+      <%= submit class: "primary group inline-flex" do %>
+
+        <%= icon @conn, "lock-closed", "inline-block h-5 w-5 text-indigo-300 group-hover:text-white" %>
+
+        <%= gettext "Login" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

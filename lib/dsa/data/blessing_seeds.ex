@@ -69,8 +69,6 @@ defmodule Dsa.Data.BlessingSeeds do
     Enum.each(@blessings, fn blessing ->
       attrs = to_map(blessing)
 
-      IO.inspect(attrs)
-
       case Enum.find(blessings, &(&1.id == attrs.id)) do
         nil -> Data.create_blessing!(attrs)
         blessing -> Data.update_blessing!(blessing, attrs)
