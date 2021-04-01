@@ -6,8 +6,9 @@ defmodule DsaWeb.UserRegistrationController do
   alias DsaWeb.UserAuth
 
   def new(conn, _params) do
-    changeset = Accounts.change_user_registration(%User{})
-    render(conn, "new.html", changeset: changeset)
+    conn
+    |> put_layout("flipped.html")
+    |> render("new.html", changeset: Accounts.change_user_registration(%User{}))
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -20,7 +21,7 @@ defmodule DsaWeb.UserRegistrationController do
           )
 
         conn
-        |> put_flash(:info, "User created successfully.")
+        |> put_flash(:info, gettext("User created successfully."))
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->

@@ -1,1 +1,10 @@
 button:disabled, input:disabled, select:disabled { @apply cursor-not-allowed; }
+
+/* Inputs */
+.input { @apply w-full px-2 py-0 leading-7 shadow-sm border-gray-300 rounded-md; }
+.input:focus { @apply ring-indigo-500 border-indigo-500; }
+
+/* Inputs with Icons */
+div.icon { @apply relative bg-white; }
+div.icon input { @apply bg-transparent pl-9; }
+div.icon svg { @apply absolute mx-2 mt-1 text-gray-300 pointer-events-none; }
