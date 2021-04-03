@@ -1,23 +1,25 @@
-<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
-  <div class="max-w-sm mx-auto my-3 space-y-3 text-center" data-turbo="false">
+<div class="max-w-sm mx-auto my-3 space-y-3 text-center">
 
-    <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
+  <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
 
-    <h2 class="text-3xl font-extrabold"><%= gettext("Enter Aventuria") %></h2>
+  <h2 class="text-3xl font-extrabold"><%= gettext("Enter Aventuria") %></h2>
 
-    <%= if @error_message do %>
-      <div class="inline-block alert error"><%= @error_message %></div>
-    <% end %>
+  <%= if @error_message do %>
+    <div class="inline-block alert error"><%= @error_message %></div>
+  <% end %>
 
-    <div class="flex justify-between text-sm">
-      <%= link gettext("Not yet registered?"),
-        to: Routes.user_registration_path(@conn, :new),
-        class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+  <div class="flex justify-between text-sm">
+    <%= link gettext("Not yet registered?"),
+      to: Routes.user_registration_path(@conn, :new),
+      class: "font-medium text-indigo-600 hover:text-indigo-500" %>
 
-      <%= link gettext("Forgot your password?"),
-        to: Routes.user_reset_password_path(@conn, :new),
-        class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
-    </div>
+    <%= link gettext("Forgot your password?"),
+      to: Routes.user_reset_password_path(@conn, :new),
+      class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
+  </div>
+
+  <%= form_for @conn, Routes.user_session_path(@conn, :create),
+    [as: :user, data: [turbo: false]], fn f -> %>
 
     <div class="rounded-md shadow-sm -space-y-px">
       <div class='icon rounded-t-md'>
@@ -41,11 +43,11 @@
       </div>
     </div>
 
-    <div>
+    <div class='mt-3'>
       <%= checkbox f, :remember_me, class: "form-checkbox rounded " %>
       <%= label f, :remember_me, gettext("Keep me logged in for 60 days") %>
     </div>
 
-    <%= submit gettext("Login"), class: "primary" %>
-  </div>
-<% end %>
+    <%= submit gettext("Login"), class: "primary mt-3" %>
+  <% end %>
+</div>
