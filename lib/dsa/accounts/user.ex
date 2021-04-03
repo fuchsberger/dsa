@@ -2,10 +2,15 @@ defmodule Dsa.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Inspect, except: [:password]}
+  import DsaWeb.Gettext
+
+  @derive {Inspect, except: [:password, :password_confirm]}
   schema "users" do
+    field :admin, :boolean, default: false
     field :email, :string
+    field :username, :string
     field :password, :string, virtual: true
+    field :password_confirm, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
@@ -31,8 +36,10 @@ defmodule Dsa.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :username, :password, :password_confirm])
     |> validate_email()
+    |> validate_username()
+    |> validate_password_confirm()
     |> validate_password(opts)
   end
 
@@ -45,14 +52,27 @@ defmodule Dsa.Accounts.User do
     |> unique_constraint(:email)
   end
 
+  defp validate_username(changeset) do
+    changeset
+    |> validate_required([:username])
+    |> validate_length(:username, min: 2, max: 15)
+  end
+
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 12, max: 80)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[a-z]/, message: gettext("at least one lower case character"))
+    # |> validate_format(:password, ~r/[A-Z]/, message: gettext("at least one upper case character"))
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
     |> maybe_hash_password(opts)
+  end
+
+  defp validate_password_confirm(changeset) do
+    case get_change(changeset, :password) == get_change(changeset, :password_confirm) do
+      true -> changeset
+      false -> add_error(changeset, :password_confirm, gettext("Passwords don't match"))
+    end
   end
 
   defp maybe_hash_password(changeset, opts) do
