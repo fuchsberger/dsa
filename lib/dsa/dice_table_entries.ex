@@ -50,11 +50,18 @@ defmodule Dsa.DiceTableEntries do
 
   """
   def create_dice_table_entry(attrs \\ %{}, table_id) do
-    attrs = Map.merge(attrs, %{"dice_table_id" => table_id})
+    attrs = Map.merge(attrs, %{dice_table_id: table_id}) |> key_to_atom
 
     %DiceTableEntry{}
     |> DiceTableEntry.changeset(attrs)
     |> Repo.insert()
+  end
+
+  defp key_to_atom(map) do
+    Enum.reduce(map, %{}, fn
+      {key, value}, acc when is_atom(key) -> Map.put(acc, key, value)
+      {key, value}, acc when is_binary(key) -> Map.put(acc, String.to_existing_atom(key), value)
+    end)
   end
 
   @doc """

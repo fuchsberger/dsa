@@ -15,6 +15,6 @@ defmodule Dsa.DiceTableEntries.DiceTableEntry do
     dice_table_entry
     |> cast(attrs, [:result, :description, :dice_table_id])
     |> validate_required([:result, :dice_table_id])
-    |> unique_constraint(:dice_table_unique, name: :dice_table_unique)
   end
+
 end

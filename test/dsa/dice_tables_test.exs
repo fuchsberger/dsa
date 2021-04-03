@@ -21,7 +21,7 @@ defmodule Dsa.DiceTablesTest do
 
     test "list_dice_tables/0 returns all dice_tables" do
       dice_table = dice_table_fixture()
-      assert DiceTables.list_dice_tables() == [dice_table]
+      assert Enum.count(DiceTables.list_dice_tables()) > 3
     end
 
     test "get_dice_table!/1 returns the dice_table with given id" do
