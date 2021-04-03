@@ -15,7 +15,7 @@
 
       <td>
         <span><%= link "Show", to: Routes.dice_table_path(@conn, :show, dice_table) %></span>
-        <span><%= link "Edit", to: Routes.dice_table_path(@conn, :edit, dice_table) %></span>
+        <span><%= link "Edit Name", to: Routes.dice_table_path(@conn, :edit, dice_table) %></span>
         <span><%= link "Delete", to: Routes.dice_table_path(@conn, :delete, dice_table), method: :delete, data: [confirm: "Are you sure?"] %></span>
     <%= if @current_user.group_id do %>
       <td>

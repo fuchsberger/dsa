@@ -228,24 +228,26 @@ defmodule Dsa.Logs do
   def create_dice_table_roll(group, %{"table_id" => table_id}) do
     table = DiceTables.get_dice_table!(table_id)
     entries = DiceTableEntries.list_dice_table_entries(table_id)
-    random_entry = Enum.random(entries)
 
-    change = %{
-      left: "#{table.table_name}",
-      result: "no entry in the table",
-      type: Event.Type.DiceTableRoll,
-      group_id: group.id
-    }
+    change =
+      if Enum.count(entries) > 0 do
+        random_entry = Enum.random(entries)
 
-    if random_entry do
-      change = %{
-        left: "#{table.table_name}",
-        right: "#{random_entry.text}",
-        result: "#{random_entry.text}",
-        type: Event.Type.DiceTableRoll,
-        group_id: group.id
-      }
-    end
+        change = %{
+          left: "#{table.table_name}",
+          right: "/dice_tables/#{table_id}/entries/#{random_entry.id}",
+          result: "#{random_entry.result}",
+          type: Event.Type.DiceTableRoll,
+          group_id: group.id
+        }
+      else
+        %{
+          left: "#{table.table_name}",
+          result: "no entry in the table",
+          type: Event.Type.DiceTableRoll,
+          group_id: group.id
+        }
+      end
 
     Event.changeset(%Event{}, change)
     |> put_assoc(:group, group)

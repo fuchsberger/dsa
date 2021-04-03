@@ -3,7 +3,8 @@ defmodule Dsa.DiceTableEntries.DiceTableEntry do
   import Ecto.Changeset
 
   schema "dice_table_entries" do
-    field :text, :string
+    field :result, :string
+    field :description, :string
     field :dice_table_id, :integer
 
     timestamps()
@@ -12,8 +13,8 @@ defmodule Dsa.DiceTableEntries.DiceTableEntry do
   @doc false
   def changeset(dice_table_entry, attrs) do
     dice_table_entry
-    |> cast(attrs, [:text, :dice_table_id])
-    |> validate_required([:text, :dice_table_id])
+    |> cast(attrs, [:result, :description, :dice_table_id])
+    |> validate_required([:result, :dice_table_id])
     |> unique_constraint(:dice_table_unique, name: :dice_table_unique)
   end
 end

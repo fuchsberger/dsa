@@ -50,13 +50,10 @@ defmodule Dsa.DiceTableEntries do
 
   """
   def create_dice_table_entry(attrs \\ %{}, table_id) do
-    IO.inspect(attrs)
     attrs = Map.merge(attrs, %{"dice_table_id" => table_id})
-    IO.inspect(attrs)
 
     %DiceTableEntry{}
     |> DiceTableEntry.changeset(attrs)
-    |> IO.inspect
     |> Repo.insert()
   end
 

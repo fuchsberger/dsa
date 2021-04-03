@@ -1,4 +1,4 @@
-<h1>Edit Dice table entry</h1>
+<h1>Edit entry</h1>
 
 <%= render "form.html", Map.put(assigns, :action, Routes.dice_table_dice_table_entry_path(@conn, :update, @table_id, @dice_table_entry)) %>
 

@@ -5,8 +5,10 @@
     </div>
   <% end %>
 
-  <%= label f, :text %>
-  <%= text_input f, :text, class: "input" %>
+  <%= label f, :result %>
+  <%= text_input f, :result, class: "input" %>
+  <%= label f, :description %>
+  <%= text_input f, :description, class: "input" %>
   <%= error_tag f, :text %>
 
   <div>
