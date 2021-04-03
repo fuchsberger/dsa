@@ -1,0 +1,13 @@
+<h1>Show Dice table</h1>
+
+<ul>
+
+  <li>
+    <strong>Table name:</strong>
+    <%= @dice_table.table_name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.dice_table_path(@conn, :edit, @dice_table) %></span>
+<span><%= link "Back", to: Routes.dice_table_path(@conn, :index) %></span>

@@ -37,6 +37,12 @@ defmodule DsaWeb.Router do
     resources "/spells", SpellController, only: [:index]
     resources "/blessings", BlessingController, only: [:index]
 
+
+    resources "/dice_tables", DiceTableController do
+       resources "/entries", DiceTableEntryController
+    end
+
+
     # user registration
     resources "/user", UserController, only: [:new, :create]
     get "/user/confirm/:token", UserController, :confirm

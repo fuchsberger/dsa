@@ -1,0 +1,26 @@
+<h1>Listing Dice tables</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Table name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for dice_table <- @dice_tables do %>
+    <tr>
+      <td><%= dice_table.table_name %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.dice_table_path(@conn, :show, dice_table) %></span>
+        <span><%= link "Edit", to: Routes.dice_table_path(@conn, :edit, dice_table) %></span>
+        <span><%= link "Delete", to: Routes.dice_table_path(@conn, :delete, dice_table), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Dice table", to: Routes.dice_table_path(@conn, :new) %></span>
