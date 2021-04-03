@@ -8,7 +8,12 @@ defmodule DsaWeb.DiceTableEntryController do
   def index(conn, %{"dice_table_id" => table_id}) do
     table = DiceTables.get_dice_table!(table_id)
     dice_table_entries = DiceTableEntries.list_dice_table_entries(table_id)
-    render(conn, "index.html", dice_table_entries: dice_table_entries, table_id: table_id, table_name: table.table_name)
+
+    render(conn, "index.html",
+      dice_table_entries: dice_table_entries,
+      table_id: table_id,
+      table_name: table.table_name
+    )
   end
 
   def new(conn, %{"dice_table_id" => table_id}) do
@@ -46,12 +51,14 @@ defmodule DsaWeb.DiceTableEntryController do
     )
   end
 
-  def update(conn,a = %{
-        "id" => id,
-        "dice_table_entry" => dice_table_entry_params,
-        "dice_table_id" => table_id
-      }) do
-
+  def update(
+        conn,
+        a = %{
+          "id" => id,
+          "dice_table_entry" => dice_table_entry_params,
+          "dice_table_id" => table_id
+        }
+      ) do
     dice_table_entry = DiceTableEntries.get_dice_table_entry!(id)
 
     case DiceTableEntries.update_dice_table_entry(dice_table_entry, dice_table_entry_params) do
@@ -67,12 +74,13 @@ defmodule DsaWeb.DiceTableEntryController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"dice_table_id" => table_id, "id" => id}) do
     dice_table_entry = DiceTableEntries.get_dice_table_entry!(id)
+
     {:ok, _dice_table_entry} = DiceTableEntries.delete_dice_table_entry(dice_table_entry)
 
     conn
     |> put_flash(:info, "Dice table entry deleted successfully.")
-    |> redirect(to: Routes.dice_table_entry_path(conn, :index))
+    |> redirect(to: Routes.dice_table_entry_path(conn, table_id, :index))
   end
 end
