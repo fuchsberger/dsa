@@ -14,6 +14,9 @@ defmodule Dsa.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
+    belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
+    has_many :characters, Dsa.Characters.Character
+
     timestamps()
   end
 

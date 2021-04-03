@@ -5,7 +5,7 @@ defmodule Dsa.Accounts do
 
   import Ecto.Query, warn: false
   alias Dsa.Repo
-  alias Dsa.Accounts.{User, UserToken, UserNotifier}
+  alias Dsa.Accounts.{Group, User, UserToken, UserNotifier}
 
   ## Database getters
 
@@ -227,7 +227,7 @@ defmodule Dsa.Accounts do
   """
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+    Repo.one(query) |> Repo.preload(:characters)
   end
 
   @doc """
@@ -345,5 +345,13 @@ defmodule Dsa.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  def list_groups do
+    from(g in Group, preload: [
+      master: ^from(u in User, select: u.username),
+      users: ^from(u in User, select: u.id)
+    ])
+    |> Repo.all()
   end
 end

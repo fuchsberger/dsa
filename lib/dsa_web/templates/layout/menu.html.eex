@@ -169,10 +169,10 @@
               to: Routes.group_path(@conn, :index) %>
 
             <%= link [icon(@conn, "cog-solid"), gettext("Settings")],
-              to: Routes.user_path(@conn, :edit, @current_user) %>
+              to: Routes.user_settings_path(@conn, :edit) %>
 
             <%= link [icon(@conn, "logout-solid"), gettext("Logout")],
-              to: Routes.session_path(@conn, :delete, @current_user), method: :delete %>
+              to: Routes.user_session_path(@conn, :delete), method: :delete %>
           </div>
         </div>
       <% else %>
