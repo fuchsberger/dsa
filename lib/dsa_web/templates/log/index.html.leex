@@ -53,6 +53,9 @@
           <% Dsa.Logs.Event.Type.DMGRoll -> %>
             <%= render DsaWeb.LogView, "dmg_roll.html", entry: entry, show_dice?: @show_dice? %>
 
+          <% Dsa.Logs.Event.Type.DiceTableRoll -> %>
+            <%= render DsaWeb.LogView, "dice_table_roll.html", entry: entry, show_dice?: @show_dice? %>
+
           <% _ -> %>
             <%= render DsaWeb.LogView, "simple_text.html", entry: entry %>
         <% end %>

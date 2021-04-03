@@ -1,0 +1,18 @@
+<h1><%= @dice_table_entry.result %></h1>
+
+<ul>
+
+  <li>
+    <strong>Result:</strong>
+    <%= @dice_table_entry.result %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @dice_table_entry.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.dice_table_dice_table_entry_path(@conn, :edit, @table_id, @dice_table_entry) %></span>
+<span><%= link "Back", to: Routes.dice_table_dice_table_entry_path(@conn, :index, @table_id) %></span>

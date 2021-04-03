@@ -10,7 +10,12 @@ defmodule DsaWeb.EventController do
 
   def action(conn, _) do
     character_id = conn.params["character_id"]
-    character = Characters.get!(conn.assigns.current_user, character_id)
+    character = nil
+
+    if character_id do
+      character = Characters.get!(conn.assigns.current_user, character_id)
+    end
+
     group = Accounts.get_user_group!(conn.assigns.current_user)
 
     args = [conn, conn.params, group, character]
@@ -24,7 +29,7 @@ defmodule DsaWeb.EventController do
         redirect(conn, to: Routes.character_skill_path(conn, :index, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
+        Logger.warn(inspect(changeset))
         redirect(conn, to: Routes.character_skill_path(conn, :index, character))
     end
   end
@@ -36,7 +41,7 @@ defmodule DsaWeb.EventController do
         redirect(conn, to: Routes.character_spell_path(conn, :index, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
+        Logger.warn(inspect(changeset))
         redirect(conn, to: Routes.character_spell_path(conn, :index, character))
     end
   end
@@ -48,8 +53,20 @@ defmodule DsaWeb.EventController do
         redirect(conn, to: Routes.character_blessing_path(conn, :index, character))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
+        Logger.warn(inspect(changeset))
         redirect(conn, to: Routes.character_blessing_path(conn, :index, character))
+    end
+  end
+
+  def dice_table_roll(conn, %{"dice_table_roll" => roll_params}, group, character) do
+    case Logs.create_dice_table_roll(group, roll_params) do
+      {:ok, dice_table_roll} ->
+        broadcast(group.id, {:log, dice_table_roll})
+        redirect(conn, to: Routes.dice_table_path(conn, :index))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn(inspect(changeset))
+        redirect(conn, to: Routes.dice_table_path(conn, :index))
     end
   end
 
