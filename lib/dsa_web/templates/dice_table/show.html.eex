@@ -9,5 +9,6 @@
 
 </ul>
 
+<span><%= link "Edit entries", to: Routes.dice_table_dice_table_entry_path(@conn, :index, @dice_table.id) %></span>
 <span><%= link "Edit", to: Routes.dice_table_path(@conn, :edit, @dice_table) %></span>
 <span><%= link "Back", to: Routes.dice_table_path(@conn, :index) %></span>

@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, Routes.dice_table_path(@conn, :update, @dice_table)) %>
 
-<span><%= link "Back", to: Routes.dice_table_path(@conn, :index) %></span>
+<span><%= link gettext "Back", to: Routes.dice_table_path(@conn, :index) %></span>

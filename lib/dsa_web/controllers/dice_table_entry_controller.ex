@@ -6,8 +6,9 @@ defmodule DsaWeb.DiceTableEntryController do
   alias Dsa.DiceTables
 
   def index(conn, %{"dice_table_id" => table_id}) do
+    table = DiceTables.get_dice_table!(table_id)
     dice_table_entries = DiceTableEntries.list_dice_table_entries(table_id)
-    render(conn, "index.html", dice_table_entries: dice_table_entries, table_id: table_id)
+    render(conn, "index.html", dice_table_entries: dice_table_entries, table_id: table_id, table_name: table.table_name)
   end
 
   def new(conn, %{"dice_table_id" => table_id}) do
@@ -16,14 +17,16 @@ defmodule DsaWeb.DiceTableEntryController do
   end
 
   def create(conn, %{"dice_table_entry" => dice_table_entry_params, "dice_table_id" => table_id}) do
-    case DiceTableEntries.create_dice_table_entry(dice_table_entry_params) do
+    case DiceTableEntries.create_dice_table_entry(dice_table_entry_params, table_id) do
       {:ok, dice_table_entry} ->
         conn
         |> put_flash(:info, "Dice table entry created successfully.")
-        |> redirect(to: Routes.dice_table_dice_table_entry_path(conn, :show, table_id, dice_table_entry))
+        |> redirect(
+          to: Routes.dice_table_dice_table_entry_path(conn, :show, table_id, dice_table_entry)
+        )
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, table_id: table_id)
     end
   end
 
@@ -32,20 +35,32 @@ defmodule DsaWeb.DiceTableEntryController do
     render(conn, "show.html", dice_table_entry: dice_table_entry, table_id: table_id)
   end
 
-  def edit(conn, %{"id" => id}) do
+  def edit(conn, %{"id" => id, "dice_table_id" => table_id}) do
     dice_table_entry = DiceTableEntries.get_dice_table_entry!(id)
     changeset = DiceTableEntries.change_dice_table_entry(dice_table_entry)
-    render(conn, "edit.html", dice_table_entry: dice_table_entry, changeset: changeset)
+
+    render(conn, "edit.html",
+      dice_table_entry: dice_table_entry,
+      table_id: table_id,
+      changeset: changeset
+    )
   end
 
-  def update(conn, %{"id" => id, "dice_table_entry" => dice_table_entry_params}) do
+  def update(conn,a = %{
+        "id" => id,
+        "dice_table_entry" => dice_table_entry_params,
+        "dice_table_id" => table_id
+      }) do
+
     dice_table_entry = DiceTableEntries.get_dice_table_entry!(id)
 
     case DiceTableEntries.update_dice_table_entry(dice_table_entry, dice_table_entry_params) do
       {:ok, dice_table_entry} ->
         conn
         |> put_flash(:info, "Dice table entry updated successfully.")
-        |> redirect(to: Routes.dice_table_entry_path(conn, :show, dice_table_entry))
+        |> redirect(
+          to: Routes.dice_table_dice_table_entry_path(conn, :show, table_id, dice_table_entry)
+        )
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", dice_table_entry: dice_table_entry, changeset: changeset)

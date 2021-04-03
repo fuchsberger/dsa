@@ -18,7 +18,7 @@ defmodule Dsa.DiceTableEntries do
 
   """
   def list_dice_table_entries(table_id) do
-    Repo.all(DiceTableEntry, dice_table_id: table_id)
+    Repo.all(from t in DiceTableEntry, where: t.dice_table_id == ^table_id)
   end
 
   @doc """
@@ -49,9 +49,14 @@ defmodule Dsa.DiceTableEntries do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_dice_table_entry(attrs \\ %{}) do
+  def create_dice_table_entry(attrs \\ %{}, table_id) do
+    IO.inspect(attrs)
+    attrs = Map.merge(attrs, %{"dice_table_id" => table_id})
+    IO.inspect(attrs)
+
     %DiceTableEntry{}
     |> DiceTableEntry.changeset(attrs)
+    |> IO.inspect
     |> Repo.insert()
   end
 

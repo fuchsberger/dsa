@@ -1,4 +1,4 @@
-<h1>Listing Dice table entries</h1>
+<h1><%= @table_name %></h1>
 
 <table>
   <thead>
@@ -13,16 +13,16 @@
 <%= for dice_table_entry <- @dice_table_entries do %>
     <tr>
       <td><%= dice_table_entry.text %></td>
-      <td><%= dice_table_entry.dice %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.dice_table_dice_table_entry_path(@conn, :show, dice_table_entry, @table_id) %></span>
-        <span><%= link "Edit", to: Routes.dice_table_dice_table_entry_path(@conn, :edit, dice_table_entry,  @table_id) %></span>
-        <span><%= link "Delete", to: Routes.dice_table_dice_table_entry_path(@conn, :delete, dice_table_entry, @table_id), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link gettext "Show", to: Routes.dice_table_dice_table_entry_path(@conn, :show, @table_id, dice_table_entry) %></span>
+        <span><%= link gettext "Edit Name", to: Routes.dice_table_dice_table_entry_path(@conn, :edit, @table_id, dice_table_entry) %></span>
+        <span><%= link gettext "Delete", to: Routes.dice_table_dice_table_entry_path(@conn, :delete, @table_id, dice_table_entry), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Dice table entry", to: Routes.dice_table_dice_table_entry_path(@conn, :new, 1) %></span>
+<span><%= link gettext "New Dice table entry", to: Routes.dice_table_dice_table_entry_path(@conn, :new, 1) %></span>
+<span><%= link gettext "Back", to: Routes.dice_table_path(@conn, :show, @table_id) %></span>

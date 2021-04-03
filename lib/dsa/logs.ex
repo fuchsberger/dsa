@@ -9,6 +9,12 @@ defmodule Dsa.Logs do
   alias Dsa.Characters.Character
   alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, BlessingRoll, Event}
 
+  alias Dsa.DiceTables
+  alias Dsa.DiceTables.DiceTable
+  alias Dsa.DiceTableEntries.DiceTableEntry
+  alias Dsa.DiceTableEntries
+  alias Dsa.DiceTableEntries.DiceTableEntry
+
   require Logger
 
   # LOGS
@@ -52,17 +58,17 @@ defmodule Dsa.Logs do
 
   def trial_result_type(success?, critical?) when is_boolean(success?) do
     case {success?, critical?} do
-      {false, true}   -> {"✗ K!", Event.ResultType.Failure}
-      {_, true}       -> {"✓ K!", Event.ResultType.Success}
-      {false, false}  -> {"✗", Event.ResultType.Failure}
-      {_, false}      -> {"✓", Event.ResultType.Success}
+      {false, true} -> {"✗ K!", Event.ResultType.Failure}
+      {_, true} -> {"✓ K!", Event.ResultType.Success}
+      {false, false} -> {"✗", Event.ResultType.Failure}
+      {_, false} -> {"✓", Event.ResultType.Success}
     end
   end
 
   def trial_result_type(quality, critical?) when is_integer(quality) do
     case {quality, critical?} do
-      {0, true} ->  {"✗ K!", Event.ResultType.Failure}
-      {_, true} ->  {"✓ K!", Event.ResultType.Success}
+      {0, true} -> {"✗ K!", Event.ResultType.Failure}
+      {_, true} -> {"✓ K!", Event.ResultType.Success}
       {0, false} -> {"✗", Event.ResultType.Failure}
       {_, false} -> {"✓ #{quality}", Event.ResultType.Success}
     end
@@ -161,7 +167,6 @@ defmodule Dsa.Logs do
       |> put_assoc(:character, character)
       |> put_assoc(:group, group)
       |> Repo.insert()
-
     else
       changeset
     end
@@ -170,9 +175,7 @@ defmodule Dsa.Logs do
   def create_blessing_roll(character, group, attrs) do
     changeset = change_blessing_roll(attrs)
 
-
     if changeset.valid? do
-
       modifier = get_field(changeset, :modifier)
       blessing_id = get_field(changeset, :blessing_id)
 
@@ -217,10 +220,37 @@ defmodule Dsa.Logs do
       |> put_assoc(:character, character)
       |> put_assoc(:group, group)
       |> Repo.insert()
-
     else
       changeset
     end
+  end
+
+  def create_dice_table_roll(group, %{"table_id" => table_id}) do
+    table = DiceTables.get_dice_table!(table_id)
+    entries = DiceTableEntries.list_dice_table_entries(table_id)
+    random_entry = Enum.random(entries)
+
+    change = %{
+      left: "#{table.table_name}",
+      result: "no entry in the table",
+      type: Event.Type.DiceTableRoll,
+      group_id: group.id
+    }
+
+    if random_entry do
+      change = %{
+        left: "#{table.table_name}",
+        right: "#{random_entry.text}",
+        result: "#{random_entry.text}",
+        type: Event.Type.DiceTableRoll,
+        group_id: group.id
+      }
+    end
+
+    Event.changeset(%Event{}, change)
+    |> put_assoc(:group, group)
+    |> IO.inspect()
+    |> Repo.insert()
   end
 
   # Trait Rolls

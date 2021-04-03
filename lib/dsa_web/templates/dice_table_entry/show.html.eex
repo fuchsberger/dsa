@@ -7,11 +7,6 @@
     <%= @dice_table_entry.text %>
   </li>
 
-  <li>
-    <strong>Dice:</strong>
-    <%= @dice_table_entry.dice %>
-  </li>
-
 </ul>
 
 <span><%= link "Edit", to: Routes.dice_table_dice_table_entry_path(@conn, :edit, @dice_table_entry, @table_id) %></span>

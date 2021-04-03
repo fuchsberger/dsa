@@ -40,6 +40,7 @@ defmodule DsaWeb.Router do
 
     resources "/dice_tables", DiceTableController do
        resources "/entries", DiceTableEntryController
+       post "/dice_table_roll", EventController, :dice_table_roll
     end
 
 

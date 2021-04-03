@@ -1,5 +1,5 @@
 <h1>Edit Dice table entry</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.dice_table_entry_path(@conn, :update, @dice_table_entry)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.dice_table_dice_table_entry_path(@conn, :update, @table_id, @dice_table_entry)) %>
 
-<span><%= link "Back", to: Routes.dice_table_entry_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.dice_table_dice_table_entry_path(@conn, :index, @table_id) %></span>

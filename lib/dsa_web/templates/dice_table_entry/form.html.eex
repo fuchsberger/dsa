@@ -9,10 +9,6 @@
   <%= text_input f, :text, class: "input" %>
   <%= error_tag f, :text %>
 
-  <%= label f, :dice %>
-  <%= number_input f, :dice, class: "input" %>
-  <%= error_tag f, :dice %>
-
   <div>
     <%= submit "Save" %>
   </div>
