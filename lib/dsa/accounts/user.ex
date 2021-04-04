@@ -10,7 +10,7 @@ defmodule Dsa.Accounts.User do
     field :email, :string
     field :username, :string
     field :password, :string, virtual: true
-    field :password_confirm, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
@@ -39,7 +39,7 @@ defmodule Dsa.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :username, :password, :password_confirm])
+    |> cast(attrs, [:email, :username, :password, :password_confirmation])
     |> validate_email()
     |> validate_username()
     |> validate_password_confirm()

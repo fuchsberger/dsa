@@ -11,13 +11,8 @@
   <% end %>
 
   <div class="flex justify-between text-sm">
-    <%= link gettext("Log In"),
-      to: Routes.user_session_path(@conn, :new),
-      class: "font-medium text-indigo-600 hover:text-indigo-500" %>
-
-    <%= link gettext("Forgot your password?"),
-      to: Routes.user_reset_password_path(@conn, :new),
-      class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
+    <%= link gettext("Log In"), to: Routes.user_session_path(@conn, :new) %>
+    <%= link gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new) %>
   </div>
 
   <%= form_for @changeset, Routes.user_registration_path(@conn, :create),
@@ -55,14 +50,14 @@
       <%= error_tag f, :password %>
 
       <div class='icon rounded-md'>
-        <%= label f, :password_confirm, gettext("Confirm Password"), class: "sr-only" %>
+        <%= label f, :password_confirmation, gettext("Confirm Password"), class: "sr-only" %>
         <%= icon @conn, "lock-closed-solid" %>
-        <%= password_input f, :password_confirm,
+        <%= password_input f, :password_confirmation,
           autocomplete: "new-password",
           class: "input",
           placeholder: gettext("Confirm Password") %>
       </div>
-      <%= error_tag f, :password_confirm %>
+      <%= error_tag f, :password_confirmation %>
 
       <%= submit gettext("Register"), class: "primary" %>
     </div>
