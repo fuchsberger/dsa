@@ -10,10 +10,10 @@ defmodule DsaWeb.EventController do
 
   def action(conn, _) do
     character_id = conn.params["character_id"]
-    character = nil
-
-    if character_id do
+    character = if character_id do
       character = Characters.get!(conn.assigns.current_user, character_id)
+    else 
+      nil
     end
 
     group = Accounts.get_user_group!(conn.assigns.current_user)
