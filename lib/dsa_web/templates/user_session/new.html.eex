@@ -9,13 +9,8 @@
   <% end %>
 
   <div class="flex justify-between text-sm">
-    <%= link gettext("Not yet registered?"),
-      to: Routes.user_registration_path(@conn, :new),
-      class: "font-medium text-indigo-600 hover:text-indigo-500" %>
-
-    <%= link gettext("Forgot your password?"),
-      to: Routes.user_reset_password_path(@conn, :new),
-      class: "font-medium text-indigo-600 hover:text-indigo-500 text-sm" %>
+    <%= link gettext("Not yet registered?"), to: Routes.user_registration_path(@conn, :new) %>
+    <%= link gettext("Forgot your password?"), to: Routes.user_reset_password_path(@conn, :new) %>
   </div>
 
   <%= form_for @conn, Routes.user_session_path(@conn, :create),

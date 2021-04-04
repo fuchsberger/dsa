@@ -1,26 +1,43 @@
-<h1>Reset password</h1>
+<div class="max-w-sm mx-auto my-3 space-y-3 text-center">
+  <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
 
-<%= form_for @changeset, Routes.user_reset_password_path(@conn, :update, @token), fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+  <h2 class="text-3xl font-extrabold"><%= gettext("Reset password") %></h2>
 
-  <%= label f, :password, "New password" %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <%= label f, :password_confirmation, "Confirm new password" %>
-  <%= password_input f, :password_confirmation, required: true %>
-  <%= error_tag f, :password_confirmation %>
-
-  <div>
-    <%= submit "Reset password" %>
+  <div class="flex justify-between text-sm">
+    <%= link gettext("Log In"), to: Routes.user_registration_path(@conn, :new) %>
+    <%= link gettext("Register"), to: Routes.user_session_path(@conn, :new) %>
   </div>
-<% end %>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+  <%= form_for @changeset, Routes.user_reset_password_path(@conn, :update, @token), fn f -> %>
+    <div class="space-y-3">
+    <%= if @changeset.action do %>
+      <div class="inline-block alert error">
+        <%= gettext "Oops, something went wrong! Please check the errors below." %>
+      </div>
+    <% end %>
+
+    <div class='icon rounded-md'>
+      <%= label f, :password, gettext("New password"), class: "sr-only" %>
+      <%= icon @conn, "lock-closed-solid" %>
+      <%= password_input f, :password,
+        autocomplete: "new-password",
+        class: "input",
+        placeholder: gettext("New Password") %>
+    </div>
+    <%= error_tag f, :password %>
+
+    <div class='icon rounded-md'>
+      <%= label f, :password_confirmation, gettext("Confirm Password"), class: "sr-only" %>
+      <%= icon @conn, "lock-closed-solid" %>
+      <%= password_input f, :password_confirmation,
+        autocomplete: "new-password",
+        class: "input",
+        placeholder: gettext("Confirm Password") %>
+    </div>
+    <%= error_tag f, :password_confirmation %>
+
+    <%= submit gettext("Reset password"), class: "primary" %>
+
+  </div>
+  <% end %>
+</div>
