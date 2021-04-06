@@ -354,4 +354,33 @@ defmodule Dsa.Accounts do
     ])
     |> Repo.all()
   end
+
+  def get_group!(id), do: Repo.get!(Group, id)
+
+  def change_group(%Group{} = group, attrs \\ %{}), do: Group.changeset(group, attrs)
+
+  def create_group(%User{} = user, attrs) do
+    %Group{}
+    |> Group.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:master, user)
+    |> Repo.insert()
+  end
+
+  def delete_group(%Group{} = group), do: Repo.delete(group)
+
+  def join_group(%User{} = user, %Group{} = group) do
+    user
+    |> Repo.preload(:group)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:group, group)
+    |> Repo.update()
+  end
+
+  def leave_group(%User{} = user) do
+    user
+    |> Repo.preload(:group)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:group, nil)
+    |> Repo.update()
+  end
 end
