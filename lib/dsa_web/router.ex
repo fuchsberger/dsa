@@ -133,6 +133,9 @@ defmodule DsaWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+    get "/users/change_password", UserChangePasswordController, :edit
+    post "/users/change_password", UserChangePasswordController, :update
+    delete "/users/delete", UserSettingsController, :delete
   end
 
   scope "/", DsaWeb do
