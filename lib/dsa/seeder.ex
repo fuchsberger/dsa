@@ -10,6 +10,7 @@ defmodule Dsa.Data.Seeder do
     seed(:skills)
     seed(:spells)
     seed(:blessings)
+    seed(:roll_tables)
   end
 
   def seed(:skills) do
@@ -66,6 +67,10 @@ defmodule Dsa.Data.Seeder do
 
   def seed(:blessings) do
     Dsa.Data.BlessingSeeds.reseed
+  end
+
+  def seed(:roll_tables) do
+    Dsa.Data.DiceTableSeeds.seed
   end
 
   defp read_file(filename) do

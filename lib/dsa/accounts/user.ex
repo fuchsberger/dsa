@@ -72,9 +72,15 @@ defmodule Dsa.Accounts.User do
   end
 
   defp validate_password_confirm(changeset) do
+<<<<<<< HEAD
     case get_change(changeset, :password) == get_change(changeset, :password_confirm) do
       true -> changeset
       false -> add_error(changeset, :password_confirm, gettext("Passwords don't match"))
+=======
+    case get_change(changeset, :password) == get_change(changeset, :password_confirmation) do
+      true -> changeset
+      false -> add_error(changeset, :password_confirmation, gettext("Passwords don't match"))
+>>>>>>> fbaf9fbe7b392a980b7aaabc2e83c682038c583e
     end
   end
 

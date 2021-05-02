@@ -32,7 +32,6 @@ defmodule Dsa.Repo.Migrations.Data do
     create unique_index(:spells, [:name])
 
     flush()
-    Dsa.Data.Seeder.seed()
   end
 
   def down do

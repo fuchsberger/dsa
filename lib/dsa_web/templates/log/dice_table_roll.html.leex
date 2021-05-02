@@ -1,0 +1,11 @@
+<div class='mr-3'>
+  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded text-blue-500 bg-blue-50 border border-blue-200'><%= @entry.left %></span>
+  <span class='mx-1 lg:mx-2'>»</span>
+  <span class='inline-block text-xs font-semibold leading-6 px-1 rounded bg-yellow-50 text-yellow-600 border border-yellow-200'>
+    <%= if @entry.right do %>
+      <%= link(@entry.result, to: @entry.right) %>
+      <% else %>
+      <%= @entry.result %>
+    <% end %>
+  </span>
+</div>

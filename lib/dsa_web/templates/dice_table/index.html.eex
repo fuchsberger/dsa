@@ -1,0 +1,37 @@
+<h1>Listing Dice tables</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Table name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for dice_table <- @dice_tables do %>
+    <tr>
+      <td><%= dice_table.table_name %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.dice_table_path(@conn, :show, dice_table) %></span>
+        <span><%= link "Edit Name", to: Routes.dice_table_path(@conn, :edit, dice_table) %></span>
+        <span><%= link "Delete", to: Routes.dice_table_path(@conn, :delete, dice_table), method: :delete, data: [confirm: "Are you sure?"] %></span>
+    <%= if @current_user.group_id do %>
+      <td>
+
+        <%= form_for @conn, Routes.dice_table_event_path(@conn, :dice_table_roll, dice_table.id), [], fn f -> %>
+        <%= submit icon(@conn, "cube"),
+          class: "text-indigo-600 hover:text-indigo-400",
+          name: input_name(:dice_table_roll, :table_id),
+          value: dice_table.id %>
+      </td>
+    <% end %>
+    <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Dice table", to: Routes.dice_table_path(@conn, :new) %></span>

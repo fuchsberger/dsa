@@ -1,0 +1,29 @@
+<h1><%= @table_name %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Result</th>
+      <th>Description</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for dice_table_entry <- @dice_table_entries do %>
+    <tr>
+      <td><%= dice_table_entry.result %></td>
+      <td><%= dice_table_entry.description %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.dice_table_dice_table_entry_path(@conn, :show, @table_id, dice_table_entry) %></span>
+        <span><%= link "Edit", to: Routes.dice_table_dice_table_entry_path(@conn, :edit, @table_id, dice_table_entry) %></span>
+        <span><%= link "Delete", to: Routes.dice_table_dice_table_entry_path(@conn, :delete, @table_id, dice_table_entry), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Dice table entry", to: Routes.dice_table_dice_table_entry_path(@conn, :new, @table_id) %></span>
+<span><%= link "Back", to: Routes.dice_table_path(@conn, :show, @table_id) %></span>

@@ -136,6 +136,20 @@
           </div>
         </div>
       <% end %>
+
+      <%= if auth?(@conn) do %>
+        <div class="menu-item dropdown hidden lg:inline-block relative">
+          <button>
+            <span><%= gettext "Support Info " %></span>
+            <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
+          </button>
+
+          <div class="origin-bottom-left left-0 group-hover:scale-100">
+            <%= link [icon(@conn, "pencil-solid"), gettext "Dice tables"],
+              to: Routes.dice_table_path(@conn, :index) %>
+          </div>
+        </div>
+      <% end %>
     </div>
     <div class='inline-flex space-x-3 my-1'>
       <button type='button' id='log-button' class='mobile-button inline-block lg:hidden'>
