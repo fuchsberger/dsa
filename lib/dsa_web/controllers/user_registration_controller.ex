@@ -25,6 +25,7 @@ defmodule DsaWeb.UserRegistrationController do
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error(changeset.errors)
         conn
         |> put_layout("flipped.html")
         |> render("new.html", changeset: changeset)
