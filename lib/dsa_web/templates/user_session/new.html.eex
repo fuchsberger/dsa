@@ -45,6 +45,6 @@
       <%= label f, :remember_me, dgettext("account", "Keep me logged in for 60 days") %>
     </div>
 
-    <%= submit dgettext("Login", "Login"), class: "primary mt-3" %>
+    <%= submit dgettext("account", "Login"), class: "primary mt-3" %>
   <% end %>
 </div>

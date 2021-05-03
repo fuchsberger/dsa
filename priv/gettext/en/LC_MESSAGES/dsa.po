@@ -220,17 +220,17 @@ msgid "Settings"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:148
+#: lib/dsa/accounts/user_credential.ex:148
 msgid "Current Password incorrect."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:125
+#: lib/dsa/accounts/user_credential.ex:125
 msgid "Invalid email address."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:119 lib/dsa/accounts/user.ex:72
+#: lib/dsa/accounts/user.ex:72 lib/dsa/accounts/user_credential.ex:119
 msgid "Passwords don't match"
 msgstr ""
 
@@ -754,7 +754,7 @@ msgid "back to Home"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:133
+#: lib/dsa/accounts/user_credential.ex:133
 msgid "must contain one upper-case, one lower-case letter and one digit"
 msgstr ""
 

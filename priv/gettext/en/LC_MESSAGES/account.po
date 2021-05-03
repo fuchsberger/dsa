@@ -47,3 +47,8 @@ msgstr ""
 #: lib/dsa_web/templates/user_session/new.html.eex:38
 msgid "Password"
 msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:48
+msgid "Login"
+msgstr ""
