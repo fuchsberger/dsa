@@ -1,6 +1,6 @@
 <div class="max-w-sm mx-auto my-3 space-y-3 text-center">
 
-  <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
+  <%= icon @conn, "eye-solid", "mx-auto h-12 w-auto" %>
 
   <h2 class="text-3xl font-extrabold"><%= dgettext("account", "Sign Up") %></h2>
 
@@ -63,7 +63,6 @@
             placeholder: dgettext("account", "Confirm Password") %>
         </div>
         <%= error_tag fc, :password_confirmation %>
-
       <% end %>
 
       <%= submit dgettext("account", "Register"), class: "primary" %>

@@ -19,7 +19,7 @@ defmodule Dsa.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{user.username},
 
     You can confirm your account by visiting the URL below:
 

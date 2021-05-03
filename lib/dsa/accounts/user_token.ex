@@ -55,7 +55,7 @@ defmodule Dsa.Accounts.UserToken do
   their email.
   """
   def build_email_token(user, context) do
-    build_hashed_token(user, context, user.email)
+    build_hashed_token(user, context, user.credential.email)
   end
 
   defp build_hashed_token(user, context, sent_to) do

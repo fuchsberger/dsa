@@ -9,9 +9,15 @@
           <%= icon @conn, "x", "h-6 w-6 m-2" %>
         </button>
 
-        <%= link gettext("DSA Tool"),
-          to: Routes.page_path(@conn, :index),
-          class: "lg:ml-0 font-bold text-2xl text-gray-200 hover:text-white ml-1 lg:ml-0" %>
+        <div class='inline-flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ml-1 lg:ml-0'>
+          <%= link to: Routes.page_path(@conn, :index),
+            class: "flex-shrink-0 flex items-center text-gray-200 hover:text-white" do %>
+            <%= icon @conn, "eye-solid", "inline-block w-7 h-7" %>
+            <span class='hidden lg:inline lg:pl-1 font-bold text-2xl'>
+              <%= gettext("DSA Tool") %>
+            </span>
+          <% end %>
+        </div>
       </div>
 
       <%= if auth?(@conn) do %>
@@ -151,6 +157,7 @@
         </div>
       <% end %>
     </div>
+
     <div class='inline-flex space-x-3 my-1'>
       <button type='button' id='log-button' class='mobile-button inline-block lg:hidden'>
         <%= icon @conn, "clipboard-list", "h-6 w-6 m-2" %>
