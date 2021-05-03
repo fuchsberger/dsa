@@ -7,13 +7,19 @@ defmodule Dsa.Repo.Migrations.CreateUsersAuthTables do
     create table(:users) do
       add :admin, :boolean, null: false
       add :username, :string, null: false
-      add :email, :citext, null: false
-      add :hashed_password, :string, null: false
-      add :confirmed_at, :naive_datetime
       timestamps()
     end
 
-    create unique_index(:users, [:email])
+    create table(:user_credentials) do
+      add :user_id, references(:users, on_delete: :delete_all), null: false
+      add :confirmed_at, :naive_datetime
+      add :email, :citext, null: false
+      add :hashed_password, :string, null: false
+      timestamps()
+    end
+
+    create index(:user_credentials, [:user_id])
+    create unique_index(:user_credentials, [:email])
 
     create table(:users_tokens) do
       add :user_id, references(:users, on_delete: :delete_all), null: false

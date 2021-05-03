@@ -1,11 +1,11 @@
-defmodule Dsa.Accounts.Credential do
+defmodule Dsa.Accounts.UserCredential do
   use Ecto.Schema
 
   import Ecto.Changeset
   import DsaWeb.Gettext #TODO: Change Validation Error Domain for messages
 
   @derive {Inspect, except: [:password, :password_confirmation]}
-  schema "credentials" do
+  schema "user_credentials" do
     field :confirmed_at, :naive_datetime
     field :email, :string
     field :hashed_password, :string
@@ -30,7 +30,7 @@ defmodule Dsa.Accounts.Credential do
   If there is no user or the user doesn't have a password, we call
   `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%Dsa.Accounts.Credential{hashed_password: hashed_password}, password)
+  def valid_password?(%Dsa.Accounts.UserCredential{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
   end

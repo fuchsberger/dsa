@@ -20,3 +20,30 @@ msgstr "Ungültige Email oder Passwort"
 #: lib/dsa_web/controllers/user_session_controller.ex:28
 msgid "Logged out successfully."
 msgstr "Erfolgreich ausgeloggt."
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:12
+msgid "Not yet registered?"
+msgstr "Noch nicht registriert?"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:14
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:23
+#: lib/dsa_web/templates/user_session/new.html.eex:28
+msgid "Email"
+msgstr "Email"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:45
+msgid "Keep me logged in for 60 days"
+msgstr "Eingeloggt bleiben für 60 Tage"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:33
+#: lib/dsa_web/templates/user_session/new.html.eex:38
+msgid "Password"
+msgstr "Passwort"

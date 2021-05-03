@@ -5,7 +5,7 @@ defmodule Dsa.Accounts do
   import Ecto.Query, warn: false
 
   alias Dsa.Repo
-  alias Dsa.Accounts.{Group, User, UserToken, UserNotifier}
+  alias Dsa.Accounts.{UserCredential, Group, User, UserToken, UserNotifier}
 
   ## Database getters
 
@@ -39,8 +39,12 @@ defmodule Dsa.Accounts do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
-    if User.valid_password?(user, password), do: user
+    credential = Repo.get_by(UserCredential, email: email)
+    if UserCredential.valid_password?(credential, password) do
+      credential
+      |> Repo.preload(:user)
+      |> Map.get(:user)
+    end
   end
 
   @doc """

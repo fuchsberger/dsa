@@ -59,33 +59,25 @@ msgstr "Zauber"
 #, elixir-format
 #: lib/dsa_web/templates/user_registration/new.html.eex:33
 #: lib/dsa_web/templates/user_registration/new.html.eex:38 lib/dsa_web/templates/user_reset_password/new.html.eex:13
-#: lib/dsa_web/templates/user_reset_password/new.html.eex:18 lib/dsa_web/templates/user_session/new.html.eex:21
-#: lib/dsa_web/templates/user_session/new.html.eex:26 lib/dsa_web/templates/user_settings/edit.html.eex:32
+#: lib/dsa_web/templates/user_reset_password/new.html.eex:18 lib/dsa_web/templates/user_settings/edit.html.eex:32
 #: lib/dsa_web/templates/user_settings/edit.html.eex:37
 msgid "Email"
 msgstr "Email"
 
 #, elixir-format
 #: lib/dsa_web/templates/user_registration/new.html.eex:15
-#: lib/dsa_web/templates/user_reset_password/new.html.eex:4 lib/dsa_web/templates/user_session/new.html.eex:13
+#: lib/dsa_web/templates/user_reset_password/new.html.eex:4
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/menu.html.eex:179
-#: lib/dsa_web/templates/user_session/new.html.eex:46
 msgid "Login"
 msgstr "Einloggen"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:12
-msgid "Not yet registered?"
-msgstr "Noch nicht registriert?"
-
-#, elixir-format
 #: lib/dsa_web/templates/user_registration/new.html.eex:43
-#: lib/dsa_web/templates/user_registration/new.html.eex:48 lib/dsa_web/templates/user_session/new.html.eex:31
-#: lib/dsa_web/templates/user_session/new.html.eex:36
+#: lib/dsa_web/templates/user_registration/new.html.eex:48
 msgid "Password"
 msgstr "Passwort"
 
@@ -950,11 +942,6 @@ msgstr ""
 #, elixir-format
 #: lib/dsa_web/templates/group/live.html.leex:23
 msgid "KE"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:43
-msgid "Keep me logged in for 60 days"
 msgstr ""
 
 #, elixir-format
