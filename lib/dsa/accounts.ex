@@ -79,7 +79,8 @@ defmodule Dsa.Accounts do
   """
   def register_user(attrs) do
     %User{}
-    |> User.registration_changeset(attrs)
+    |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: {UserCredential, :registration_changeset, []})
     |> Repo.insert()
   end
 
@@ -93,7 +94,11 @@ defmodule Dsa.Accounts do
 
   """
   def change_user_registration(%User{} = user, attrs \\ %{}) do
-    User.registration_changeset(user, attrs, hash_password: false)
+    # User.registration_changeset(user, attrs, hash_password: false)
+    user
+    |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential,
+          with: {UserCredential, :registration_changeset, [[hash_password: false]]})
   end
 
   ## Settings

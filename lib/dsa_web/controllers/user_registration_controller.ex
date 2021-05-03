@@ -17,11 +17,10 @@ defmodule DsaWeb.UserRegistrationController do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &Routes.user_confirmation_url(conn, :confirm, &1)
-          )
+            &Routes.user_confirmation_url(conn, :confirm, &1))
 
         conn
-        |> put_flash(:info, gettext("User created successfully."))
+        |> put_flash(:info, dgettext("account", "User created successfully."))
         |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
