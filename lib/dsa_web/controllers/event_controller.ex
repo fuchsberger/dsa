@@ -12,7 +12,7 @@ defmodule DsaWeb.EventController do
     character_id = conn.params["character_id"]
     character = if character_id do
       character = Characters.get!(conn.assigns.current_user, character_id)
-    else 
+    else
       nil
     end
 

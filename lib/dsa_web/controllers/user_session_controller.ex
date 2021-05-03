@@ -17,14 +17,15 @@ defmodule DsaWeb.UserSessionController do
       UserAuth.log_in_user(conn, user, user_params)
     else
       conn
+      |> assign(:error_message, dgettext("account", "Invalid email or password"))
       |> put_layout("flipped.html")
-      |> render("new.html", error_message: gettext("Invalid email or password"))
+      |> render("new.html")
     end
   end
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, gettext("Logged out successfully."))
+    |> put_flash(:info, dgettext("account", "Logged out successfully."))
     |> UserAuth.log_out_user()
   end
 end

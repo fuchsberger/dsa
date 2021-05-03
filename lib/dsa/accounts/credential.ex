@@ -4,21 +4,54 @@ defmodule Dsa.Accounts.Credential do
   import Ecto.Changeset
   import DsaWeb.Gettext #TODO: Change Validation Error Domain for messages
 
+  @derive {Inspect, except: [:password, :password_confirmation]}
   schema "credentials" do
+    field :confirmed_at, :naive_datetime
     field :email, :string
-    field :password_hash, :string
-    field :confirmed, :boolean, default: false
-    field :reset, :boolean, default: false
-    field :token, :string
-
-    # virtual fields
-    field :password_old, :string, virtual: true
+    field :hashed_password, :string
     field :password, :string, virtual: true
-    field :password_confirm, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
 
     belongs_to :user, Dsa.Accounts.User
     timestamps()
   end
+
+  @doc """
+  Confirms the account by setting `confirmed_at`.
+  """
+  def confirm_changeset(credential) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(credential, confirmed_at: now)
+  end
+
+  @doc """
+  Verifies the password.
+
+  If there is no user or the user doesn't have a password, we call
+  `Bcrypt.no_user_verify/0` to avoid timing attacks.
+  """
+  def valid_password?(%Dsa.Accounts.Credential{hashed_password: hashed_password}, password)
+      when is_binary(hashed_password) and byte_size(password) > 0 do
+    Bcrypt.verify_pass(password, hashed_password)
+  end
+
+  def valid_password?(_, _) do
+    Bcrypt.no_user_verify()
+    false
+  end
+
+  @doc """
+  Validates the current password otherwise adds an error to the changeset.
+  """
+  def validate_current_password(changeset, password) do
+    if valid_password?(changeset.data, password) do
+      changeset
+    else
+      add_error(changeset, :current_password, "is not valid")
+    end
+  end
+
+  # OLD CHECK OUT:
 
   # used for registration
   def changeset(credential, params) do

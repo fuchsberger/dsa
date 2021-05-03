@@ -227,17 +227,17 @@ msgid "Settings"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:115
+#: lib/dsa/accounts/credential.ex:148
 msgid "Current Password incorrect."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:92
+#: lib/dsa/accounts/credential.ex:125
 msgid "Invalid email address."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:86 lib/dsa/accounts/user.ex:77
+#: lib/dsa/accounts/credential.ex:119 lib/dsa/accounts/user.ex:72
 msgid "Passwords don't match"
 msgstr ""
 
@@ -375,11 +375,6 @@ msgstr ""
 #, elixir-format
 #: lib/dsa_web/views/spell_view.ex:7
 msgid "Elves"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:5
-msgid "Enter Aventuria"
 msgstr ""
 
 #, elixir-format
@@ -766,7 +761,7 @@ msgid "back to Home"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/credential.ex:100
+#: lib/dsa/accounts/credential.ex:133
 msgid "must contain one upper-case, one lower-case letter and one digit"
 msgstr ""
 
@@ -952,11 +947,6 @@ msgid "If your email is in our system, you will receive instructions to reset yo
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_session_controller.ex:21
-msgid "Invalid email or password"
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/templates/group/live.html.leex:23
 msgid "KE"
 msgstr ""
@@ -975,11 +965,6 @@ msgstr ""
 #: lib/dsa_web/templates/user_registration/new.html.eex:14
 #: lib/dsa_web/templates/user_reset_password/edit.html.eex:7 lib/dsa_web/templates/user_reset_password/new.html.eex:7
 msgid "Log In"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/user_session_controller.ex:27
-msgid "Logged out successfully."
 msgstr ""
 
 #, elixir-format
@@ -1044,6 +1029,11 @@ msgid "User created successfully."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/accounts/user.ex:68
+#: lib/dsa/accounts/user.ex:63
 msgid "at least one lower case character"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:5
+msgid "Enter Aventuria"
 msgstr ""

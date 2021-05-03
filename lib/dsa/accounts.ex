@@ -2,8 +2,8 @@ defmodule Dsa.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
   import Ecto.Query, warn: false
+
   alias Dsa.Repo
   alias Dsa.Accounts.{Group, User, UserToken, UserNotifier}
 

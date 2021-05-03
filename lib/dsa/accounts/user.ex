@@ -1,21 +1,16 @@
 defmodule Dsa.Accounts.User do
   use Ecto.Schema
-  import Ecto.Changeset
 
+  import Ecto.Changeset
   import DsaWeb.Gettext
 
-  @derive {Inspect, except: [:password, :password_confirm]}
   schema "users" do
     field :admin, :boolean, default: false
-    field :email, :string
     field :username, :string
-    field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
-    field :hashed_password, :string
-    field :confirmed_at, :naive_datetime
 
-    belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
+    has_one :credential, Dsa.Accounts.Credential
     has_many :characters, Dsa.Characters.Character
+    belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
 
     timestamps()
   end
@@ -72,15 +67,9 @@ defmodule Dsa.Accounts.User do
   end
 
   defp validate_password_confirm(changeset) do
-<<<<<<< HEAD
-    case get_change(changeset, :password) == get_change(changeset, :password_confirm) do
-      true -> changeset
-      false -> add_error(changeset, :password_confirm, gettext("Passwords don't match"))
-=======
     case get_change(changeset, :password) == get_change(changeset, :password_confirmation) do
       true -> changeset
       false -> add_error(changeset, :password_confirmation, gettext("Passwords don't match"))
->>>>>>> fbaf9fbe7b392a980b7aaabc2e83c682038c583e
     end
   end
 
@@ -139,30 +128,5 @@ defmodule Dsa.Accounts.User do
     change(user, confirmed_at: now)
   end
 
-  @doc """
-  Verifies the password.
 
-  If there is no user or the user doesn't have a password, we call
-  `Bcrypt.no_user_verify/0` to avoid timing attacks.
-  """
-  def valid_password?(%Dsa.Accounts.User{hashed_password: hashed_password}, password)
-      when is_binary(hashed_password) and byte_size(password) > 0 do
-    Bcrypt.verify_pass(password, hashed_password)
-  end
-
-  def valid_password?(_, _) do
-    Bcrypt.no_user_verify()
-    false
-  end
-
-  @doc """
-  Validates the current password otherwise adds an error to the changeset.
-  """
-  def validate_current_password(changeset, password) do
-    if valid_password?(changeset.data, password) do
-      changeset
-    else
-      add_error(changeset, :current_password, "is not valid")
-    end
-  end
 end

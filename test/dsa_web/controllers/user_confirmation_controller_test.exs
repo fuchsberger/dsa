@@ -31,7 +31,7 @@ defmodule DsaWeb.UserConfirmationControllerTest do
     end
 
     test "does not send confirmation token if User is confirmed", %{conn: conn, user: user} do
-      Repo.update!(Accounts.User.confirm_changeset(user))
+      Repo.update!(Accounts.User.confirm_changeset(user)) # TODO
 
       conn =
         post(conn, Routes.user_confirmation_path(conn, :create), %{
