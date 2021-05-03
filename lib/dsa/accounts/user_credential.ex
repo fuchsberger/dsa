@@ -1,9 +1,8 @@
 defmodule Dsa.Accounts.UserCredential do
   use Ecto.Schema
-  require Logger
 
   import Ecto.Changeset
-  import DsaWeb.Gettext #TODO: Change Validation Error Domain for messages
+  import DsaWeb.Gettext
 
   @derive {Inspect, except: [:password, :password_confirmation]}
   schema "user_credentials" do
@@ -35,8 +34,6 @@ defmodule Dsa.Accounts.UserCredential do
       Defaults to `true`.
   """
   def registration_changeset(credential, attrs, opts \\ []) do
-    Logger.warn inspect opts
-
     credential
     |> cast(attrs, [:email, :password, :password_confirmation])
     |> validate_email()
@@ -93,8 +90,8 @@ defmodule Dsa.Accounts.UserCredential do
 
   It requires the email to change otherwise an error is added.
   """
-  def email_changeset(user, attrs) do
-    user
+  def email_changeset(credential, attrs) do
+    credential
     |> cast(attrs, [:email])
     |> validate_email()
     |> case do
@@ -115,8 +112,8 @@ defmodule Dsa.Accounts.UserCredential do
       validations on a LiveView form), this option can be set to `false`.
       Defaults to `true`.
   """
-  def password_changeset(user, attrs, opts \\ []) do
-    user
+  def password_changeset(credential, attrs, opts \\ []) do
+    credential
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: dgettext("account", "does not match password"))
     |> validate_password(opts)

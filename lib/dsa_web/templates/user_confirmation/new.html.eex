@@ -1,15 +1,32 @@
-<h1>Resend confirmation instructions</h1>
+<div class="max-w-sm mx-auto my-3 space-y-3 text-center">
 
-<%= form_for :user, Routes.user_confirmation_path(@conn, :create), fn f -> %>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <%= icon @conn, "eye-solid", "mx-auto h-12 w-auto" %>
 
-  <div>
-    <%= submit "Resend confirmation instructions" %>
+  <h2 class="text-3xl font-extrabold">
+    <%= dgettext("account", "Confirm Account") %>
+  </h2>
+
+  <div class="flex justify-between text-sm">
+    <%= link dgettext("account", "Register"),
+      to: Routes.user_registration_path(@conn, :new) %>
+
+    <%= link dgettext("account", "Log In"),
+      to: Routes.user_session_path(@conn, :new) %>
   </div>
-<% end %>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+  <%= form_for :user, Routes.user_confirmation_path(@conn, :create), [data: [turbo: false]], fn f -> %>
+    <div class="space-y-3">
+      <div class='icon rounded-md'>
+        <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
+        <%= icon @conn, "mail-solid" %>
+        <%= email_input f, :email,
+          autocomplete: "email",
+          class: "input",
+          placeholder: dgettext("account", "Email"),
+          required: true %>
+      </div>
+
+      <%= submit dgettext("account", "Resend confirmation instructions"), class: "primary" %>
+    </div>
+  <% end %>
+</div>

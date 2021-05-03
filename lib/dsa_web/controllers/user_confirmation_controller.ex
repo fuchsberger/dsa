@@ -4,7 +4,9 @@ defmodule DsaWeb.UserConfirmationController do
   alias Dsa.Accounts
 
   def new(conn, _params) do
-    render(conn, "new.html")
+    conn
+    |> put_layout("flipped.html")
+    |> render("new.html")
   end
 
   def create(conn, %{"user" => %{"email" => email}}) do
@@ -14,7 +16,7 @@ defmodule DsaWeb.UserConfirmationController do
 
     # Regardless of the outcome, show an impartial success/error message.
     conn
-    |> put_flash(:info, gettext("If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."))
+    |> put_flash(:info, dgettext("account", "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."))
     |> redirect(to: "/")
   end
 
@@ -24,7 +26,7 @@ defmodule DsaWeb.UserConfirmationController do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, gettext("User confirmed successfully."))
+        |> put_flash(:info, dgettext("account", "User confirmed successfully."))
         |> redirect(to: "/")
 
       :error ->
@@ -38,7 +40,7 @@ defmodule DsaWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, gettext("User confirmation link is invalid or it has expired."))
+            |> put_flash(:error, dgettext("account", "User confirmation link is invalid or it has expired."))
             |> redirect(to: "/")
         end
     end

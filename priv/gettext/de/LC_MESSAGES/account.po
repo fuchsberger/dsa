@@ -27,12 +27,15 @@ msgid "Not yet registered?"
 msgstr "Noch nicht registriert?"
 
 #, elixir-format
+#: lib/dsa_web/templates/user_registration/new.html.eex:16
 #: lib/dsa_web/templates/user_session/new.html.eex:14
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:23
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:20
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:25 lib/dsa_web/templates/user_registration/new.html.eex:37
+#: lib/dsa_web/templates/user_registration/new.html.eex:42 lib/dsa_web/templates/user_session/new.html.eex:23
 #: lib/dsa_web/templates/user_session/new.html.eex:28
 msgid "Email"
 msgstr "Email"
@@ -43,7 +46,8 @@ msgid "Keep me logged in for 60 days"
 msgstr "Eingeloggt bleiben für 60 Tage"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:33
+#: lib/dsa_web/templates/user_registration/new.html.eex:47
+#: lib/dsa_web/templates/user_registration/new.html.eex:52 lib/dsa_web/templates/user_session/new.html.eex:33
 #: lib/dsa_web/templates/user_session/new.html.eex:38
 msgid "Password"
 msgstr "Passwort"
@@ -52,3 +56,102 @@ msgstr "Passwort"
 #: lib/dsa_web/templates/user_session/new.html.eex:48
 msgid "Login"
 msgstr "Login"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:6
+msgid "Confirm Account"
+msgstr "Account bestätigen"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_registration/new.html.eex:57
+#: lib/dsa_web/templates/user_registration/new.html.eex:63
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_confirmation_controller.ex:19
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Sollte deine Email Addresse bei uns registriert und noch nicht aktiviert sein, wirst du in Kürze einen Bestätigungslink erhalten."
+
+#, elixir-format, fuzzy
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:13
+#: lib/dsa_web/templates/user_registration/new.html.eex:14
+msgid "Log In"
+msgstr "Einloggen"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_registration/new.html.eex:9
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr "Oops, etwas ist falsch gelaufen! Bitte überprüfe deine Eingaben."
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:71
+msgid "Passwords don't match"
+msgstr "Passwörter stimmen nicht überein"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:10
+#: lib/dsa_web/templates/user_registration/new.html.eex:68
+msgid "Register"
+msgstr "Anmelden"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:29
+msgid "Resend confirmation instructions"
+msgstr "Aktivierungsemail erneut senden"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_registration/new.html.eex:5
+msgid "Sign Up"
+msgstr "Anmelden"
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_confirmation_controller.ex:43
+msgid "User confirmation link is invalid or it has expired."
+msgstr "Aktivierungslink ist ungültig oder abgelaufen."
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_confirmation_controller.ex:29
+msgid "User confirmed successfully."
+msgstr "Account erfolgreich aktiviert."
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_registration_controller.ex:23
+msgid "User created successfully."
+msgstr "Account erfolgreich erstellt."
+
+#, elixir-format
+#: lib/dsa_web/templates/user_registration/new.html.eex:25
+#: lib/dsa_web/templates/user_registration/new.html.eex:30
+msgid "Username"
+msgstr "Benutzername"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:62
+msgid "at least one digit or punctuation character"
+msgstr "mind. eine Ziffer oder ein Sonderzeichen erforderlich"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:59
+msgid "at least one lower case character"
+msgstr "mindestens ein Kleinbuchstabe erforderlich"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:99
+msgid "did not change"
+msgstr "ist unverändert"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:118
+msgid "does not match password"
+msgstr "Passwörter stimmen nicht überein"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:153
+msgid "is not valid"
+msgstr "ist ungültig"
+
+#, elixir-format
+#: lib/dsa/accounts/user_credential.ex:48
+msgid "must have the @ sign and no spaces"
+msgstr "muss ein @ symbol beinhalten und keine Leerzeichen"

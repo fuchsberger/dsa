@@ -22,7 +22,12 @@ defmodule Dsa.Accounts do
 
   """
   def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+    credential = Repo.get_by(UserCredential, email: email)
+    if credential do
+      credential
+      |> Repo.preload(:user)
+      |> Map.get(:user)
+    end
   end
 
   @doc """
@@ -159,7 +164,7 @@ defmodule Dsa.Accounts do
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, [context]))
   end
 
   @doc """
@@ -212,7 +217,7 @@ defmodule Dsa.Accounts do
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
@@ -281,18 +286,19 @@ defmodule Dsa.Accounts do
   """
   def confirm_user(token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
-         %User{} = user <- Repo.one(query),
-         {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user)) do
+         %UserCredential{} = credential <- Repo.one(query),
+         {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(credential)) do
       {:ok, user}
     else
       _ -> :error
     end
   end
 
-  defp confirm_user_multi(user) do
+  defp confirm_user_multi(credential) do
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.confirm_changeset(user))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, ["confirm"]))
+    |> Ecto.Multi.update(:credential, UserCredential.confirm_changeset(credential))
+    |> Ecto.Multi.delete_all(:tokens,
+        UserToken.user_and_contexts_query(credential.user_id, ["confirm"]))
   end
 
   ## Reset password
@@ -349,7 +355,7 @@ defmodule Dsa.Accounts do
   def reset_user_password(user, attrs) do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}

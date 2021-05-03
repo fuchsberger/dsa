@@ -15,7 +15,7 @@ defmodule Dsa.Accounts.UserNotifier do
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do
-    deliver(user.email, """
+    deliver(user.credential.email, """
 
     ==============================
 

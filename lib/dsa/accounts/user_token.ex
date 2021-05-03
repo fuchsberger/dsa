@@ -85,8 +85,9 @@ defmodule Dsa.Accounts.UserToken do
         query =
           from token in token_and_context_query(hashed_token, context),
             join: user in assoc(token, :user),
-            where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
-            select: user
+            join: credential in assoc(user, :credential),
+            where: token.inserted_at > ago(^days, "day") and token.sent_to == credential.email,
+            select: credential
 
         {:ok, query}
 
@@ -129,11 +130,11 @@ defmodule Dsa.Accounts.UserToken do
   @doc """
   Gets all tokens for the given user for the given contexts.
   """
-  def user_and_contexts_query(user, :all) do
-    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user.id
+  def user_and_contexts_query(user_id, :all) do
+    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user_id
   end
 
-  def user_and_contexts_query(user, [_ | _] = contexts) do
-    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user.id and t.context in ^contexts
+  def user_and_contexts_query(user_id, [_ | _] = contexts) do
+    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user_id and t.context in ^contexts
   end
 end
