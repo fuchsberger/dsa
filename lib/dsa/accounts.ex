@@ -194,7 +194,8 @@ defmodule Dsa.Accounts do
 
   """
   def change_user_password(user, attrs \\ %{}) do
-    User.password_changeset(user, attrs, hash_password: false)
+    # user = Repo.preload(user, :credential)
+    UserCredential.password_changeset(user.credential, attrs, hash_password: false)
   end
 
   @doc """
@@ -286,8 +287,8 @@ defmodule Dsa.Accounts do
   """
   def confirm_user(token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
-         %UserCredential{} = credential <- Repo.one(query),
-         {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(credential)) do
+         %User{} = user <- Repo.one(query),
+         {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user.credential)) do
       {:ok, user}
     else
       _ -> :error
@@ -314,6 +315,7 @@ defmodule Dsa.Accounts do
   """
   def deliver_user_reset_password_instructions(%User{} = user, reset_password_url_fun)
       when is_function(reset_password_url_fun, 1) do
+    user = Repo.preload(user, :credential)
     {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
     Repo.insert!(user_token)
     UserNotifier.deliver_reset_password_instructions(user, reset_password_url_fun.(encoded_token))
@@ -353,8 +355,9 @@ defmodule Dsa.Accounts do
 
   """
   def reset_user_password(user, attrs) do
+    user = Repo.preload(user, :credential)
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
+    |> Ecto.Multi.update(:user, UserCredential.password_changeset(user.credential, attrs))
     |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
     |> Repo.transaction()
     |> case do

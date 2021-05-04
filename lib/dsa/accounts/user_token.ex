@@ -87,7 +87,8 @@ defmodule Dsa.Accounts.UserToken do
             join: user in assoc(token, :user),
             join: credential in assoc(user, :credential),
             where: token.inserted_at > ago(^days, "day") and token.sent_to == credential.email,
-            select: credential
+            select: user,
+            select_merge: %{credential: credential}
 
         {:ok, query}
 

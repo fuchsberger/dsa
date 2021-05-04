@@ -35,11 +35,11 @@ defmodule Dsa.Accounts.UserNotifier do
   Deliver instructions to reset a user password.
   """
   def deliver_reset_password_instructions(user, url) do
-    deliver(user.email, """
+    deliver(user.credential.email, """
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{user.username},
 
     You can reset your password by visiting the URL below:
 
@@ -55,11 +55,11 @@ defmodule Dsa.Accounts.UserNotifier do
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    deliver(user.email, """
+    deliver(user.credential.email, """
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{user.username},
 
     You can change your email by visiting the URL below:
 

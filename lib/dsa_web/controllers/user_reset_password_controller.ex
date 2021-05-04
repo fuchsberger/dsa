@@ -18,7 +18,7 @@ defmodule DsaWeb.UserResetPasswordController do
 
     # Regardless of the outcome, show an impartial success/error message.
     conn
-    |> put_flash(:info, gettext("If your email is in our system, you will receive instructions to reset your password shortly."))
+    |> put_flash(:info, dgettext("account", "If your email is in our system, you will receive instructions to reset your password shortly."))
     |> redirect(to: "/")
   end
 
@@ -30,11 +30,11 @@ defmodule DsaWeb.UserResetPasswordController do
 
   # Do not log in the user after reset password to avoid a
   # leaked token giving the user access to the account.
-  def update(conn, %{"user" => user_params}) do
-    case Accounts.reset_user_password(conn.assigns.user, user_params) do
+  def update(conn, %{"user_credential" => credential_params}) do
+    case Accounts.reset_user_password(conn.assigns.user, credential_params) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, gettext("Password reset successfully."))
+        |> put_flash(:info, dgettext("account", "Password reset successfully."))
         |> redirect(to: Routes.user_session_path(conn, :new))
 
       {:error, changeset} ->
@@ -49,7 +49,7 @@ defmodule DsaWeb.UserResetPasswordController do
       conn |> assign(:user, user) |> assign(:token, token)
     else
       conn
-      |> put_flash(:error, gettext("Reset password link is invalid or it has expired."))
+      |> put_flash(:error, dgettext("account", "Reset password link is invalid or it has expired."))
       |> redirect(to: "/")
       |> halt()
     end
