@@ -114,11 +114,14 @@ defmodule Dsa.Accounts do
   ## Examples
 
       iex> change_user_email(user)
-      %Ecto.Changeset{data: %User{}}
+      %Ecto.Changeset{data: %Credential{}}
 
   """
   def change_user_email(user, attrs \\ %{}) do
-    User.email_changeset(user, attrs)
+    user
+    |> Repo.preload(:credential)
+    |> Map.get(:credential)
+    |> UserCredential.email_changeset(attrs)
   end
 
   @doc """
@@ -136,8 +139,10 @@ defmodule Dsa.Accounts do
   """
   def apply_user_email(user, password, attrs) do
     user
-    |> User.email_changeset(attrs)
-    |> User.validate_current_password(password)
+    |> Repo.preload(:credential)
+    |> Map.get(:credential)
+    |> UserCredential.email_changeset(attrs)
+    |> UserCredential.validate_current_password(password)
     |> Ecto.Changeset.apply_action(:update)
   end
 
@@ -190,12 +195,14 @@ defmodule Dsa.Accounts do
   ## Examples
 
       iex> change_user_password(user)
-      %Ecto.Changeset{data: %User{}}
+      %Ecto.Changeset{data: %Credential{}}
 
   """
   def change_user_password(user, attrs \\ %{}) do
-    # user = Repo.preload(user, :credential)
-    UserCredential.password_changeset(user.credential, attrs, hash_password: false)
+    user
+    |> Repo.preload(:credential)
+    |> Map.get(:credential)
+    |> UserCredential.password_changeset(attrs, hash_password: false)
   end
 
   @doc """
@@ -213,11 +220,13 @@ defmodule Dsa.Accounts do
   def update_user_password(user, password, attrs) do
     changeset =
       user
-      |> User.password_changeset(attrs)
-      |> User.validate_current_password(password)
+      |> Repo.preload(:credential)
+      |> Map.get(:credential)
+      |> UserCredential.password_changeset(attrs)
+      |> UserCredential.validate_current_password(password)
 
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
+    |> Ecto.Multi.update(:credential, changeset)
     |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
     |> Repo.transaction()
     |> case do

@@ -9,11 +9,12 @@ defmodule DsaWeb.UserChangePasswordController do
     |> render("edit.html", changeset: Accounts.change_user_password(conn.assigns.current_user))
   end
 
-  def update(conn, %{"current_password" => password, "user" => user_params}) do
-    case Accounts.update_user_password(conn.assigns.current_user, password, user_params) do
+  def update(conn, %{"current_password" => password, "user_credential" => credential_params}) do
+    Logger.warn "UPDATE"
+    case Accounts.update_user_password(conn.assigns.current_user, password, credential_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, gettext("Password updated successfully."))
+        |> put_flash(:info, dgettext("account", "Password updated successfully."))
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       {:error, changeset} ->

@@ -1,54 +1,55 @@
 <div class="max-w-sm mx-auto my-3 space-y-3 text-center">
   <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
 
-  <h2 class="text-3xl font-extrabold"><%= gettext("Reset password") %></h2>
+  <h2 class="text-3xl font-extrabold"><%= dgettext("account", "Reset password") %></h2>
 
   <div class="flex justify-between text-sm">
-    <%= link gettext("Settings"), to: Routes.user_settings_path(@conn, :edit) %>
-    <%= link gettext("Delete Account"), to: Routes.user_settings_path(@conn, :delete), method: :delete, data_confirm: gettext("Are you sure you want to delete your account including all characters?") %>
+    <%= link dgettext("account", "Settings"), to: Routes.user_settings_path(@conn, :edit) %>
+    <%= link dgettext("account", "Delete Account"), to: Routes.user_settings_path(@conn, :delete), method: :delete, data_confirm: dgettext("account", "Are you sure you want to delete your account including all characters?") %>
   </div>
 
-  <%= form_for @changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
+  <%= form_for @changeset, Routes.user_change_password_path(@conn, :update), fn f -> %>
     <%= if @changeset.action do %>
       <div class="inline-block alert error">
-        <%= gettext "Oops, something went wrong! Please check the errors below." %>
+        <%= dgettext("account", "Oops, something went wrong! Please check the errors below.") %>
       </div>
     <% end %>
 
     <%= hidden_input f, :action, name: "action", value: "update_password" %>
 
     <div class='icon rounded-md mt-3'>
-      <%= label f, :current_password, gettext("Current Password"), class: "sr-only", for: "current_password_for_password" %>
+      <%= label f, :current_password, dgettext("account", "Current Password"),
+        class: "sr-only", for: "current_password_for_password" %>
       <%= icon @conn, "lock-closed-solid" %>
       <%= password_input f, :current_password,
         autocomplete: "new-password",
         name: "current_password",
         id: "current_password_for_password",
         class: "input",
-        placeholder: gettext("Current Password") %>
+        placeholder: dgettext("account", "Current Password") %>
     </div>
     <%= error_tag f, :current_password %>
-
     <div class='icon rounded-md mt-3'>
-      <%= label f, :password, gettext("New Password"), class: "sr-only" %>
+      <%= label f, :password, dgettext("account", "New Password"), class: "sr-only" %>
       <%= icon @conn, "lock-closed-solid" %>
       <%= password_input f, :password,
         autocomplete: "new-password",
         class: "input",
-        placeholder: gettext("New Password") %>
+        placeholder: dgettext("account", "New Password") %>
     </div>
     <%= error_tag f, :password %>
 
     <div class='icon rounded-md mt-3'>
-      <%= label f, :password_confirmation, gettext("Confirm new Password"), class: "sr-only" %>
+      <%= label f, :password_confirmation, dgettext("account", "Confirm new Password"),
+        class: "sr-only" %>
       <%= icon @conn, "lock-closed-solid" %>
       <%= password_input f, :password_confirmation,
         autocomplete: "new-password",
         class: "input",
-        placeholder: gettext("Confirm new Password") %>
+        placeholder: dgettext("account", "Confirm new Password") %>
     </div>
     <%= error_tag f, :password_confirmation %>
 
-    <%= submit gettext("Change password"), class: "primary mt-3" %>
+    <%= submit dgettext("account", "Change password"), class: "primary mt-3" %>
   <% end %>
 </div>
