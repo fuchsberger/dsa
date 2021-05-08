@@ -24,8 +24,8 @@ defmodule DsaWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, params \\ %{}) do
-    token = Accounts.generate_user_session_token(user)
+  def log_in_user(conn, credential, params \\ %{}) do
+    token = Accounts.generate_user_session_token(credential)
     user_return_to = get_session(conn, :user_return_to)
 
     conn

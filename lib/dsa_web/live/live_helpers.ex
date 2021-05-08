@@ -4,6 +4,7 @@ defmodule DsaWeb.LiveHelpers do
   import Phoenix.LiveView
 
   alias Dsa.Accounts
+  alias DsaWeb.Router.Helpers, as: Routes
 
   require Logger
 
@@ -17,7 +18,7 @@ defmodule DsaWeb.LiveHelpers do
     if socket.assigns.current_user do
       socket
     else
-      redirect(socket, to: "/login")
+      redirect(socket, to: Routes.user_session_path(socket, :new))
     end
   end
 

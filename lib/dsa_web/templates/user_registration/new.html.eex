@@ -21,49 +21,50 @@
     [data: [turbo: false]], fn f -> %>
     <div class="space-y-3">
 
-      <div class='icon rounded-md'>
-        <%= label f, :username, dgettext("account", "Username"), class: "sr-only" %>
-        <%= icon @conn, "user" %>
-        <%= text_input f, :username,
-          autocomplete: "username",
-          class: "input",
-          placeholder: dgettext("account", "Username") %>
-      </div>
-      <%= error_tag f, :username %>
-
-      <%= inputs_for f, :credential, fn fc -> %>
+      <%= inputs_for f, :user, fn fu -> %>
 
         <div class='icon rounded-md'>
-          <%= label fc, :email, dgettext("account", "Email"), class: "sr-only" %>
-          <%= icon @conn, "mail-solid" %>
-          <%= email_input fc, :email,
-            autocomplete: "email",
+          <%= label fu, :username, dgettext("account", "Username"), class: "sr-only" %>
+          <%= icon @conn, "user" %>
+          <%= text_input fu, :username,
+            autocomplete: "username",
             class: "input",
-            placeholder: dgettext("account", "Email") %>
+            placeholder: dgettext("account", "Username") %>
         </div>
-        <%= error_tag fc, :email %>
+        <%= error_tag fu, :username %>
 
-        <div class='icon rounded-md'>
-          <%= label fc, :password, dgettext("account", "Password"), class: "sr-only" %>
-          <%= icon @conn, "lock-closed-solid" %>
-          <%= password_input fc, :password,
-            autocomplete: "new-password",
-            class: "input",
-            placeholder: dgettext("account", "Password") %>
-        </div>
-        <%= error_tag fc, :password %>
-
-        <div class='icon rounded-md'>
-          <%= label fc, :password_confirmation, dgettext("account", "Confirm Password"),
-            class: "sr-only" %>
-          <%= icon @conn, "lock-closed-solid" %>
-          <%= password_input fc, :password_confirmation,
-            autocomplete: "new-password",
-            class: "input",
-            placeholder: dgettext("account", "Confirm Password") %>
-        </div>
-        <%= error_tag fc, :password_confirmation %>
       <% end %>
+
+      <div class='icon rounded-md'>
+        <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
+        <%= icon @conn, "mail-solid" %>
+        <%= email_input f, :email,
+          autocomplete: "email",
+          class: "input",
+          placeholder: dgettext("account", "Email") %>
+      </div>
+      <%= error_tag f, :email %>
+
+      <div class='icon rounded-md'>
+        <%= label f, :password, dgettext("account", "Password"), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password,
+          autocomplete: "new-password",
+          class: "input",
+          placeholder: dgettext("account", "Password") %>
+      </div>
+      <%= error_tag f, :password %>
+
+      <div class='icon rounded-md'>
+        <%= label f, :password_confirmation, dgettext("account", "Confirm Password"),
+          class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password_confirmation,
+          autocomplete: "new-password",
+          class: "input",
+          placeholder: dgettext("account", "Confirm Password") %>
+      </div>
+      <%= error_tag f, :password_confirmation %>
 
       <%= submit dgettext("account", "Register"), class: "primary" %>
     </div>

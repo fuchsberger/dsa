@@ -14,12 +14,12 @@ defmodule Dsa.Accounts.UserNotifier do
   @doc """
   Deliver instructions to confirm account.
   """
-  def deliver_confirmation_instructions(user, url) do
-    deliver(user.credential.email, """
+  def deliver_confirmation_instructions(credential, url) do
+    deliver(credential.email, """
 
     ==============================
 
-    Hi #{user.username},
+    Hi,
 
     You can confirm your account by visiting the URL below:
 
@@ -34,12 +34,12 @@ defmodule Dsa.Accounts.UserNotifier do
   @doc """
   Deliver instructions to reset a user password.
   """
-  def deliver_reset_password_instructions(user, url) do
-    deliver(user.credential.email, """
+  def deliver_reset_password_instructions(credential, url) do
+    deliver(credential.email, """
 
     ==============================
 
-    Hi #{user.username},
+    Hi,
 
     You can reset your password by visiting the URL below:
 
@@ -54,12 +54,12 @@ defmodule Dsa.Accounts.UserNotifier do
   @doc """
   Deliver instructions to update a user email.
   """
-  def deliver_update_email_instructions(user, url) do
-    deliver(user.credential.email, """
+  def deliver_update_email_instructions(credential, url) do
+    deliver(credential.email, """
 
     ==============================
 
-    Hi #{user.username},
+    Hi,
 
     You can change your email by visiting the URL below:
 

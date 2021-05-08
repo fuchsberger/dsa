@@ -9,9 +9,11 @@ defmodule DsaWeb.UserConfirmationController do
     |> render("new.html")
   end
 
-  def create(conn, %{"user" => %{"email" => email}}) do
-    if user = Accounts.get_user_by_email(email) do
-      Accounts.deliver_user_confirmation_instructions(user, &Routes.user_confirmation_url(conn, :confirm, &1))
+  def create(conn, %{"user_credential" => %{"email" => email}}) do
+    if credential = Accounts.get_credential_by_email(email) do
+      Accounts.deliver_user_confirmation_instructions(
+        credential,
+        &Routes.user_confirmation_url(conn, :confirm, &1))
     end
 
     # Regardless of the outcome, show an impartial success/error message.
@@ -34,14 +36,26 @@ defmodule DsaWeb.UserConfirmationController do
         # then odds are that the confirmation link was already visited, either
         # by some automation or by the user themselves, so we redirect without
         # a warning message.
-        case conn.assigns do
-          %{current_user: %{confirmed_at: confirmed_at}} when not is_nil(confirmed_at) ->
-            redirect(conn, to: "/")
+        confirmed_at =
+          case conn.assigns.current_user do
+            nil ->
+              nil
+            user ->
+              user
+              |> Dsa.Repo.preload(:credential)
+              |> Map.get(:credential)
+              |> Map.get(:confirmed_at)
+          end
 
-          %{} ->
+        case confirmed_at do
+          nil ->
             conn
-            |> put_flash(:error, dgettext("account", "User confirmation link is invalid or it has expired."))
+            |> put_flash(:error,
+                  dgettext("account", "User confirmation link is invalid or it has expired."))
             |> redirect(to: "/")
+
+          confirmed_at ->
+            redirect(conn, to: "/")
         end
     end
   end

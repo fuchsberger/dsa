@@ -13,8 +13,8 @@ defmodule DsaWeb.UserSessionController do
   def create(conn, %{"credential" => credential_params}) do
     %{"email" => email, "password" => password} = credential_params
 
-    if user = Accounts.get_user_by_email_and_password(email, password) do
-      UserAuth.log_in_user(conn, user, credential_params)
+    if credential = Accounts.get_credential_by_email_and_password(email, password) do
+      UserAuth.log_in_user(conn, credential, credential_params)
     else
       conn
       |> assign(:error_message, dgettext("account", "Invalid email or password"))

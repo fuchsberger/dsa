@@ -10,45 +10,54 @@ defmodule Dsa.Accounts do
   ## Database getters
 
   @doc """
-  Gets a user by email.
+  Gets a credential by user_id.
 
   ## Examples
 
-      iex> get_user_by_email("foo@example.com")
+      iex> get_credential(1)
       %User{}
 
-      iex> get_user_by_email("unknown@example.com")
+      iex> get_credential(-1)
       nil
 
   """
-  def get_user_by_email(email) when is_binary(email) do
-    credential = Repo.get_by(UserCredential, email: email)
-    if credential do
-      credential
-      |> Repo.preload(:user)
-      |> Map.get(:user)
-    end
+  def get_credential(id) when is_integer(id) do
+    Repo.get(UserCredential, id)
   end
 
   @doc """
-  Gets a user by email and password.
+  Gets a credential by email.
 
   ## Examples
 
-      iex> get_user_by_email_and_password("foo@example.com", "correct_password")
+      iex> get_credential_by_email("foo@example.com")
       %User{}
 
-      iex> get_user_by_email_and_password("foo@example.com", "invalid_password")
+      iex> get_credential_by_email("unknown@example.com")
       nil
 
   """
-  def get_user_by_email_and_password(email, password)
+  def get_credential_by_email(email) when is_binary(email) do
+    Repo.get_by(UserCredential, email: email)
+  end
+
+  @doc """
+  Gets a credential by email and password.
+
+  ## Examples
+
+      iex> get_credential_by_email_and_password("foo@example.com", "correct_password")
+      %User{}
+
+      iex> get_credential_by_email_and_password("foo@example.com", "invalid_password")
+      nil
+
+  """
+  def get_credential_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
     credential = Repo.get_by(UserCredential, email: email)
     if UserCredential.valid_password?(credential, password) do
       credential
-      |> Repo.preload(:user)
-      |> Map.get(:user)
     end
   end
 
@@ -71,21 +80,22 @@ defmodule Dsa.Accounts do
   ## User registration
 
   @doc """
-  Registers a user.
+  Registers a user by creating a user and an associated credential.
+  Returns the credential.
 
   ## Examples
 
       iex> register_user(%{field: value})
-      {:ok, %User{}}
+      {:ok, %Credential{}}
 
       iex> register_user(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
   def register_user(attrs) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:credential, with: {UserCredential, :registration_changeset, []})
+    %UserCredential{}
+    |> UserCredential.registration_changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
     |> Repo.insert()
   end
 
@@ -94,16 +104,14 @@ defmodule Dsa.Accounts do
 
   ## Examples
 
-      iex> change_user_registration(user)
-      %Ecto.Changeset{data: %User{}}
+      iex> change_user_registration(credential)
+      %Ecto.Changeset{data: %Credential{}}
 
   """
-  def change_user_registration(%User{} = user, attrs \\ %{}) do
-    # User.registration_changeset(user, attrs, hash_password: false)
-    user
-    |> User.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:credential,
-          with: {UserCredential, :registration_changeset, [[hash_password: false]]})
+  def change_user_registration(%UserCredential{} = credential, attrs \\ %{}) do
+    credential
+    |> UserCredential.registration_changeset(attrs, hash_password: false)
+    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
   end
 
   ## Settings
@@ -240,8 +248,8 @@ defmodule Dsa.Accounts do
   @doc """
   Generates a session token.
   """
-  def generate_user_session_token(user) do
-    {token, user_token} = UserToken.build_session_token(user)
+  def generate_user_session_token(credential) do
+    {token, user_token} = UserToken.build_session_token(credential)
     Repo.insert!(user_token)
     token
   end
@@ -276,15 +284,17 @@ defmodule Dsa.Accounts do
       {:error, :already_confirmed}
 
   """
-  def deliver_user_confirmation_instructions(%User{} = user, confirmation_url_fun)
+  def deliver_user_confirmation_instructions(%UserCredential{} = credential, confirmation_url_fun)
       when is_function(confirmation_url_fun, 1) do
-    user = Repo.preload(user, :credential)
-    if user.credential.confirmed_at do
+
+    if credential.confirmed_at do
       {:error, :already_confirmed}
     else
-      {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
+      {encoded_token, user_token} = UserToken.build_email_token(credential, "confirm")
       Repo.insert!(user_token)
-      UserNotifier.deliver_confirmation_instructions(user, confirmation_url_fun.(encoded_token))
+      UserNotifier.deliver_confirmation_instructions(
+        credential,
+        confirmation_url_fun.(encoded_token))
     end
   end
 

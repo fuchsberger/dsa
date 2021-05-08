@@ -64,8 +64,8 @@ defmodule DsaWeb.ConnCase do
 
   It returns an updated `conn`.
   """
-  def log_in_user(conn, user) do
-    token = Dsa.Accounts.generate_user_session_token(user)
+  def log_in_user(conn, credential) do
+    token = Dsa.Accounts.generate_user_session_token(credential)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

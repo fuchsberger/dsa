@@ -14,7 +14,7 @@
       to: Routes.user_session_path(@conn, :new) %>
   </div>
 
-  <%= form_for :user, Routes.user_confirmation_path(@conn, :create), [data: [turbo: false]], fn f -> %>
+  <%= form_for :user_credential, Routes.user_confirmation_path(@conn, :create), [data: [turbo: false]], fn f -> %>
     <div class="space-y-3">
       <div class='icon rounded-md'>
         <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
