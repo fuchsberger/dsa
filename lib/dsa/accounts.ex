@@ -202,15 +202,12 @@ defmodule Dsa.Accounts do
 
   ## Examples
 
-      iex> change_user_password(user)
+      iex> change_user_password(credential)
       %Ecto.Changeset{data: %Credential{}}
 
   """
-  def change_user_password(user, attrs \\ %{}) do
-    user
-    |> Repo.preload(:credential)
-    |> Map.get(:credential)
-    |> UserCredential.password_changeset(attrs, hash_password: false)
+  def change_user_password(credential, attrs \\ %{}) do
+    UserCredential.password_changeset(credential, attrs, hash_password: false)
   end
 
   @doc """
@@ -218,24 +215,22 @@ defmodule Dsa.Accounts do
 
   ## Examples
 
-      iex> update_user_password(user, "valid password", %{password: ...})
+      iex> update_user_password(credential, "valid password", %{password: ...})
       {:ok, %User{}}
 
-      iex> update_user_password(user, "invalid password", %{password: ...})
+      iex> update_user_password(credential, "invalid password", %{password: ...})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user_password(user, password, attrs) do
+  def update_user_password(credential, password, attrs) do
     changeset =
-      user
-      |> Repo.preload(:credential)
-      |> Map.get(:credential)
+      credential
       |> UserCredential.password_changeset(attrs)
       |> UserCredential.validate_current_password(password)
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:credential, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(credential.user_id, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
