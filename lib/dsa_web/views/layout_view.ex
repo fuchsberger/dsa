@@ -37,10 +37,10 @@ defmodule DsaWeb.LayoutView do
     current = "bg-gray-900 text-white"
 
     case {mobile, active} do
-      {false, false} -> "#{default} #{base} text-base"
-      {false, true} -> "#{current} #{base} text-base"
-      {true, false} -> "#{default} #{base} text-sm"
-      {true, true} -> "#{current} #{base} text-sm"
+      {false, false} -> "#{default} #{base} text-sm"
+      {false, true} -> "#{current} #{base} text-sm"
+      {true, false} -> "#{default} #{base} text-base"
+      {true, true} -> "#{current} #{base} text-base"
     end
   end
 
