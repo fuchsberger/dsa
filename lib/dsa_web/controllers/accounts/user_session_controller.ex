@@ -6,7 +6,6 @@ defmodule DsaWeb.UserSessionController do
 
   def new(conn, _params) do
     conn
-    |> put_layout("flipped.html")
     |> render("new.html", error_message: nil)
   end
 

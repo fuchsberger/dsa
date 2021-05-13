@@ -29,12 +29,12 @@ module.exports = (env, options) => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js$/i,
         exclude: /node_modules/,
         use: { loader: 'babel-loader' }
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [
           MiniCssExtractPlugin.loader,  // extract CSS into separate file
           'css-loader',                 // translates CSS into CommonJS
@@ -42,7 +42,7 @@ module.exports = (env, options) => ({
         ]
       },
       {
-        test: /\.(svg|png)$/,
+        test: /\.(svg|woff2)$/i,
         use: {
           loader: 'url-loader',
           options: { limit: 8192 } // 8 Kb
