@@ -2,8 +2,8 @@ const path = require('path')
 // const glob = require('glob')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = (env, options) => ({
 
@@ -13,12 +13,10 @@ module.exports = (env, options) => ({
 
   entry: './js/app.js',
 
-  // stats: 'minimal',
-
   optimization: {
     minimizer: [
       new TerserPlugin({ test: /\.js(\?.*)?$/i }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin({ test: /\.css$/i })
     ]
   },
 

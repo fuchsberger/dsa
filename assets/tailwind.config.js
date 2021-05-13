@@ -1,15 +1,15 @@
-const colors = require('tailwindcss/colors')
+// const colors = require('tailwindcss/colors')
 
 module.exports = {
+  mode: 'jit',
   purge: [
-    '../lib/**/*.ex',
-    '../lib/**/*.leex',
-    '../lib/**/*.eex',
-    './js/**/*.js'
+    "../**/*.html.eex",
+    "../**/*.html.leex",
+    "../**/views/**/*.ex",
+    "../**/live/**/*.ex",
+    "./js/**/*.js"
   ],
   theme: {},
   variants: {},
-  plugins: [
-    require('@tailwindcss/forms')
-  ]
+  plugins: [ require('@tailwindcss/forms') ]
 };

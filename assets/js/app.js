@@ -1,4 +1,5 @@
 import "../css/app.css"
+import 'alpinejs'
 
 import * as Turbo from "@hotwired/turbo"
 import "phoenix_html"
@@ -9,6 +10,13 @@ document.addEventListener("turbo:load", function() {
 
   const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
   const liveSocket = new LiveSocket("/live", Socket, {
+    dom: {
+      onBeforeElUpdated(from, to) {
+        if (from.__x) {
+          window.Alpine.clone(from.__x, to);
+        }
+      }
+    },
     params: {_csrf_token: csrfToken},
     metadata: { keydown: e => ({key: e.key, metaKey: e.metaKey, repeat: e.repeat}) }
   })

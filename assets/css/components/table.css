@@ -1,4 +1,10 @@
 /* Tables */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
 .table { @apply min-w-full shadow-lg border-gray-200 border divide-y divide-gray-200 border-collapse; }
 
 .table thead, .table .header-row { @apply bg-gray-50; }
@@ -8,3 +14,5 @@
 .table td { @apply px-1 py-1 whitespace-nowrap; }
 
 .small { @apply text-xs font-medium text-gray-500 tracking-wider text-center; }
+
+}

@@ -1,13 +1,15 @@
-<nav class="fixed w-full bg-gray-800 z-40">
+<nav x-data='{ isOpen: false }' class="fixed w-full bg-gray-800 z-40">
   <div class="relative mx-auto max-w-7xl flex px-3">
     <div class='flex-grow space-y-2 lg:space-y-0 lg:inline-flex lg:space-x-3 my-1'>
       <div class='flex items-center'>
         <!-- Mobile menu button-->
-        <button type='button' id='mobile-button' class='mobile-button lg:hidden' aria-controls="mobile-menu" aria-expanded="false">
+        <button @click=' isOpen =  !isOpen' type='button' id='mobile-button' class='mobile-button lg:hidden' aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only"><%= gettext("Open main menu") %></span>
           <%= icon @conn, "menu", "h-6 w-6 m-2" %>
           <%= icon @conn, "x", "h-6 w-6 m-2" %>
         </button>
+
+        <h1 x-show="isOpen">index.html</h1>
 
         <div class='inline-flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ml-1 lg:ml-0'>
           <%= link to: Routes.page_path(@conn, :index),
@@ -27,7 +29,7 @@
             class: "menu-item hidden lg:inline-block" %>
         <% end %>
 
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span>Characters</span>
             <%= icon @conn, "chevron-down-solid", "hidden lg:inline-block group-hover:-rotate-180" %>
@@ -49,7 +51,7 @@
       <% end %>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span><%= gettext "Skills" %></span>
             <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
@@ -77,7 +79,7 @@
       <% end %>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span><%= gettext "Spells" %></span>
             <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
@@ -105,7 +107,7 @@
       <% end %>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span><%= gettext "Blessings" %></span>
             <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
@@ -128,7 +130,7 @@
       <% end %>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span><%= gettext "Combat Sets" %></span>
             <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
@@ -144,7 +146,7 @@
       <% end %>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown hidden lg:inline-block relative">
+        <div class="menu-item dropdown group hidden lg:inline-block relative">
           <button>
             <span><%= gettext "Support Info " %></span>
             <%= icon @conn, "chevron-down-solid", "group-hover:-rotate-180" %>
@@ -165,7 +167,7 @@
       </button>
 
       <%= if auth?(@conn) do %>
-        <div class="menu-item dropdown relative px-0 lg:px-2">
+        <div class="menu-item dropdown group relative px-0 lg:px-2">
           <button>
             <span class='hidden lg:inline-block'><%= @current_user.username %></span>
             <%= icon @conn, "chevron-down-solid", "hidden lg:inline-block group-hover:-rotate-180" %>

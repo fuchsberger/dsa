@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* hide live-refresh iframe (dev only) */
+  iframe { display: none; }
+
+  a { @apply font-medium text-indigo-600; }
+  a:hover { @apply text-indigo-400; }
+}

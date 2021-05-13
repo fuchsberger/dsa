@@ -1,23 +1,16 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "base/base.css";
+
 @import "components/forms.css";
 @import "components/links.css";
 @import "components/labels.css";
 @import "components/menu.css";
 @import "components/table.css";
 
-@import "tailwindcss/utilities";
 /* @tailwind screens; */
-
-/* hide live-refresh iframe (dev only) */
-iframe { display: none; }
-
-@layer base {
-  a { @apply font-medium text-indigo-600; }
-  a:hover { @apply text-indigo-400; }
-}
-
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-12 overflow-hidden; }
 

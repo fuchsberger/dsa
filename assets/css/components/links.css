@@ -1,2 +1,10 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+/*
+@layer components {
+
 a.brand { @apply text-2xl font-bold text-gray-200; }
 a.brand:hover { @apply text-white; }
+
+} */
