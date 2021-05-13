@@ -6,21 +6,14 @@
         <%= dgettext("account", "Sign in to your account") %>
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
-        Or
+        <%= dgettext("account", "Or") %>
         <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-          start your 14-day free trial
+          <%= dgettext("account", "register a new account") %>
         </a>
       </p>
     </div>
 
-
-    <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
-
-    <h2 class="text-3xl font-extrabold"><%= gettext("Enter Aventuria") %></h2>
-
-    <%= if @error_message do %>
-      <div class="inline-block alert error"><%= @error_message %></div>
-    <% end %>
+    <%= if @error_message, do: alert(:error, @conn, @error_message) %>
 
     <div class="flex justify-between text-sm">
       <%= link dgettext("account", "Not yet registered?"),
