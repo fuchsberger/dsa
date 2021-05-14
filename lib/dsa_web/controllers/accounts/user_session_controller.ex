@@ -5,8 +5,7 @@ defmodule DsaWeb.UserSessionController do
   alias DsaWeb.UserAuth
 
   def new(conn, _params) do
-    conn
-    |> render("new.html", error_message: nil)
+    render(conn, "new.html", error_message: nil)
   end
 
   def create(conn, %{"credential" => credential_params}) do

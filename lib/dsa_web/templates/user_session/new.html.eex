@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen -mt-16 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
       <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
@@ -24,7 +24,7 @@
           <%= icon @conn, "mail-solid" %>
           <%= email_input f, :email,
             autocomplete: "email",
-            class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+            class: " relative rounded-top focus:z-10",
             placeholder: dgettext("account", "Email address"),
             required: true %>
         </div>
@@ -33,7 +33,7 @@
           <%= icon @conn, "lock-closed-solid" %>
           <%= password_input f, :password,
             autocomplete: "current-password",
-            class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+            class: "relative rounded-bot focus:z-10",
             placeholder: dgettext("account", "Password"),
             required: true %>
         </div>

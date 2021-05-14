@@ -117,6 +117,8 @@ defmodule DsaWeb.Router do
   scope "/", DsaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
+    get "/login", UserSessionController, :new
+    post "/login", UserSessionController, :create
 
     get "/users/reset_password", UserResetPasswordController, :new
     post "/users/reset_password", UserResetPasswordController, :create
@@ -148,8 +150,7 @@ defmodule DsaWeb.Router do
   scope "/accounts", DsaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    get "/login", UserSessionController, :new
-    post "/login", UserSessionController, :create
+
 
     get "/register", UserRegistrationController, :new
     post "/register", UserRegistrationController, :create

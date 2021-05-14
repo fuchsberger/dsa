@@ -6,9 +6,7 @@ defmodule DsaWeb.UserRegistrationController do
   alias DsaWeb.UserAuth
 
   def new(conn, _params) do
-    conn
-    |> put_layout("flipped.html")
-    |> render("new.html", changeset: Accounts.change_user_registration(%UserCredential{}))
+    render(conn, "new.html", changeset: Accounts.change_user_registration(%UserCredential{}))
   end
 
   def create(conn, %{"user_credential" => credential_params}) do

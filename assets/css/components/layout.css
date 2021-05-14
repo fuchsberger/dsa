@@ -1,0 +1,3 @@
+@layer utilities {
+  .max-w-xxs { max-width: 16rem; }
+}
