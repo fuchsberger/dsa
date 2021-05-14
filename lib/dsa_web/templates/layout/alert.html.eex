@@ -1,11 +1,20 @@
-<div class="rounded-md <%= @bg_color %> p-4">
+<% {bg_color, border_color, icon_color, text_color, icon_type} = alert_colors(@type) %>
+
+<div class="rounded-md <%= bg_color %> p-4 shadow-md border <%= border_color %>"
+  x-data='{ dismissed: false }'
+  x-show='!dismissed'
+  x-transition:leave="transition-opacity ease-linear duration-300"
+  x-transition:leave-start="opacity-100"
+  x-transition:leave-end="opacity-0">
   <div class="flex">
-    <div class="flex-shrink-0"><%= @icon %></div>
-    <div class="ml-3">
-      <h3 class="text-sm font-medium <%= @header_color %>"><%= @header %></h3>
-      <%= if @details do %>
-        <div class="mt-2 text-sm <%= @details_color %>"><%= @details %></div>
-      <% end %>
+    <div class="flex-shrink-0">
+      <%= icon(@conn, icon_type, "h-5 w-5 #{icon_color}") %>
     </div>
+    <div class="flex-grow mx-3">
+      <h3 class="text-sm font-medium <%= text_color %>"><%= @message %></h3>
+    </div>
+    <button type='button' @click='dismissed=!dismissed'>
+      <%= icon(@conn, "x", "h-5 w-5 #{text_color}") %>
+    </button>
   </div>
 </div>

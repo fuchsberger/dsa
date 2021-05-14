@@ -7,7 +7,9 @@ defmodule Dsa.Accounts.User do
   schema "users" do
     field :admin, :boolean, default: false
     field :username, :string
+    field :email, :string, virtual: true
 
+    belongs_to :active_character, Dsa.Characters.Character
     has_one :credential, Dsa.Accounts.UserCredential
     has_many :characters, Dsa.Characters.Character
     belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify

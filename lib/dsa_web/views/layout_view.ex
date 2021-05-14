@@ -5,6 +5,24 @@ defmodule DsaWeb.LayoutView do
 
   alias Dsa.Accounts.User
 
+  defp active_character_name(%User{} = current_user) do
+    if is_nil(current_user.active_character_id) do
+      gettext("No active character")
+    else
+      Enum.find(@current_user.characters, & &1.id == @current_user.active_character_id).name
+    end
+  end
+
+  def alert_colors(type) do
+    case type do
+      :error ->
+        {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
+
+      :info ->
+        {"bg-blue-50", "border-blue-300", "text-blue-400", "text-blue-800", "information-circle-solid"}
+    end
+  end
+
   defp menu_items(conn, mobile) do
     [
       %{ name: "Dashboard", path: "#", icon: "clipboard-list" },

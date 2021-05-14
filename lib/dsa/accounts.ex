@@ -6,6 +6,7 @@ defmodule Dsa.Accounts do
 
   alias Dsa.Repo
   alias Dsa.Accounts.{UserCredential, Group, User, UserToken, UserNotifier}
+  alias Dsa.Characters.Character
 
   ## Database getters
 
@@ -250,11 +251,16 @@ defmodule Dsa.Accounts do
   end
 
   @doc """
-  Gets the user with the given signed token.
+  Gets the user with the given signed token and preloads essential information.
   """
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query) |> Repo.preload(:characters)
+
+    character_query = from(c in Character, select: map(c, [:id, :name]))
+
+    query
+    |> Repo.one()
+    |> Repo.preload(characters: character_query)
   end
 
   @doc """

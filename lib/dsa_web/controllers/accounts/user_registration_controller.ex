@@ -18,7 +18,7 @@ defmodule DsaWeb.UserRegistrationController do
             &Routes.user_confirmation_url(conn, :confirm, &1))
 
         conn
-        |> put_flash(:info, dgettext("account", "User created successfully."))
+        |> put_flash(:info, dgettext("account", "Registration successfull! A link to activate your account was sent per email."))
         |> UserAuth.log_in_user(credential)
 
       {:error, %Ecto.Changeset{} = changeset} ->

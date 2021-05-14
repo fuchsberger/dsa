@@ -13,17 +13,6 @@ defmodule DsaWeb.ViewHelpers do
     String.to_atom("#{action}_#{struct_name(changeset.data)}")
   end
 
-  def alert(:error, conn, header \\ nil, details \\ nil) do
-    icon = icon(conn, "x-circle-solid", "h-5 w-5 text-red-400")
-    render DsaWeb.LayoutView, "alert.html",
-      bg_color: "bg-red-50",
-      header_color: "text-red-800",
-      details_color: "text-red-700",
-      icon: icon,
-      header: header || dgettext("account", "An error occured."),
-      details: details
-  end
-
   def auth?(conn), do: not is_nil(conn.assigns.current_user)
 
   def admin?(conn), do: conn.assigns.current_user && conn.assigns.current_user.admin

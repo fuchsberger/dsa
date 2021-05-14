@@ -14,10 +14,7 @@ defmodule DsaWeb.UserSessionController do
     if credential = Accounts.get_credential_by_email_and_password(email, password) do
       UserAuth.log_in_user(conn, credential, credential_params)
     else
-      conn
-      |> assign(:error_message, dgettext("account", "Invalid email or password"))
-      |> put_layout("flipped.html")
-      |> render("new.html")
+      render(conn, "new.html", error_message: dgettext("account", "Invalid email or password"))
     end
   end
 

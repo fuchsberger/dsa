@@ -103,7 +103,16 @@
     </div>
 
     <main class="flex-1 relative overflow-y-auto focus:outline-none">
-
+      <%= unless is_nil(get_flash(@conn, :error)) do %>
+        <div class='mx-4 lg:mx-6 mt-3'>
+          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: get_flash(@conn, :error) %>
+        </div>
+      <% end %>
+      <%= unless is_nil(get_flash(@conn, :info)) do %>
+        <div class='mx-4 lg:mx-6 mt-3'>
+          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :info, message: get_flash(@conn, :info) %>
+        </div>
+      <% end %>
       <%# DEFAULT LAYOUT: %>
       <%# <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

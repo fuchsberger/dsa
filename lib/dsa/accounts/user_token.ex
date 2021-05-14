@@ -36,15 +36,16 @@ defmodule Dsa.Accounts.UserToken do
 
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
-
-  The query returns the user found by the token and preloads characters
+  The query returns the user found by the token.
   """
   def verify_session_token_query(token) do
     query =
       from(token in token_and_context_query(token, "session"),
         join: user in assoc(token, :user),
+        join: credential in assoc(user, :credential),
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: user)
+        select: user,
+        select_merge: %{email: credential.email})
 
     {:ok, query}
   end

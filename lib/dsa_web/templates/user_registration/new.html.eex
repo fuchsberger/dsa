@@ -12,7 +12,9 @@
       </p>
     </div>
 
-    <%= if @changeset.action, do: alert(:error, @conn, dgettext("account", "Oops, something went wrong! Please check the errors below.")) %>
+    <%= if @changeset.action, do:
+      render DsaWeb.LayoutView, "alert_error.html", conn: @conn, type: :error, message:
+        dgettext("account", "Oops, something went wrong! Please check the errors below.") %>
 
     <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "mt-8 space-y-3"], fn f -> %>
       <%= inputs_for f, :user, fn fu -> %>

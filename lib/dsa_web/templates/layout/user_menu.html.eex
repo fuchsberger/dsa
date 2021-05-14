@@ -3,11 +3,11 @@
     <a href="#" class="flex-shrink-0 w-full group block">
       <div class="flex items-center">
         <div>
-          <img class="inline-block h-9 w-9 rounded-full" src="<%= gravatar_url("admind@fuchsberger.us") %>" alt="">
+          <img class="inline-block h-9 w-9 rounded-full" src="<%= gravatar_url(@current_user.email) %>" alt="">
         </div>
         <div class="ml-3">
           <p class="text-sm font-medium text-white">
-            Tom Cook
+            <%= active_character_name(@current_user) %>
           </p>
           <p class="text-xs font-medium text-gray-300 group-hover:text-gray-200">
             <%= @current_user.username %>

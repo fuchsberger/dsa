@@ -32,5 +32,11 @@ defmodule Dsa.Repo.Migrations.CreateCharacters do
     end
 
     create index(:characters, :user_id)
+
+    alter table(:users) do
+      add :active_character_id, references(:characters, on_delete: :nilify_all)
+    end
+
+    create index(:users, :active_character_id)
   end
 end
