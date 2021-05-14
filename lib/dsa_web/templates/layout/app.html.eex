@@ -1,4 +1,4 @@
-<div class="h-screen flex overflow-hidden bg-gray-100" x-data='{ menu: true, log: false }'>
+<div class="h-screen flex overflow-hidden bg-gray-100" x-data='{ menu: false, log: false }'>
   <%# Off-canvas menu for mobile %>
   <div class="fixed inset-0 flex z-40 lg:hidden" role="dialog" aria-modal="true"
     x-show='menu'

@@ -7,52 +7,59 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         <%= dgettext("account", "Or") %>
-        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-          <%= dgettext("account", "register a new account") %>
-        </a>
+        <%= link dgettext("account", "register a new account"),
+          to: Routes.user_registration_path(@conn, :new), class: "link" %>
       </p>
     </div>
 
     <%= if @error_message, do: alert(:error, @conn, @error_message) %>
 
-    <div class="flex justify-between text-sm">
-      <%= link dgettext("account", "Not yet registered?"),
-            to: Routes.user_registration_path(@conn, :new) %>
-      <%= link dgettext("account", "Forgot your password?"),
-            to: Routes.user_reset_password_path(@conn, :new) %>
-    </div>
-
     <%= form_for @conn, Routes.user_session_path(@conn, :create),
-      [as: :credential, data: [turbo: false]], fn f -> %>
+      [as: :credential, data: [turbo: false], class: "mt-8 space-y-6"], fn f -> %>
 
+      <input type="hidden" name="remember" value="true">
       <div class="rounded-md shadow-sm -space-y-px">
-        <div class='icon rounded-t-md'>
-          <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
+        <div class='icon-input'>
+          <%= label f, :email, dgettext("account", "Email address"), class: "sr-only" %>
           <%= icon @conn, "mail-solid" %>
           <%= email_input f, :email,
             autocomplete: "email",
-            class: "input rounded-none rounded-t-md",
-            placeholder: dgettext("account", "Email"),
+            class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+            placeholder: dgettext("account", "Email address"),
             required: true %>
         </div>
-
-        <div class='icon rounded-b-md'>
+        <div class='icon-input'>
           <%= label f, :password, dgettext("account", "Password"), class: "sr-only" %>
           <%= icon @conn, "lock-closed-solid" %>
           <%= password_input f, :password,
             autocomplete: "current-password",
-            class: "input rounded-none rounded-b-md",
+            class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
             placeholder: dgettext("account", "Password"),
             required: true %>
         </div>
       </div>
 
-      <div class='mt-3'>
-        <%= checkbox f, :remember_me, class: "form-checkbox rounded " %>
-        <%= label f, :remember_me, dgettext("account", "Keep me logged in for 60 days") %>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <%= checkbox f, :remember_me, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" %>
+          <%= label f, :remember_me, dgettext("account", "Remember me for 60 days"), class: "ml-2 block text-sm text-gray-900" %>
+        </div>
+
+        <div class="text-sm">
+          <%= link dgettext("account", "Forgot your password?"),
+            to: Routes.user_reset_password_path(@conn, :new),
+            class: "link" %>
+        </div>
       </div>
 
-      <%= submit dgettext("account", "Login"), class: "primary mt-3" %>
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <%= icon(@conn, "lock-closed-solid", "h-5 w-5 text-indigo-500 group-hover:text-indigo-400") %>
+          </span>
+          <%= dgettext("account", "Sign in") %>
+        </button>
+      </div>
     <% end %>
   </div>
 </div>
