@@ -18,6 +18,13 @@ defmodule DsaWeb.LayoutView do
     end)
   end
 
+  # size is in rem (by default 4 pixel)
+  defp gravatar_url(email, size \\ 9) when is_binary(email) do
+    email = email |> String.trim() |> String.downcase(:ascii)
+    hash = :crypto.hash(:md5, email) |> Base.encode16(case: :lower)
+    "https://www.gravatar.com/avatar/#{hash}?s=#{size*4}&d=mp"
+  end
+
   defp icon_class(mobile, active) when is_boolean(mobile) and is_boolean(active) do
     base = "h-6 w-6"
     default = "text-gray-400 group-hover:text-gray-300"

@@ -5,13 +5,13 @@
 @layer components {
 
 /* General Button styles */
-button.primary { @apply inline-block px-2 leading-7 rounded-md border font-medium text-sm; }
-button.primary:focus { @apply outline-none ring-2 ring-offset-2; }
+/* button.primary { @apply inline-block px-2 leading-7 rounded-md border font-medium text-sm; }
+button.primary:focus { @apply outline-none ring-2 ring-offset-2; } */
 
 /* Submit Button */
-button.primary { @apply bg-indigo-600 text-gray-100 border-transparent; }
+/* button.primary { @apply bg-indigo-600 text-gray-100 border-transparent; }
 button.primary:hover { @apply bg-indigo-800 text-white; }
-button.primary:focus { @apply ring-indigo-500; }
+button.primary:focus { @apply ring-indigo-500; } */
 
 .label { @apply inline-block text-xs leading-6 font-semibold rounded px-1; }
 

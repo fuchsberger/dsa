@@ -119,6 +119,8 @@ defmodule DsaWeb.Router do
 
     get "/login", UserSessionController, :new
     post "/login", UserSessionController, :create
+    get "/register", UserRegistrationController, :new
+    post "/register", UserRegistrationController, :create
 
     get "/users/reset_password", UserResetPasswordController, :new
     post "/users/reset_password", UserResetPasswordController, :create
@@ -145,16 +147,6 @@ defmodule DsaWeb.Router do
     get "/confirm", UserConfirmationController, :new
     post "/confirm", UserConfirmationController, :create
     get "/confirm/:token", UserConfirmationController, :confirm
-  end
-
-  scope "/accounts", DsaWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
-
-
-
-    get "/register", UserRegistrationController, :new
-    post "/register", UserRegistrationController, :create
-
   end
 
   scope "/accounts", DsaWeb do

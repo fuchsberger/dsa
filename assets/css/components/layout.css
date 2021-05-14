@@ -1,6 +1,9 @@
 @layer components {
+
+  a.link { @apply font-medium text-indigo-600 hover:text-indigo-500; }
+
   .centered-box {
-    @apply flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8;
+    @apply flex items-center justify-center pt-2 pb-4 px-4 sm:px-6 lg:px-8;
     min-height: calc(100vh - 4rem);
   }
 }

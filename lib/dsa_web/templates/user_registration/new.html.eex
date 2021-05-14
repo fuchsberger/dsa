@@ -1,72 +1,65 @@
-<div class="max-w-sm mx-auto my-3 space-y-3 text-center">
-
-  <%= icon @conn, "eye-solid", "mx-auto h-12 w-auto" %>
-
-  <h2 class="text-3xl font-extrabold"><%= dgettext("account", "Sign Up") %></h2>
-
-  <%= if @changeset.action do %>
-    <div class="inline-block alert error">
-      <%= dgettext "account", "Oops, something went wrong! Please check the errors below." %>
+<div class="centered-box">
+  <div class="max-w-md w-full space-y-6">
+    <div>
+      <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
+      <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900">
+        <%= dgettext("account", "Register Account") %>
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        <%= dgettext("account", "Or") %>
+        <%= link dgettext("account", "log into your account"),
+          to: Routes.user_session_path(@conn, :new), class: "link" %>
+      </p>
     </div>
-  <% end %>
 
-  <div class="flex justify-between text-sm">
-    <%= link dgettext("account", "Log In"),
-      to: Routes.user_session_path(@conn, :new) %>
-    <%= link dgettext("account", "Forgot your password?"),
-      to: Routes.user_reset_password_path(@conn, :new) %>
-  </div>
+    <%= if @changeset.action, do: alert(:error, @conn, dgettext("account", "Oops, something went wrong! Please check the errors below.")) %>
 
-  <%= form_for @changeset, Routes.user_registration_path(@conn, :create),
-    [data: [turbo: false]], fn f -> %>
-    <div class="space-y-3">
-
+    <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "mt-8 space-y-3"], fn f -> %>
       <%= inputs_for f, :user, fn fu -> %>
-
-        <div class='icon rounded-md'>
+        <div class='icon-input'>
           <%= label fu, :username, dgettext("account", "Username"), class: "sr-only" %>
           <%= icon @conn, "user" %>
           <%= text_input fu, :username,
             autocomplete: "username",
-            class: "input",
             placeholder: dgettext("account", "Username") %>
         </div>
         <%= error_tag fu, :username %>
-
       <% end %>
 
-      <div class='icon rounded-md'>
+      <div class='icon-input'>
         <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
         <%= icon @conn, "mail-solid" %>
         <%= email_input f, :email,
           autocomplete: "email",
-          class: "input",
           placeholder: dgettext("account", "Email") %>
       </div>
       <%= error_tag f, :email %>
 
-      <div class='icon rounded-md'>
+      <div class='icon-input'>
         <%= label f, :password, dgettext("account", "Password"), class: "sr-only" %>
         <%= icon @conn, "lock-closed-solid" %>
         <%= password_input f, :password,
           autocomplete: "new-password",
-          class: "input",
           placeholder: dgettext("account", "Password") %>
       </div>
       <%= error_tag f, :password %>
 
-      <div class='icon rounded-md'>
+      <div class='icon-input'>
         <%= label f, :password_confirmation, dgettext("account", "Confirm Password"),
           class: "sr-only" %>
         <%= icon @conn, "lock-closed-solid" %>
         <%= password_input f, :password_confirmation,
           autocomplete: "new-password",
-          class: "input",
           placeholder: dgettext("account", "Confirm Password") %>
       </div>
       <%= error_tag f, :password_confirmation %>
 
-      <%= submit dgettext("account", "Register"), class: "primary" %>
-    </div>
-  <% end %>
+      <button type="submit" class="primary group relative w-full flex justify-center">
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+          <%= icon(@conn, "lock-closed-solid", "h-5 w-5 text-indigo-500 group-hover:text-indigo-400") %>
+        </span>
+        <%= dgettext("account", "Sign up") %>
+      </button>
+    <% end %>
+  </div>
 </div>
