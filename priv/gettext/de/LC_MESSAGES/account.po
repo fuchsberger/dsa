@@ -12,51 +12,35 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_session_controller.ex:20
+#: lib/dsa_web/controllers/accounts/user_session_controller.ex:18
 msgid "Invalid email or password"
 msgstr "Ungültige Email oder Passwort"
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_session_controller.ex:28
+#: lib/dsa_web/controllers/accounts/user_session_controller.ex:26
 msgid "Logged out successfully."
 msgstr "Erfolgreich ausgeloggt."
 
 #, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:12
-msgid "Not yet registered?"
-msgstr "Noch nicht registriert?"
-
-#, elixir-format
 #: lib/dsa_web/templates/user_registration/new.html.eex:16
-#: lib/dsa_web/templates/user_reset_password/new.html.eex:4 lib/dsa_web/templates/user_session/new.html.eex:14
+#: lib/dsa_web/templates/user_reset_password/new.html.eex:4 lib/dsa_web/templates/user_session/new.html.eex:49
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
 #, elixir-format
 #: lib/dsa_web/templates/user_confirmation/new.html.eex:20
-#: lib/dsa_web/templates/user_confirmation/new.html.eex:25 lib/dsa_web/templates/user_registration/new.html.eex:37
-#: lib/dsa_web/templates/user_registration/new.html.eex:42 lib/dsa_web/templates/user_reset_password/new.html.eex:13
-#: lib/dsa_web/templates/user_reset_password/new.html.eex:18 lib/dsa_web/templates/user_session/new.html.eex:23
-#: lib/dsa_web/templates/user_session/new.html.eex:28
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:25 lib/dsa_web/templates/user_registration/new.html.eex:39
+#: lib/dsa_web/templates/user_registration/new.html.eex:44 lib/dsa_web/templates/user_reset_password/new.html.eex:13
+#: lib/dsa_web/templates/user_reset_password/new.html.eex:18
 msgid "Email"
 msgstr "Email"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:45
-msgid "Keep me logged in for 60 days"
-msgstr "Eingeloggt bleiben für 60 Tage"
-
-#, elixir-format
-#: lib/dsa_web/templates/user_registration/new.html.eex:47
-#: lib/dsa_web/templates/user_registration/new.html.eex:52 lib/dsa_web/templates/user_session/new.html.eex:33
-#: lib/dsa_web/templates/user_session/new.html.eex:38
+#: lib/dsa_web/templates/user_registration/new.html.eex:49
+#: lib/dsa_web/templates/user_registration/new.html.eex:54 lib/dsa_web/templates/user_session/new.html.eex:32
+#: lib/dsa_web/templates/user_session/new.html.eex:37
 msgid "Password"
 msgstr "Passwort"
-
-#, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:48
-msgid "Login"
-msgstr "Login"
 
 #, elixir-format
 #: lib/dsa_web/templates/user_confirmation/new.html.eex:6
@@ -64,14 +48,14 @@ msgid "Confirm Account"
 msgstr "Account bestätigen"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_registration/new.html.eex:57
-#: lib/dsa_web/templates/user_registration/new.html.eex:63 lib/dsa_web/templates/user_reset_password/edit.html.eex:30
+#: lib/dsa_web/templates/user_registration/new.html.eex:59
+#: lib/dsa_web/templates/user_registration/new.html.eex:65 lib/dsa_web/templates/user_reset_password/edit.html.eex:30
 #: lib/dsa_web/templates/user_reset_password/edit.html.eex:36
 msgid "Confirm Password"
 msgstr "Passwort bestätigen"
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_confirmation_controller.ex:19
+#: lib/dsa_web/controllers/accounts/user_confirmation_controller.ex:21
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Sollte deine Email Addresse bei uns registriert und noch nicht aktiviert sein, wirst du in Kürze einen Bestätigungslink erhalten."
 
@@ -84,7 +68,7 @@ msgstr "Einloggen"
 
 #, elixir-format
 #: lib/dsa_web/templates/user_registration/new.html.eex:9
-#: lib/dsa_web/templates/user_reset_password/edit.html.eex:15
+#: lib/dsa_web/templates/user_reset_password/edit.html.eex:15 lib/dsa_web/views/accounts/account_helpers.ex:10
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr "Oops, etwas ist falsch gelaufen! Bitte überprüfe deine Eingaben."
 
@@ -95,7 +79,7 @@ msgstr "Passwörter stimmen nicht überein"
 
 #, elixir-format
 #: lib/dsa_web/templates/user_confirmation/new.html.eex:10
-#: lib/dsa_web/templates/user_registration/new.html.eex:68 lib/dsa_web/templates/user_reset_password/edit.html.eex:8
+#: lib/dsa_web/templates/user_registration/new.html.eex:69 lib/dsa_web/templates/user_reset_password/edit.html.eex:8
 #: lib/dsa_web/templates/user_reset_password/new.html.eex:8
 msgid "Register"
 msgstr "Anmelden"
@@ -111,23 +95,23 @@ msgid "Sign Up"
 msgstr "Anmelden"
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_confirmation_controller.ex:43
+#: lib/dsa_web/controllers/accounts/user_confirmation_controller.ex:54
 msgid "User confirmation link is invalid or it has expired."
 msgstr "Aktivierungslink ist ungültig oder abgelaufen."
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_confirmation_controller.ex:29
+#: lib/dsa_web/controllers/accounts/user_confirmation_controller.ex:31
 msgid "User confirmed successfully."
 msgstr "Account erfolgreich aktiviert."
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_registration_controller.ex:23
+#: lib/dsa_web/controllers/accounts/user_registration_controller.ex:21
 msgid "User created successfully."
 msgstr "Account erfolgreich erstellt."
 
 #, elixir-format
-#: lib/dsa_web/templates/user_registration/new.html.eex:25
-#: lib/dsa_web/templates/user_registration/new.html.eex:30
+#: lib/dsa_web/templates/user_registration/new.html.eex:27
+#: lib/dsa_web/templates/user_registration/new.html.eex:32
 msgid "Username"
 msgstr "Benutzername"
 
@@ -177,14 +161,15 @@ msgid "Reset password link is invalid or it has expired."
 msgstr "Aktualisierungslink ist ungültig oder abgelaufen."
 
 #, elixir-format
-#: lib/dsa_web/templates/user_reset_password/edit.html.eex:20
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:26
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:30 lib/dsa_web/templates/user_reset_password/edit.html.eex:20
 #: lib/dsa_web/templates/user_reset_password/edit.html.eex:25
 msgid "New Password"
 msgstr "Neues Passwort"
 
 #, elixir-format
-#: lib/dsa_web/templates/user_reset_password/edit.html.eex:4
-#: lib/dsa_web/templates/user_reset_password/edit.html.eex:40
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:2
+#: lib/dsa_web/templates/user_reset_password/edit.html.eex:4 lib/dsa_web/templates/user_reset_password/edit.html.eex:40
 msgid "Reset password"
 msgstr "Passwort zurücksetzen"
 
@@ -192,3 +177,91 @@ msgstr "Passwort zurücksetzen"
 #: lib/dsa_web/templates/user_reset_password/new.html.eex:22
 msgid "Send instructions to reset password"
 msgstr "Sende Link zum Zurücksetzen deines Passworts"
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_settings_controller.ex:25
+msgid "A link to confirm your email change has been sent to the new address."
+msgstr "Ein Aktivierunglink wurde an deine neue Email Adresse gesendet."
+
+#, elixir-format
+#: lib/dsa_web/views/view_helpers.ex:23
+msgid "An error occured."
+msgstr "Ein Fehler ist aufgetreten."
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:19
+msgid "Are you sure you want to delete your account including all characters?"
+msgstr "Bist du sicher dass du deinen Account inklusive deiner Helden löschen möchtest?"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:44
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:35
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:40
+msgid "Confirm new Password"
+msgstr "Bestätige neues Passwort"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:14
+#: lib/dsa_web/templates/user_change_password/edit.html.eex:21
+msgid "Current Password"
+msgstr "Aktuelles Passwort"
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:16
+msgid "Delete Account"
+msgstr "Account löschen"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:23
+#: lib/dsa_web/templates/user_session/new.html.eex:28
+msgid "Email address"
+msgstr "Email Adresse"
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_settings_controller.ex:42
+msgid "Email change link is invalid or it has expired."
+msgstr "Bestätigungslink ist ungültig oder abgelaufen."
+
+#, elixir-format
+#: lib/dsa_web/controllers/user_settings_controller.ex:37
+msgid "Email changed successfully."
+msgstr "Email Adresse erfolgreich geändert."
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:9
+msgid "Or"
+msgstr "Oder"
+
+#, elixir-format
+#: lib/dsa_web/controllers/accounts/user_change_password.ex:19
+msgid "Password updated successfully."
+msgstr "Account erfolgreich aktualisiert."
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:45
+msgid "Remember me for 60 days"
+msgstr "Für 60 Tage eingeloggt bleiben"
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:23
+msgid "Settings"
+msgstr "Einstellungen"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:60
+msgid "Sign in"
+msgstr "Anmelden"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:6
+msgid "Sign in to your account"
+msgstr "Melde dich an"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_session/new.html.eex:10
+msgid "register a new account"
+msgstr "erstelle einen neuen Account"

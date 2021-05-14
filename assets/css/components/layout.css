@@ -1,3 +1,10 @@
+@layer components {
+  .centered-box {
+    @apply flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8;
+    min-height: calc(100vh - 4rem);
+  }
+}
+
 @layer utilities {
   .max-w-xxs { max-width: 16rem; }
 }

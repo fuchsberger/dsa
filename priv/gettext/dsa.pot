@@ -15,7 +15,7 @@ msgstr ""
 #: lib/dsa_web/templates/error/401.html.eex:14 lib/dsa_web/templates/error/403.html.eex:7
 #: lib/dsa_web/templates/error/403.html.eex:14 lib/dsa_web/templates/error/404.html.eex:7
 #: lib/dsa_web/templates/error/404.html.eex:14 lib/dsa_web/templates/error/500.html.eex:7
-#: lib/dsa_web/templates/error/500.html.eex:14 lib/dsa_web/templates/layout/menu.html.eex:17
+#: lib/dsa_web/templates/error/500.html.eex:14 lib/dsa_web/templates/layout/menu.html.eex:19
 #: lib/dsa_web/templates/layout/root.html.eex:8
 msgid "DSA Tool"
 msgstr ""
@@ -28,7 +28,7 @@ msgid "A character, dice, and group management tool for DSA, Das Schwarze Auge"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:181
+#: lib/dsa_web/templates/layout/menu.html.eex:183
 msgid "Logout"
 msgstr ""
 
@@ -44,14 +44,14 @@ msgid "Roll"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:54
-#: lib/dsa_web/templates/layout/menu.html.eex:74 lib/dsa_web/templates/skill/index.html.eex:2
+#: lib/dsa_web/templates/layout/menu.html.eex:56
+#: lib/dsa_web/templates/layout/menu.html.eex:76 lib/dsa_web/templates/skill/index.html.eex:2
 msgid "Skills"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:82
-#: lib/dsa_web/templates/layout/menu.html.eex:102
+#: lib/dsa_web/templates/layout/menu.html.eex:84
+#: lib/dsa_web/templates/layout/menu.html.eex:104
 msgid "Spells"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgid "Email"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:186
+#: lib/dsa_web/templates/layout/menu.html.eex:188
 msgid "Login"
 msgstr ""
 
@@ -75,12 +75,6 @@ msgstr ""
 #: lib/dsa_web/templates/user_settings/edit.html.eex:42
 #: lib/dsa_web/templates/user_settings/edit.html.eex:47
 msgid "Username"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:33
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:38
-msgid "New Password"
 msgstr ""
 
 #, elixir-format
@@ -157,7 +151,6 @@ msgid "Characters"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:8
 #: lib/dsa_web/templates/user_settings/edit.html.eex:8
 msgid "Delete Account"
 msgstr ""
@@ -169,13 +162,13 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/group/index.html.eex:16
-#: lib/dsa_web/templates/layout/menu.html.eex:25
+#: lib/dsa_web/templates/layout/menu.html.eex:27
 msgid "Group"
 msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/character/index.html.eex:3
-#: lib/dsa_web/templates/character/new.html.eex:1 lib/dsa_web/templates/layout/menu.html.eex:40
+#: lib/dsa_web/templates/character/new.html.eex:1 lib/dsa_web/templates/layout/menu.html.eex:42
 msgid "New Character"
 msgstr ""
 
@@ -185,8 +178,8 @@ msgid "Save"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:178
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:7 lib/dsa_web/templates/user_settings/edit.html.eex:4
+#: lib/dsa_web/templates/layout/menu.html.eex:180
+#: lib/dsa_web/templates/user_settings/edit.html.eex:4
 msgid "Settings"
 msgstr ""
 
@@ -259,7 +252,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/combat_set/index.html.eex:3
-#: lib/dsa_web/templates/layout/menu.html.eex:133
+#: lib/dsa_web/templates/layout/menu.html.eex:135
 msgid "Combat Sets"
 msgstr ""
 
@@ -285,7 +278,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/group/new.html.eex:8
-#: lib/dsa_web/templates/layout/app.html.eex:24
+#: lib/dsa_web/templates/layout/app.backup.html.eex:24
 msgid "Create Group"
 msgstr ""
 
@@ -379,7 +372,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/group/index.html.eex:2
-#: lib/dsa_web/templates/layout/menu.html.eex:175
+#: lib/dsa_web/templates/layout/menu.html.eex:177
 msgid "Groups"
 msgstr ""
 
@@ -434,22 +427,22 @@ msgid "Leave"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:37
+#: lib/dsa_web/templates/layout/menu.html.eex:39
 msgid "List Characters"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:59
+#: lib/dsa_web/templates/layout/menu.html.eex:61
 msgid "List Skills"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:87
+#: lib/dsa_web/templates/layout/menu.html.eex:89
 msgid "List Spells"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:26
+#: lib/dsa_web/templates/layout/app.backup.html.eex:26
 msgid "List existing Groups"
 msgstr ""
 
@@ -498,15 +491,14 @@ msgid "New Group"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:63
+#: lib/dsa_web/templates/layout/menu.html.eex:65
 #: lib/dsa_web/templates/skill/new.html.eex:4
 msgid "New Skill"
 msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/combat_set/form.html.eex:5
-#: lib/dsa_web/templates/skill/form.html.eex:4 lib/dsa_web/templates/user_change_password/edit.html.eex:14
-#: lib/dsa_web/templates/user_settings/edit.html.eex:14
+#: lib/dsa_web/templates/skill/form.html.eex:4 lib/dsa_web/templates/user_settings/edit.html.eex:14
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
@@ -691,7 +683,7 @@ msgid "You must be logged in to access this page."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/app.html.eex:19
+#: lib/dsa_web/templates/layout/app.backup.html.eex:19
 msgid "You must join a DSA group before the log can be displayed."
 msgstr ""
 
@@ -736,8 +728,8 @@ msgid "Blessing"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:110
-#: lib/dsa_web/templates/layout/menu.html.eex:125
+#: lib/dsa_web/templates/layout/menu.html.eex:112
+#: lib/dsa_web/templates/layout/menu.html.eex:127
 msgid "Blessings"
 msgstr ""
 
@@ -791,7 +783,7 @@ msgid "INI Base"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:115
+#: lib/dsa_web/templates/layout/menu.html.eex:117
 msgid "List Blessings"
 msgstr ""
 
@@ -836,35 +828,17 @@ msgid "has left combat."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_settings_controller.ex:25
-msgid "A link to confirm your email change has been sent to the new address."
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/templates/group/live.html.leex:20
 msgid "AE"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:8
 #: lib/dsa_web/templates/user_settings/edit.html.eex:8
 msgid "Are you sure you want to delete your account including all characters?"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:52
-msgid "Change password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:43
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:48
-msgid "Confirm new Password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:21
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:28 lib/dsa_web/templates/user_settings/edit.html.eex:19
+#: lib/dsa_web/templates/user_settings/edit.html.eex:19
 #: lib/dsa_web/templates/user_settings/edit.html.eex:27
 msgid "Current Password"
 msgstr ""
@@ -875,7 +849,7 @@ msgid "Delete"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:154
+#: lib/dsa_web/templates/layout/menu.html.eex:156
 msgid "Dice tables"
 msgstr ""
 
@@ -890,26 +864,11 @@ msgid "LE"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_change_password.ex:16
-msgid "Password updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_change_password/edit.html.eex:4
-msgid "Reset password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:149
+#: lib/dsa_web/templates/layout/menu.html.eex:151
 msgid "Support Info "
 msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/user_settings/edit.html.eex:51
 msgid "Update Settings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_session/new.html.eex:5
-msgid "Enter Aventuria"
 msgstr ""
