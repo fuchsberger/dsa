@@ -6,21 +6,23 @@ defmodule Dsa.AccountsFixtures do
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
+  def valid_username, do: "Der Namenlose"
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
       email: unique_user_email(),
-      password: valid_user_password()
+      password: valid_user_password(),
+      password_confirmation: valid_user_password(),
+      user: %{username: valid_username()}
     })
   end
 
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
+  def user_credential_fixture(attrs \\ %{}) do
+    {:ok, credential} =
       attrs
       |> valid_user_attributes()
       |> Dsa.Accounts.register_user()
-
-    user
+    credential
   end
 
   def extract_user_token(fun) do

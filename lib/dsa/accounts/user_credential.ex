@@ -59,7 +59,7 @@ defmodule Dsa.Accounts.UserCredential do
       message: dgettext("account", "at least one lower case character"))
     # |> validate_format(:password, ~r/[A-Z]/, message: gettext("at least one upper case character"))
     |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
-      message: dgettext("account", "at least one digit or punctuation character"))
+      message: dgettext("errors", "at least one digit or punctuation character"))
     |> maybe_hash_password(opts)
   end
 
@@ -68,7 +68,7 @@ defmodule Dsa.Accounts.UserCredential do
       true ->
         changeset
       false ->
-        add_error(changeset, :password_confirmation, dgettext("account", "Passwords don't match"))
+        add_error(changeset, :password_confirmation, dgettext("errors", "Passwords don't match"))
     end
   end
 

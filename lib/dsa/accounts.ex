@@ -161,24 +161,27 @@ defmodule Dsa.Accounts do
   If the token matches, the user email is updated and the token is deleted.
   The confirmed_at date is also updated to the current time.
   """
-  def update_user_email(user, token) do
-    context = "change:#{user.email}"
+  def update_credential_email(credential, token) do
+    context = "change:#{credential.email}"
 
     with {:ok, query} <- UserToken.verify_change_email_token_query(token, context),
          %UserToken{sent_to: email} <- Repo.one(query),
-         {:ok, _} <- Repo.transaction(user_email_multi(user, email, context)) do
+         {:ok, _} <- Repo.transaction(credential_email_multi(credential, email, context)) do
       :ok
     else
       _ -> :error
     end
   end
 
-  defp user_email_multi(user, email, context) do
-    changeset = user |> User.email_changeset(%{email: email}) |> User.confirm_changeset()
+  defp credential_email_multi(credential, email, context) do
+    changeset =
+      credential
+      |> UserCredential.email_changeset(%{email: email})
+      |> UserCredential.confirm_changeset()
 
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, [context]))
+    |> Ecto.Multi.update(:credential, changeset)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(credential.user_id, [context]))
   end
 
   @doc """
@@ -363,22 +366,21 @@ defmodule Dsa.Accounts do
   end
 
   @doc """
-  Resets the user password.
+  Resets the credential's password.
 
   ## Examples
 
-      iex> reset_user_password(user, %{password: "new long password", password_confirmation: "new long password"})
+      iex> reset_credential_password(credential, %{password: "new long password", password_confirmation: "new long password"})
       {:ok, %User{}}
 
-      iex> reset_user_password(user, %{password: "valid", password_confirmation: "not the same"})
+      iex> reset_credential_password(credential, %{password: "valid", password_confirmation: "not the same"})
       {:error, %Ecto.Changeset{}}
 
   """
-  def reset_user_password(user, attrs) do
-    user = Repo.preload(user, :credential)
+  def reset_credential_password(credential, attrs) do
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, UserCredential.password_changeset(user.credential, attrs))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user.id, :all))
+    |> Ecto.Multi.update(:user, UserCredential.password_changeset(credential, attrs))
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(credential.user_id, :all))
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}

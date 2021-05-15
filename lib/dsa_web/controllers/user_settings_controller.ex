@@ -31,7 +31,7 @@ defmodule DsaWeb.UserSettingsController do
   end
 
   def confirm_email(conn, %{"token" => token}) do
-    case Accounts.update_user_email(conn.assigns.current_user, token) do
+    case Accounts.update_credential_email(conn.assigns.current_user, token) do
       :ok ->
         conn
         |> put_flash(:info, dgettext("account", "Email changed successfully."))

@@ -31,7 +31,7 @@ defmodule DsaWeb.UserResetPasswordController do
   # Do not log in the user after reset password to avoid a
   # leaked token giving the user access to the account.
   def update(conn, %{"user_credential" => credential_params}) do
-    case Accounts.reset_user_password(conn.assigns.user, credential_params) do
+    case Accounts.reset_credential_password(conn.assigns.user, credential_params) do
       {:ok, _} ->
         conn
         |> put_flash(:info, dgettext("account", "Password reset successfully."))
