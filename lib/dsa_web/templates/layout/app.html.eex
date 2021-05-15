@@ -96,23 +96,29 @@
             <span class="sr-only">View log entries</span>
             <%= icon(@conn, "bell", "h-6 w-6") %>
           </button>
-
-
         </div>
       </div>
     </div>
 
     <main class="flex-1 relative overflow-y-auto focus:outline-none">
-      <%= unless is_nil(get_flash(@conn, :error)) do %>
+      <%= unless is_nil(get_flash(@conn, :success)) do %>
         <div class='mx-4 lg:mx-6 mt-3'>
-          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: get_flash(@conn, :error) %>
+          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :success, message: get_flash(@conn, :success) %>
         </div>
       <% end %>
+
       <%= unless is_nil(get_flash(@conn, :info)) do %>
         <div class='mx-4 lg:mx-6 mt-3'>
           <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :info, message: get_flash(@conn, :info) %>
         </div>
       <% end %>
+
+      <%= unless is_nil(get_flash(@conn, :error)) do %>
+        <div class='mx-4 lg:mx-6 mt-3'>
+          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: get_flash(@conn, :error) %>
+        </div>
+      <% end %>
+
       <%# DEFAULT LAYOUT: %>
       <%# <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

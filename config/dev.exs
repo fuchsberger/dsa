@@ -2,14 +2,10 @@ use Mix.Config
 
 config :dsa, :environment, :dev
 
-# Configure your database
 config :dsa, Dsa.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "dsa_dev",
-  hostname: "localhost",
-  # log: false,
+  url: "ecto://postgres:postgres@localhost/dsa_dev",
   show_sensitive_data_on_connection_error: true,
+  # log: false,
   pool_size: 10
 
 config :dsa, Dsa.Mailer,

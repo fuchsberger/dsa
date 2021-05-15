@@ -12,19 +12,18 @@ defmodule DsaWeb.UserRegistrationController do
   def create(conn, %{"user_credential" => credential_params}) do
     case Accounts.register_user(credential_params) do
       {:ok, credential} ->
-        {:ok, _} =
+        %Bamboo.Email{to: [nil: email]} =
           Accounts.deliver_user_confirmation_instructions(
             credential,
             &Routes.user_confirmation_url(conn, :confirm, &1))
 
         conn
-        |> put_flash(:info, dgettext("account", "Registration successfull! A link to activate your account was sent per email."))
-        |> UserAuth.log_in_user(credential)
+        |> put_flash(:success, dgettext("account", "Registration successfull! A link to activate your account was sent to %{email}.", email: email))
+        # |> UserAuth.log_in_user(credential)
+        |> redirect(to: Routes.user_session_path(conn, :new))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        conn
-        |> put_layout("flipped.html")
-        |> render("new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset)
     end
   end
 end

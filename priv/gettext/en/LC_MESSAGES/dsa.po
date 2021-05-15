@@ -873,3 +873,8 @@ msgstr ""
 #: lib/dsa_web/templates/user_settings/edit.html.eex:51
 msgid "Update Settings"
 msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/views/layout_view.ex:10
+msgid "No active character"
+msgstr ""

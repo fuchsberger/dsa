@@ -294,7 +294,7 @@ defmodule Dsa.Accounts do
       {encoded_token, user_token} = UserToken.build_email_token(credential, "confirm")
       Repo.insert!(user_token)
       UserNotifier.deliver_confirmation_instructions(
-        credential,
+        credential.email,
         confirmation_url_fun.(encoded_token))
     end
   end
