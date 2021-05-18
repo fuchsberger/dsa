@@ -1,4 +1,4 @@
-defmodule DsaWeb.CharacterHelpers do
+defmodule DsaWeb.Helpers.CharacterHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """

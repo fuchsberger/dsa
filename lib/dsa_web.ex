@@ -31,59 +31,54 @@ defmodule DsaWeb do
     end
   end
 
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-      use Phoenix.HTML
-
-      import Phoenix.HTML.Form, except: [
-        email_input: 3,
-        number_input: 3,
-        password_input: 3,
-        text_input: 3,
-        select: 4
-      ]
-
-      import Phoenix.LiveView.Helpers
-      import DsaWeb.DsaHelpers
-      import DsaWeb.CharacterHelpers
-      import DsaWeb.FormHelpers
-      import DsaWeb.ViewHelpers
-
-      import DsaWeb.DsaLive, only: [broadcast: 1]
-      import DsaWeb.Gettext
-
-      alias DsaWeb.Router.Helpers, as: Routes
-
-      require Logger
-    end
-  end
-
   def view do
     quote do
       use Phoenix.View, root: "lib/dsa_web/templates", namespace: DsaWeb
       use Phoenix.HTML
 
-      import Phoenix.HTML.Form, except: [
-        email_input: 3,
-        number_input: 3,
-        password_input: 3,
-        text_input: 3,
-        select: 4
-      ]
+      # Import convenience functions from controllers
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      import DsaWeb.Gettext
+      # TODO: Handle
+      # import Phoenix.HTML.Form, except: [
+      #   email_input: 3,
+      #   number_input: 3,
+      #   password_input: 3,
+      #   text_input: 3,
+      #   select: 4
+      # ]
 
-      import DsaWeb.FormHelpers
-      import DsaWeb.DsaHelpers
-      import DsaWeb.CharacterHelpers
-      import DsaWeb.ViewHelpers
-      import Phoenix.LiveView.Helpers
+      # Include shared imports and aliases for views
+      unquote(view_helpers())
+    end
+  end
 
-      alias DsaWeb.Router.Helpers, as: Routes
-      alias DsaWeb.LogView
+  def live_view do
+    quote do
+      use Phoenix.LiveView, layout: {DsaWeb.LayoutView, "live.html"}
 
-      require Logger
+      unquote(view_helpers())
+    end
+  end
+
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+      use Phoenix.HTML
+
+      # TODO: handle
+      # import Phoenix.HTML.Form, except: [
+      #   email_input: 3,
+      #   number_input: 3,
+      #   password_input: 3,
+      #   text_input: 3,
+      #   select: 4
+      # ]
+
+      import DsaWeb.DsaLive, only: [broadcast: 1]
+
+      unquote(view_helpers())
     end
   end
 
@@ -91,10 +86,40 @@ defmodule DsaWeb do
     quote do
       use Phoenix.Router
 
-      import Phoenix.LiveView.Router #TODO: Remove once live views are integrated.
       import Plug.Conn
       import Phoenix.Controller
-      import DsaWeb.Auth, only: [authenticate_user: 2, admin: 2]
+      import Phoenix.LiveView.Router
+    end
+  end
+
+  defp view_helpers do
+    quote do
+      # Use all HTML functionality (forms, tags, etc)
+      use Phoenix.HTML
+
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      import Phoenix.LiveView.Helpers
+
+      # Import basic rendering functionality (render, render_layout, etc)
+      import Phoenix.View
+
+      import DsaWeb.Helpers.ErrorHelpers
+      import DsaWeb.Helpers.FormHelpers       # added
+      import DsaWeb.Helpers.ViewHelpers       # added
+      import DsaWeb.Helpers.DsaHelpers        # added
+      import DsaWeb.Helpers.CharacterHelpers  # added
+
+      import DsaWeb.Gettext
+      alias DsaWeb.Router.Helpers, as: Routes
+
+      require Logger
+    end
+  end
+
+  def channel do
+    quote do
+      use Phoenix.Channel
+      import DsaWeb.Gettext
     end
   end
 

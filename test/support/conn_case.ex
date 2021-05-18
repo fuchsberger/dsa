@@ -23,13 +23,9 @@ defmodule DsaWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import DsaWeb.ConnCase
-      import Dsa.TestHelpers
       import DsaWeb.Gettext
-      import DsaWeb.Auth, only: [authenticate_user: 1]
 
       alias DsaWeb.Router.Helpers, as: Routes
-
-      require Logger
 
       # The default endpoint for testing
       @endpoint DsaWeb.Endpoint
@@ -64,8 +60,8 @@ defmodule DsaWeb.ConnCase do
 
   It returns an updated `conn`.
   """
-  def log_in_user(conn, credential) do
-    token = Dsa.Accounts.generate_user_session_token(credential)
+  def log_in_user(conn, user) do
+    token = Dsa.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

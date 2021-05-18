@@ -1,4 +1,4 @@
-defmodule DsaWeb.ViewHelpers do
+defmodule DsaWeb.Helpers.ViewHelpers do
   @moduledoc """
   Conveniences for all views.
   """

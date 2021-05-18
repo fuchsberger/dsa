@@ -7,7 +7,7 @@ defmodule Dsa.Data.Blessing do
   import Ecto.Changeset
   alias Dsa.Type.Probe
 
-  import DsaWeb.DsaHelpers, only: [traits: 0]
+  import DsaWeb.Helpers.DsaHelpers, only: [traits: 0]
 
   @table :blessings
   @sf_values ~w(A B C D E)a

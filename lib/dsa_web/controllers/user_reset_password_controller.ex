@@ -6,9 +6,7 @@ defmodule DsaWeb.UserResetPasswordController do
   plug :get_user_by_reset_password_token when action in [:edit, :update]
 
   def new(conn, _params) do
-    conn
-    |> put_layout("flipped.html")
-    |> render("new.html")
+    render(conn, "new.html")
   end
 
   def create(conn, %{"user" => %{"email" => email}}) do
@@ -23,15 +21,13 @@ defmodule DsaWeb.UserResetPasswordController do
   end
 
   def edit(conn, _params) do
-    conn
-    |> put_layout("flipped.html")
-    |> render("edit.html", changeset: Accounts.change_user_password(conn.assigns.user))
+    render(conn, "edit.html", changeset: Accounts.change_user_password(conn.assigns.user))
   end
 
   # Do not log in the user after reset password to avoid a
   # leaked token giving the user access to the account.
-  def update(conn, %{"user_credential" => credential_params}) do
-    case Accounts.reset_credential_password(conn.assigns.user, credential_params) do
+  def update(conn, %{"user" => user_params}) do
+    case Accounts.reset_user_password(conn.assigns.user, user_params) do
       {:ok, _} ->
         conn
         |> put_flash(:info, dgettext("account", "Password reset successfully."))

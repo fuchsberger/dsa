@@ -1,5 +1,14 @@
-# Scripts for populating the database. You can them as:
-# mix run priv/repo/seeds.exs
+# Script for populating the database. You can run it as:
+#
+#     mix run priv/repo/seeds.exs
+#
+# Inside the script, you can read and write to any of your
+# repositories directly:
+#
+#     Dsa.Repo.insert!(%Dsa.SomeSchema{})
+#
+# We recommend using the bang functions (`insert!`, `update!`
+# and so on) as they will fail if something goes wrong.
 
 # Also some admin conviencences are now supported via the interactive shell:
 # iex -S mix
@@ -18,4 +27,4 @@
 
 # This will update / insert all DSA data elements
 # Alternatively Data elements are automatically inserted via migration.
-Dsa.Data.Seeder.seed()
+# Dsa.Data.Seeder.seed()

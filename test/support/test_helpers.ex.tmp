@@ -11,33 +11,6 @@ defmodule Dsa.TestHelpers do
     group
   end
 
-  def user_fixture(attrs \\ %{}) do
-    id = System.unique_integer([:positive])
-
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{
-        email: attrs[:email] || "test#{id}@test.abc",
-        username: attrs[:username] || "user#{id}",
-        password: attrs[:password] || "Supersecret123",
-        password_confirm: attrs[:password_confirm] || attrs[:password] || "Supersecret123"
-      })
-      |> Accounts.register_user()
-
-    user = Accounts.preload_characters(user)
-
-    {confirmed, admin} = if is_map(attrs),
-      do: {Map.get(attrs, :confirmed, true), Map.get(attrs, :admin, false)},
-      else: {Keyword.get(attrs, :confirmed, true), Keyword.get(attrs, :admin, false)}
-
-    case {confirmed, admin} do
-      {true, true} -> Accounts.manage_user!(user, %{confirmed: true, token: nil, admin: true})
-      {true, false} -> Accounts.manage_user!(user, %{confirmed: true, token: nil})
-      {false, true} -> Accounts.manage_user!(user, %{admin: true})
-      _ -> user
-    end
-  end
-
   def character_fixture(%Accounts.User{} = user, attrs \\ %{}) do
     attrs = Enum.into(attrs, %{
       name: attrs[:name] || "char_#{System.unique_integer([:positive])}",

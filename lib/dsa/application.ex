@@ -9,6 +9,8 @@ defmodule Dsa.Application do
     children = [
       # Start the Ecto repository
       Dsa.Repo,
+      # Start the Telemetry supervisor
+      DsaWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Dsa.PubSub},
       # Start the Endpoint (http/https)

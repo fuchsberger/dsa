@@ -1,6 +1,7 @@
 defmodule DsaWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
+  import DsaWeb.Gettext
 
   alias Dsa.Accounts
   alias DsaWeb.Router.Helpers, as: Routes
@@ -24,8 +25,8 @@ defmodule DsaWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, credential, params \\ %{}) do
-    token = Accounts.generate_user_session_token(credential)
+  def log_in_user(conn, user, params \\ %{}) do
+    token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
 
     conn
@@ -132,7 +133,7 @@ defmodule DsaWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, dgettext("account", "You must log in to access this page."))
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
       |> halt()
@@ -146,4 +147,20 @@ defmodule DsaWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"
+
+  @doc """
+  Used for routes that require the user to be an admin.
+  require_authenticated_user/2 does not need to be plugged first but can be.
+  """
+  def require_admin_user(conn, _opts) do
+    if conn.assigns.current_user && conn.assigns.current_user.admin do
+      conn
+    else
+      # TODO Show Forbidden page instead.
+      conn
+      |> put_flash(:error, dgettext("account", "You must be an adminstrator to access this page."))
+      |> redirect(to: Routes.character_path(conn, :index))
+      |> halt()
+    end
+  end
 end

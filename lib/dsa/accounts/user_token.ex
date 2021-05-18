@@ -26,26 +26,22 @@ defmodule Dsa.Accounts.UserToken do
   such as session or cookie. As they are signed, those
   tokens do not need to be hashed.
   """
-  def build_session_token(credential) do
+  def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {
-      token,
-      %Dsa.Accounts.UserToken{token: token, context: "session",  user_id: credential.user_id}
-    }
+    {token, %Dsa.Accounts.UserToken{token: token, context: "session", user_id: user.id}}
   end
 
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
+
   The query returns the user found by the token.
   """
   def verify_session_token_query(token) do
     query =
-      from(token in token_and_context_query(token, "session"),
+      from token in token_and_context_query(token, "session"),
         join: user in assoc(token, :user),
-        join: credential in assoc(user, :credential),
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: user,
-        select_merge: %{email: credential.email})
+        select: user
 
     {:ok, query}
   end
@@ -58,11 +54,11 @@ defmodule Dsa.Accounts.UserToken do
   The token is valid for a week as long as users don't change
   their email.
   """
-  def build_email_token(credential, context) do
-    build_hashed_token(credential, context, credential.email)
+  def build_email_token(user, context) do
+    build_hashed_token(user, context, user.email)
   end
 
-  defp build_hashed_token(credential, context, sent_to) do
+  defp build_hashed_token(user, context, sent_to) do
     token = :crypto.strong_rand_bytes(@rand_size)
     hashed_token = :crypto.hash(@hash_algorithm, token)
 
@@ -71,7 +67,7 @@ defmodule Dsa.Accounts.UserToken do
        token: hashed_token,
        context: context,
        sent_to: sent_to,
-       user_id: credential.user_id
+       user_id: user.id
      }}
   end
 
@@ -88,9 +84,9 @@ defmodule Dsa.Accounts.UserToken do
 
         query =
           from token in token_and_context_query(hashed_token, context),
-            join: credential in Dsa.Accounts.UserCredential,
-            where: token.inserted_at > ago(^days, "day") and token.sent_to == credential.email,
-            select: credential
+            join: user in assoc(token, :user),
+            where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
+            select: user
 
         {:ok, query}
 
@@ -133,11 +129,11 @@ defmodule Dsa.Accounts.UserToken do
   @doc """
   Gets all tokens for the given user for the given contexts.
   """
-  def user_and_contexts_query(user_id, :all) do
-    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user_id
+  def user_and_contexts_query(user, :all) do
+    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user.id
   end
 
-  def user_and_contexts_query(user_id, [_ | _] = contexts) do
-    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user_id and t.context in ^contexts
+  def user_and_contexts_query(user, [_ | _] = contexts) do
+    from t in Dsa.Accounts.UserToken, where: t.user_id == ^user.id and t.context in ^contexts
   end
 end

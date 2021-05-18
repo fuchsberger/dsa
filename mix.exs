@@ -26,8 +26,8 @@ defmodule Dsa.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "priv/repo/seeds", "test/support"]
-  defp elixirc_paths(_), do: ["lib", "priv/repo/seeds"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -35,21 +35,23 @@ defmodule Dsa.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.5.8"},
+      {:phoenix, "~> 1.5.9"},
       {:phoenix_ecto, "~> 4.2.1"},
       {:ecto_sql, "~> 3.6.1"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.14.3"},
       {:phoenix_live_view, "~> 0.15.4"},
+      {:floki, ">= 0.0.0", only: :test},
+      {:phoenix_html, "~> 2.14.3"},
       {:phoenix_live_reload, "~> 1.3.0", only: :dev},
+      {:phoenix_live_dashboard, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.5.0"},
-      {:pbkdf2_elixir, "~> 1.0"},
-      {:bamboo, "~> 2.1.0"},
       {:phx_gen_auth, "~> 0.7.0", only: [:dev], runtime: false},
-      {:enum_type, "~> 1.1.0"},
-      {:floki, ">= 0.0.0", only: :test}
+      {:bamboo, "~> 2.1.0"},
+      {:enum_type, "~> 1.1.0"}
     ]
   end
 
@@ -64,7 +66,7 @@ defmodule Dsa.MixProject do
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end

@@ -2,6 +2,11 @@
 
   a.link { @apply font-medium text-indigo-600 hover:text-indigo-500; }
 
+  /* Submit button in account pages (with lock icon) */
+  .auth-button { @apply primary group relative w-full flex justify-center; }
+  .auth-button span { @apply absolute left-0 inset-y-0 flex items-center pl-3; }
+  .auth-button svg { @apply h-5 w-5 text-indigo-500 group-hover:text-indigo-400; }
+
   .centered-box {
     @apply flex items-center justify-center pt-2 pb-4 px-4 sm:px-6 lg:px-8;
     min-height: calc(100vh - 4rem);

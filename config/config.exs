@@ -7,7 +7,8 @@
 # General application configuration
 use Mix.Config
 
-config :dsa, ecto_repos: [Dsa.Repo]
+config :dsa,
+  ecto_repos: [Dsa.Repo]
 
 # Configures the endpoint
 config :dsa, DsaWeb.Endpoint,
@@ -23,7 +24,9 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Web Application is in German by Default
-config :gettext, default_locale: "de", locales: ~w(en de)
+config :gettext,
+  default_locale: "de",
+  locales: ~w(en de)
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

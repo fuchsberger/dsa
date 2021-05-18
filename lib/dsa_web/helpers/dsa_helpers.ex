@@ -1,4 +1,4 @@
-defmodule DsaWeb.DsaHelpers do
+defmodule DsaWeb.Helpers.DsaHelpers do
   @moduledoc """
   Conveniences specific for the app
   """
