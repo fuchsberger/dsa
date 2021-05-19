@@ -1,6 +1,6 @@
 defmodule DsaWeb.UserResetPasswordController do
   use DsaWeb, :controller
-
+  import DsaWeb.AccountTranslations
   alias Dsa.Accounts
 
   plug :get_user_by_reset_password_token when action in [:edit, :update]
@@ -16,7 +16,7 @@ defmodule DsaWeb.UserResetPasswordController do
 
     # Regardless of the outcome, show an impartial success/error message.
     conn
-    |> put_flash(:info, dgettext("account", "If your email is in our system, you will receive instructions to reset your password shortly."))
+    |> put_flash(:info, t(:reset_password_msg))
     |> redirect(to: "/")
   end
 
@@ -30,7 +30,7 @@ defmodule DsaWeb.UserResetPasswordController do
     case Accounts.reset_user_password(conn.assigns.user, user_params) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, dgettext("account", "Password reset successfully."))
+        |> put_flash(:info, t(:reset_password_success))
         |> redirect(to: Routes.user_session_path(conn, :new))
 
       {:error, changeset} ->
@@ -45,7 +45,7 @@ defmodule DsaWeb.UserResetPasswordController do
       conn |> assign(:user, user) |> assign(:token, token)
     else
       conn
-      |> put_flash(:error, dgettext("account", "Reset password link is invalid or it has expired."))
+      |> put_flash(:error, t(:reset_password_invalid))
       |> redirect(to: "/")
       |> halt()
     end

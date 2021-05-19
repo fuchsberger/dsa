@@ -1,6 +1,6 @@
 defmodule DsaWeb.UserConfirmationController do
   use DsaWeb, :controller
-
+  import DsaWeb.AccountTranslations
   alias Dsa.Accounts
 
   def new(conn, _params) do
@@ -17,7 +17,7 @@ defmodule DsaWeb.UserConfirmationController do
 
     # Regardless of the outcome, show an impartial success/error message.
     conn
-    |> put_flash(:info, dgettext("account", "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."))
+    |> put_flash(:info, t(:confirm_message))
     |> redirect(to: "/")
   end
 
@@ -27,7 +27,7 @@ defmodule DsaWeb.UserConfirmationController do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, dgettext("account", "User confirmed successfully."))
+        |> put_flash(:info, t(:confirm_success))
         |> redirect(to: "/")
 
       :error ->
@@ -41,7 +41,7 @@ defmodule DsaWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, dgettext("account", "User confirmation link is invalid or it has expired."))
+            |> put_flash(:error, t(:confirm_invalid))
             |> redirect(to: "/")
         end
     end

@@ -1,13 +1,24 @@
 defmodule Dsa.AccountsTest do
   use Dsa.DataCase
 
-  alias Dsa.Accounts
   import Dsa.AccountsFixtures
+  import DsaWeb.Gettext
+
+  alias Dsa.Accounts
   alias Dsa.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
       refute Accounts.get_user_by_email("unknown@example.com")
+    end
+
+    test "does not return the user if they have been blocked" do
+      user = user_fixture()
+
+      Accounts.block_user(user)
+
+      assert {:error, :user_blocked} ==
+        Accounts.get_user_by_email_and_password(user.email, valid_user_password())
     end
 
     test "returns the user if the email exists" do
@@ -18,19 +29,27 @@ defmodule Dsa.AccountsTest do
 
   describe "get_user_by_email_and_password/2" do
     test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
+      assert {:error, :bad_username_or_password} ==
+        Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
     end
 
     test "does not return the user if the password is not valid" do
       user = user_fixture()
-      refute Accounts.get_user_by_email_and_password(user.email, "invalid")
+      assert {:error, :bad_username_or_password} ==
+        Accounts.get_user_by_email_and_password(user.email, "invalid")
+    end
+
+    test "does not return the user if their account has not been confirmed" do
+      user = user_fixture(%{}, confirmed: false)
+
+      assert {:error, :not_confirmed} ==
+        Accounts.get_user_by_email_and_password(user.email, valid_user_password())
     end
 
     test "returns the user if the email and password are valid" do
       %{id: id} = user = user_fixture()
 
-      assert %User{id: ^id} =
-               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+      assert {:ok, %User{id: ^id}} = Accounts.get_user_by_email_and_password(user.email, valid_user_password())
     end
   end
 
@@ -57,13 +76,22 @@ defmodule Dsa.AccountsTest do
              } = errors_on(changeset)
     end
 
-    test "validates email and password when given" do
-      {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "not valid"})
+    test "validates username, email and password when given" do
+      {:error, changeset} =
+        Accounts.register_user(%{
+          username: "",
+          email: "not valid",
+          password: "not valid",
+          password_confirmation: "not matching"
+        })
 
-      assert %{
-               email: ["must have the @ sign and no spaces"],
-               password: ["should be at least 12 character(s)"]
-             } = errors_on(changeset)
+      e1 = dgettext("errors", "can&#39;t be blank")
+      e2 = dgettext("errors", "must have the @ sign and no spaces")
+      e3 = dgettext("errors", "should be at least %{count} character(s)", count: 12)
+      e4 = dgettext("errors", "does not match password")
+
+      assert %{ username: [e1], email: [e2], password: [e3], password_confirmation: [e4]} =
+        errors_on(changeset)
     end
 
     test "validates maximum values for email and password for security" do
@@ -85,7 +113,15 @@ defmodule Dsa.AccountsTest do
 
     test "registers users with a hashed password" do
       email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
+
+      {:ok, user} =
+        Accounts.register_user(%{
+          username: valid_user_username(),
+          email: email,
+          password: valid_user_password(),
+          password_confirmation: valid_user_password()
+        })
+
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -382,7 +418,7 @@ defmodule Dsa.AccountsTest do
 
   describe "confirm_user/1" do
     setup do
-      user = user_fixture()
+      user = user_fixture(%{}, confirmed: false)
 
       token =
         extract_user_token(fn url ->
@@ -496,6 +532,32 @@ defmodule Dsa.AccountsTest do
       _ = Accounts.generate_user_session_token(user)
       {:ok, _} = Accounts.reset_user_password(user, %{password: "new valid password"})
       refute Repo.get_by(UserToken, user_id: user.id)
+    end
+  end
+
+  describe "block_user/1" do
+    setup do
+      user = user_fixture()
+      token = Accounts.generate_user_session_token(user)
+      %{user: user, token: token}
+    end
+
+    test "sets the is_blocked flag to true and removes any tokens belonging to the user", %{user: user, token: token} do
+      assert {:ok, user} = Accounts.block_user(user)
+      assert user.is_blocked == true
+      refute Accounts.get_user_by_session_token(token)
+    end
+  end
+
+  describe "unblock_user/1" do
+    setup do
+      {:ok, user} = user_fixture() |> Accounts.block_user()
+      %{user: user}
+    end
+
+    test "sets the is_blocked flag to false", %{user: user} do
+      assert {:ok, user} = Accounts.unblock_user(user)
+      assert user.is_blocked == false
     end
   end
 

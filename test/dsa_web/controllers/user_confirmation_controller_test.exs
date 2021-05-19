@@ -1,19 +1,21 @@
 defmodule DsaWeb.UserConfirmationControllerTest do
   use DsaWeb.ConnCase, async: true
 
+  import Dsa.AccountsFixtures
+  import DsaWeb.AccountTranslations
+
   alias Dsa.Accounts
   alias Dsa.Repo
-  import Dsa.AccountsFixtures
 
   setup do
-    %{user: user_fixture()}
+    %{user: user_fixture(%{}, confirmed: false)}
   end
 
   describe "GET /users/confirm" do
     test "renders the confirmation page", %{conn: conn} do
       conn = get(conn, Routes.user_confirmation_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Resend confirmation instructions</h1>"
+      assert response =~ t(:resend_confirmation) <> "</button>"
     end
   end
 
@@ -26,7 +28,7 @@ defmodule DsaWeb.UserConfirmationControllerTest do
         })
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ dgettext("account", "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
+      assert get_flash(conn, :info) =~ t(:confirm_message)
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "confirm"
     end
 
@@ -39,7 +41,7 @@ defmodule DsaWeb.UserConfirmationControllerTest do
         })
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ dgettext("account", "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
+      assert get_flash(conn, :info) =~ t(:confirm_message)
       refute Repo.get_by(Accounts.UserToken, user_id: user.id)
     end
 
@@ -50,7 +52,7 @@ defmodule DsaWeb.UserConfirmationControllerTest do
         })
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ dgettext("account", "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
+      assert get_flash(conn, :info) =~ t(:confirm_message)
       assert Repo.all(Accounts.UserToken) == []
     end
   end

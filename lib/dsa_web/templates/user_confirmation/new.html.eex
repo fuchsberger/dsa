@@ -2,9 +2,7 @@
 
   <%= icon @conn, "eye-solid", "mx-auto h-12 w-auto" %>
 
-  <h2 class="text-3xl font-extrabold">
-    <%= dgettext("account", "Confirm Account") %>
-  </h2>
+  <h1 class="text-3xl font-extrabold"><%= t(:confirm_account) %></h1>
 
   <div class="flex justify-between text-sm">
     <%= link dgettext("account", "Register"),
@@ -26,7 +24,7 @@
           required: true %>
       </div>
 
-      <%= submit dgettext("account", "Resend confirmation instructions"), class: "primary" %>
+      <%= submit t(:resend_confirmation), class: "primary" %>
     </div>
   <% end %>
 </div>

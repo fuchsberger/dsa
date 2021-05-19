@@ -86,7 +86,7 @@
           </button>
 
           <div class="origin-bottom-left left-0 group-hover:scale-100">
-            <%= link [icon(@conn, "view-list"), gettext("List Spells")],
+            <%# link [icon(@conn, "view-list"), gettext("List Spells")],
               to: Routes.spell_path(@conn, :index) %>
 
             <%= if admin?(@conn) do %>
@@ -95,7 +95,7 @@
             <% end %>
 
             <%= for {id, name} <- @current_user.characters do %>
-              <%= link [icon(@conn, "pencil-solid"), name],
+              <%# link [icon(@conn, "pencil-solid"), name],
                 to: Routes.character_spell_path(@conn, :index, id) %>
             <% end %>
           </div>

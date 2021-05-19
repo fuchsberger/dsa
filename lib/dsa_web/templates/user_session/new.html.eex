@@ -2,9 +2,7 @@
   <div class="max-w-md w-full space-y-6">
     <div>
       <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
-      <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900">
-        <%= t(:heading_sign_in) %>
-      </h2>
+      <h1 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= t(:heading_sign_in) %></h1>
       <p class="mt-2 text-center text-sm text-gray-600">
         <%= t(:or) %>
         <%= link t(:register_link),
@@ -54,7 +52,7 @@
       </div>
 
       <div>
-        <button type="submit" class="auth-button"><span><%= icon(@conn, "lock-closed-solid") %></span><%= t(:sign_in) %></button>
+        <button type="submit" class="auth-button group"><span><%= icon(@conn, "lock-closed-solid") %></span><%= t(:sign_in) %></button>
       </div>
     <% end %>
   </div>

@@ -1,44 +1,41 @@
 <div class="max-w-sm mx-auto my-3 space-y-3 text-center">
   <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
 
-  <h2 class="text-3xl font-extrabold"><%= dgettext("account", "Reset password") %></h2>
+  <h1 class="text-3xl font-extrabold"><%= t(:reset_password) %></h1>
 
   <div class="flex justify-between text-sm">
-    <%= link dgettext("account", "Log In"), to: Routes.user_registration_path(@conn, :new) %>
-    <%= link dgettext("account", "Register"), to: Routes.user_session_path(@conn, :new) %>
+    <%= link t(:sign_in), to: Routes.user_session_path(@conn, :new) %>
+    <%= link t(:sign_up), to: Routes.user_registration_path(@conn, :new) %>
   </div>
 
   <%= form_for @changeset, Routes.user_reset_password_path(@conn, :update, @token), fn f -> %>
     <div class="space-y-3">
-    <%= if @changeset.action do %>
-      <div class="inline-block alert error">
-        <%= dgettext "account", "Oops, something went wrong! Please check the errors below." %>
+      <%= if @changeset.action do %>
+        <div class="inline-block alert error"><%= t(:form_error) %></div>
+      <% end %>
+
+      <div class='icon rounded-md'>
+        <%= label f, :password, t(:new_password), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password,
+          autocomplete: "new-password",
+          class: "input",
+          placeholder: t(:new_password) %>
       </div>
-    <% end %>
+      <%= error_tag f, :password %>
 
-    <div class='icon rounded-md'>
-      <%= label f, :password, dgettext("account", "New Password"), class: "sr-only" %>
-      <%= icon @conn, "lock-closed-solid" %>
-      <%= password_input f, :password,
-        autocomplete: "new-password",
-        class: "input",
-        placeholder: dgettext("account", "New Password") %>
+      <div class='icon rounded-md'>
+        <%= label f, :password_confirmation, t(:password_confirmation),
+          class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password_confirmation,
+          autocomplete: "new-password",
+          class: "input",
+          placeholder: t(:password_confirmation) %>
+      </div>
+      <%= error_tag f, :password_confirmation %>
+
+      <%= submit t(:reset_password), class: "primary" %>
     </div>
-    <%= error_tag f, :password %>
-
-    <div class='icon rounded-md'>
-      <%= label f, :password_confirmation, dgettext("account", "Confirm Password"),
-        class: "sr-only" %>
-      <%= icon @conn, "lock-closed-solid" %>
-      <%= password_input f, :password_confirmation,
-        autocomplete: "new-password",
-        class: "input",
-        placeholder: dgettext("account", "Confirm Password") %>
-    </div>
-    <%= error_tag f, :password_confirmation %>
-
-    <%= submit dgettext("account", "Reset password"), class: "primary" %>
-
-  </div>
   <% end %>
 </div>

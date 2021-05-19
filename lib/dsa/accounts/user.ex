@@ -1,6 +1,7 @@
 defmodule Dsa.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  import DsaWeb.Gettext
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -10,6 +11,7 @@ defmodule Dsa.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    field :is_blocked, :boolean, default: false
 
     # belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
     # belongs_to :active_character, Dsa.Characters.Character, on_replace: :nilify
@@ -38,6 +40,7 @@ defmodule Dsa.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :username])
+    |> validate_confirmation(:password, message: "does not match password")
     |> validate_email()
     |> validate_password(opts)
     |> validate_username()
@@ -46,7 +49,8 @@ defmodule Dsa.Accounts.User do
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
+        message: dgettext("errors", "must have the @ sign and no spaces"))
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, Dsa.Repo)
     |> unique_constraint(:email)
@@ -124,6 +128,14 @@ defmodule Dsa.Accounts.User do
   end
 
   @doc """
+  A user changeset for blocking / unblocking a user.
+  """
+  def block_user_changeset(user, should_block?) do
+    user
+    |> cast(%{is_blocked: should_block?}, [:is_blocked])
+  end
+
+  @doc """
   Verifies the password.
 
   If there is no user or the user doesn't have a password, we call
@@ -138,6 +150,16 @@ defmodule Dsa.Accounts.User do
     Bcrypt.no_user_verify()
     false
   end
+
+  @doc """
+  Returns true if the user has confirmed their account, false otherwise
+  """
+  def is_confirmed?(user), do: user.confirmed_at != nil
+
+  @doc """
+  Returns true if the user has been blocked, false otherwise
+  """
+  def is_blocked?(user), do: user.is_blocked
 
   @doc """
   Validates the current password otherwise adds an error to the changeset.

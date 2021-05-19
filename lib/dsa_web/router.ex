@@ -3,10 +3,6 @@ defmodule DsaWeb.Router do
 
   import DsaWeb.UserAuth
 
-  if Application.get_env(:dsa, :environment) == :dev do
-    forward "/sent_emails", Bamboo.SentEmailViewerPlug
-  end
-
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -35,6 +31,17 @@ defmodule DsaWeb.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: DsaWeb.Telemetry
     end
+  end
+
+  if Mix.env() == :dev do
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
+  # Public Routes
+  scope "/", DsaWeb do
+    pipe_through :browser
+
+    get "/", PageController, :index
   end
 
   ## Authentication routes
@@ -72,9 +79,6 @@ defmodule DsaWeb.Router do
   # # Public Routes
   # scope "/", DsaWeb do
   #   pipe_through :browser
-
-  #   # Authentication
-  #   get "/", PageController, :index
 
   #   resources "/character", CharacterController, only: [:show]
 

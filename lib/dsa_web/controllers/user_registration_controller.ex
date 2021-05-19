@@ -1,6 +1,8 @@
 defmodule DsaWeb.UserRegistrationController do
   use DsaWeb, :controller
 
+  import DsaWeb.AccountTranslations
+
   alias Dsa.Accounts
   alias Dsa.Accounts.User
 
@@ -13,13 +15,11 @@ defmodule DsaWeb.UserRegistrationController do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         {:ok, _} =
-          Accounts.deliver_user_confirmation_instructions(
-            user,
-            &Routes.user_confirmation_url(conn, :confirm, &1)
-          )
+          Accounts.deliver_user_confirmation_instructions(user,
+            &Routes.user_confirmation_url(conn, :confirm, &1))
 
         conn
-          |> put_flash(:success, dgettext("account", "Registration successfull! A link to activate your account was sent to %{email}.", email: user.email))
+          |> put_flash(:success, t(:registration_successful))
           # |> UserAuth.log_in_user(user)
           |> redirect(to: Routes.user_session_path(conn, :new))
 

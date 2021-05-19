@@ -1,53 +1,82 @@
-<div class="max-w-sm mx-auto my-3 space-y-3 text-center">
-  <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
+<div class="centered-box">
+  <div class="max-w-md w-full space-y-6">
+    <div>
+      <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
+      <h1 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= t(:settings) %></h1>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        <%= link t(:delete_account_link), to: Routes.page_path(@conn, :index), class: "link", method: :delete, data_confirm: t(:delete_account_confirmation) %>
+      </p>
+    </div>
 
-  <h2 class="text-3xl font-extrabold"><%= gettext("Settings") %></h2>
+    <h3><%= t(:change_email) %></h3>
+    <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), [class: "mt-8 space-y-2"], fn f -> %>
+      <%= if @email_changeset.action, do: render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: t(:form_error) %>
 
-  <div class="flex justify-between text-sm">
-    <%= link gettext("Change Password"), to: Routes.user_change_password_path(@conn, :edit) %>
-    <%= link gettext("Delete Account"), to: Routes.user_settings_path(@conn, :delete), method: :delete, data_confirm: gettext("Are you sure you want to delete your account including all characters?") %>
-  </div>
+      <div class='icon-input'>
+        <%= label f, :email, t(:email_address), class: "sr-only" %>
+        <%= icon @conn, "mail-solid" %>
+        <%= email_input f, :email,
+          autocomplete: "email",
+          placeholder: t(:email_address),
+          required: true %>
+      </div>
+      <%= error_tag f, :email %>
 
-  <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
-    <%= if @email_changeset.action do %>
-      <div class="inline-block alert error">
-        <%= gettext "Oops, something went wrong! Please check the errors below." %>
+      <div class='icon-input'>
+        <%= label f, :current_password, t(:current_password), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :current_password,
+          autocomplete: "password",
+          name: "current_password",
+          id: "current_password_for_email",
+          placeholder: t(:current_password),
+          required: true %>
+      </div>
+      <%= error_tag f, :current_password %>
+
+      <div>
+        <button type="submit" class="auth-button group"><span><%= icon(@conn, "lock-closed-solid") %></span><%= t(:change_email) %></button>
       </div>
     <% end %>
 
-    <div class='icon rounded-md'>
-      <%= label f, :current_password, gettext("Current Password"),
-        class: "sr-only", for: "current_password_for_email" %>
-      <%= icon @conn, "lock-closed-solid" %>
-      <%= password_input f, :current_password,
-        autocomplete: "new-password",
-        name: "current_password",
-        id: "current_password_for_email",
-        class: "input",
-        placeholder: gettext("Current Password") %>
-    </div>
-    <%= error_tag f, :current_password %>
+    <h3><%= t(:change_password) %></h3>
+    <%= form_for @password_changeset, Routes.user_settings_path(@conn, :update), [class: "mt-8 space-y-2"], fn f -> %>
+      <%= if @password_changeset.action, do: render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: t(:form_error) %>
 
-    <div class='icon rounded-md mt-3'>
-      <%= label f, :email, gettext("Email"), class: "sr-only" %>
-      <%= icon @conn, "mail-solid" %>
-      <%= email_input f, :email,
-        autocomplete: "email",
-        class: "input",
-        placeholder: gettext("Email") %>
-    </div>
-    <%= error_tag f, :email %>
+      <div class='icon-input'>
+        <%= label f, :password, t(:new_password), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password,
+          autocomplete: "new-password",
+          placeholder: t(:new_password),
+          required: true %>
+      </div>
+      <%= error_tag f, :password %>
 
-    <div class='icon rounded-md mt-3'>
-      <%= label f, :username, gettext("Username"), class: "sr-only" %>
-      <%= icon @conn, "user" %>
-      <%= text_input f, :username,
-        autocomplete: "username",
-        class: "input",
-        placeholder: gettext("Username") %>
-    </div>
-    <%= error_tag f, :username %>
+      <div class='icon-input'>
+        <%= label f, :password_confirmation, t(:password_confirmation), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :password_confirmation,
+          autocomplete: "new-password",
+          placeholder: t(:password_confirmation),
+          required: true %>
+      </div>
+      <%= error_tag f, :password_confirmation %>
 
-    <%= submit gettext("Update Settings"), class: "primary mt-3" %>
-  <% end %>
+      <div class='icon-input'>
+        <%= label f, :current_password, t(:current_password), class: "sr-only" %>
+        <%= icon @conn, "lock-closed-solid" %>
+        <%= password_input f, :current_password,
+          autocomplete: "password",
+          name: "current_password",
+          id: "current_password_for_email",
+          placeholder: t(:current_password),
+          required: true %>
+      </div>
+      <%= error_tag f, :current_password %>
+
+      <div>
+        <button type="submit" class="auth-button group"><span><%= icon(@conn, "lock-closed-solid") %></span><%= t(:change_password) %></button>
+      </div>
+    <% end %>
 </div>

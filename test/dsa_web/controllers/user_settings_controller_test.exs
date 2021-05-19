@@ -1,8 +1,9 @@
 defmodule DsaWeb.UserSettingsControllerTest do
   use DsaWeb.ConnCase, async: true
-
-  alias Dsa.Accounts
   import Dsa.AccountsFixtures
+  import DsaWeb.AccountTranslations
+  alias Dsa.Accounts
+
 
   setup :register_and_log_in_user
 
@@ -10,7 +11,7 @@ defmodule DsaWeb.UserSettingsControllerTest do
     test "renders settings page", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :edit))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Settings</h1>"
+      assert response =~ t(:settings) <> "</h1>"
     end
 
     test "redirects if user is not logged in" do
@@ -50,10 +51,10 @@ defmodule DsaWeb.UserSettingsControllerTest do
         })
 
       response = html_response(old_password_conn, 200)
-      assert response =~ dgettext("account", "Settings")
-      assert response =~ dgettext("account", "should be at least %{count} character(s)", count: 12)
-      assert response =~ dgettext("account", "does not match password")
-      assert response =~ dgettext("account", "is not valid")
+      assert response =~ t(:settings) <> "</h1>"
+      assert response =~ dgettext("errors", "should be at least %{count} character(s)", count: 12)
+      assert response =~ dgettext("errors", "does not match password")
+      assert response =~ dgettext("errors", "is not valid")
 
       assert get_session(old_password_conn, :user_token) == get_session(conn, :user_token)
     end
@@ -83,7 +84,7 @@ defmodule DsaWeb.UserSettingsControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ dgettext("account", "Settings")
+      assert response =~ t(:settings) <> "</h1>"
       assert response =~ dgettext("errors", "must have the @ sign and no spaces")
       assert response =~ dgettext("errors", "is not valid")
     end

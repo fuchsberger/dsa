@@ -1,9 +1,11 @@
 defmodule DsaWeb.UserResetPasswordControllerTest do
   use DsaWeb.ConnCase, async: true
 
+  import Dsa.AccountsFixtures
+  import DsaWeb.AccountTranslations
+
   alias Dsa.Accounts
   alias Dsa.Repo
-  import Dsa.AccountsFixtures
 
   setup do
     %{user: user_fixture()}
@@ -13,7 +15,7 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
     test "renders the reset password page", %{conn: conn} do
       conn = get(conn, Routes.user_reset_password_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ dgettext("account", "Forgot your password?")
+      assert response =~ t(:forgot_password?) <> "</h1>"
     end
   end
 
@@ -26,7 +28,7 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
         })
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ dgettext("account", "If your email is in our system, you will receive instructions to reset your password shortly.")
+      assert get_flash(conn, :info) =~ t(:reset_password_msg)
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "reset_password"
     end
 
@@ -37,7 +39,7 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
         })
 
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ dgettext("account", "If your email is in our system, you will receive instructions to reset your password shortly.")
+      assert get_flash(conn, :info) =~ t(:reset_password_msg)
       assert Repo.all(Accounts.UserToken) == []
     end
   end
@@ -54,13 +56,13 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
 
     test "renders reset password", %{conn: conn, token: token} do
       conn = get(conn, Routes.user_reset_password_path(conn, :edit, token))
-      assert html_response(conn, 200) =~ dgettext("account", "Reset password")
+      assert html_response(conn, 200) =~ t(:reset_password) <> "</h1>"
     end
 
     test "does not render reset password with invalid token", %{conn: conn} do
       conn = get(conn, Routes.user_reset_password_path(conn, :edit, "oops"))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ dgettext("account", "Reset password link is invalid or it has expired.")
+      assert get_flash(conn, :error) =~ t(:reset_password_invalid)
     end
   end
 
@@ -85,7 +87,7 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
 
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
       refute get_session(conn, :user_token)
-      assert get_flash(conn, :info) =~ dgettext("account", "Password reset successfully.")
+      assert get_flash(conn, :info) =~ t(:reset_password_success)
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
     end
 
@@ -99,15 +101,15 @@ defmodule DsaWeb.UserResetPasswordControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ dgettext("account", "Reset password")
-      assert response =~ dgettext("account", "should be at least %{count} character(s)", count: 12)
-      assert response =~ dgettext("account", "does not match password")
+      assert response =~ t(:reset_password) <> "</h1>"
+      assert response =~ dgettext("errors", "should be at least %{count} character(s)", count: 12)
+      assert response =~ dgettext("errors", "does not match password")
     end
 
     test "does not reset password with invalid token", %{conn: conn} do
       conn = put(conn, Routes.user_reset_password_path(conn, :update, "oops"))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ dgettext("account", "Reset password link is invalid or it has expired")
+      assert get_flash(conn, :error) =~ t(:reset_password_invalid)
     end
   end
 end

@@ -19,12 +19,6 @@ config :dsa, Dsa.Mailer,
 # with webpack to recompile .js and .css sources.
 config :dsa, DsaWeb.Endpoint,
   http: [port: 4000],
-  https: [
-    port: 4000,
-    cipher_suite: :strong,
-    keyfile: "priv/cert/selfsigned_key.pem",
-    certfile: "priv/cert/selfsigned.pem"
-  ],
   debug_errors: true, # switch to false to test error pages
   code_reloader: true,
   check_origin: false,

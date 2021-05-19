@@ -12,9 +12,9 @@ defmodule DsaWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ t(:heading_sign_in)
-      assert response =~ t(:sign_in) <> "</button>"
+      assert response =~ t(:heading_sign_in) <> "</h1>"
       assert response =~ t(:register_link) <> "</a>"
+      assert response =~ t(:sign_in) <> "</button>"
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do
@@ -35,9 +35,9 @@ defmodule DsaWeb.UserSessionControllerTest do
 
       # Now do a logged in request and assert on the menu
       # TODO: reenable and fix
-      # conn = get(conn, "/")
-      # response = html_response(conn, 200)
-      # assert response =~ user.email
+      conn = get(conn, "/")
+      response = html_response(conn, 200)
+      assert response =~ user.username
       # assert response =~ "Settings</a>"
       # assert response =~ "Log out</a>"
     end
@@ -79,6 +79,40 @@ defmodule DsaWeb.UserSessionControllerTest do
       response = html_response(conn, 200)
       assert response =~ t(:heading_sign_in)
       assert response =~ t(:invalid_email_or_password)
+    end
+
+    test "emits error message when account is not confirmed", %{conn: conn} do
+      user = user_fixture(%{}, confirmed: false)
+
+      conn =
+        post(conn, Routes.user_session_path(conn, :create), %{
+          "user" => %{
+            "email" => user.email,
+            "password" => valid_user_password(),
+            "remember_me" => "true"
+          }
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ t(:heading_sign_in) <>"</h1>"
+      assert response =~ t(:confirm_before_signin)
+    end
+
+    test "emits error message when account is blocked", %{conn: conn} do
+      {:ok, user} = user_fixture() |> Dsa.Accounts.block_user()
+
+      conn =
+        post(conn, Routes.user_session_path(conn, :create), %{
+          "user" => %{
+            "email" => user.email,
+            "password" => valid_user_password(),
+            "remember_me" => "true"
+          }
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ t(:heading_sign_in) <> "</h1>"
+      assert response =~ t(:blocked_message)
     end
   end
 

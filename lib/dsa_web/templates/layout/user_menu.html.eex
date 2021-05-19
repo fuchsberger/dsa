@@ -7,7 +7,7 @@
         </div>
         <div class="ml-3">
           <p class="text-sm font-medium text-white">
-            <%= active_character_name(@current_user) %>
+            <%# active_character_name(@current_user) %>
           </p>
           <p class="text-xs font-medium text-gray-300 group-hover:text-gray-200">
             <%= @current_user.username %>

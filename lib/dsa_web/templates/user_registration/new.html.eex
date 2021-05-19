@@ -2,57 +2,55 @@
   <div class="max-w-md w-full space-y-6">
     <div>
       <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
-      <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900">
-        <%= dgettext("account", "Register Account") %>
-      </h2>
+      <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= t(:heading_registration) %></h2>
       <p class="mt-2 text-center text-sm text-gray-600">
-        <%= dgettext("account", "Or") %>
-        <%= link dgettext("account", "log into your account"),
-          to: Routes.user_session_path(@conn, :new), class: "link" %>
+        <%= t(:or) %>
+        <%= link t(:signin_link), to: Routes.user_session_path(@conn, :new), class: "link" %>
       </p>
     </div>
 
     <%= if @changeset.action, do:
-      render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message:
-        dgettext("account", "Oops, something went wrong! Please check the errors below.") %>
+      render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: t(:form_error) %>
 
     <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "mt-8 space-y-3"], fn f -> %>
-      <%= inputs_for f, :user, fn fu -> %>
-        <div class='icon-input'>
-          <%= label fu, :username, dgettext("account", "Username"), class: "sr-only" %>
-          <%= icon @conn, "user" %>
-          <%= text_input fu, :username,
-            autocomplete: "username",
-            placeholder: dgettext("account", "Username") %>
-        </div>
-        <%= error_tag fu, :username %>
-      <% end %>
 
       <div class='icon-input'>
-        <%= label f, :email, dgettext("account", "Email"), class: "sr-only" %>
+        <%= label f, :username, t(:username), class: "sr-only" %>
+        <%= icon @conn, "user" %>
+        <%= text_input f, :username,
+          autocomplete: "username",
+          placeholder: t(:username),
+          required: true %>
+      </div>
+      <%= error_tag f, :username %>
+
+      <div class='icon-input'>
+        <%= label f, :email, t(:email_address), class: "sr-only" %>
         <%= icon @conn, "mail-solid" %>
         <%= email_input f, :email,
           autocomplete: "email",
-          placeholder: dgettext("account", "Email") %>
+          placeholder: t(:email_address),
+          required: true %>
       </div>
       <%= error_tag f, :email %>
 
       <div class='icon-input'>
-        <%= label f, :password, dgettext("account", "Password"), class: "sr-only" %>
+        <%= label f, :password, t(:password), class: "sr-only" %>
         <%= icon @conn, "lock-closed-solid" %>
         <%= password_input f, :password,
           autocomplete: "new-password",
-          placeholder: dgettext("account", "Password") %>
+          placeholder: t(:password),
+          required: true %>
       </div>
       <%= error_tag f, :password %>
 
       <div class='icon-input'>
-        <%= label f, :password_confirmation, dgettext("account", "Confirm Password"),
-          class: "sr-only" %>
+        <%= label f, :password_confirmation, t(:password_confirmation), class: "sr-only" %>
         <%= icon @conn, "lock-closed-solid" %>
         <%= password_input f, :password_confirmation,
           autocomplete: "new-password",
-          placeholder: dgettext("account", "Confirm Password") %>
+          placeholder: t(:password_confirmation),
+          required: true %>
       </div>
       <%= error_tag f, :password_confirmation %>
 
@@ -60,8 +58,7 @@
         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
           <%= icon(@conn, "lock-closed-solid", "h-5 w-5 text-indigo-500 group-hover:text-indigo-400") %>
         </span>
-        <%= dgettext("account", "Sign up") %>
-      </button>
+        <%= t(:sign_up) %></button>
     <% end %>
   </div>
 </div>

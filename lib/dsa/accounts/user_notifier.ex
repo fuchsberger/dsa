@@ -1,12 +1,11 @@
-defmodule Dsa.Mailer do
-  use Bamboo.Mailer, otp_app: :dsa
-end
-
 defmodule Dsa.Accounts.UserNotifier do
   import Bamboo.Email
   import DsaWeb.Gettext
+  import DsaWeb.AccountTranslations
 
-  @sender {"DSA Tool", "noreply@fuchsberger.us"}
+  alias Dsa.Mailer
+
+  @from {"DSA Tool", "noreply@fuchsberger.us"}
 
   defimpl Bamboo.Formatter, for: Dsa.Accounts.User do
     # Used by `to`, `bcc`, `cc` and `from`
@@ -15,45 +14,44 @@ defmodule Dsa.Accounts.UserNotifier do
     end
   end
 
-  defp deliver(email) do
-    %Bamboo.Email{to: to, text_body: body} =
-      email
-      |> from({"DSA Tool", "noreply@fuchsberger.us"})
-      |> Dsa.Mailer.deliver_now!()
+  defp deliver(to, subject, text_body, html_body) do
+    email =
+      new_email(
+        to: to,
+        from: @from,
+        subject: subject,
+        text_body: text_body,
+        html_body: html_body
+      )
+      |> Mailer.deliver_now()
 
-    {:ok, %{to: to, body: body}}
+    {:ok, email}
   end
 
   @doc """
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do
-    new_email(
-      to: user,
-      subject: dgettext("account", "DSA Tool - Account Activation"),
-      text_body: dgettext("account", "Hi %{username},\n\nYou can activate your account by visiting the URL below:\n%{url}\n\nIf you have not created an account with us, please ignore this.\n\nBest,\nThe DSA Team", username: user.username, url: url))
-    |> deliver()
+    text_body = t(:confirmation_email_text, url, user.username)
+    html_body = t(:confirmation_email_html, url, user.username)
+    deliver(user, t(:email_subject), text_body, html_body)
   end
 
   @doc """
   Deliver instructions to reset a user password.
   """
   def deliver_reset_password_instructions(user, url) do
-    new_email(
-      to: user,
-      subject: dgettext("account", "DSA Tool - Reset Password"),
-      text_body: dgettext("account", "Hi %{username},\n\nYou can reset your password by visiting the URL below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team", username: user.username, url: url))
-    |> deliver()
+    text_body = t(:reset_password_email_text, url, user.username)
+    html_body = t(:reset_password_email_html, url, user.username)
+    deliver(user, t(:email_subject), text_body, html_body)
   end
 
   @doc """
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    new_email(
-      to: user,
-      subject: dgettext("account", "DSA Tool - Change Email"),
-      text_body: dgettext("account", "Hi %{username},\n\nYou can change your email by visiting the URL below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team", username: user.username, url: url))
-    |> deliver()
+    text_body = t(:update_email_text, url, user.username)
+    html_body = t(:update_email_html, url, user.username)
+    deliver(user, t(:email_subject), text_body, html_body)
   end
 end
