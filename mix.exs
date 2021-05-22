@@ -52,6 +52,7 @@ defmodule Dsa.MixProject do
       {:phx_gen_auth, "~> 0.7.0", only: [:dev], runtime: false},
       {:bamboo, "~> 2.1.0"},
       {:enum_type, "~> 1.1.0"},
+      {:ecto_psql_extras, "~> 0.2"},
       {:algolia, "~> 0.8.0"}
     ]
   end

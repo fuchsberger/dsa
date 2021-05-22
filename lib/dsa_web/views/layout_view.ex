@@ -28,9 +28,11 @@ defmodule DsaWeb.LayoutView do
 
   defp menu_items(conn, mobile) do
     [
-      %{ name: "Dashboard", path: "#", icon: "clipboard-list" },
-      %{ name: "Dashboard 1", path: "#", icon: "clipboard-list" },
-      %{ name: "Dashboard 2", path: "#", icon: "clipboard-list" }
+      %{
+        name: "Suche Synchronisieren",
+        path: Routes.manage_path(conn, :sync_search),
+        icon: "clipboard-list"
+      }
     ]
     |> Enum.map(& Map.put(&1, :active, &1.path == Path.join(["/" | conn.path_info])))
     |> Enum.map(fn item ->
@@ -40,7 +42,7 @@ defmodule DsaWeb.LayoutView do
   end
 
   # size is in rem (by default 4 pixel)
-  defp gravatar_url(email, size \\ 9) when is_binary(email) do
+  defp gravatar_url(email, size \\ 10) when is_binary(email) do
     email = email |> String.trim() |> String.downcase(:ascii)
     hash = :crypto.hash(:md5, email) |> Base.encode16(case: :lower)
     "https://www.gravatar.com/avatar/#{hash}?s=#{size*4}&d=mp"

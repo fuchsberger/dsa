@@ -6,19 +6,18 @@
     <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
     <title><%= gettext("DSA Tool") %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body class='bg-gray-100'>
-    <nav class="w-full bg-gray-800">
-      <div class="relative mx-auto max-w-7xl px-3 h-12 flex items-center">
-        <%= link gettext("DSA Tool"), to: Routes.session_path(@conn, :index), class: "brand" %>
-      </div>
-    </nav>
-    <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
+    <div class='container mx-auto px-3 py-8 md:max-w-screen-sm text-center space-y-3'>
+      <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
       <h1 class='font-sans font-bold text-3xl'>Error 403</h1>
       <hr>
-      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Forbidden" %></h2>
-      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
+      <%= if get_flash(@conn, :error) do %>
+        <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: get_flash(@conn, :error) %>
+      <% else %>
+        <h2 class='font-sans font-medium text-xl'><%= dgettext("errors", "Forbidden") %></h2>
+      <% end %>
+      <%= link gettext("back to Home"), class: "block link", to: Routes.page_path(@conn, :index) %>
     </div>
   </body>
 </html>

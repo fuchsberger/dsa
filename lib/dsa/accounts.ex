@@ -381,4 +381,22 @@ defmodule Dsa.Accounts do
     |> User.block_user_changeset(false)
     |> Repo.update()
   end
+
+  @doc """
+  Promote a user to admin
+  """
+  def make_admin(user) do
+    user
+    |> User.admin_changeset(true)
+    |> Repo.update()
+  end
+
+  @doc """
+  Removes admin privileges from a user
+  """
+  def remove_admin_status(user) do
+    user
+    |> User.admin_changeset(false)
+    |> Repo.update()
+  end
 end

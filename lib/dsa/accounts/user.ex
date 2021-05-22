@@ -136,6 +136,14 @@ defmodule Dsa.Accounts.User do
   end
 
   @doc """
+  A user changeset for promoting / demoting admin status of a user.
+  """
+  def admin_changeset(user, admin?) do
+    user
+    |> cast(%{admin: admin?}, [:admin])
+  end
+
+  @doc """
   Verifies the password.
 
   If there is no user or the user doesn't have a password, we call

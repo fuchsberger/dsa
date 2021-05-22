@@ -156,10 +156,9 @@ defmodule DsaWeb.UserAuth do
     if conn.assigns.current_user && conn.assigns.current_user.admin do
       conn
     else
-      # TODO Show Forbidden page instead.
       conn
       |> put_flash(:error, dgettext("account", "You must be an adminstrator to access this page."))
-      |> redirect(to: Routes.character_path(conn, :index))
+      |> render(DsaWeb.ErrorView, "403.html")
       |> halt()
     end
   end

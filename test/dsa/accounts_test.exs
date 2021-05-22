@@ -561,6 +561,31 @@ defmodule Dsa.AccountsTest do
     end
   end
 
+  describe "make_admin/1" do
+    setup do
+      user = user_fixture()
+      %{user: user}
+    end
+
+    test "sets the admin flag to true", %{user: user} do
+      assert user.admin == false
+      assert {:ok, user} = Accounts.make_admin(user)
+      assert user.admin == true
+    end
+  end
+
+  describe "remove_admin_status/1" do
+    setup do
+      {:ok, user} = user_fixture() |> Accounts.make_admin()
+      %{user: user}
+    end
+
+    test "sets the admin flag to false", %{user: user} do
+      assert {:ok, user} = Accounts.remove_admin_status(user)
+      assert user.admin == false
+    end
+  end
+
   describe "inspect/2" do
     test "does not include password" do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""

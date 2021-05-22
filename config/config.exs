@@ -18,6 +18,23 @@ config :dsa, DsaWeb.Endpoint,
   pubsub_server: Dsa.PubSub,
   live_view: [signing_salt: "eV1hYRod"]
 
+# Configures Algolia Smart Search
+application_id =
+  System.get_env("ALGOLIA_APPLICATION_ID_DSA") ||
+    raise """
+    environment variable ALGOLIA_APPLICATION_ID_DSA is missing.
+    """
+
+algolia_admin_api_key =
+  System.get_env("ALGOLIA_ADMIN_API_KEY") ||
+    raise """
+    environment variable ALGOLIA_ADMIN_API_KEY is missing.
+    """
+
+config :algolia,
+  application_id: application_id,
+  api_key: algolia_admin_api_key
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

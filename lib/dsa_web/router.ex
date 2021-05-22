@@ -29,7 +29,7 @@ defmodule DsaWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: DsaWeb.Telemetry
+      live_dashboard "/dashboard", metrics: DsaWeb.Telemetry, ecto_repos: [Dsa.Repo]
     end
   end
 
@@ -74,6 +74,12 @@ defmodule DsaWeb.Router do
     get "/account_bestaetigen", UserConfirmationController, :new
     post "/account_bestaetigen", UserConfirmationController, :create
     get "/account_bestaetigen/:token", UserConfirmationController, :confirm
+  end
+
+  scope "/verwalten", DsaWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin_user]
+
+    get "/suche_synconisieren", ManageController, :sync_search
   end
 
   # # Public Routes
