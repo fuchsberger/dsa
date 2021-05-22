@@ -1,5 +1,12 @@
 @layer components {
 
+  .key-combo {
+    @apply flex-none px-1.5 py-0.5 rounded-md bg-gray-50 border border-gray-300 text-gray-400 text-sm;
+  }
+
+  input#search_query { @apply  text-lg border-0 shadow-none ring-0; }
+  input#search_query:focus { @apply outline-none; }
+
   .sidebar{
     @apply fixed top-0 left-0 h-screen flex flex-col z-30 bg-gray-800 text-gray-300;
     width: 256px;
