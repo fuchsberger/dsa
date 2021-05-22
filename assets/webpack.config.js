@@ -40,7 +40,7 @@ module.exports = (env, options) => {
           ]
         },
         {
-          test: /\.(svg|woff2)$/,
+          test: /\.(gif|svg|woff2)$/,
           use: {
             loader: 'url-loader',
             options: { limit: 8192 }      // use file-loader if file < 8 Kb

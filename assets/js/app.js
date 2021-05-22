@@ -13,12 +13,16 @@ import "../css/app.css"
 //     import socket from "./socket"
 //
 
+import Spruce from '@ryangjchandler/spruce'
 import 'alpinejs'
+import algoliasearch from 'algoliasearch/lite'
+import 'phoenix_html'
 import {Socket} from "phoenix"
 import topbar from "topbar"
 import LiveSocket from "phoenix_live_view"
 // import "phoenix_html"
 
+// Configure Live Sockets
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
@@ -45,3 +49,50 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+//  Initialize Menu
+Spruce.store('menu', {
+  menu: false,
+  open() { this.menu = true },
+  close() { this.menu = false },
+  isOpen() { return this.menu === true }
+});
+
+//  Initialize User Dropdown
+Spruce.store('user_dropdown', {
+  user_dropdown: false,
+  open() { this.user_dropdown = true },
+  close() { this.user_dropdown = false },
+  isOpen() { return this.user_dropdown === true }
+});
+
+// Configure Algoria search
+const client = algoliasearch('WL8XME362C', '6c57ebae586cc1d9895ec316af1491d8')
+const index = client.initIndex('records')
+
+// TODO: delete
+Spruce.store('search', {
+  modal: false,
+  query: "",
+  results: [{title: "Test", path: "/", desc: "Desc"}],
+  openModal() { this.modal = true },
+  closeModal() { this.modal = false },
+  modalIsOpen() { return this.modal === true }
+})
+
+Spruce.watch('search.query', query => {
+  if(query.length < 3){
+    Spruce.reset('search', { query, results: [] })
+    return
+  }
+
+  index.search(query).then(results => {
+    Spruce.reset('search', { query, results: results.hits })
+  });
+})
+
+Spruce.starting(function(){
+  alert("TEST")
+
+  // x-on:keydown.escape="alert('Esc key  pressed.')"
+})

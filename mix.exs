@@ -51,7 +51,8 @@ defmodule Dsa.MixProject do
       {:plug_cowboy, "~> 2.5.0"},
       {:phx_gen_auth, "~> 0.7.0", only: [:dev], runtime: false},
       {:bamboo, "~> 2.1.0"},
-      {:enum_type, "~> 1.1.0"}
+      {:enum_type, "~> 1.1.0"},
+      {:algolia, "~> 0.8.0"}
     ]
   end
 

@@ -1,5 +1,10 @@
 @layer components {
 
+  .sidebar{
+    @apply fixed top-0 left-0 h-screen flex flex-col z-30 bg-gray-800 text-gray-300;
+    width: 256px;
+  }
+
   a.link { @apply font-medium text-indigo-600 hover:text-indigo-500; }
 
   /* Submit button in account pages (with lock) */
