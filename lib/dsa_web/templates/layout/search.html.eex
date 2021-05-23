@@ -1,9 +1,22 @@
 <div class='flex-grow'
-  x-data='{ search: false, query: "", results: [] }'
+  x-data='{ search: false, query: "", selected:null, results: [] }'
   x-init='window.addEventListener("keydown", e => {
-    if((e.ctrlKey || e.metaKey)&&(e.keyCode == 71)){e.preventDefault();search=true;$nextTick(() => { document.getElementById("search_query").focus() });return false}
-    if(search && e.keyCode == 27){e.preventDefault();search=false;return false}
-  })'>
+      if((e.ctrlKey || e.metaKey)&&(e.keyCode == 71)){
+        e.preventDefault();
+        search=true;
+        $nextTick(() => { document.getElementById("search_query").focus() });
+        return false
+      }
+      if(search && e.keyCode == 27){
+        e.preventDefault();
+        search=false;
+        return false;
+      }
+    });
+    $watch("query", query => {
+      if(query.length < 3) results = [];
+      else window.index.search(query).then(search_results => {results = search_results.hits})
+    })'>
   <button class='w-full flex items-center group text-gray-400 focus:outline-none'
     @click='search=true;$nextTick(() => { document.getElementById("search_query").focus() });' >
     <!-- Heroicon name: solid/search -->
@@ -23,7 +36,7 @@
   </button>
   <%# Search Modal %>
   <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" x-show='search' style='display:none;'>
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <%# Background Overlay %>
       <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
         @click='search = false'
@@ -64,19 +77,20 @@
         </header>
 
         <%# Search Results Section %>
-        <div class="p-4 space-y-3">
+        <ul role='listbox' class="px-4 sm:px-6 py-3 space-y-2">
           <template x-for="item in results" :key="item">
-            <a
-              class="flex items-center shadow hover:bg-indigo-100 hover:shadow-lg hover:rounded transition duration-150 ease-in-out transform p-3 bg-white"
-              x-bind:href="item.path"
-            >
-              <div class="">
-                <h3 class="text-gray-900 leading-none" x-text="item.title"></h3>
-                <p class='text-sm text-gray-600 leading-none' x-text="item.desc"></p>
-              </div>
-            </a>
+            <li class='search-hit' role='option' @mouseenter="if(selected !== item.objectID) selected = item.objectID;" :aria-selected='selected === item.objectID ? "true" : "false"'>
+              <a x-bind:href="item.path">
+                <div class="flex items-center h-16">
+                  <%= icon(@conn, "shield-check", "w-5 h-5") %>
+                  <strong x-text='item.title'></strong>
+                  <p x-text='item.desc'></p>
+                  <%= icon(@conn, "select", "pl-3 w-8 h-8") %>
+                </div>
+              </a>
+            </li>
           </template>
-        </div>
+        </ul>
       </div>
     </div>
   </div>

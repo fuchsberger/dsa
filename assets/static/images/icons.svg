@@ -104,6 +104,13 @@
   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
 </svg>
 
+<svg id="select" viewBox="0 0 20 20" stroke="currentColor" fill="none">
+  <g fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 3v4c0 2-2 4-4 4H2"></path>
+    <path d="M8 17l-6-6 6-6"></path>
+  </g>
+</svg>
+
 <svg id="shield-check" fill="none" viewBox="0 0 24 24" stroke="currentColor">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
 </svg>

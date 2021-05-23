@@ -13,9 +13,8 @@ import "../css/app.css"
 //     import socket from "./socket"
 //
 
-import Spruce from '@ryangjchandler/spruce'
-import 'alpinejs'
 import algoliasearch from 'algoliasearch/lite'
+import 'alpinejs'
 import 'phoenix_html'
 import {Socket} from "phoenix"
 import topbar from "topbar"
@@ -52,31 +51,4 @@ window.liveSocket = liveSocket
 
 // Configure Algoria search
 const client = algoliasearch('WL8XME362C', '6c57ebae586cc1d9895ec316af1491d8')
-const index = client.initIndex('records')
-
-// TODO: delete
-Spruce.store('search', {
-  modal: false,
-  query: "",
-  results: [{title: "Test", path: "/", desc: "Desc"}],
-  openModal() { this.modal = true },
-  closeModal() { this.modal = false },
-  modalIsOpen() { return this.modal === true }
-})
-
-Spruce.watch('search.query', query => {
-  if(query.length < 3){
-    Spruce.reset('search', { query, results: [] })
-    return
-  }
-
-  index.search(query).then(results => {
-    Spruce.reset('search', { query, results: results.hits })
-  });
-})
-
-Spruce.starting(function(){
-  alert("TEST")
-
-  // x-on:keydown.escape="alert('Esc key  pressed.')"
-})
+window.index = client.initIndex('records')
