@@ -50,22 +50,6 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-//  Initialize Menu
-Spruce.store('menu', {
-  menu: false,
-  open() { this.menu = true },
-  close() { this.menu = false },
-  isOpen() { return this.menu === true }
-});
-
-//  Initialize User Dropdown
-Spruce.store('user_dropdown', {
-  user_dropdown: false,
-  open() { this.user_dropdown = true },
-  close() { this.user_dropdown = false },
-  isOpen() { return this.user_dropdown === true }
-});
-
 // Configure Algoria search
 const client = algoliasearch('WL8XME362C', '6c57ebae586cc1d9895ec316af1491d8')
 const index = client.initIndex('records')

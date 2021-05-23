@@ -1,12 +1,12 @@
 <%# Page Wrapper %>
-<div class='h-screen flex overflow-hidden bg-gray-100' x-data>
+<div class='h-screen flex overflow-hidden bg-gray-100' x-data='{open:false}'>
   <%# Mobile Sidebar Wrapper %>
   <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true"
-    x-show='$store.menu.isOpen()'>
+    x-show='open===true'>
     <%# Mobile Backdrop %>
     <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"
-      @click='$store.menu.close()'
-      x-show='$store.menu.isOpen()'
+      @click='open=false'
+      x-show='open===true'
       x-transition:enter='transition-opacity ease-linear duration-300'
       x-transition:enter-start='opacity-0'
       x-transition:enter-end='opacity-100'
@@ -15,7 +15,7 @@
       x-transition:leave-end='opacity-0'></div>
     <%# Mobile Sidebar %>
     <div class="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800"
-      x-show='$store.menu.isOpen()'
+      x-show='open===true'
       x-transition:enter='transition ease-in-out duration-300 transform'
       x-transition:enter-start='-translate-x-full'
       x-transition:enter-end='translate-x-0'
@@ -24,14 +24,14 @@
       x-transition:leave-end='-translate-x-full'>
       <%# Mobile Close Button %>
       <div class="absolute top-0 right-0 -mr-12 pt-2"
-        x-show='$store.menu.isOpen()'
+        x-show='open===true'
         x-transition:enter='ease-in-out duration-300'
         x-transition:enter-start='opacity-0'
         x-transition:enter-end='opacity-100'
         x-transition:leave='ease-in-out duration-300'
         x-transition:leave-start='opacity-100'
         x-transition:leave-end='opacity-0'>
-        <button class="flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click='$store.menu.close()'>
+        <button class="flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click='open=false'>
           <span class="sr-only"><%= gettext("Close sidebar") %></span>
           <%# Heroicon name: outline/x %>
           <%= icon(@conn, "x", "m-2 h-8 w-8 text-white") %>
@@ -59,7 +59,7 @@
     <%# Top Bar %>
     <div class="shadow-2xl text-gray-500 bg-white">
       <div class='max-w-screen-xl mx-auto flex md:px-6'>
-        <button class="md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 border-r border-gray-300" @click='$store.menu.open()'>
+        <button class="md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 border-r border-gray-300" @click='open=true'>
           <span class="sr-only"><%= gettext("Open sidebar") %></span>
           <!-- Heroicon name: outline/menu -->
           <%= icon(@conn, "menu", "m-2 h-8 w-8") %>
@@ -67,41 +67,8 @@
 
         <%# Search Button and Modal %>
         <%= render DsaWeb.LayoutView, "search.html", conn: @conn %>
-
         <%# User Menu / Login %>
-        <div class="ml-2 relative">
-          <%= if @current_user do %>
-            <div>
-              <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500 p-1" id="user-menu-button" aria-expanded="false" aria-haspopup="true" @click='$store.user_dropdown.open()'>
-                <span class="sr-only"><%= gettext("Open user menu") %></span>
-                <img class="h-10 w-10 rounded-full" src="<%= gravatar_url(@current_user.email) %>" alt="">
-              </button>
-            </div>
-            <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
-              @click.away="$store.user_dropdown.close()"
-              x-show='$store.user_dropdown.isOpen()'
-              x-transition:enter='transition ease-out duration-100'
-              x-transition:enter-start='transform opacity-0 scale-95'
-              x-transition:enter-end='transform opacity-100 scale-100'
-              x-transition:leave='transition ease-in duration-75'
-              x-transition:leave-start='transform opacity-100 scale-100'
-              x-transition:leave-end='transform opacity-0 scale-95'>
-              <!-- Active: "bg-gray-100", Not Active: "" -->
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1"><%= dgettext("account", "Settings") %></a>
-
-              <%= link dgettext("account", "Sign out"), to: Routes.user_session_path(@conn, :delete), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, role: "menuitem", tabindex: -1 %>
-            </div>
-          <% else %>
-            <div>
-              <%= link to: Routes.user_session_path(@conn, :new),
-                class: "focus:outline-none hover:text-gray-600", title: gettext("Sign In") do %>
-                <span class="sr-only"><%= gettext("Sign In") %></span>
-                <!-- Heroicon name: outline/login -->
-                <%= icon(@conn, "login", "m-2 h-8 w-8") %>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
+        <%= render DsaWeb.LayoutView, "user_menu.html", conn: @conn, user: @current_user %>
       </div>
     </div>
     <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none">

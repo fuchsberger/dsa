@@ -48,8 +48,6 @@
         x-transition:leave-start='opacity-100 translate-y-0 sm:scale-100'
         x-transition:leave-end='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'>
 
-
-
         <%# Search Box Header %>
         <header class='px-4 py-2 sm:px-6 border-b'>
           <%= form_for :search, "#", [class: "flex items-center", novalidate: true, "x-on:submit.prevent": true], fn f -> %>
@@ -65,59 +63,21 @@
           <% end %>
         </header>
 
-        <div class='bg-blue-200'>
-        Body
+        <%# Search Results Section %>
+        <div class="p-4 space-y-3">
+          <template x-for="item in results" :key="item">
+            <a
+              class="flex items-center shadow hover:bg-indigo-100 hover:shadow-lg hover:rounded transition duration-150 ease-in-out transform p-3 bg-white"
+              x-bind:href="item.path"
+            >
+              <div class="">
+                <h3 class="text-gray-900 leading-none" x-text="item.title"></h3>
+                <p class='text-sm text-gray-600 leading-none' x-text="item.desc"></p>
+              </div>
+            </a>
+          </template>
         </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="hidden relative shadow-2xl" x-data>
-    <button class="md:hidden border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden" @click='$store.menu.open()' x-show="!$store.menu.isOpen()">
-      <span class="sr-only">Open sidebar</span>
-      <%= icon(@conn, "menu-alt-2", "h-10 w-10 m-2") %>
-    </button>
-    <button class="md:hidden border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden" @click='$store.menu.close()' x-bind:class="{ 'hidden': !$store.menu.isOpen() }">
-      <span class="sr-only">Close sidebar</span>
-      <%= icon(@conn, "x", "h-10 w-10 m-2") %>
-    </button>
-    <button class='flex-grow text-gray-400 text-left truncate'>
-      <%= icon(@conn, "search-solid", "inline-block h-10 w-10 m-2") %>
-      Search anything
-    </button>
-    <div class="hidden flex-1 px-4 flex justify-between">
-      <div class="flex-1 flex">
-
-        <label for="search-field" class="sr-only">Search</label>
-        <div class="relative w-full text-gray-400 focus-within:text-gray-600"  >
-          <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-            <%= icon(@conn, "search-solid", "h-5 w-5") %>
-          </div>
-          <input
-            id="search-field"
-            placeholder="Search"
-            type="search"
-            name="search"
-            x-model.debounce.300="$store.search.query"
-            x-ref="searchField"
-            x-on:keydown.window.prevent.slash="$refs.searchField.focus()">
-        </div>
-
       </div>
     </div>
   </div>
 </div>
-<%# <div class="hidden absolute inset-0 top-16 w-full p-4 space-y-2 bg-gray-100 z-10" x-data='$store.search.results'>
-  <template x-for="item in $store.search.results" :key="item">
-    <a
-      class="flex items-center shadow hover:bg-indigo-100 hover:shadow-lg hover:rounded transition duration-150 ease-in-out transform p-3 bg-white"
-      x-bind:href="item.path"
-    >
-      <div class="">
-        <h3 class="text-gray-900 leading-none" x-text="item.title"></h3>
-        <p class='text-sm text-gray-600 leading-none' x-text="item.desc"></p>
-      </div>
-    </a>
-  </template>
-</div> %>
