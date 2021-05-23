@@ -1,0 +1,4 @@
+<header class="relative flex items-center justify-center border-b border-gray-900">
+  <%= icon(@conn, "eye-solid", "m-1 h-10 w-10 text-indigo-500") %>
+  <div class='pl-1 text-gray-200 text-3xl font-bold tracking-tighter'><%= gettext("DSA Tool") %></div>
+</header>
