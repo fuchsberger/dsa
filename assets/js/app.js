@@ -15,6 +15,7 @@ import "../css/app.css"
 
 import algoliasearch from 'algoliasearch/lite'
 import 'alpinejs'
+import SimpleScrollbar from 'simple-scrollbar'
 import 'phoenix_html'
 import {Socket} from "phoenix"
 import topbar from "topbar"
@@ -48,6 +49,8 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+global.SimpleScrollbar = SimpleScrollbar
 
 // Configure Algoria search
 const client = algoliasearch('WL8XME362C', '6c57ebae586cc1d9895ec316af1491d8')

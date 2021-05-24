@@ -1,4 +1,40 @@
 @layer components {
+  .page-wrapper { @apply h-screen flex overflow-hidden bg-gray-100; }
+
+  /* Mobile Sidebar Menu */
+  .mobile-wrapper { @apply fixed inset-0 flex z-40 md:hidden; }
+  .mobile-backdrop { @apply fixed inset-0 bg-gray-600 bg-opacity-75; }
+
+  .mobile-sidebar-wrapper {
+    @apply relative flex-1 flex flex-col w-full bg-gray-800;
+    max-width: 256px;
+  }
+  .mobile-close-button-wrapper { @apply absolute top-0 right-0 -mr-12 pt-2; }
+  .mobile-close-button { @apply ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white; }
+  .mobile-shrink { @apply flex-shrink-0 w-14; } /* Force sidebar to shrink to fit close icon */
+
+  /* Desktop Sidebar Menu */
+  .desktop-wrapper { @apply hidden md:flex md:flex-shrink-0; }
+  .desktop-sidebar-wrapper { @apply flex flex-col h-0 flex-1 bg-gray-800; }
+
+  /* Sidebar */
+  .sidebar { @apply flex-1 flex flex-col overflow-hidden text-gray-300; }
+  .sidebar nav { @apply flex-grow overflow-y-auto my-4 space-y-2; }
+
+  .menu-item { @apply flex items-center px-4 py-1 text-sm border-l-4 border-transparent hover:text-white hover:bg-gray-900; }
+  .menu-item.active { @apply text-white bg-gray-900 border-blue-600; }
+
+  .menu-item div { @apply bg-transparent rounded-sm mr-2; }
+  .menu-item.active div { @apply bg-gray-700 rounded-sm mr-2; }
+
+  .stl-sidebar-link.stl-sidebar-link-active {
+    box-shadow: inset 3px 0 0 #5468ff;
+  }
+
+  .stl-sidebar-link:hover, .stl-sidebar-link:focus, .stl-sidebar-link.stl-sidebar-link-active {
+      background-color: #111432;
+      color: #ffffff;
+  }
 
   .key-combo {
     @apply flex-none px-1.5 py-0.5 rounded-md bg-gray-50 border border-gray-300 text-gray-400 text-sm;

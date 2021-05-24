@@ -15,10 +15,6 @@
 .mobile-button.active svg:last-of-type { @apply inline-block; }
 
 /* Menu Items */
-.menu-item { @apply text-gray-300 rounded-md font-medium leading-10 px-2;}
-.menu-item:hover { @apply bg-gray-700 text-white; }
-.menu-item.active { @apply bg-gray-900 text-white; }
-
 .menu-item.dropdown:hover .group-hover\:scale-100 { transform: scale(1) }
 .menu-item.dropdown:hover .group-hover\:-rotate-180 { transform: rotate(180deg) }
 
