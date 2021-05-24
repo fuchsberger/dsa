@@ -1,8 +1,24 @@
 {
+  "skills": [
+    {
+      "category": "Handwerkstalente",
+      "check": "MU/KL/FF",
+      "applications": ["alchimistische Gifte", "Elixiere", "profane Alchimie"],
+      "encumbrance": true,
+      "tools": "alchimistisches Labor",
+      "quality": "Der Trank weist eine bessere Qualität auf.",
+      "failue": "Das Elixier ist misslungen oder eine Analyse hat kein Ergebnis gebracht.",
+      "success": "Der Held weiß exakt, welches Elixier er vor sich hat, welche Stufe es besitzt und wie lange haltbar es ist.",
+      "botch": "Das Elixier sorgt für einen unangenehmen Nebeneffekt.",
+      "cost_factor": "C",
+      "reference": ["Basis Regelwerk", 206, "ff"],
+      "description": "Mit der alten Kunst der Alchimie lassen sich sowohl wundersame Tinkturen als auch profane Substanzen wie Seifen, Glas und Porzellan, Farben und Lacke analysieren und herstellen.\nZur Herstellung von Elixieren und Tränken benötigt der Alchimist meist aufwendig aufzutreibende Grundstoffe, das richtige Rezept und ein Labor. Viele Alchimisten werden argwöhnisch betrachtet, da man befürchtet, sie könnten bei ihren verrückten Experimenten ihre Werkstätten in Brand setzen und giftige Wolken oder bestialischen Gestank produzieren."
+    }
+  ],
   "spells": [
     {
       "id": 1,
-      "probe": "MU/KL/CH",
+      "roll": "MU/KL/CH",
       "name": "Ablativum",
       "effect": "Der Spruch erschafft eine unsichtbare Kuppel um den Magier herum, die sich mit ihm bewegt und darin Befindliches vor Zaubern schützt. Die Kuppel ist eigentlich eine Kugel, da jedoch der Magier meistens auf dem Boden steht, ist die Kugelform nur selten relevant. Die Kuppel verfügt über einen Radius von 3 Schritt und eine Schildstärke in Höhe von QS x 3. Wird ein freundlicher oder feindlicher Zauber gegen ein unter der Kuppel befindliches Ziel gerichtet, vermindert die Schildstärke dessen QS. Sinkt diese dadurch auf 0, tritt kein Effekt ein. Die Schildstärke wird jedoch im Rahmen dieses Prozesses verbraucht (–1 Schildstärke je aufgehaltener QS), und der Ablativum endet vorzeitig, sobald seine QS unter 1 fällt.\n\nSollte ein Flächenzauber, beispielsweise der Ignisphaero, teilweise den Schild des Ablativum berühren, wird die Schildstärke um die QS des Flächenzaubers vermindert. Wirkt ein Zauber über mehrere KR, so wird die Schildstärke jede KR um die QS vermindert. Sollte ein Zauber mehr QS aufweisen als der Ablativum, dringt der Zauber mit den überzähligen QS durch den Schild. Die gesamten QS des Zaubers werden aber wie üblich von der Schildstärke abgezogen.",
       "cast_duration": "1 Aktion(en)",

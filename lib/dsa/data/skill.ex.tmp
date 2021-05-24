@@ -4,16 +4,17 @@ defmodule Dsa.Data.Skill do
   import Ecto.Changeset
   import DsaWeb.DsaHelpers, only: [traits: 0]
 
-  alias Dsa.Type.{SkillCategory, Probe}
+  alias Dsa.Type.Probe
 
-  @sf_values ~w(A B C D E)a
+  @categories [physical: 1, social: 2, nature: 3, knowledge: 4, crafting: 5]
+  @factors [a: 1, b: 2, c: 3, d: 4]
 
   schema "skills" do
     field :name, :string
     field :be, :boolean
-    field :category, SkillCategory
-    field :probe, Probe
-    field :sf, Ecto.Enum, values: @sf_values
+    field :category, Ecto.Enum, values: @categories
+    field :cost_factor, Ecto.Enum, values: @factors
+    field :probe, :string
     field :t1, Ecto.Enum, values: traits(), virtual: true
     field :t2, Ecto.Enum, values: traits(), virtual: true
     field :t3, Ecto.Enum, values: traits(), virtual: true
@@ -27,12 +28,12 @@ defmodule Dsa.Data.Skill do
     |> cast(attrs, [:be | @fields])
     |> validate_required(@fields)
     |> validate_length(:name, min: 5, max: 30)
-    |> validate_number(:category, greater_than_or_equal_to: 0, less_than: SkillCategory.count())
+    |> validate_number(:category, greater_than: 0, less_than_or_equal_to: Enum.count(@categories))
+    |> validate_number(:cost_factor, greater_than: 0, less_than_or_equal_to: Enum.count(@factors))
     |> validate_number(:probe, greater_than_or_equal_to: 0, less_than_or_equal_to: 512)
     |> validate_inclusion(:t1, traits())
     |> validate_inclusion(:t2, traits())
     |> validate_inclusion(:t3, traits())
-    |> validate_inclusion(:sf, @sf_values)
     |> validate_probe()
     |> unique_constraint(:name)
   end
@@ -45,5 +46,21 @@ defmodule Dsa.Data.Skill do
       _ ->
         changeset
     end
+  end
+
+  def get_category(category) when is_binary(category) do
+    case category do
+      "Körpertalente" => :physical
+      "Gesellschaftstalente" => :social
+      "Naturtalente" => :nature
+      "Wissenstalente" => :knowledge
+      "Handwerkstalente" => :crafting
+    end
+  end
+
+  def get_cost_factor(factor) when is_binary(factor) do
+    factor
+    |> String.downcase(:ascii)
+    |> String.to_integer()
   end
 end

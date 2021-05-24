@@ -16,9 +16,9 @@ defmodule Mix.Tasks.Seed do
   end
 
   defp seed do
-    Logger.debug("Reading data.json file.")
+    Logger.info("Reading data.json file")
     _data = read_file("priv/repo/data.json")
-    Logger.info("Finished database syncronization.")
+    Logger.info("Finished database syncronization")
   end
 
   defp read_file(filename) do

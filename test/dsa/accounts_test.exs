@@ -85,12 +85,12 @@ defmodule Dsa.AccountsTest do
           password_confirmation: "not matching"
         })
 
-      e1 = dgettext("errors", "can&#39;t be blank")
+      e1 = dgettext("errors", "can\'t be blank")
       e2 = dgettext("errors", "must have the @ sign and no spaces")
       e3 = dgettext("errors", "should be at least %{count} character(s)", count: 12)
       e4 = dgettext("errors", "does not match password")
 
-      assert %{ username: [e1], email: [e2], password: [e3], password_confirmation: [e4]} =
+      assert %{ username: [^e1], email: [^e2], password: [^e3], password_confirmation: [^e4]} =
         errors_on(changeset)
     end
 
