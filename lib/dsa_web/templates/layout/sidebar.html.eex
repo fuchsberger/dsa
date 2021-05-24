@@ -15,8 +15,8 @@
     </button>
   <% else %>
     <div class='relative h-20 px-4 flex flex-col justify-center bg-gray-700'>
-      <%= link dgettext("account", "Register Account"), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>
-      <%= link dgettext("account", "or sign in"), to: Routes.user_session_path(@conn, :new), class: "px-2 rounded-lg hover:bg-gray-800" %>
+      <%= link t(:heading_registration), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>
+      <%= link t(:or_sign_in), to: Routes.user_session_path(@conn, :new), class: "px-2 rounded-lg hover:bg-gray-800" %>
     </div>
   <% end %>
   <nav>
@@ -30,6 +30,6 @@
     <% end %>
   </nav>
   <div class='flex-shrink-0 bg-gray-700'>
-    Log Entries
+    TODO: Log Entries
   </div>
 </div>

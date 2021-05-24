@@ -37,9 +37,8 @@ defmodule DsaWeb.UserSessionControllerTest do
       # TODO: reenable and fix
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ user.username
-      # assert response =~ "Settings</a>"
-      # assert response =~ "Log out</a>"
+      assert response =~ t(:settings) <> "</a>"
+      assert response =~ t(:sign_out) <> "</a>"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do

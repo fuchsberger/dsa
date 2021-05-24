@@ -1,3 +1,5 @@
-Home Page
-
-TODO: provide general information
+<h1 class="heading"><%= gettext("Welcome in Aventuria!") %></h1>
+<p>This tool allows you to play DSA (Das Schwarze Auge) online with your friends. It mainly is a tool to manage your characters and dice rolls. Current features include:</p>
+<ul class='list-disc list-inside'>
+  <li>Quick Reference of DSA content such as Spells, Skills,...</li>
+</ul>

@@ -14,15 +14,15 @@
       x-transition:leave-start='transform opacity-100 scale-100'
       x-transition:leave-end='transform opacity-0 scale-95'>
       <!-- Active: "bg-gray-100", Not Active: "" -->
-      <%= link dgettext("account", "Settings"), to: Routes.user_settings_path(@conn, :edit), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
+      <%= link t(:settings), to: Routes.user_settings_path(@conn, :edit), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
 
-      <%= link dgettext("account", "Sign out"), to: Routes.user_session_path(@conn, :delete), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, role: "menuitem", tabindex: -1 %>
+      <%= link t(:sign_out), to: Routes.user_session_path(@conn, :delete), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, role: "menuitem", tabindex: -1 %>
     </div>
   </div>
 <% else %>
   <div class="ml-2 relative">
     <%= link to: Routes.user_session_path(@conn, :new),
-      class: "focus:outline-none hover:text-gray-600", title: gettext("Sign In") do %>
+      class: "focus:outline-none hover:text-gray-600", title: t(:sign_in) do %>
       <span class="sr-only"><%= gettext("Sign In") %></span>
       <!-- Heroicon name: outline/login -->
       <%= icon(@conn, "login", "m-2 h-8 w-8") %>

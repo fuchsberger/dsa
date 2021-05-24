@@ -22,6 +22,9 @@ defmodule DsaWeb.AccountTranslations do
   def t(:password), do: dgettext(@d, "Password")
   def t(:remember_me), do: dgettext(@d, "Remember me for 60 days")
   def t(:sign_in), do: dgettext(@d, "Sign in")
+  def t(:or_sign_in), do: dgettext(@d, "or sign in")
+  def t(:sign_out), do: dgettext(@d, "Sign out")
+
 
   # Registration controller
   def t(:registration_successful), do: dgettext(@d, "Welcome to DSA Tool! Please confirm your email before signing in. An email confirmation link has been sent to you.")

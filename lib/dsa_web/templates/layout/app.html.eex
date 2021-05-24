@@ -53,25 +53,22 @@
     </div>
   </div>
   <%# Content Area %>
-  <div class="flex flex-col w-0 flex-1 overflow-hidden">
+  <div class="content-area">
     <%# Top Bar %>
-    <div class="shadow-2xl text-gray-500 bg-white">
-      <div class='max-w-screen-xl mx-auto flex md:px-6'>
-        <button class="md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 border-r border-gray-300" @click='open=true'>
+    <div class="top-bar">
+      <div>
+        <button class="menu-button" @click='open=true'>
           <span class="sr-only"><%= gettext("Open sidebar") %></span>
-          <!-- Heroicon name: outline/menu -->
           <%= icon(@conn, "menu", "m-2 h-8 w-8") %>
         </button>
-
         <%# Search Button and Modal %>
         <%= render DsaWeb.LayoutView, "search.html", conn: @conn %>
         <%# User Menu / Login %>
         <%= render DsaWeb.LayoutView, "user_menu.html", conn: @conn, user: @current_user %>
       </div>
     </div>
-    <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
-
+    <main>
+      <div>
         <%# Flash Messages %>
         <%= unless is_nil(get_flash(@conn, :success)) do %>
           <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :success, message: get_flash(@conn, :success) %>
@@ -84,8 +81,6 @@
         <%= unless is_nil(get_flash(@conn, :error)) do %>
           <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: get_flash(@conn, :error) %>
         <% end %>
-
-        <%# <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1> %>
         <div><%= @inner_content %></div>
       </div>
     </main>
