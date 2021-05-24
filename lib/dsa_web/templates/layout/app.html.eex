@@ -1,10 +1,9 @@
 <%# Page Wrapper %>
-<div class='h-screen flex overflow-hidden bg-gray-100' x-data='{open:false}'>
+<div class='page-wrapper' x-data='{open:false}' x-init='elms = document.querySelector(".desktop-wrapper nav"); SimpleScrollbar.initEl(elms);'>
   <%# Mobile Sidebar Wrapper %>
-  <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true"
-    x-show='open===true'>
+  <div class="mobile-wrapper" role="dialog" aria-modal="true" x-show='open===true'>
     <%# Mobile Backdrop %>
-    <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"
+    <div class="mobile-backdrop" aria-hidden="true"
       @click='open=false'
       x-show='open===true'
       x-transition:enter='transition-opacity ease-linear duration-300'
@@ -14,7 +13,7 @@
       x-transition:leave-start='opacity-100'
       x-transition:leave-end='opacity-0'></div>
     <%# Mobile Sidebar %>
-    <div class="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800"
+    <div class="mobile-sidebar-wrapper"
       x-show='open===true'
       x-transition:enter='transition ease-in-out duration-300 transform'
       x-transition:enter-start='-translate-x-full'
@@ -23,7 +22,7 @@
       x-transition:leave-start='translate-x-0'
       x-transition:leave-end='-translate-x-full'>
       <%# Mobile Close Button %>
-      <div class="absolute top-0 right-0 -mr-12 pt-2"
+      <div class="mobile-close-button-wrapper"
         x-show='open===true'
         x-transition:enter='ease-in-out duration-300'
         x-transition:enter-start='opacity-0'
@@ -31,29 +30,25 @@
         x-transition:leave='ease-in-out duration-300'
         x-transition:leave-start='opacity-100'
         x-transition:leave-end='opacity-0'>
-        <button class="flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click='open=false'>
+        <button class="mobile-close-button" @click='open=false'>
           <span class="sr-only"><%= gettext("Close sidebar") %></span>
           <%# Heroicon name: outline/x %>
           <%= icon(@conn, "x", "m-2 h-8 w-8 text-white") %>
         </button>
       </div>
       <%# Mobile Sidebar Content %>
-      <div class="flex-1 h-0 pb-4 overflow-y-auto">
-        <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
-      </div>
-      <%# Force sidebar to shrink to fit close icon %>
-      <div class="flex-shrink-0 w-14"></div>
+      <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
+
+      <div class="mobile-shrink"></div>
     </div>
   </div>
   <%# Static Sidebar for Desktop %>
-  <div class="hidden md:flex md:flex-shrink-0">
+  <div class="desktop-wrapper">
     <div class="flex flex-col w-64">
       <%# Sidebar Component %>
-      <div class="flex flex-col h-0 flex-1 bg-gray-800">
+      <div class="desktop-sidebar-wrapper">
         <%# Desktop Sidebar Content %>
-        <div class="flex-1 flex flex-col pb-4 overflow-y-auto">
-          <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
-        </div>
+        <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
       </div>
     </div>
   </div>
