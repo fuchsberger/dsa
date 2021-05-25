@@ -1,16 +1,15 @@
 defmodule Dsa.Data.Skill do
-  use Ecto.Schema
-
-  import Ecto.Changeset
-  import DsaWeb.Gettext
+  use Dsa, :schema
 
   alias Dsa.Type.{Check, CostFactor, SkillCategory}
+  alias DsaWeb.Router.Helpers, as: Routes
 
   @traits ~w(MU KL IN CH FF GE KO KK)
 
   schema "skills" do
     field :applications, {:array, :string}
     field :name, :string
+    field :slug, :string
     field :description, :string
     field :encumbrance_default, :boolean, default: false
     field :encumbrance_conditional, :string
@@ -39,9 +38,20 @@ defmodule Dsa.Data.Skill do
     |> validate_inclusion(:category, SkillCategory.values())
     |> validate_inclusion(:cost_factor, CostFactor.values())
     |> validate_check()
-    |> unique_constraint(:name)
+    |> put_slug()
+    |> unique_constraint(:slug)
   end
-  require Logger
+
+  def format_algolia(skill) do
+    %{
+      id: skill.id,
+      name: skill.name,
+      path: Routes.page_path(DsaWeb.Endpoint, :index),
+      # path: Routes.skill_path(Dsa.Endpoint, :show, skill.slug),
+      description: skill.description
+    }
+  end
+
   defp validate_check(changeset) do
     case changeset do
       %Ecto.Changeset{changes: %{check: check}} ->

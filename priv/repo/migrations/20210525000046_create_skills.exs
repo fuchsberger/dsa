@@ -5,6 +5,7 @@ defmodule Dsa.Repo.Migrations.CreateSkills do
     create table(:skills) do
       add :applications, {:array, :string}
       add :name, :string
+      add :slug, :string
       add :description, :text
       add :encumbrance_default, :boolean, null: false
       add :encumbrance_conditional, :string

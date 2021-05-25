@@ -11,12 +11,14 @@ defmodule Dsa.DataTest do
       assert [] =  Data.list_skills()
     end
 
-    test "returns list of entries" do
-      %{id: id} = skill_fixture()
-      assert [%Skill{id: ^id}] = Data.list_skills()
+    test "returns list of entries in correct order" do
+      %{id: id1} = skill_fixture(%{name: "Skill A", category: "Handwerkstalente"})
+      %{id: id2} = skill_fixture(%{name: "Skill C", category: "Naturtalente"})
+      %{id: id3} = skill_fixture(%{name: "Skill B", category: "Naturtalente"})
+      assert [%Skill{id: ^id3}, %Skill{id: ^id2}, %Skill{id: ^id1}] = Data.list_skills()
     end
   end
-  require Logger
+
   describe "save_skill/1" do
 
     test "with valid data creates a skill if not exists" do

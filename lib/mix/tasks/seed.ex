@@ -40,9 +40,10 @@ defmodule Mix.Tasks.Seed do
       end
     end)
 
-    Logger.info("All skills saved...")
+    Logger.info("Updating skills in Algolia index...")
 
-
+    prepared_skills = Data.list_skills() |> Enum.map(& Skill.format_algolia(&1))
+    Algolia.save_objects("skills", prepared_skills, id_attribute: :id)
 
     # Enum.each(data["skills"], fn skill_params ->
     #   if Enum.member?(skill_ids, skill_params["id"]) do

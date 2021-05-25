@@ -42,6 +42,7 @@ defmodule DsaWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/talente/:slug", PageController, :index
   end
 
   ## Authentication routes
