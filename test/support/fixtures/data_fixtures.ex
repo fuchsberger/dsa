@@ -5,11 +5,9 @@ defmodule Dsa.DataFixtures do
   alias Dsa.Data
 
   def valid_skill_attributes(attrs \\ %{}) do
-    id = System.unique_integer([:positive])
-
     Enum.into(attrs, %{
-      id: id,
-      name: "Skill #{id}",
+      id: System.unique_integer([:positive]),
+      name: "Alchimie",
       category: "Handwerkstalente",
       check: "MU/KL/FF",
       applications: ["alchimistische Gifte", "Elixiere", "profane Alchimie"],

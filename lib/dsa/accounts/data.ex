@@ -57,4 +57,23 @@ defmodule Dsa.Data do
     |> Skill.changeset(attrs)
     |> Repo.update()
   end
+
+  @doc """
+  Creates or updates a skill.
+  Requires a valid id field in attrs.
+
+  ## Examples
+
+      iex> update_skill(%Skill{}, %{field: value})
+      {:ok, %Skill{}}
+
+      iex> update_skill(%Skill{}, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def save_skill(skill, attrs) do
+    skill
+    |> Skill.changeset(attrs)
+    |> Repo.insert_or_update()
+  end
 end
