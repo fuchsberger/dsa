@@ -15,7 +15,3 @@
 
 # Make user an admin
 # "user@example.abc" |> Dsa.Accounts.get_user_by_email() |> Dsa.Accounts.make_admin()
-
-# This will update / insert all DSA data elements
-# Alternatively Data elements are automatically inserted via migration.
-# Dsa.Data.Seeder.seed()

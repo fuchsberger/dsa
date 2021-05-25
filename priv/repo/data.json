@@ -1,17 +1,21 @@
 {
   "skills": [
     {
+      "id": 1,
+      "name": "Alchimie",
       "category": "Handwerkstalente",
       "check": "MU/KL/FF",
       "applications": ["alchimistische Gifte", "Elixiere", "profane Alchimie"],
-      "encumbrance": true,
+      "encumbrance_default": true,
+      "encumbrance_conditional": null,
       "tools": "alchimistisches Labor",
       "quality": "Der Trank weist eine bessere Qualität auf.",
-      "failue": "Das Elixier ist misslungen oder eine Analyse hat kein Ergebnis gebracht.",
+      "failure": "Das Elixier ist misslungen oder eine Analyse hat kein Ergebnis gebracht.",
       "success": "Der Held weiß exakt, welches Elixier er vor sich hat, welche Stufe es besitzt und wie lange haltbar es ist.",
       "botch": "Das Elixier sorgt für einen unangenehmen Nebeneffekt.",
       "cost_factor": "C",
-      "reference": ["Basis Regelwerk", 206, "ff"],
+      "book": "Basis Regelwerk",
+      "page": 206,
       "description": "Mit der alten Kunst der Alchimie lassen sich sowohl wundersame Tinkturen als auch profane Substanzen wie Seifen, Glas und Porzellan, Farben und Lacke analysieren und herstellen.\nZur Herstellung von Elixieren und Tränken benötigt der Alchimist meist aufwendig aufzutreibende Grundstoffe, das richtige Rezept und ein Labor. Viele Alchimisten werden argwöhnisch betrachtet, da man befürchtet, sie könnten bei ihren verrückten Experimenten ihre Werkstätten in Brand setzen und giftige Wolken oder bestialischen Gestank produzieren."
     }
   ],

@@ -1,7 +1,6 @@
 defmodule Dsa.AccountsFixtures do
   @moduledoc """
-  This module defines test helpers for creating
-  entities via the `Dsa.Accounts` context.
+  This module defines test helpers for creating entities via the `Dsa.Accounts` context.
   """
   alias Dsa.Repo
   alias Dsa.Accounts.{User, UserToken}

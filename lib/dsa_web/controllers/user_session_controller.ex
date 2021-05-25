@@ -7,7 +7,6 @@ defmodule DsaWeb.UserSessionController do
   alias DsaWeb.UserAuth
 
   def new(conn, _params) do
-    Logger.warn Routes.user_confirmation_url(conn, :confirm, "ABC")
     render(conn, "new.html", error_message: nil)
   end
 
