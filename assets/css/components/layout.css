@@ -42,8 +42,11 @@
     @apply flex-none px-1.5 py-0.5 rounded-md bg-gray-50 border border-gray-300 text-gray-400 text-sm;
   }
 
+  #search-modal em { @apply text-blue-500; }
+
   input#search_query { @apply  text-lg border-0 shadow-none ring-0; }
   input#search_query:focus { @apply outline-none; }
+
 
   .sidebar{
     @apply fixed top-0 left-0 h-screen flex flex-col z-30 bg-gray-800 text-gray-300;
@@ -63,12 +66,29 @@
   }
 
   .search-hit { @apply relative; }
-  .search-hit > a { @apply block rounded-lg bg-gray-50 shadow-sm pl-4 pr-5; }
-  .search-hit[aria-selected=true] > a { @apply bg-blue-300; }
+  .search-hit > a { @apply rounded-lg bg-gray-100 shadow-sm px-4 py-2; }
+  .search-hit[aria-selected=true] > a { @apply bg-blue-200; }
 
-  .search-hit > a > div { @apply flex items-center h-16; }
+  /* .search-hit > a > div { @apply flex items-center h-16; }
   .search-hit > a > div > strong { @apply text-gray-900 leading-none px-2; }
-  .search-hit > a > div > p { @apply flex-grow text-sm text-gray-600 leading-none truncate; }
+  .search-hit > a > div > p { @apply flex-grow text-sm text-gray-600 leading-none truncate; } */
+
+  /* TABLES */
+
+
+.table-wrapper { @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg; }
+
+.table-wrapper table {}
+
+
+.table thead, .table .header-row { @apply bg-gray-50; }
+.table th { @apply px-1 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
+
+.table tbody { @apply bg-white divide-y divide-gray-200; }
+.table td { @apply px-1 py-1 whitespace-nowrap; }
+
+.small { @apply text-xs font-medium text-gray-500 tracking-wider text-center; }
+
 }
 
 @layer utilities {

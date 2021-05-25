@@ -13,10 +13,8 @@ msgstr ""
 #, elixir-format
 #: lib/dsa_web/templates/error/401.html.eex:7
 #: lib/dsa_web/templates/error/401.html.eex:14 lib/dsa_web/templates/error/403.html.eex:7
-#: lib/dsa_web/templates/error/403.html.eex:14 lib/dsa_web/templates/error/404.html.eex:7
-#: lib/dsa_web/templates/error/404.html.eex:14 lib/dsa_web/templates/error/500.html.eex:7
-#: lib/dsa_web/templates/error/500.html.eex:14 lib/dsa_web/templates/layout/menu.html.eex:19
-#: lib/dsa_web/templates/layout/root.html.eex:8
+#: lib/dsa_web/templates/error/404.html.eex:7 lib/dsa_web/templates/error/500.html.eex:7
+#: lib/dsa_web/templates/layout/root.html.eex:9 lib/dsa_web/templates/layout/sidebar.html.eex:4
 msgid "DSA Tool"
 msgstr ""
 
@@ -28,603 +26,43 @@ msgid "A character, dice, and group management tool for DSA, Das Schwarze Auge"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:183
-msgid "Logout"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:7
-msgid "Open main menu"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/spell/index.html.eex:6
-#: lib/dsa_web/templates/spell/index.html.eex:14
-msgid "Roll"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:56
-#: lib/dsa_web/templates/layout/menu.html.eex:76 lib/dsa_web/templates/skill/index.html.eex:2
-msgid "Skills"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:84
-#: lib/dsa_web/templates/layout/menu.html.eex:104
-msgid "Spells"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:32
-#: lib/dsa_web/templates/user_settings/edit.html.eex:37
-msgid "Email"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:188
-msgid "Login"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/about.html.eex:1
+#: lib/dsa_web/templates/page/index.html.eex:1
 msgid "Welcome in Aventuria!"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:42
-#: lib/dsa_web/templates/user_settings/edit.html.eex:47
-msgid "Username"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/reset.html.eex:5
-#: lib/dsa_web/templates/email/reset.html.eex:10
-msgid "Reset Password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:13
-msgid ", welcome to the DSA Tool!"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:15
-msgid "Activate"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:17
-#: lib/dsa_web/templates/email/reset.html.eex:11
-msgid "Cheers,"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:5
-msgid "Confirm Account"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/reset.html.eex:10
-msgid "Here is your link to reset your password:"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:16
-msgid "May Phex bring you luck when you roll your dice!"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:12
-#: lib/dsa_web/templates/email/reset.html.eex:8
-msgid "The Twelve Divines greet you!"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/email/confirm.html.eex:14
-msgid "To be able to login you first must activate your account:"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/error_controller.ex:16
-msgid "Account must be confirmed first. Please check your email."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/index.html.eex:37
-msgid "Are you sure you want to delete this character?"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:7
-msgid "Change Password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:62
-msgid "Character created successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/index.html.eex:2
-msgid "Characters"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:8
-msgid "Delete Account"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/edit.html.eex:1
-msgid "Edit Character"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:16
-#: lib/dsa_web/templates/layout/menu.html.eex:27
-msgid "Group"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/index.html.eex:3
-#: lib/dsa_web/templates/character/new.html.eex:1 lib/dsa_web/templates/layout/menu.html.eex:42
-msgid "New Character"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/form.html.eex:54
-msgid "Save"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:180
-#: lib/dsa_web/templates/user_settings/edit.html.eex:4
-msgid "Settings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:27
-msgid "#"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:39
-msgid "+"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:16
-#: lib/dsa_web/templates/combat_set/index.html.eex:14
-msgid "AT"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_skill/edit.html.eex:15
-msgid "Add remaining skills"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_spell/edit.html.eex:10
-msgid "Add remaining spells"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:122
-msgid "An error occured when updating character."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:107
-msgid "An error occured when updating user."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:63
-msgid "Are you sure you want to delete this group?"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/form.html.eex:48
-#: lib/dsa_web/templates/skill/header.html.eex:3
-msgid "BE"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/form.html.eex:16
-msgid "Category"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:94
-msgid "Character deleted successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:35
-msgid "Character does not exist."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:80
-msgid "Character updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/index.html.eex:3
-#: lib/dsa_web/templates/layout/menu.html.eex:135
-msgid "Combat Sets"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/combat_set_controller.ex:39
-msgid "Combat set created successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/combat_set_controller.ex:85
-msgid "Combat set deleted successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/combat_set_controller.ex:70
-msgid "Combat set updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/form_helpers.ex:36
+#: lib/dsa_web/helpers/form_helpers.ex:36
 msgid "Create"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/group/new.html.eex:8
-#: lib/dsa_web/templates/layout/app.backup.html.eex:24
-msgid "Create Group"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/index.html.eex:16
-msgid "DMG"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:55
-msgid "Edit"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/edit.html.eex:2
-msgid "Edit Combat Set"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/edit.html.eex:4
-msgid "Edit Skill"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_skill/edit.html.eex:5
-#: lib/dsa_web/templates/character_skill/index.html.eex:35
-msgid "Edit Skills"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_spell/edit.html.eex:5
-#: lib/dsa_web/templates/character_spell/index.html.eex:31
-msgid "Edit Spells"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/spell_view.ex:7
-msgid "Elves"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/skill_view.ex:8
-msgid "Event."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/dsa_helpers.ex:50
+#: lib/dsa_web/helpers/dsa_helpers.ex:50
 msgid "Evtl"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:25
-#: lib/dsa_web/templates/character_skill/edit.html.eex:31 lib/dsa_web/templates/character_spell/edit.html.eex:25
-msgid "FW"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/error/403.html.eex:20
-msgid "Forbidden"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/spell_view.ex:5
-msgid "General"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:18
-msgid "Gesellschaft"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:17
-msgid "Gesellschaftstalente"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/new.html.eex:4
-msgid "Group Name"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/group_controller.ex:49
-msgid "Group deleted successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/group_controller.ex:24
-msgid "Group was created."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:2
-#: lib/dsa_web/templates/layout/menu.html.eex:177
-msgid "Groups"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/spell_view.ex:6
-msgid "Guildmages"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:39
-msgid "Handwerk"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:38
-msgid "Handwerkstalente"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/error/500.html.eex:20
+#: lib/dsa_web/templates/error/500.html.eex:15
 msgid "Internal Server Error"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/error_controller.ex:47
-msgid "Invalid Login Data."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/dsa_helpers.ex:48 lib/dsa_web/views/skill_view.ex:9
+#: lib/dsa_web/helpers/dsa_helpers.ex:48
 msgid "Ja"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:40
-msgid "Join"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:11
-msgid "Körper"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:10
-msgid "Körpertalente"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:35
-msgid "Leave"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:39
-msgid "List Characters"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:61
-msgid "List Skills"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:89
-msgid "List Spells"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/app.backup.html.eex:26
-msgid "List existing Groups"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:17
-msgid "Master"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_blessing/index.html.eex:10
-#: lib/dsa_web/templates/character_skill/index.html.eex:10 lib/dsa_web/templates/character_spell/index.html.eex:10
-msgid "Modifier"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:11
-#: lib/dsa_web/templates/combat_set/index.html.eex:13 lib/dsa_web/templates/group/new.html.eex:5
-#: lib/dsa_web/templates/skill/form.html.eex:10
-msgid "Name"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:25
-msgid "Natur"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:24
-msgid "Naturtalente"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/dsa_helpers.ex:49 lib/dsa_web/views/skill_view.ex:10
+#: lib/dsa_web/helpers/dsa_helpers.ex:49
 msgid "Nein"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/combat_set/index.html.eex:4
-#: lib/dsa_web/templates/combat_set/new.html.eex:2
-msgid "New Combat Set"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:4
-msgid "New Group"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:65
-#: lib/dsa_web/templates/skill/new.html.eex:4
-msgid "New Skill"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:5
-#: lib/dsa_web/templates/skill/form.html.eex:4 lib/dsa_web/templates/user_settings/edit.html.eex:14
-msgid "Oops, something went wrong! Please check the errors below."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:21
-#: lib/dsa_web/templates/combat_set/index.html.eex:15
-msgid "PA"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:23
-#: lib/dsa_web/templates/character_skill/edit.html.eex:29 lib/dsa_web/templates/character_spell/edit.html.eex:23
-msgid "Probe"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_skill/edit.html.eex:18
-msgid "Remove Skills at 0"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_spell/edit.html.eex:13
-msgid "Remove Spells at 0"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/blessing/index.html.eex:4
-#: lib/dsa_web/templates/spell/index.html.eex:4
-msgid "Ritual"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/blessing/index.html.eex:5
-#: lib/dsa_web/templates/blessing/index.html.eex:13 lib/dsa_web/templates/character_blessing/edit.html.eex:24
-#: lib/dsa_web/templates/character_skill/edit.html.eex:30 lib/dsa_web/templates/character_spell/edit.html.eex:24
-#: lib/dsa_web/templates/skill/form.html.eex:42 lib/dsa_web/templates/skill/header.html.eex:5
-#: lib/dsa_web/templates/spell/index.html.eex:5 lib/dsa_web/templates/spell/index.html.eex:13
-msgid "SF"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/form.html.eex:71
-#: lib/dsa_web/templates/character/form.html.eex:72
-msgid "SK"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/form.html.eex:14
-#: lib/dsa_web/templates/character/form.html.eex:15
-msgid "SP"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_skill/edit.html.eex:11
-msgid "Save Skills"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_spell/edit.html.eex:6
-msgid "Save Spells"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_skill/edit.html.eex:28
+#: lib/dsa/data/skill.ex:49
 msgid "Skill"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/skill_controller.ex:59
-msgid "Skills deleted successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_skill_controller.ex:50
-#: lib/dsa_web/controllers/character_skill_controller.ex:65 lib/dsa_web/controllers/skill_controller.ex:22
-#: lib/dsa_web/controllers/skill_controller.ex:46
-msgid "Skills updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_spell/edit.html.eex:22
-#: lib/dsa_web/templates/spell/index.html.eex:12
-msgid "Spell"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_spell_controller.ex:50
-#: lib/dsa_web/controllers/character_spell_controller.ex:65
-msgid "Spells updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/spell/index.html.eex:7
-#: lib/dsa_web/templates/spell/index.html.eex:15
-msgid "Spread"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/form.html.eex:24
-msgid "T1"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/skill/form.html.eex:30
-#: lib/dsa_web/templates/skill/form.html.eex:36
-msgid "T3"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/about.html.eex:3
-msgid "TODO: This is a placeholder page for some general information about the tool and its capabilities."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/error_controller.ex:38
-msgid "The given character was not found."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/error/404.html.eex:20
+#: lib/dsa_web/templates/error/404.html.eex:15
 msgid "The server could not find the requested resource."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_controller.ex:46
-msgid "This character is hidden by the user."
 msgstr ""
 
 #, elixir-format
@@ -633,247 +71,88 @@ msgid "Unauthorized"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/views/form_helpers.ex:36
+#: lib/dsa_web/helpers/form_helpers.ex:36
 msgid "Update"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/combat_set/form.html.eex:33
-msgid "W"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:32
-msgid "Wissen"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/types/skill_category.ex:31
-msgid "Wissenstalente"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/spell_view.ex:8
-msgid "Witches"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/group_controller.ex:69
-msgid "You have joined the group."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/group_controller.ex:80
-msgid "You have left the group."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/error_controller.ex:7
-msgid "You must authenticate to access the requested response."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/auth1.ex:65
-msgid "You must be an adminstrator to access this page."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/auth1.ex:44
-msgid "You must be logged in to access this page."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/app.backup.html.eex:19
-msgid "You must join a DSA group before the log can be displayed."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/form.html.eex:76
-#: lib/dsa_web/templates/character/form.html.eex:77
-msgid "ZK"
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/templates/error/401.html.eex:21
-#: lib/dsa_web/templates/error/403.html.eex:21 lib/dsa_web/templates/error/404.html.eex:21
-#: lib/dsa_web/templates/error/500.html.eex:21
+#: lib/dsa_web/templates/error/403.html.eex:20 lib/dsa_web/templates/error/404.html.eex:16
+#: lib/dsa_web/templates/error/500.html.eex:16
 msgid "back to Home"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:10
-msgid "Add remaining blessings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/index.html.eex:34
-msgid "Are you sure?"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/combat_set/edit.html.eex:3
-#: lib/dsa_web/templates/combat_set/new.html.eex:3
-msgid "Back"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/index.html.leex:71
-msgid "Bei Phex! Noch sind keine Würfel gerollt!"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/blessing/index.html.eex:12
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:22
-msgid "Blessing"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:112
-#: lib/dsa_web/templates/layout/menu.html.eex:127
-msgid "Blessings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/character_blessing_controller.ex:50
-#: lib/dsa_web/controllers/character_blessing_controller.ex:65
-msgid "Blessings updated successfully."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/blessing/index.html.eex:6
-#: lib/dsa_web/templates/blessing/index.html.eex:14
-msgid "Cast time"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/live.html.leex:27
-msgid "Choose..."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/blessing/index.html.eex:7
-#: lib/dsa_web/templates/blessing/index.html.eex:15
-msgid "Cost"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/index.html.leex:13
-msgid "Dice"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:5
-#: lib/dsa_web/templates/character_blessing/index.html.eex:31
-msgid "Edit Blessings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/index.html.leex:6
-msgid "Empty Log"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/ini_roll.html.leex:13
-msgid "INI"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character/form.html.eex:81
-msgid "INI Base"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:117
-msgid "List Blessings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:13
-msgid "Remove Blessings at 0"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/character_blessing/edit.html.eex:6
-msgid "Save Blessings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/at_roll.html.leex:3
-msgid "attacked"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/dmg_roll.html.leex:5
-msgid "damage."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/dmg_roll.html.leex:3
-msgid "dealt"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/pa_roll.html.leex:3
-msgid "defended"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/ini_roll.html.leex:7
-msgid "has entered combat."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/log/ini_roll.html.leex:5
-msgid "has left combat."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/live.html.leex:20
-msgid "AE"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:8
-msgid "Are you sure you want to delete your account including all characters?"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:19
-#: lib/dsa_web/templates/user_settings/edit.html.eex:27
-msgid "Current Password"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/index.html.eex:62
-msgid "Delete"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:156
-msgid "Dice tables"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/live.html.leex:23
-msgid "KE"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/group/live.html.leex:17
-msgid "LE"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/menu.html.eex:151
-msgid "Support Info "
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/user_settings/edit.html.eex:51
-msgid "Update Settings"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/views/layout_view.ex:10
+#: lib/dsa_web/views/layout_view.ex:11
 msgid "No active character"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:34
+msgid "Close sidebar"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:30
+msgid "Ctrl"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/app.html.eex:61
+msgid "Open sidebar"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/user_menu.html.eex:4
+msgid "Open user menu"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:28
+msgid "Press"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:70
+msgid "Search"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:25
+msgid "Search for anything..."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/controllers/manage_controller.ex:13
+msgid "Search has been syncronized."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/user_menu.html.eex:26
+msgid "Sign In"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:33
+msgid "and"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:53
+msgid "applications"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:72
+msgid "search DSA Tool"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:35
+msgid "to search"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/search.html.eex:31
+msgid "⌘"
 msgstr ""

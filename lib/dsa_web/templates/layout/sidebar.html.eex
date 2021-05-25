@@ -20,7 +20,11 @@
     </div>
   <% end %>
   <nav>
-    <%= link to: Routes.page_path(@conn, :index), class: "menu-item active" do %>
+    <%= link to: Routes.skill_path(@conn, :index), class: "menu-item active" do %>
+      <div><%= icon(@conn, "cog-solid", "w-5 h-5") %></div>
+      <span><%= gettext("Skills") %></span>
+    <% end %>
+    <%= link to: Routes.page_path(@conn, :index), class: "menu-item" do %>
       <div><%= icon(@conn, "cog-solid", "w-5 h-5") %></div>
       <span>Spells</span>
     <% end %>

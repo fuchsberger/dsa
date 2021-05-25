@@ -52,6 +52,18 @@ window.liveSocket = liveSocket
 
 global.SimpleScrollbar = SimpleScrollbar
 
-// Configure Algoria search
+/**
+ * Configure Algoria search
+ *
+ * Every search entry should have the following properties:
+ * objectID (unique in format type_id if persistent database record)
+ * type
+ * name
+ * path
+ * description (optional)
+ * list_name (optional)
+ * list_entries (optional)
+ */
+let env = document.querySelector("meta[name='environment']").getAttribute("content")
 const client = algoliasearch('WL8XME362C', '6c57ebae586cc1d9895ec316af1491d8')
-window.index = client.initIndex('records')
+global.searchIndex = client.initIndex(env + '_records')

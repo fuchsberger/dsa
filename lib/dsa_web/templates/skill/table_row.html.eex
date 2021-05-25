@@ -1,0 +1,17 @@
+<tr>
+  <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+    <%= @skill.name %>
+  </td>
+  <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500"><%= @skill.check %></td>
+  <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500 uppercase">
+    <%= cond do
+      not is_nil(@skill.encumbrance_conditional) -> gettext("maybe")
+      @skill.encumbrance_default -> gettext("yes")
+      true -> gettext("no")
+    end %>
+  </td>
+  <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500 uppercase">
+    <%= @skill.cost_factor %>
+  </td>
+  <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500 uppercase">25</td>
+</tr>

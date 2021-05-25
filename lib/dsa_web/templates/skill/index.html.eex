@@ -1,15 +1,48 @@
-<div class='sticky top-0 bg-gray-100 leading-8 flex justify-around' data-turbo='false'>
-  <h2 class='leading-8 text-xl font-bold'><%= gettext "Skills" %></h2>
-  <%= for %{short: short, id: id} <- SkillCategory.list() do %>
-    <%= link short, to: "##{id}" %>
-  <% end %>
-</div>
+<h1 class='heading'><%= gettext("Skills") %></h1>
 
-<table class="table">
-  <tbody>
-    <%= for category <- SkillCategory.list() do  %>
-      <%= render DsaWeb.SkillView, "header.html", category: category, admin: admin?(@conn) %>
-      <%= render_many Enum.filter(@skills, & &1.category == category.id), DsaWeb.SkillView, "row.html", as: :skill, conn: @conn %>
-    <% end %>
-  </tbody>
-</table>
+<div class='lg:grid lg:grid-cols-2 lg:gap-4'>
+  <div class='space-y-4'>
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <%= render "table_head.html", category: gettext("Body Skills") %>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= render_many @body_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+        </tbody>
+      </table>
+    </div>
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <%= render "table_head.html", category: gettext("Social Skills") %>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= render_many @social_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+        </tbody>
+      </table>
+    </div>
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <%= render "table_head.html", category: gettext("Nature Skills") %>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= render_many @nature_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class='space-y-4'>
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <%= render "table_head.html", category: gettext("Knowledge Skills") %>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= render_many @knowledge_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+        </tbody>
+      </table>
+    </div>
+    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <%= render "table_head.html", category: gettext("Crafting Skills") %>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= render_many @crafting_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

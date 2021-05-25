@@ -85,3 +85,18 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/error/403.html.eex:18
+msgid "Forbidden"
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/dsa/data/skill.ex:68
+msgid "invalid check format"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/accounts/user.ex:53
+msgid "must have the @ sign and no spaces"
+msgstr ""

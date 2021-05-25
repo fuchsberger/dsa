@@ -43,7 +43,7 @@ defmodule Mix.Tasks.Seed do
     Logger.info("Updating skills in Algolia index...")
 
     prepared_skills = Data.list_skills() |> Enum.map(& Skill.format_algolia(&1))
-    Algolia.save_objects("skills", prepared_skills, id_attribute: :id)
+    Algolia.save_objects(algoria_index(), prepared_skills)
 
     # Enum.each(data["skills"], fn skill_params ->
     #   if Enum.member?(skill_ids, skill_params["id"]) do
@@ -70,6 +70,8 @@ defmodule Mix.Tasks.Seed do
 
     Logger.info("Finished database syncronization")
   end
+
+  defp algoria_index, do: "#{Application.get_env(:dsa, :environment)}_records"
 
   defp read_file(filename) do
     filename

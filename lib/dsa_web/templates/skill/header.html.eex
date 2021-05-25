@@ -1,9 +1,0 @@
-<tr id='<%= @category.id %>' class='header-row'>
-  <th scope="col"><%= @category.title %> (<%= @category.pages %>)</th>
-  <th scope="col"><%= gettext "BE" %></th>
-  <th scope="col"><%= @category.probe %></th>
-  <th scope="col"><%= gettext "SF" %></th>
-  <%= if @admin do %>
-    <th scope="col" class='w-11'></th>
-  <% end %>
-</tr>

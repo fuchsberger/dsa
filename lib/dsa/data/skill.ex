@@ -44,11 +44,14 @@ defmodule Dsa.Data.Skill do
 
   def format_algolia(skill) do
     %{
-      id: skill.id,
+      objectID: "skill_#{skill.id}",
       name: skill.name,
+      type: gettext("Skill"),
       path: Routes.page_path(DsaWeb.Endpoint, :index),
       # path: Routes.skill_path(Dsa.Endpoint, :show, skill.slug),
-      description: skill.description
+      description: skill.description,
+      list_name: gettext("applications"),
+      list_entries: skill.applications
     }
   end
 

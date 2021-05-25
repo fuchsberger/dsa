@@ -15,7 +15,7 @@
     });
     $watch("query", query => {
       if(query.length < 3) results = [];
-      else window.index.search(query).then(search_results => {results = search_results.hits})
+      else searchIndex.search(query, { attributesToSnippet: ["name", "description", "list_entries" ], hitsPerPage: 5 }).then(search_results => {results = search_results.hits})
     })'>
   <button class='w-full flex items-center group text-gray-400 focus:outline-none'
     @click='search=true;$nextTick(() => { document.getElementById("search_query").focus() });' >
@@ -35,7 +35,7 @@
       <span class="sr-only"> <%= gettext("to search") %></span></span>
   </button>
   <%# Search Modal %>
-  <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" x-show='search' style='display:none;'>
+  <div id='search-modal' class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" x-show='search' style='display:none;'>
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <%# Background Overlay %>
       <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
@@ -80,13 +80,21 @@
         <ul role='listbox' class="px-4 sm:px-6 py-3 space-y-2">
           <template x-for="item in results" :key="item">
             <li class='search-hit' role='option' @mouseenter="if(selected !== item.objectID) selected = item.objectID;" :aria-selected='selected === item.objectID ? "true" : "false"'>
-              <a x-bind:href="item.path">
-                <div class="flex items-center h-16">
-                  <%= icon(@conn, "shield-check", "w-5 h-5") %>
-                  <strong x-text='item.title'></strong>
-                  <p x-text='item.desc'></p>
-                  <%= icon(@conn, "select", "pl-3 w-8 h-8") %>
+              <a x-bind:href="item.path" class='flex items-center'>
+                <div class="flex-grow flex flex-col">
+                  <div class='overflow-y-hidden'>
+                    <strong x-html='item._snippetResult.name.value' class='text-black'></strong>
+                    <span x-text='"(" + item.type + ")"' class='ml-2 italic'></span>
+                  </div>
+                  <small x-html='item._snippetResult.description.value' class='text-justify truncate'></small>
+                  <small x-show='item.list_entries.length > 0' class='truncate'>
+                    <strong x-text='item.list_name'></strong>
+                    <template x-for="entry in item._snippetResult.list_entries" :key="entry">
+                      <span x-html='entry.value' class='rounded-full ml-0.5 px-1 bg-gray-300 text-black'></span>
+                    </template>
+                  </small>
                 </div>
+                <%= icon(@conn, "select", "pl-3 w-8 h-8") %>
               </a>
             </li>
           </template>
