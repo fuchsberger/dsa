@@ -13,6 +13,11 @@ mix gettext.extract
 mix gettext.merge priv/gettext --locale de
 ```
 
+## Additional mix tasks
+Two additional mix tasks are available:
+- `mix seed` Populates the database with DSA data
+- `mix algolia` Syncronizes algolia search index with app data
+
 ## Deployment Instructions
 After ssh into the production server this sequence will update the web application:
 

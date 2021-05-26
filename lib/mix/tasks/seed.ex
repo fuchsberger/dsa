@@ -1,17 +1,16 @@
 defmodule Mix.Tasks.Seed do
   @moduledoc """
   Syncronizes database with data from /priv/repo/data.json
-  Also updates Algolia search with new data.
 
   Can be run via: $ mix seed
   """
   use Mix.Task
   require Logger
-  # import Algolia, only: [save_objects: 1]
+
   alias Dsa.Data
   alias Dsa.Data.Skill
 
-  @shortdoc "Populates the database and updates algolia search index"
+  @shortdoc "Populates the database with DSA data."
   def run(_) do
     # This will start our application
     Mix.Task.run("app.start")
@@ -40,10 +39,7 @@ defmodule Mix.Tasks.Seed do
       end
     end)
 
-    Logger.info("Updating skills in Algolia index...")
-
-    prepared_skills = Data.list_skills() |> Enum.map(& Skill.format_algolia(&1))
-    Algolia.save_objects(algoria_index(), prepared_skills)
+    Logger.info("Finished seeding database...")
 
     # Enum.each(data["skills"], fn skill_params ->
     #   if Enum.member?(skill_ids, skill_params["id"]) do
@@ -67,8 +63,6 @@ defmodule Mix.Tasks.Seed do
     #     end
     #   end
     # end)
-
-    Logger.info("Finished database syncronization")
   end
 
   defp algoria_index, do: "#{Application.get_env(:dsa, :environment)}_records"
