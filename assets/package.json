@@ -9,7 +9,6 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "@ryangjchandler/spruce": "^2.7.1",
     "algoliasearch": "^4.9.1",
     "alpinejs": "^2.8.2",
     "phoenix": "file:../deps/phoenix",

@@ -33,6 +33,7 @@
       <span>Items</span>
     <% end %>
   </nav>
+
   <div class='flex-shrink-0 bg-gray-700'>
     TODO: Log Entries
   </div>

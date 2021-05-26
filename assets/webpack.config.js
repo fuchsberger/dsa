@@ -1,5 +1,4 @@
 const path = require('path')
-const glob = require('glob')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -16,7 +15,7 @@ module.exports = (env, options) => {
       ]
     },
     entry: {
-      'app': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
+      'app': './js/app.js'
     },
     output: {
       filename: '[name].js',
@@ -43,7 +42,7 @@ module.exports = (env, options) => {
           test: /\.(gif|svg|woff2)$/,
           use: {
             loader: 'url-loader',
-            options: { limit: 8192 }      // use file-loader if file < 8 Kb
+            options: { limit: 8192 }      // use file-loader if file size < 8 Kb
           }
         }
       ]

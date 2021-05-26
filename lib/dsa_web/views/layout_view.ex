@@ -16,30 +16,35 @@ defmodule DsaWeb.LayoutView do
 
   def alert_colors(type) do
     case type do
-      :error ->
+      "error" ->
         {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
 
-      :info ->
+      "info" ->
         {"bg-blue-50", "border-blue-300", "text-blue-400", "text-blue-800", "information-circle-solid"}
 
-      :success ->
+      "success" ->
         {"bg-green-50", "border-green-300", "text-green-400", "text-green-800", "check-circle-solid"}
     end
   end
 
-  defp menu_items(conn, mobile) do
+  defp menu_items(conn) do
     [
+      %{
+        name: gettext("Skills"),
+        path: Routes.skill_path(conn, :index),
+        icon: "clipboard-list"
+      },
       %{
         name: "Suche Synchronisieren",
         path: Routes.manage_path(conn, :sync_search),
         icon: "clipboard-list"
       }
     ]
-    |> Enum.map(& Map.put(&1, :active, &1.path == Path.join(["/" | conn.path_info])))
-    |> Enum.map(fn item ->
-      link(conn, [icon(conn, item.icon, icon_class(mobile, item.active)), item.name],
-        class: link_class(mobile, item.active), to: item.path)
-    end)
+    # |> Enum.map(& Map.put(&1, :active, &1.path == Path.join(["/" | conn.path_info])))
+    # |> Enum.map(fn item ->
+    #   link(conn, [icon(conn, item.icon, icon_class(mobile, item.active)), item.name],
+    #     class: link_class(mobile, item.active), to: item.path)
+    # end)
   end
 
   # size is in rem (by default 4 pixel)
