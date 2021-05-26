@@ -20,18 +20,11 @@
     </div>
   <% end %>
   <nav>
-    <%= link to: Routes.skill_path(@conn, :index), class: "menu-item active" do %>
-      <div><%= icon(@conn, "cog-solid", "w-5 h-5") %></div>
-      <span><%= gettext("Skills") %></span>
-    <% end %>
-    <%= link to: Routes.page_path(@conn, :index), class: "menu-item" do %>
-      <div><%= icon(@conn, "cog-solid", "w-5 h-5") %></div>
-      <span>Spells</span>
-    <% end %>
-    <%= link to: Routes.page_path(@conn, :index), class: "menu-item" do %>
-      <div><%= icon(@conn, "cog-solid", "w-5 h-5") %></div>
-      <span>Items</span>
-    <% end %>
+    <%= menu_item(@conn, gettext("Home"),
+      to: Routes.page_path(@conn, :index), icon: "home") %>
+
+    <%= menu_item(@conn, gettext("Skills"),
+      to: Routes.skill_path(@conn, :index), icon: "cog-solid") %>
   </nav>
 
   <div class='flex-shrink-0 bg-gray-700'>
