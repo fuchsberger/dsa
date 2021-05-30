@@ -11,14 +11,14 @@
   <body class='bg-gray-100'>
     <nav class="w-full bg-gray-800">
       <div class="relative mx-auto max-w-7xl px-3 h-12 flex items-center">
-        <%= link gettext("DSA Tool"), to: Routes.session_path(@conn, :index), class: "brand" %>
+        <%= link gettext("DSA Tool"), to: Routes.user_session_path(@conn, :index), class: "brand" %>
       </div>
     </nav>
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
       <h1 class='font-sans font-bold text-3xl'>Error 401</h1>
       <hr>
       <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Unauthorized" %></h2>
-      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
+      <%= link gettext("back to Home"), to: Routes.user_session_path(@conn, :index) %>
     </div>
   </body>
 </html>

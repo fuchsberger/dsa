@@ -1,6 +1,5 @@
 defmodule Dsa.Accounts.UserNotifier do
   import Bamboo.Email
-  import DsaWeb.Gettext
   import DsaWeb.AccountTranslations
 
   alias Dsa.Mailer

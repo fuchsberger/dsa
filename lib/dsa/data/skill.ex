@@ -1,7 +1,6 @@
 defmodule Dsa.Data.Skill do
   use Dsa, :schema
 
-  alias Dsa.Type.{Check, CostFactor, SkillCategory}
   alias DsaWeb.Router.Helpers, as: Routes
 
   def format_algolia(skill) do
@@ -483,6 +482,139 @@ defmodule Dsa.Data.Skill do
           %{
             action: "Fesseln",
             modifier: "Erfolgsprobe; Gegner muss sich mit einer Sammelprobe befreien"
+          }
+        ]
+      }, %{
+        id: 11,
+        name: gettext("Fishing"),
+        category: :nature,
+        check: {:ff, :ge, :ko},
+        applications: [
+          %{name: gettext("Saltwater Animals")},
+          %{name: gettext("Freshwater Animals")},
+          %{name: gettext("Water Monsters")}
+        ],
+        uses: [],
+        encumbrance: false,
+        encumbrance_condition: gettext("Yes (spearfishing) or No (fishing with weirs, nets, or hooks)"),
+        tools: gettext("Net, weir, spear, fishing line with hook"),
+        quality: gettext("The fish are tastier than the average catch."),
+        failed: gettext("The fish don’t bite, or avoid the net."),
+        success: gettext("The number of rations obtained is very high. For QL, competitive checks, and cumulative checks, SP = 2xSR."),
+        botch: gettext("The fisher falls into the water and loses some fishing equipment."),
+        improvement_cost: :a,
+        description: "Proben auf [Fischen & Angeln] beurteilen den Erfolg eines Helden bei der Jagd auf schmackhafte Wassertiere. Eine erfolgreiche Probe gibt an, dass man nicht nur etwas gefangen hat, sondern es sich in der Tat um Fische oder Meeresfrüchte handelt. Die Menge ist nicht nur von der Umgebung, sondern ebenso von der verwendeten Methode abhängig. Mittels Netzen und Reusen kann man mehr Fische innerhalb des gleichen Zeitraums fangen als mit einer einzigen Angel und einem Wurmköder.",
+        reference: {"Basis Regelwerk", 199},
+        examples: [
+          %{
+            action: "Einen Tag lang Fische angeln, um sie am Abend über dem Lagerfeuer zu braten",
+            modifier: "1 QS = 1 Ration (für eine Person und einen Tag), bei Netzen und Reusen QS x 3"
+          }
+        ]
+      },  %{
+        id: 12,
+        name: gettext("Flying"),
+        category: :physical,
+        check: {:mu, :in, :ge},
+        applications: [
+          %{name: gettext("Chases")},
+          %{name: gettext("Combat Maneuvers")},
+          %{name: gettext("Long-Distance Flight")}
+        ],
+        uses: [],
+        encumbrance: true,
+        encumbrance_condition: nil,
+        tools: gettext("a flying instrument"),
+        quality: gettext("You can cover distances faster."),
+        failed: gettext("The aerial maneuver fails and must be aborted."),
+        success: gettext("The maneuver succeeds, and the hero has an additional action remaining for the round."),
+        botch: gettext("The hero crashes."),
+        improvement_cost: :b,
+        description: "Um Gegenstände wie Hexenbesen oder fliegende Teppiche aktiv zu steuern, beispielsweise um durch eine enge Straßenschlucht oder durch ein offenes Fenster zu fliegen, ist eine Probe auf Fliegen nötig. Unter das Talent fällt außerdem das Steuern von Flugreittieren, flugfähigen Dämonen und anderen Wesenheiten, die einen Helden durch die Luft transportieren können. Der durchschnittliche Held wird eher selten Proben auf dieses Talent ablegen, eine Hexe mit ihrem Fluggerät deutlich häufiger.\n[Komplexe] Fluggeräte sind vor allem Fliegende Teppiche, die man nur fliegen kann, wenn man ein magisches Zauberwort oder eine bestimmte Geste kennt, die man vollführen muss.",
+        reference: {"Basis Regelwerk", 188},
+        examples: [
+          %{
+            action: "Ein kurzer, ruhiger Flug von etwa 100 Schritt",
+            modifier: "+5"
+          },
+          %{
+            action: "Ein mehrstündiger Flug ohne Gesäßschmerzen",
+            modifier: "+3"
+          },
+          %{
+            action: "Rasanter Flug durch eine Straßenschlucht",
+            modifier: "+1"
+          },
+          %{
+            action: "Überraschende Wendemanöver",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Durch ein schmales Fenster fliegen",
+            modifier: "-1"
+          },
+          %{
+            action: "Looping",
+            modifier: "–3"
+          },
+          %{
+            action: "Sicherer Flug durch einen Luftschacht",
+            modifier: "-5"
+          }
+        ]
+      }, %{
+        id: 13,
+        name: gettext("Streetwise"),
+        category: :social,
+        check: {:kl, :in, :ch},
+        applications: [
+          %{name: gettext("Asking Around")},
+          %{name: gettext("Judging Locations")},
+          %{name: gettext("Shadowing")}
+        ],
+        uses: [],
+        encumbrance: false,
+        encumbrance_condition: gettext("No (maybe in some situations, such as if your armor helps you resemble a guard or a nobleman)"),
+        tools: nil,
+        quality: gettext("Collect more information, or get it faster than expected."),
+        failed: gettext("Receive no useful information."),
+        success: gettext("Find an especially good but inexpensive inn, obtain much more information than expected, or find a contact who offers excellent terms."),
+        botch: gettext("Walk into an ambush by a gang of thugs who plan to rob you blind."),
+        improvement_cost: :c,
+        description: "[Gassenwissen] spiegelt die Erfahrung wider, wie gut man sich in zwielichtigen Stadtvierteln auskennt, wo man den richtigen Ansprechpartner findet oder wo man sich in eine billige Herberge einquartieren kann. Dieses Wissen lässt sich in den meisten Fällen nicht nur auf den Heimatort des Abenteurers, sondern ebenfalls auf fremde Städte anwenden.\nProben geben dem Helden Hilfestellung auf Fragen zur Ortseinschätzung: Wo patrouilliert die Stadtwache heute Nacht? In welcher Taverne treffe ich am ehesten auf ein Mitglied einer Unterweltbande? Wo kann ich am günstigsten übernachten? Wie viele Silbertaler brauche ich, um vom Bettler meines Vertrauens eine Gefälligkeit zu verlangen?\nWill man einen Hehler finden, um verbotene Waren loszuwerden oder zu kaufen, ist ebenfalls eine Probe auf [Gassenwissen] unumgänglich.\nAußerdem kann man mit diesem Talent jemand anderen beschatten. Dies umfasst eine gute Sichtposition und Kenntnis des richtigen Abstands zum Zielobjekt, aber auch allgemeine Unauffälligkeit auf den Straßen. Damit sind jedoch nicht zwangsweise Schleichen und sich Verstecken gemeint, was unter das Talent Verbergen fällt. Zu guter Letzt dient das Talent dazu zu wissen, wie und wo man gute Kontakte knüpfen kann, beispielsweise zu Wirten, Auftraggebern und vor allem zwielichtigem Gesindel.",
+        reference: {"Basis Regelwerk", 196},
+        examples: [
+          %{
+            action: "Nächste Armenspeisung finden",
+            modifier: "+5"
+          },
+          %{
+            action: "Günstigste Übernachtungsmöglichkeit finden",
+            modifier: "+3"
+          },
+          %{
+            action: "Gerüchte aufschnappen",
+            modifier: "+1"
+          },
+          %{
+            action: "Einen Schwarzmarkt finden",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Informationen über Alrik den Schläger erhalten",
+            modifier: "-1"
+          },
+          %{
+            action: "Einen Giftmischer finden",
+            modifier: "–3"
+          },
+          %{
+            action: "Hehler für gestohlenes magisches Artefakt finden",
+            modifier: "-5"
+          },
+          %{
+            action: "Beschatten",
+            modifier: "Vergleichsprobe (Gassenwissen gegen Sinnesschärfe)"
           }
         ]
       },

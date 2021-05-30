@@ -3,8 +3,6 @@ defmodule DsaWeb.Helpers.ViewHelpers do
   Conveniences for all views.
   """
   use Phoenix.HTML
-  import Phoenix.View, only: [render: 3]
-  import DsaWeb.Gettext
 
   alias DsaWeb.Router.Helpers, as: Routes
 

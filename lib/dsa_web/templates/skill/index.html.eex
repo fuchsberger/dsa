@@ -4,9 +4,9 @@
   <div class='space-y-4'>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Body Skills"), check: "MU/GE/KK" %>
+        <%= render "table_head.html", category: gettext("Physical Skills"), check: "MU/GE/KK" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @body_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
       </table>
     </div>

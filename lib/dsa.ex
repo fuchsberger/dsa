@@ -38,7 +38,7 @@ defmodule Dsa do
     |> String.replace(~r/(\s|-)+/, "-")
   end
 
-  def put_slug(changeset, field \\ :name) do
+  def put_slug(changeset, _field \\ :name) do
     case changeset do
       %Ecto.Changeset{changes: %{name: name}} ->
         Ecto.Changeset.put_change(changeset, :slug, slugify(name))

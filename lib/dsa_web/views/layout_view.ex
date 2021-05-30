@@ -4,8 +4,6 @@ defmodule DsaWeb.LayoutView do
   import Phoenix.Controller, only: [get_flash: 1]
   import DsaWeb.AccountTranslations
 
-  alias Dsa.Accounts.User
-
   # defp active_character_name(%User{} = current_user) do
   #   if is_nil(current_user.active_character_id) do
   #     gettext("No active character")

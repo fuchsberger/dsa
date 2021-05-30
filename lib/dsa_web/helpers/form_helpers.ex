@@ -4,8 +4,6 @@ defmodule DsaWeb.Helpers.FormHelpers do
   """
   use Phoenix.HTML
 
-  alias Phoenix.HTML.Form
-
   import DsaWeb.Gettext
 
   require Logger
@@ -49,20 +47,20 @@ defmodule DsaWeb.Helpers.FormHelpers do
       disabled: is_nil(modified?) || not modified?
   end
 
-  defp expand(%{source: source} = form, field, opts) when is_map(source) do
+  # defp expand(%{source: source} = form, field, opts) when is_map(source) do
 
-    error_class =
-      case not Map.has_key?(form.source, :action) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
-        true -> ""
-        false -> " error"
-      end
+  #   error_class =
+  #     case not Map.has_key?(form.source, :action) || is_nil(form.source.action) || not Keyword.has_key?(form.source.errors, field) do
+  #       true -> ""
+  #       false -> " error"
+  #     end
 
-    opts
-    |> Keyword.merge(Form.input_validations(form, field))
-    |> Keyword.merge([class: "#{Keyword.get(opts, :class)}#{error_class}"])
-  end
+  #   opts
+  #   |> Keyword.merge(Form.input_validations(form, field))
+  #   |> Keyword.merge([class: "#{Keyword.get(opts, :class)}#{error_class}"])
+  # end
 
-  defp expand(_form, _field, opts), do: opts
+  # defp expand(_form, _field, opts), do: opts
 
   @doc """
   Generates tag for inlined form input errors.

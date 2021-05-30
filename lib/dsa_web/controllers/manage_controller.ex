@@ -3,8 +3,6 @@ defmodule DsaWeb.ManageController do
 
   import Algolia
 
-  @data_path "priv/repo/data"
-
   def sync_search(conn, _params) do
 
     sync_pages(conn)
@@ -12,12 +10,6 @@ defmodule DsaWeb.ManageController do
     conn
     |> put_flash(:info, gettext("Search has been syncronized."))
     |> redirect(to: Routes.page_path(conn, :index))
-  end
-
-  defp read_file(filename) do
-    filename
-    |> File.read!()
-    |> Jason.decode!()
   end
 
   defp sync_pages(conn) do

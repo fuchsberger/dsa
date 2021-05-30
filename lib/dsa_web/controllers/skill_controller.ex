@@ -7,7 +7,7 @@ defmodule DsaWeb.SkillController do
     skills = Data.list_skills()
 
     conn
-    |> assign(:body_skills, Enum.filter(skills, & &1.category == :body))
+    |> assign(:physical_skills, Enum.filter(skills, & &1.category == :physical))
     |> assign(:social_skills, Enum.filter(skills, & &1.category == :social))
     |> assign(:nature_skills, Enum.filter(skills, & &1.category == :nature))
     |> assign(:knowledge_skills, Enum.filter(skills, & &1.category == :knowledge))
@@ -15,8 +15,8 @@ defmodule DsaWeb.SkillController do
     |> render("index.html")
   end
 
-  def show(conn, %{"id" => id}) do
-    case Data.slug_to_id(:skills) do
+  def show(conn, %{"slug" => slug}) do
+    case Data.slug_to_id(:skills, slug) do
       nil ->
         render(conn, DsaWeb.ErrorView, "404.html")
       id ->
