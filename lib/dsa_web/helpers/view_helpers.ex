@@ -42,4 +42,8 @@ defmodule DsaWeb.Helpers.ViewHelpers do
     |> String.split(".")
     |> List.last()
   end
+
+  def check_to_string({t1, t2, t3}) when is_atom(t1) and is_atom(t2) and is_atom(t3) do
+    "#{Atom.to_string(t1)}/#{Atom.to_string(t2)}/#{Atom.to_string(t3)}"
+  end
 end

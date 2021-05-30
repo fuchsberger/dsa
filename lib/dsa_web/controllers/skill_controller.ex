@@ -14,4 +14,13 @@ defmodule DsaWeb.SkillController do
     |> assign(:crafting_skills, Enum.filter(skills, & &1.category == :crafting))
     |> render("index.html")
   end
+
+  def show(conn, %{"id" => id}) do
+    case Data.slug_to_id(:skills) do
+      nil ->
+        render(conn, DsaWeb.ErrorView, "404.html")
+      id ->
+        render(conn, "show.html", skill: Data.get_skill(id))
+    end
+  end
 end

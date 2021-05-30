@@ -14,8 +14,7 @@ mix gettext.merge priv/gettext --locale de
 ```
 
 ## Additional mix tasks
-Two additional mix tasks are available:
-- `mix seed` Populates the database with DSA data
+One additional mix task is available:
 - `mix algolia` Syncronizes algolia search index with app data
 
 ## Deployment Instructions

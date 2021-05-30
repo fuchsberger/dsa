@@ -201,7 +201,7 @@ msgstr "Account erstellen"
 msgid "Change Email"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:61
 msgid "Change Password"
 msgstr "Passwort ändern"
@@ -211,17 +211,17 @@ msgstr "Passwort ändern"
 msgid "DSA Tool - Please Confirm Account"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:73
 msgid "Hi %{username},\n\nYou can change your e-mail by visiting the url below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team"
 msgstr "Die Zwölfe zum Gruß,\n\nDu kannst deine Email Addresse ändern indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du diese Anfrage nicht gestellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:67
 msgid "Hi %{username},\n\nYou can confirm your account by visiting the URL below:\n%{url}\n\nIf you have not created an account with us, please ignore this.\n\nBest,\nThe DSA Team"
 msgstr "Die Zwölfe zum Gruß,\n\nDu kannst deinen Account aktivieren indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du keinen Account bei uns erstellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:70
 msgid "Hi %{username},\n\nYou can reset your password by visiting the url below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team"
 msgstr "Die Zwölfe zum Gruß,\n\nDu kannst dein Passwort zurücksetzen indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du diese Anfrage nicht gestellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
@@ -241,7 +241,7 @@ msgstr ""
 msgid "Hi %{username},<br/><br/>You can reset your password by visiting the url below:<br/><a href=\"%{url}\" target=\"_blank\">%{url}</a><br/><br/>If you didn't request this change, please ignore this.<br/><br/>Best,<br/>The DSA Team"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:14
 msgid "Invalid email or password."
 msgstr "Ungültige Email oder Passwort"
@@ -251,7 +251,7 @@ msgstr "Ungültige Email oder Passwort"
 msgid "Please confirm your email before signing in. An email confirmation link has been sent to you."
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:26
 msgid "Sign out"
 msgstr "Anmelden"
@@ -279,9 +279,9 @@ msgstr ""
 #, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:25
 msgid "or sign in"
-msgstr ""
+msgstr "oder melde dich an"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:34
 msgid "sign into your account"
 msgstr "Melde dich an"

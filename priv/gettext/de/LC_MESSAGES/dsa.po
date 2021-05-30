@@ -57,7 +57,7 @@ msgid "Nein"
 msgstr "No"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:49
+#: lib/dsa/data/skill.ex:11
 msgid "Skill"
 msgstr "Talent"
 
@@ -84,39 +84,29 @@ msgid "back to Home"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/views/layout_view.ex:11
-msgid "No active character"
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/templates/layout/app.html.eex:34
 msgid "Close sidebar"
-msgstr ""
+msgstr "Schließe Seitenmenü"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/search.html.eex:30
 msgid "Ctrl"
-msgstr ""
+msgstr "Strg"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/app.html.eex:61
 msgid "Open sidebar"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/templates/layout/user_menu.html.eex:4
-msgid "Open user menu"
-msgstr ""
+msgstr "Öffne Seitenmenü"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/search.html.eex:28
 msgid "Press"
-msgstr ""
+msgstr "Drücke"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/search.html.eex:70
 msgid "Search"
-msgstr ""
+msgstr "Suche"
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/search.html.eex:25
@@ -139,7 +129,7 @@ msgid "and"
 msgstr "und"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:53
+#: lib/dsa/data/skill.ex:15
 msgid "applications"
 msgstr "Anwendungsgebiete"
 
@@ -157,3 +147,569 @@ msgstr ""
 #: lib/dsa_web/templates/layout/search.html.eex:31
 msgid "⌘"
 msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/index.html.eex:7
+msgid "Body Skills"
+msgstr "Körpertalente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/index.html.eex:41
+msgid "Crafting Skills"
+msgstr "Handwerkstalente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/edit.html.eex:4
+msgid "Edit Skill"
+msgstr "Talent bearbeiten"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_head.html.eex:4
+msgid "Enc"
+msgstr "BE"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/sidebar.html.eex:23
+msgid "Home"
+msgstr "Home"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/index.html.eex:33
+msgid "Knowledge Skills"
+msgstr "Wissenstalente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/index.html.eex:23
+msgid "Nature Skills"
+msgstr "Naturtalente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/new.html.eex:4
+msgid "New Skill"
+msgstr "Neues Talent"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_head.html.eex:6
+msgid "SV"
+msgstr "SF"
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/sidebar.html.eex:26
+#: lib/dsa_web/templates/skill/index.html.eex:1
+msgid "Skills"
+msgstr "Talente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/index.html.eex:15
+msgid "Social Skills"
+msgstr "Gesellschaftstalente"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_head.html.eex:5
+msgid "Stg"
+msgstr "FW"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_row.html.eex:6
+msgid "maybe"
+msgstr "evtl"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_row.html.eex:8
+msgid "no"
+msgstr "nein"
+
+#, elixir-format
+#: lib/dsa_web/templates/skill/table_row.html.eex:7
+msgid "yes"
+msgstr "ja"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:24
+msgid "Alchemy"
+msgstr "Alchimie"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:28
+msgid "Alchemical Poisons"
+msgstr "Alchimistische Gifte"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:29
+msgid "Elixirs"
+msgstr "Elixiere"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:30
+msgid "Mundane Alchemy"
+msgstr "Profane Alchimie"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:35
+msgid "alchemical laboratory"
+msgstr "Alchemistisches Labor"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:38
+msgid "Identify an elixir precisely, including its Level and how long it will remain stable."
+msgstr "Der Held weiß exakt, welches Elixier er vor sich hat, welche Stufe es besitzt und wie lange haltbar es ist."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:39
+msgid "The elixir has an unpleasant side effect."
+msgstr "Das Elixier sorgt für einen unangenehmen Nebeneffekt."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:37
+msgid "The elixir is ruined, or an analysis fails to yield a useful result."
+msgstr "Das Elixier ist misslungen oder eine Analyse hat kein Ergebnis gebracht."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:36
+msgid "The potion is of better quality."
+msgstr "Der Trank weist eine bessere Qualität auf."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:55
+msgid "Conversation"
+msgstr "Einzelgespräch"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:56
+msgid "Debate"
+msgstr "Diskussionsführung"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:57
+msgid "Oration"
+msgstr "Öffentliche Rede"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:51
+msgid "Persuasion"
+msgstr "Bekehren & Überzeugen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:58 lib/dsa/data/skill.ex:248
+msgid "Provocation"
+msgstr "Provokation"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:65
+msgid "The target doesn’t believe the orator."
+msgstr "Das Opfer glaubt dem Prediger nicht."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:67
+msgid "The target feels insulted."
+msgstr "Das Opfer fühlt sich vom Prediger beleidigt oder für dumm verkauft."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:66
+msgid "The target is completely convinced."
+msgstr "Das Opfer der Überzeugungsversuche ist vollends überzeugt."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:64
+msgid "You persuade more people, or the target adheres to the new belief for a longer time."
+msgstr "Mehr Menschen lassen sich von dem Helden bekehren, oder der Bekehrte folgt seiner neuen Überzeugung länger."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:109
+msgid "Beautify"
+msgstr "Aufhübschen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:107
+msgid "Flirting"
+msgstr "Anbändeln"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:113
+msgid "No, but there could be situational exceptions, like trying to seduce somebody while wearing plate armor"
+msgstr "Nein, situationsabhängige Ausnahmen können vorkommen, z.B. Verführen in Gestechrüstung"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:108
+msgid "Romantic Arts"
+msgstr "Liebeskünste"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:103
+msgid "Seduction"
+msgstr "Betören"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:116
+msgid "The character doesn’t manage to arouse the target’s interest."
+msgstr "Dem Helden gelingt es vorerst nicht, Interesse beim Opfer zu wecken."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:115
+msgid "The target reacts favorably to the character."
+msgstr "Der Bezirzte ist bereit, mehr für den Helden zu tun."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:118
+msgid "The target slaps the character for being crude."
+msgstr "Der Held kassiert eine schallende Ohrfeige für seinen plumpen Anmachversuch."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:117
+msgid "The target tries to fulfill all the character’s wishes."
+msgstr "Das Verführungsopfer versucht, dem betörenden Helden alle Wünsche zu erfüllen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:158 lib/dsa/data/skill.ex:406
+msgid "Chases"
+msgstr "Verfolgungsjagden"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:159 lib/dsa/data/skill.ex:407
+msgid "Combat Maneuvers"
+msgstr "Kampfmanöver"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:160 lib/dsa/data/skill.ex:408
+msgid "Long Distances"
+msgstr "Langstrecke"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:167 lib/dsa/data/skill.ex:415
+msgid "Negotiate the distance faster."
+msgstr "Die Distanz bis zum Ziel kann schneller überwunden werden."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:161 lib/dsa/data/skill.ex:409
+msgid "Races"
+msgstr "Wettfahren"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:154
+msgid "Sailing"
+msgstr "Boote & Schiffe"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:166
+msgid "Ship or boat"
+msgstr "Schiff oder Boot"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:168
+msgid "The hero barely makes any progress with the boat or ship."
+msgstr "Der Held kommt mit dem Boot oder Schiff kaum voran."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:170
+msgid "The hero falls overboard or damages an important part of the vessel."
+msgstr "Der Held fällt von Bord oder ein wichtiger Teil des Wasserfahrzeugs wurde beschädigt."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:169
+msgid "The hero uses currents and winds to sail twice as fast as expected."
+msgstr "Der Held nutzt günstige Strömungen und Winde, um doppelt so schnell voranzukommen wie üblich."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:210
+msgid "Betting Games"
+msgstr "Wettspiele"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:211
+msgid "Board Games"
+msgstr "Brettspiele"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:212
+msgid "Card Games"
+msgstr "Kartenspiele"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:213
+msgid "Dice Games"
+msgstr "Würfelspiele"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:206
+msgid "Gambling"
+msgstr "Brett- & Glücksspiel"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:218
+msgid "Game"
+msgstr "Spiel"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:220
+msgid "Lose the game."
+msgstr "Der Held verliert."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:219
+msgid "Make a smart gambit."
+msgstr "Der Held hat einen guten Spielzug gemacht."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:222
+msgid "Others suspect the character of cheating, especially if they have suffered losing streaks. If playing for money, lose at least your whole stake (if not more)."
+msgstr "Der Held wird fälschlicherweise des Falschspiels verdächtigt oder hat eine Pechsträhne. Wird um Geld gespielt, verliert er mindestens den kompletten Einsatz (oder mehr)."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:221
+msgid "Win spectacularly. If playing for money, double your winnings."
+msgstr "Der Held gewinnt auf spektakuläre Art und Weise. Wurde um Geld gespielt, verdoppelt sich sein Gewinn."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:215
+msgid "Cheating"
+msgstr "Falschspiel"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:258
+msgid "Instead of being intimidated or insulted, the reverse happens, and the target grows angry, calm, or even amused. Alternatively, the would-be intimidator appears foolish."
+msgstr "Anstatt eingeschüchtert oder beleidigt zu sein, geschieht das Gegenteil: Das Opfer ist wütend, völlig gelassen oder amüsiert. Oder der Held macht sich mit seinem Gehabe völlig zum Affen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:249
+msgid "Interrogation"
+msgstr "Verhör"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:242
+msgid "Intimidation"
+msgstr "Einschüchtern"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:256
+msgid "The target ignores all insults and attempts at intimidation."
+msgstr "Das Gegenüber ignoriert alle Schmähungen und Einschüchterungsversuche des Helden."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:257
+msgid "The target is utterly intimidated and won’t act against the character for the foreseeable future."
+msgstr "Das Gegenüber des Helden ist vollkommen eingeschüchtert und wird in absehbarer Zeit nichts mehr gegen den Helden unternehmen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:255
+msgid "The victim remains intimidated longer or reveals more than expected."
+msgstr "Das Opfer ist länger eingeschüchtert oder verrät dem Helden mehr als erwartet."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:246
+msgid "Threats"
+msgstr "Drohung"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:247
+msgid "Torture"
+msgstr "Folter"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:294
+msgid "Etiquette"
+msgstr "Etikette"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:301
+msgid "Fashion"
+msgstr "Mode"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:298
+msgid "Manners"
+msgstr "Benehmen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:299
+msgid "Rumors"
+msgstr "Klatsch & Tratsch"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:300
+msgid "Small Talk"
+msgstr "leichte Unterhaltung"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:308
+msgid "The hero forgets some important rules of etiquette and makes a bad impression."
+msgstr "Der Held kann sich nicht an alle wichtigen Benimmregeln erinnern und fällt unangenehm auf."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:307
+msgid "The hero makes a good impression and is remembered in a positive light."
+msgstr "Der Held hinterlässt einen guten Eindruck und bleibt positiv in Erinnerung."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:310
+msgid "The hero’s boorish behavior insults an important personage."
+msgstr "Der Held beleidigt mit seinem Verhalten eine wichtige Persönlichkeit."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:309
+msgid "The hero’s manners, wit, and charm are the talk of the party."
+msgstr "Auf der Feier ist der Held aufgrund seines Benehmens, Wortwitzes und Charmes der Mittelpunkt."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:503
+msgid "Animal Lore"
+msgstr "Tierkunde"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:507
+msgid "Domesticated Animals"
+msgstr "domestizierte Tiere"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:511
+msgid "Mimicry"
+msgstr "Tierstimmen imitieren"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:508
+msgid "Monsters"
+msgstr "Ungeheuer"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:515
+msgid "The hero gains more information about an animal."
+msgstr "genauere Informationen zu einem Tier"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:517
+msgid "The hero has extensive knowledge of that type of animal."
+msgstr "Der Held weiß alles über das Tier."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:516
+msgid "The hero has no idea."
+msgstr "Der Held hat keine Ahnung."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:509
+msgid "Wild Animals"
+msgstr "Wildtiere"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:518
+msgid "You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."
+msgstr "Der Held glaubt, etwas über das Tier zu wissen, liegt aber gefährlich falsch (schätzt es ungiftig ein, obwohl es sehr giftig ist, oder als Pflanzenfresser, obwohl es Fleischfresser ist)."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:351
+msgid "Animal Tracks"
+msgstr "tierische Spuren"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:361
+msgid "As long as a trail hasn’t been completely destroyed, the hero can follow it to its end and receive more information than usual, spotting deceptions (such as covered-up tracks) at once."
+msgstr "Sofern die Spur nicht komplett zerstört wurde, kann der Held ihr zielsicher bis zum Ende folgen. Er erhält mehr Informationen als üblich. Täuschungsmanöver wie das Verwischen der Spuren durchschaut er sofort."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:352
+msgid "Conceal Tracks"
+msgstr "Verwischen eigener Fährte"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:353
+msgid "Humanoid Tracks"
+msgstr "humanoide Spuren"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:359
+msgid "Perceive more details on the trail."
+msgstr "Über die Qualitätsstufe kann der Held mehr Details in der Fährte erkennen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:360
+msgid "The hero cannot find a trail or doesn’t learn anything new."
+msgstr "Der Held findet keine Spur oder kann keine neuen Erkenntnisse gewinnen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:362
+msgid "The hero mistakes the tracks and follows the wrong trail, perhaps meeting a dangerous creature or finding the wrong people."
+msgstr "Der Held verwechselt die Spur und folgt einer falschen Fährte. So trifft er vielleicht auf eine gefährliche Kreatur oder jagt den falschen Leuten hinterher."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:347
+msgid "Tracking"
+msgstr "Fährtensuchen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:402
+msgid "Driving"
+msgstr "Fahrzeuge"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:417
+msgid "The vehicle makes good speed and arrives in record time."
+msgstr "Das Fahrzeug kommt gut voran und schafft die Strecke in Rekordzeit."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:416
+msgid "The vehicle moves sluggishly, or the hero can’t set it into motion."
+msgstr "Das Fahrzeug bewegt sich schwerfällig oder dem Helden gelingt es nicht, es in Bewegung zu setzen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:418
+msgid "The vehicle suffers a broken axle or tips on its side and throws the driver, who suffers falling damage"
+msgstr "Das Fahrzeug erleidet einen Achsenbruch oder fällt während der Fahrt mitsamt dem Fahrer um, und der Held erleidet Fallschaden."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:414
+msgid "Vehicle"
+msgstr "Fahrzeug"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:458
+msgid "Bindings"
+msgstr "Fesselungen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:459
+msgid "Knots"
+msgstr "Knotenkunde"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:465
+msgid "No (maybe with a helmet or gauntlets)"
+msgstr "nein (eventuell ja bei Helmen, Panzerhandschuhen, etc.)"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:466
+msgid "Rope"
+msgstr "Fessel"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:454
+msgid "Ropes"
+msgstr "Fesseln"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:461
+msgid "Splice Ropes"
+msgstr "Netze knüpfen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:467
+msgid "The bindings hold better and are more difficult to escape."
+msgstr "Die Fessel hält länger und kann gegebenenfalls schwerer geöffnet werden."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:470
+msgid "The hero ties a knot that slips open in any situation. It won't keep anything secured."
+msgstr "Der Held hat einen Knoten gemacht, der sich in jeder Lage löst – oder der denkbar ungünstigsten."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:469
+msgid "The hero ties a very robust knot. For QL, competitive checks, and cumulative checks, SP = 2xSR."
+msgstr "Der Held hat einen stabilen Knoten gemacht. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:468
+msgid "The hero’s knots are poor quality and easier to escape than usual."
+msgstr "Dem Held gelingt nur ein Knoten von schlechter Qualität. Das Befreien daraus ist leichter als üblich."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:460
+msgid "Tie Nets"
+msgstr "Netze knüpfen"

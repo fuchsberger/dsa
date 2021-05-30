@@ -19,6 +19,9 @@ defmodule Dsa.Application do
       # {Dsa.Worker, arg}
     ]
 
+    # Populate ETS storage with DSA data
+    Dsa.Data.init()
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Dsa.Supervisor]

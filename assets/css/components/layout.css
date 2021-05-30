@@ -36,7 +36,7 @@
   main { @apply flex-1 relative z-0 overflow-y-auto focus:outline-none; }
   main > div { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4; }
 
-  .heading { @apply text-2xl font-semibold text-gray-900; }
+  .heading { @apply text-2xl font-semibold text-gray-900 pb-3; }
 
   .key-combo {
     @apply flex-none px-1.5 py-0.5 rounded-md bg-gray-50 border border-gray-300 text-gray-400 text-sm;
@@ -74,21 +74,14 @@
   .search-hit > a > div > p { @apply flex-grow text-sm text-gray-600 leading-none truncate; } */
 
   /* TABLES */
-
-
-.table-wrapper { @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg; }
-
-.table-wrapper table {}
-
-
-.table thead, .table .header-row { @apply bg-gray-50; }
-.table th { @apply px-1 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
-
-.table tbody { @apply bg-white divide-y divide-gray-200; }
-.table td { @apply px-1 py-1 whitespace-nowrap; }
-
-.small { @apply text-xs font-medium text-gray-500 tracking-wider text-center; }
-
+  .table-wrapper { @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg; }
+  .table-wrapper table { @apply min-w-full divide-y divide-gray-200; }
+  .table-wrapper thead { @apply bg-gray-50; }
+  .table-wrapper thead th { @apply px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
+  .table-wrapper tbody { @apply bg-white divide-y divide-gray-200; }
+  .table-wrapper tbody th { @apply px-3 py-2 whitespace-nowrap text-left text-sm font-medium text-gray-900; }
+  .table-wrapper tbody td { @apply px-3 py-2 whitespace-nowrap text-sm text-gray-500; }
+  td.small { @apply text-center uppercase text-xs !important; }
 }
 
 @layer utilities {

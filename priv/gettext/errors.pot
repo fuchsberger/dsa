@@ -99,11 +99,6 @@ msgid "Forbidden"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:68
-msgid "invalid check format"
-msgstr ""
-
-#, elixir-format
 #: lib/dsa/accounts/user.ex:53
 msgid "must have the @ sign and no spaces"
 msgstr ""

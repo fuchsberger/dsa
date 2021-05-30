@@ -2,25 +2,25 @@
 
 <div class='lg:grid lg:grid-cols-2 lg:gap-4'>
   <div class='space-y-4'>
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <%= render "table_head.html", category: gettext("Body Skills") %>
+    <div class="table-wrapper">
+      <table>
+        <%= render "table_head.html", category: gettext("Body Skills"), check: "MU/GE/KK" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @body_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
       </table>
     </div>
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <%= render "table_head.html", category: gettext("Social Skills") %>
+    <div class="table-wrapper">
+      <table>
+        <%= render "table_head.html", category: gettext("Social Skills"), check: "IN/CH/CH" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @social_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
       </table>
     </div>
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <%= render "table_head.html", category: gettext("Nature Skills") %>
+    <div class="table-wrapper">
+      <table>
+        <%= render "table_head.html", category: gettext("Nature Skills"), check: "MU/GE/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @nature_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
@@ -28,17 +28,17 @@
     </div>
   </div>
   <div class='space-y-4'>
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <%= render "table_head.html", category: gettext("Knowledge Skills") %>
+    <div class="table-wrapper">
+      <table>
+        <%= render "table_head.html", category: gettext("Knowledge Skills"), check: "KL/KL/IN" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @knowledge_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
       </table>
     </div>
-    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200">
-        <%= render "table_head.html", category: gettext("Crafting Skills") %>
+    <div class="table-wrapper">
+      <table>
+        <%= render "table_head.html", category: gettext("Crafting Skills"), check: "FF/FF/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @crafting_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
