@@ -545,48 +545,48 @@ msgid "The hero’s manners, wit, and charm are the talk of the party."
 msgstr "Auf der Feier ist der Held aufgrund seines Benehmens, Wortwitzes und Charmes der Mittelpunkt."
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1148
+#: lib/dsa/data/skill.ex:1197
 msgid "Animal Lore"
 msgstr "Tierkunde"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1152
+#: lib/dsa/data/skill.ex:1201
 msgid "Domesticated Animals"
 msgstr "domestizierte Tiere"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1156
+#: lib/dsa/data/skill.ex:1205
 msgid "Mimicry"
 msgstr "Tierstimmen imitieren"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1153
+#: lib/dsa/data/skill.ex:1202
 msgid "Monsters"
 msgstr "Ungeheuer"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1160
+#: lib/dsa/data/skill.ex:1209
 msgid "The hero gains more information about an animal."
 msgstr "genauere Informationen zu einem Tier"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1162
+#: lib/dsa/data/skill.ex:1211
 msgid "The hero has extensive knowledge of that type of animal."
 msgstr "Der Held weiß alles über das Tier."
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:712 lib/dsa/data/skill.ex:789 lib/dsa/data/skill.ex:838
-#: lib/dsa/data/skill.ex:1161
+#: lib/dsa/data/skill.ex:1210
 msgid "The hero has no idea."
 msgstr "Der Held hat keine Ahnung."
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1154
+#: lib/dsa/data/skill.ex:1203
 msgid "Wild Animals"
 msgstr "Wildtiere"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1163
+#: lib/dsa/data/skill.ex:1212
 msgid "You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."
 msgstr "Der Held glaubt, etwas über das Tier zu wissen, liegt aber gefährlich falsch (schätzt es ungiftig ein, obwohl es sehr giftig ist, oder als Pflanzenfresser, obwohl es Fleischfresser ist)."
 
@@ -1405,10 +1405,10 @@ msgstr "Ohne Schwierigkeiten und viel schneller als gewöhnlich hat der Held den
 msgid "The hero reaches the destination faster."
 msgstr "Der Held kommt schneller an seinem Ziel an."
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa/data/skill.ex:1094
 msgid "The hero slips and falls."
-msgstr "Der Held hat keine Ahnung."
+msgstr "Der Held rutscht ab und fällt (Sturzschaden)"
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:1084
@@ -1419,3 +1419,58 @@ msgstr "Baumklettern"
 #: lib/dsa/data/skill.ex:1085
 msgid "Walls"
 msgstr "Fassadenklettern"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1134
+msgid "Acrobatics"
+msgstr "Akrobatik"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1135
+msgid "Balance"
+msgstr "Balance"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1130
+msgid "Body Control"
+msgstr "Körperbeherrschung"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1136
+msgid "Combat Maneuver"
+msgstr "Kampfmanöver"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1137
+msgid "Jumping"
+msgstr "Springen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1138
+msgid "Running"
+msgstr "Laufen"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1139
+msgid "Squirm"
+msgstr "Entwinden"
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1146
+msgid "The action fails partially, requires more time, or leads to mistakes, perhaps forcing the hero to abort the action."
+msgstr "Die Handlung des Helden geht teilweise schief, er braucht länger und macht Fehler oder muss die Handlung abbrechen."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1147
+msgid "The action succeeds and the hero still has another action remaining. Whatever was attempted, the hero looked very graceful."
+msgstr "Dem Held gelingt seine Handlung und er hat noch eine zusätzliche Aktion zur Verfügung. Und was immer der Held getan hat: Es sah elegant aus."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1145
+msgid "The adventurer can more quickly squirm out of restraints."
+msgstr "Der Abenteurer kann sich schneller aus einer Fesselung befreien."
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1148
+msgid "The hero falls down and suffers an injury (1D6 DP, ignoring PRO)."
+msgstr "Der Held stürzt und erleidet Schaden (1W6 SP)."

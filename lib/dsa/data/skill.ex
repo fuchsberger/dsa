@@ -1121,12 +1121,69 @@ defmodule Dsa.Data.Skill do
         modifier: "–3"
       },
       %{
-        action: "Der Held rutscht ab und fällt (Sturzschaden).",
+        action: "Eine feuchte Burgmauer hochsteigen",
         modifier: "-5"
       }
     ]
   }, %{
-
+    id: 25,
+    name: gettext("Body Control"),
+    category: :physical,
+    check: {:ge, :ge, :ko},
+    applications: [
+      %{name: gettext("Acrobatics")},
+      %{name: gettext("Balance")},
+      %{name: gettext("Combat Maneuver")},
+      %{name: gettext("Jumping")},
+      %{name: gettext("Running")},
+      %{name: gettext("Squirm")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("The adventurer can more quickly squirm out of restraints."),
+    failed: gettext("The action fails partially, requires more time, or leads to mistakes, perhaps forcing the hero to abort the action."),
+    success: gettext("The action succeeds and the hero still has another action remaining. Whatever was attempted, the hero looked very graceful."),
+    botch: gettext("The hero falls down and suffers an injury (1D6 DP, ignoring PRO)."),
+    improvement_cost: :d,
+    description: "Wenn ein Held über eine Burgmauer oder an einer steilen Klippe entlangsteigt, steht eine Probe auf Klettern an. Eine misslungene Probe bedeutet nicht automatisch einen Sturz, eventuell traut sich ein Held erst gar nicht zu klettern, verletzt sich oder braucht furchtbar lange, um sein Ziel zu erreichen.",
+    reference: {"Basis Regelwerk", 189},
+    examples: [
+      %{
+        action: "Einen Purzelbaum schlagen",
+        modifier: "+5"
+      },
+      %{
+        action: "Auf einem Balken balancieren",
+        modifier: "+3"
+      },
+      %{
+        action: "Ein Rad schlagen",
+        modifier: "+1"
+      },
+      %{
+        action: "Handstand",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Bei Sturm auf einem Schiff auf den Beinen bleiben",
+        modifier: "-1"
+      },
+      %{
+        action: "Auf Skiern einen gefährlichen Abhang hinunterfahren",
+        modifier: "–3"
+      },
+      %{
+        action: "Auf einem dünnen Drahtseil laufen",
+        modifier: "-5"
+      },
+      %{
+        action: "Sich aus einem Seil oder Netz entwinden",
+        modifier: "Sammelprobe (gegen 10 + QS der Probe auf Fesseln (Fesselungen) des Gegners, Zeitintervall 1 Kampfrunde, maximal 7 Proben erlaubt)"
+      }
+    ]
+  }, %{
 
 
 

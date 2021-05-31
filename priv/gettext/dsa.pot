@@ -544,48 +544,48 @@ msgid "The hero’s manners, wit, and charm are the talk of the party."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1148
+#: lib/dsa/data/skill.ex:1197
 msgid "Animal Lore"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1152
+#: lib/dsa/data/skill.ex:1201
 msgid "Domesticated Animals"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1156
+#: lib/dsa/data/skill.ex:1205
 msgid "Mimicry"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1153
+#: lib/dsa/data/skill.ex:1202
 msgid "Monsters"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1160
+#: lib/dsa/data/skill.ex:1209
 msgid "The hero gains more information about an animal."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1162
+#: lib/dsa/data/skill.ex:1211
 msgid "The hero has extensive knowledge of that type of animal."
 msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:712 lib/dsa/data/skill.ex:789 lib/dsa/data/skill.ex:838
-#: lib/dsa/data/skill.ex:1161
+#: lib/dsa/data/skill.ex:1210
 msgid "The hero has no idea."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1154
+#: lib/dsa/data/skill.ex:1203
 msgid "Wild Animals"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1163
+#: lib/dsa/data/skill.ex:1212
 msgid "You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."
 msgstr ""
 
@@ -1417,4 +1417,59 @@ msgstr ""
 #, elixir-format
 #: lib/dsa/data/skill.ex:1085
 msgid "Walls"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1134
+msgid "Acrobatics"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1135
+msgid "Balance"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1130
+msgid "Body Control"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1136
+msgid "Combat Maneuver"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1137
+msgid "Jumping"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1138
+msgid "Running"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1139
+msgid "Squirm"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1146
+msgid "The action fails partially, requires more time, or leads to mistakes, perhaps forcing the hero to abort the action."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1147
+msgid "The action succeeds and the hero still has another action remaining. Whatever was attempted, the hero looked very graceful."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1145
+msgid "The adventurer can more quickly squirm out of restraints."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1148
+msgid "The hero falls down and suffers an injury (1D6 DP, ignoring PRO)."
 msgstr ""
