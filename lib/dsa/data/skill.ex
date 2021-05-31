@@ -617,20 +617,529 @@ defmodule Dsa.Data.Skill do
             modifier: "Vergleichsprobe (Gassenwissen gegen Sinnesschärfe)"
           }
         ]
-      },
-
-
-
-
-
-
-
-
-
-
-
-
+      }, %{
+        id: 14,
+        name: gettext("Gaukelei"),
+        category: :physical,
+        check: {:mu, :ch, :ff},
+        applications: [
+          %{name: gettext("Clowning")},
+          %{name: gettext("Hiding Tricks")},
+          %{name: gettext("Juggling")}
+        ],
+        uses: [],
+        encumbrance: true,
+        encumbrance_condition: nil,
+        tools: gettext("Depends on the trick (balls, torches, snakes, cards, and so on)"),
+        quality: gettext("Perform the trick especially well and garner more applause from the audience."),
+        failed: gettext("The trick doesn’t really work due to small mistakes, and the audience is disappointed."),
+        success: gettext("The audience is fascinated and thinks you’ve worked true magic. If there’s money to be earned, you earn double the normal amount."),
+        botch: gettext("The audience boos the hero for a mishap during the performance (perhaps the hero hits an audience member with a juggling club, or injures the mayor with pyrotechnics, or some such)."),
+        improvement_cost: :a,
+        description: "Wenn es gilt, auf einem Jahrmarkt oder in einer Taverne ein paar Silbermünzen als Jongleur zu verdienen oder sein Gegenüber mit kleinen Zaubertricks zu verblüffen, wird auf das Talent [Gaukeleien] gewürfelt. Hierunter fallen unter anderem Jonglieren, Hütchenspiel und Possenreißen.\nBesonders nützlich können sich [Gaukeleien] beim Verstecken von kleinen Gegenständen am Körper erweisen.",
+        reference: {"Basis Regelwerk", 188},
+        examples: [
+          %{
+            action: "Einfachste Kartentricks",
+            modifier: "+5"
+          },
+          %{
+            action: "Ein Kind zum Lachen bringen durch Possenreißen",
+            modifier: "+3"
+          },
+          %{
+            action: "Ein kleiner Kartentrick",
+            modifier: "+1"
+          },
+          %{
+            action: "Mit Tricks in einer Schänke (Fertigkeitspunkte) Heller verdienen",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Mit drei brennenden Fackeln jonglieren",
+            modifier: "-1"
+          },
+          %{
+            action: "Mit fünf Kugeln jonglieren",
+            modifier: "–3"
+          },
+          %{
+            action: "Ein mürrisches Publikum zum Lachen bringen",
+            modifier: "-5"
+          }
+        ]
+      }, %{
+        id: 15,
+        name: gettext("Geography"),
+        category: :knowledge,
+        check: {:kl, :kl, :in},
+        applications: [
+          %{name: gettext("Al’Anfan Empire")},
+          %{name: gettext("Albernia")},
+          %{name: gettext("Almada")},
+          %{name: gettext("Andergast")},
+          %{name: gettext("Arania")},
+          %{name: gettext("Mountain Kingdoms of the Dwarves")},
+          %{name: gettext("Bornland")},
+          %{name: gettext("Garetia")},
+          %{name: gettext("Gjalskerland")},
+          %{name: gettext("High North")},
+          %{name: gettext("Horasian Empire")},
+          %{name: gettext("Caliphate")},
+          %{name: gettext("Kosh")},
+          %{name: gettext("Maraskan")},
+          %{name: gettext("Northmarches")},
+          %{name: gettext("Nostria")},
+          %{name: gettext("Orclands")},
+          %{name: gettext("Rommilysian Marches")},
+          %{name: gettext("Salamander Stones & Elf Realms")},
+          %{name: gettext("Shadowlands")},
+          %{name: gettext("South Sea & Forest Islands")},
+          %{name: gettext("Svellt Valley")},
+          %{name: gettext("Thorwal")},
+          %{name: gettext("Deep South")},
+          %{name: gettext("Tobrien")},
+          %{name: gettext("Lands of the Tulamydes")},
+          %{name: gettext("Weiden")},
+          %{name: gettext("Windhag")},
+          %{name: gettext("Cyclops’ Islands")}
+        ],
+        uses: [gettext("Cartography")],
+        encumbrance: false,
+        encumbrance_condition: nil,
+        tools: nil,
+        quality: gettext("Uncover more details about population, places, and river crossings"),
+        failed: gettext("The hero has no idea."),
+        success: gettext("The hero knows many details of the region, such as rulers, population count, customs, river courses, and bridges."),
+        botch: gettext("Misremember geographic details completely (the population count is off, bridges are not where they were thought to be, and so on)."),
+        improvement_cost: :b,
+        description: "Da Helden viel auf Reisen sind, ist es sehr hilfreich, eine Vorstellung zu haben, wie die Welt an Orten aussieht, die man bisher nie gesehen hat. Das Talent [Geographie] ist von Nutzen, um seinen Weg zu einem gewünschten Ziel zu finden, gangbare Pässe und sichere Furten ausfindig zu machen oder eine Vorstellung zu haben, wie weit eine geplante Reise sein wird und welche Schwierigkeiten der Weg bereithält. Zur Anwendung des Talents gehören außerdem das Verstehen und der Einsatz von Landkarten.",
+        reference: {"Basis Regelwerk", 202},
+        examples: [
+          %{
+            action: "Sich in seiner Heimatstadt auskennen",
+            modifier: "+5"
+          },
+          %{
+            action: "Informationen über die Umgebung des eigenen Heimatortes",
+            modifier: "+3"
+          },
+          %{
+            action: "Wissen, wohin eine Reichstraße führt",
+            modifier: "+1"
+          },
+          %{
+            action: "Die Kenntnis über die Bevölkerungsgröße einer bekannten Stadt",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Eine Brücke über einen Fluss ausfindig machen",
+            modifier: "-1"
+          },
+          %{
+            action: "Eine Schätzung, wie weit der Weg von Gareth nach Festum ist",
+            modifier: "–3"
+          },
+          %{
+            action: "Schleichwege in einer unbekannten Baronie kennen",
+            modifier: "-5"
+          }
+        ]
+      }, %{
+        id: 16,
+        name: gettext("History"),
+        category: :knowledge,
+        check: {:kl, :kl, :in},
+        applications: [
+          %{name: gettext("Al’Anfan Empire")},
+          %{name: gettext("Albernia")},
+          %{name: gettext("Almada")},
+          %{name: gettext("Andergast")},
+          %{name: gettext("Arania")},
+          %{name: gettext("Mountain Kingdoms of the Dwarves")},
+          %{name: gettext("Bornland")},
+          %{name: gettext("Garetia")},
+          %{name: gettext("Gjalskerland")},
+          %{name: gettext("High North")},
+          %{name: gettext("Horasian Empire")},
+          %{name: gettext("Caliphate")},
+          %{name: gettext("Kosh")},
+          %{name: gettext("Maraskan")},
+          %{name: gettext("Northmarches")},
+          %{name: gettext("Nostria")},
+          %{name: gettext("Orclands")},
+          %{name: gettext("Rommilysian Marches")},
+          %{name: gettext("Salamander Stones & Elf Realms")},
+          %{name: gettext("Shadowlands")},
+          %{name: gettext("South Sea & Forest Islands")},
+          %{name: gettext("Svellt Valley")},
+          %{name: gettext("Thorwal")},
+          %{name: gettext("Deep South")},
+          %{name: gettext("Tobrien")},
+          %{name: gettext("Lands of the Tulamydes")},
+          %{name: gettext("Weiden")},
+          %{name: gettext("Windhag")},
+          %{name: gettext("Cyclops’ Islands")}
+        ],
+        uses: nil,
+        encumbrance: false,
+        encumbrance_condition: nil,
+        tools: nil,
+        quality: gettext("Uncover more details about historical personalities and epochs."),
+        failed: gettext("The hero has no idea."),
+        success: gettext("The hero knows many details about a certain event or historical person."),
+        botch: gettext("Everything you remember about the subject is incorrect; you are wrong about dates and events."),
+        improvement_cost: :b,
+        description: "Tausende von Jahren lässt sich die Geschichte Aventuriens in alten Texten nachverfolgen, Geschichten und Gesänge anderer Völker reichen noch viel weiter zurück in die Vergangenheit.\n Mithilfe dieses Talents kann man seine Kenntnisse der Geschichtskunde überprüfen.",
+        reference: {"Basis Regelwerk", 202},
+        examples: [
+          %{
+            action: "Kaiser Hal kennen",
+            modifier: "+5"
+          },
+          %{
+            action: "Den Fall Bosparans datieren",
+            modifier: "+3"
+          },
+          %{
+            action: "Hela-Horas kennen",
+            modifier: "+1"
+          },
+          %{
+            action: "Anführer des Orkensturms benennen",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Datierung der Flut von Havena",
+            modifier: "-1"
+          },
+          %{
+            action: "Kenntnis, was genau Elem zerstörte",
+            modifier: "–3"
+          },
+          %{
+            action: "Exakte Datierung der Ausgaben der Enzyclopaedia Magica",
+            modifier: "-5"
+          }
+        ]
+      }, %{
+        id: 17,
+        name: gettext("Religions"),
+        category: :knowledge,
+        check: {:kl, :kl, :in},
+        applications: [
+          %{name: gettext("A specific deity oder philosophy", modify: true)}
+        ],
+        uses: nil,
+        encumbrance: false,
+        encumbrance_condition: nil,
+        tools: nil,
+        quality: gettext("More details about Churches, cults, gods, and clergy."),
+        failed: gettext("The hero has no idea."),
+        success: gettext("The hero knows detailed information about the topic, including special rituals, prayer texts, and philosophical basics."),
+        botch: gettext("Confuse special rites and philosophies of one Church for those of another."),
+        improvement_cost: :b,
+        description: "In einer Welt, in der Götter real sind und ihre Diener wahrhafte Wunder wirken können, ist das Wissen um Alveraniare, Halbgötter und ihre Sendboten mehr wert als Gold. Dies gilt besonders für Geweihte, die Göttersagen und das Leben der Heiligen genauso beherrschen müssen wie die richtigen Rituale und Gebete. Zu diesem Talent gehören außerdem Kenntnisse der Philosophie und fremdartiger Denkrichtungen.",
+        note: gettext("If the description for a church or cult states that knowledge of the religion is a trade secret, that Church or cult cannot normally be taken as an Application of this skill. The GM has the final say."),
+        reference: {"Basis Regelwerk", 203},
+        examples: [
+          %{
+            action: "Tägliches Gebet zu Ehren der Götter kennen",
+            modifier: "+5"
+          },
+          %{
+            action: "Einen Geburtssegen aufsagen",
+            modifier: "+3"
+          },
+          %{
+            action: "Die Bedeutung einer praiotischen Sphärenkugel kennen",
+            modifier: "+1"
+          },
+          %{
+            action: "Oberflächliches Wissen über fremde Kulte",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Als Zwölfgöttergläubiger die Zeremonien der Lowanger Dualisten kennen",
+            modifier: "-1"
+          },
+          %{
+            action: "Als Mittelreicher die Rituale eines Novadis kennen",
+            modifier: "–3"
+          },
+          %{
+            action: "Die Ziele der echsischen Sekte von Scr’Shrf kennen",
+            modifier: "-5"
+          }
+        ]
+      }, %{
+        id: 18,
+        name: gettext("Commerce"),
+        category: :crafting,
+        check: {:kl, :in, :ch},
+        applications: [
+          %{name: gettext("Accounting")},
+          %{name: gettext("Haggling")},
+          %{name: gettext("Money Exchange")},
+          %{name: gettext("Fencing Stolen Goods"), requirement: {:mundane_ability, 1}}, # TODO: id
+        ],
+        uses: [gettext("Horse Faker")],
+        encumbrance: false,
+        encumbrance_condition: nil,
+        tools: nil,
+        quality: gettext("The hero can identify the price more precisely."),
+        failed: gettext("The hero gets less than expected."),
+        success: gettext("The hero buys goods extremely cheaply or sells them for a fortune, and avoids leaving partners feeling left out or resentful. Any resulting price hike or discount should be at least 50%."),
+        botch: gettext("The other person takes advantage of you, or a business partner refuses the deal. Any disadvantageous price variation should be at least 50%."),
+        improvement_cost: :b,
+        description: "Um ein gutes Geschäft machen zu können, muss man Kenntnisse von der Marktlage haben und eine Ahnung, wo man gut günstig ein- und teuer verkaufen kann. Auch der preisgünstige und sichere Warentransport von einem Ort zum anderen gehört zu diesem Talent.\nHinzu kommen der korrekte Umgang mit fremdländi- schen Münzen, der Umgang mit Zöllen, Abgaben und Wechselkursen, und der Verleih und die Verzinsung von Geld und die Verwaltung von Vermögen. Feilschen ge- hört ebenfalls zu diesem Talent.",
+        reference: {"Basis Regelwerk", 208},
+        examples: [
+          %{
+            action: "Rohstoffe sind billiger als das Endprodukt",
+            modifier: "+5"
+          },
+          %{
+            action: "Als Bauer seine Rüben in der Stadt verkaufen",
+            modifier: "+3"
+          },
+          %{
+            action: "Im Herbst sind Schweine am billigsten",
+            modifier: "+1"
+          },
+          %{
+            action: "Fernhandel ist riskant, aber lukrativ",
+            modifier: "+/- 0"
+          },
+          %{
+            action: "Von Vinsalt nach Kuslik reisen, ohne Zoll zu zahlen",
+            modifier: "-1"
+          },
+          %{
+            action: "Den Preis eines Ballens al’anfanischer Seide in Festum kennen",
+            modifier: "–3"
+          },
+          %{
+            action: "Güldenland- und Uthuriahandel planen",
+            modifier: "-5"
+          },
+          %{
+            action: "Auf dem Markt feilschen",
+            modifier: "Vergleichsprobe (Handel [Feilschen] gegen Handel [Feilschen]) (Nachdem die QS des Verlierers von den QS des Gewinners abgezogen wurden, steigt oder fällt Kaufpreis um die verbliebenen QS x 10 in Prozent nach Wahl des Siegers, maximal jedoch um 50 %.)"
+          }
+        ]
+      }, %{
+        id: 19,
+        name: gettext("Treat Poison"),
+        category: :crafting,
+        check: {:mu, :kl, :in},
+        applications: [
+          %{name: gettext("Alchemical Poisons")},
+          %{name: gettext("Mineral-based Poisons")},
+          %{name: gettext("Plant-based Toxins")},
+          %{name: gettext("Venoms")}
+        ],
+        uses: nil,
+        encumbrance: true,
+        encumbrance_condition: nil,
+        tools: gettext("Antidote"),
+        quality: gettext("Identify the poison (and therefore the treatment) faster."),
+        failed: gettext("The hero can’t identify the poison and knows of no treatment."),
+        success: gettext("The patient recovers without the need for a special antidote."),
+        botch: gettext("The healer performs an injurious bloodletting or otherwise injures the patient, possibly worsening the poisoning (1D6 DP, ignoring PRO)."),
+        improvement_cost: :b,
+        description: "Um einer vergifteten Person zu helfen, muss das Gift identifiziert und eine Behandlung, beispielsweise mit einem Gegengift, vorgenommen werden. Mit einer um die Stufe des Giftes erschwerten Probe auf das Talent kann einem Patienten geholfen werden. Manche Gegenmittel erfordern jedoch seltene Ingredienzien, die erst aufwendig beschafft werden müssen. Ist das Gegenmittel verabreicht, so ist die Wirkung des Giftes gestoppt.\nScheitert die Probe, erkennt der Heiler das Gift nicht oder kennt kein geeignetes Gegenmittel.\nDas Wissen über [komplexe] Gifte erfordert ein Berufsgeheimnis.",
+        note: "[Behandlung von Giften und Krankheiten]\nDurch eine gelungene Probe auf Heilkunde Gift oder Krankheiten kann ein Held das Wissen um die genaue Art des Giftes bzw. der Krankheit sowie die passende Behandlung eines Patienten in Erfahrung bringen bzw. erinnert sich an die richtige Behandlungsmethode. Behandlung bedeutet in diesem Fall, dass er alle Informationen zu den Abschnitten Behandlung und Gegenmittel erhält und sich auch entsprechend um den Patienten kümmern kann, damit dieser davon profitiert.",
+        reference: {"Basis Regelwerk", 208},
+        examples: nil
+      }, %{
+        id: 20,
+        name: gettext("Treat Disease"),
+        category: :crafting,
+        check: {:mu, :in, :ko},
+        applications: [
+          %{
+            name: gettext("individual diseases (such as swamp fever)"),
+            modify: true,
+            limit: false
+          }
+        ],
+        uses: nil,
+        encumbrance: true,
+        encumbrance_condition: nil,
+        tools: gettext("Remedy"),
+        quality: gettext("Identify the disease faster."),
+        failed: gettext("The hero can’t identify the disease and knows of no remedy or treatment."),
+        success: gettext("The patient heals without the need for a special remedy. In addition, the hero doesn’t catch the disease."),
+        botch: gettext("The treatment injures the patient (1D6 DP,ignoring PRO) or the symptoms get worse. In addition, for contagious diseases, raise the chance of the hero becoming infected by 25%."),
+        improvement_cost: :b,
+        description: "Mit einer um die Stufe der Krankheit erschwerten Probe lassen sich die Krankheit und eine mögliche Behandlung ermitteln. In manchen Fällen sind jedoch exotische Heilmittel vonnöten, die erst beschafft werden müssen. Meist endet die Krankheit nach der Behandlung nicht abrupt, doch ihre Auswirkungen werden gemildert und die Dauer der Erkrankung verkürzt.\nDas Wissen über [komplexe] Krankheiten erfordert ein Berufsgeheimnis.",
+        reference: {"Basis Regelwerk", 208},
+        examples: nil
+        }, %{
+          id: 21,
+          name: gettext("Treat Soul"),
+          category: :crafting,
+          check: {:in, :ch, :ko},
+          applications: [
+            %{name: gettext("Suppress Negative Trait")},
+            %{name: gettext("Suppress Fear")},
+            %{name: gettext("Suppress Personality Flaw")}
+          ],
+          uses: nil,
+          encumbrance: false,
+          encumbrance_condition: nil,
+          tools: nil,
+          quality: gettext("The patient suppresses the disadvantage for a longer time."),
+          failed: gettext("The healer has no idea how to help the patient."),
+          success: gettext("The patient suppresses a disadvantage (Afraid of…, Personality Flaw, or Negative Trait)for an entire day."),
+          botch: gettext("The healer unsettles or otherwise damages the patient’s psyche. The patient suffers a level of either the condition Fear or Confusion for one day."),
+          improvement_cost: :b,
+          description: "Wenn der Held panische Angst vor Feuer hat, von Alpträumen verfolgt wird oder von dämonischem Wirken traumatisiert ist, sind Seelenheiler gefragt. Ein kurzes Gespräch zwischen Heiler und Patient reicht aus, um seine Nachteile zu unterdrücken: Der Seelenheilkundige kann bei gelungener Probe bei seinem Patienten eine Angst, eine Schlechte Eigenschaft oder eine Persönlichkeitsschwäche für FP in Minuten unterdrücken.\nBei einer längeren Sitzung zwischen Heiler und Patient, die mehrere Stunden dauern kann, werden die oben genannten Nachteile für Qualitätsstufe in Stunden unterdrückt.",
+          reference: {"Basis Regelwerk", 209},
+          examples: nil
+      }, %{
+        id: 22,
+        name: gettext("Treat Wounds"),
+        category: :crafting,
+        check: {:kl, :ff, :ff},
+        applications: [
+          %{name: gettext("Enhance Healing")},
+          %{name: gettext("Relieve Pain")},
+          %{name: gettext("Stabilize")}
+        ],
+        uses: nil,
+        encumbrance: true,
+        encumbrance_condition: nil,
+        tools: gettext("Bandages, surgical instruments, herbs, needle and thread"),
+        quality: gettext("The hero requires fewer healing herbs for the skill check, or treats the wound faster."),
+        failed: gettext("The hero can’t help the wounded person."),
+        success: gettext("The subject receives (SP) LP during the next Regeneration Phase."),
+        botch: gettext("Injure the subject during treatment (1D6 DP, ignoring PRO)."),
+        improvement_cost: :d,
+        description: "Verletzungen gehören für Helden zur Tagesordnung. Schnitte, Prellungen und Brüche, aber auch Zahnleiden können mit dem Talent [Heilkunde Wunden] behandelt und die Heilung damit beschleunigt werden. Der Patient erhält QS LeP bei der nächsten Regenerationsphase, zusätzlich zur normalen Regeneration. Eine solche Behandlung dauert 15 Minuten.\nAußerdem kann der Heiler dem Patienten Schmerzen nehmen, die durch LE-Verlust entstanden sind. Für je 1 QS wird eine Stufe des Zustands Schmerz ignoriert. Eine solche Behandlung dauert ebenfalls 15 Minuten. Diese Wirkung hält bis zum Ende der nächsten Regenerationsphase. Außerdem kann ein Held einen Sterbenden stabilisieren.\nDie Anwendungsgebiete [Heilung fördern] und [Schmerzen nehmen] kann ein Held auch auf sich selbst anwenden. Ein Held kann sich aber durch das Talent nicht selbst stabilisieren.",
+        reference: {"Basis Regelwerk", 209},
+        examples: nil
+      }, %{
+      id: 23,
+      name: gettext("Woodworking"),
+      category: :crafting,
+      check: {:ff, :ge, :kk},
+      applications: [
+        %{name: gettext("Carpenter")},
+        %{name: gettext("Felling & Cutting")},
+        %{name: gettext("Joiner")}
+      ],
+      uses: nil,
+      encumbrance: true,
+      encumbrance_condition: nil,
+      tools: gettext("Depends on the material being worked (for example, ax, plane, knife, saw, and so on)."),
+      quality: gettext("Finish the item faster or with a better quality."),
+      failed: gettext("The hero makes no progress."),
+      success: gettext("The hero receives double the number of SP for the check (minimum of 5 SP). Remove all penalties accrued due to failed cumulative checks."),
+      botch: gettext("Accumulated QL drop to 0 and you may make no further checks on this project."),
+      improvement_cost: :b,
+      description: "Dieses Talent deckt den gesamten Bereich der Verarbeitung von Holz ab – vom fachgerechten Fällen über das Zurechtschneiden von Brettern und Balken bis hin zur Anfertigung von Gerätschaften wie Musikinstrumenten oder Bögen aus Holz und dem Bau von Booten, Holz- und Fachwerkhäusern oder Palisaden. Auch die Verarbeitung von Horn, Eis und Mammuton fällt unter dieses Talent. Unter dem Anwendungsgebiet [Schlagen & Schneiden] ist das Fällen von Bäumen zusammengefasst. Tischlerarbeiten umfassen die Bearbeitung von Holzoberflächen, Zimmermänner hingegen bearbeiten das Holz vorher und bringen es in die gewünschte Form.",
+      reference: {"Basis Regelwerk", 210},
+      examples: [
+        %{
+          action: "Einen Pfeil anfertigen",
+          time: "10 Minuten",
+          checks: "10 Proben"
+        },
+        %{
+          action: "Eine alte Eiche fällen",
+          time: "20 Minuten",
+          checks: "beliebig viele Proben"
+        },
+        %{
+          action: "Einen Stuhl aus Brettern herstellen",
+          time: "1 Stunde",
+          checks: "10 Proben"
+        },
+        %{
+          action: "Eine Truhe oder einen Schrank aus Brettern anfertigen",
+          time: "2 Stunden",
+          checks: "5 Proben"
+        },
+        %{
+          action: "Aus einem Elefantenstoßzahn eine Statue schnitzen",
+          time: "1 Tag",
+          checks: "4 Proben"
+        },
+        %{
+          action: "Ein Musikinstrument anfertigen",
+          time: "2 Tage",
+          checks: "3 Proben"
+        }
+      ]
+    }, %{
+    id: 24,
+    name: gettext("Climbing"),
+    category: :physical,
+    check: {:mu, :ge, :kk},
+    applications: [
+      %{name: gettext("Ice")},
+      %{name: gettext("Mountains")},
+      %{name: gettext("Trees")},
+      %{name: gettext("Walls")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("Climbing gear, depending on the circumstances."),
+    quality: gettext("The hero reaches the destination faster."),
+    failed: gettext("The climb takes longer than expected, or the hero suffers an injury (1D3 DP, ignoring PRO), doesn’t dare to climb, or gets stuck somewhere along the way."),
+    success: gettext("The hero climbs much faster and safer than usual. Witnesses think the hero might be one of the best climbers on Dere. For QL, competitive checks, and cumulative checks, SP = 2xSR."),
+    botch: gettext("The hero slips and falls."),
+    improvement_cost: :b,
+    description: "Wenn ein Held über eine Burgmauer oder an einer steilen Klippe entlangsteigt, steht eine Probe auf Klettern an. Eine misslungene Probe bedeutet nicht automatisch einen Sturz, eventuell traut sich ein Held erst gar nicht zu klettern, verletzt sich oder braucht furchtbar lange, um sein Ziel zu erreichen.",
+    reference: {"Basis Regelwerk", 189},
+    examples: [
       %{
+        action: "Auf den ersten Ast eines kleinen Baumes klettern",
+        modifier: "+5"
+      },
+      %{
+        action: "Über eine zwei Schritt hohe Mauer kommen",
+        modifier: "+3"
+      },
+      %{
+        action: "Einen hohen Baum erklettern",
+        modifier: "+1"
+      },
+      %{
+        action: "Zum Fenster im ersten Stockwerk klettern",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Die Fassade eines hohen Gebäudes erklimmen",
+        modifier: "-1"
+      },
+      %{
+        action: "Schwierige Wand mit wenigen Griffmöglichkeiten",
+        modifier: "–3"
+      },
+      %{
+        action: "Der Held rutscht ab und fällt (Sturzschaden).",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         id: 200,
         name: gettext("Animal Lore"),
         category: :nature,

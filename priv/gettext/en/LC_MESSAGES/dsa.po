@@ -225,7 +225,7 @@ msgid "Alchemy"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:27
+#: lib/dsa/data/skill.ex:27 lib/dsa/data/skill.ex:937
 msgid "Alchemical Poisons"
 msgstr ""
 
@@ -545,47 +545,48 @@ msgid "The hero’s manners, wit, and charm are the talk of the party."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:635
+#: lib/dsa/data/skill.ex:1148
 msgid "Animal Lore"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:639
+#: lib/dsa/data/skill.ex:1152
 msgid "Domesticated Animals"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:643
+#: lib/dsa/data/skill.ex:1156
 msgid "Mimicry"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:640
+#: lib/dsa/data/skill.ex:1153
 msgid "Monsters"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:647
+#: lib/dsa/data/skill.ex:1160
 msgid "The hero gains more information about an animal."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:649
+#: lib/dsa/data/skill.ex:1162
 msgid "The hero has extensive knowledge of that type of animal."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:648
+#: lib/dsa/data/skill.ex:712 lib/dsa/data/skill.ex:789 lib/dsa/data/skill.ex:838
+#: lib/dsa/data/skill.ex:1161
 msgid "The hero has no idea."
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:641
+#: lib/dsa/data/skill.ex:1154
 msgid "Wild Animals"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:650
+#: lib/dsa/data/skill.ex:1163
 msgid "You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."
 msgstr ""
 
@@ -842,4 +843,579 @@ msgstr ""
 #, elixir-format
 #: lib/dsa/data/skill.ex:582
 msgid "Walk into an ambush by a gang of thugs who plan to rob you blind."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:626
+msgid "Clowning"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:622
+msgid "Gaukelei"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:627
+msgid "Hiding Tricks"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:628
+msgid "Juggling"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:634
+msgid "Perform the trick especially well and garner more applause from the audience."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:637
+msgid "The audience boos the hero for a mishap during the performance (perhaps the hero hits an audience member with a juggling club, or injures the mayor with pyrotechnics, or some such)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:636
+msgid "The audience is fascinated and thinks you’ve worked true magic. If there’s money to be earned, you earn double the normal amount."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:635
+msgid "The trick doesn’t really work due to small mistakes, and the audience is disappointed."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:678 lib/dsa/data/skill.ex:755
+msgid "Albernia"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:679 lib/dsa/data/skill.ex:756
+msgid "Almada"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:677 lib/dsa/data/skill.ex:754
+msgid "Al’Anfan Empire"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:680 lib/dsa/data/skill.ex:757
+msgid "Andergast"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:681 lib/dsa/data/skill.ex:758
+msgid "Arania"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:683 lib/dsa/data/skill.ex:760
+msgid "Bornland"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:688 lib/dsa/data/skill.ex:765
+msgid "Caliphate"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:707
+msgid "Cartography"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:705 lib/dsa/data/skill.ex:782
+msgid "Cyclops’ Islands"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:633
+msgid "Depends on the trick (balls, torches, snakes, cards, and so on)"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:684 lib/dsa/data/skill.ex:761
+msgid "Garetia"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:673
+msgid "Geography"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:685 lib/dsa/data/skill.ex:762
+msgid "Gjalskerland"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:686 lib/dsa/data/skill.ex:763
+msgid "High North"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:687 lib/dsa/data/skill.ex:764
+msgid "Horasian Empire"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:689 lib/dsa/data/skill.ex:766
+msgid "Kosh"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:702 lib/dsa/data/skill.ex:779
+msgid "Lands of the Tulamydes"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:690 lib/dsa/data/skill.ex:767
+msgid "Maraskan"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:714
+msgid "Misremember geographic details completely (the population count is off, bridges are not where they were thought to be, and so on)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:682 lib/dsa/data/skill.ex:759
+msgid "Mountain Kingdoms of the Dwarves"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:691 lib/dsa/data/skill.ex:768
+msgid "Northmarches"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:692 lib/dsa/data/skill.ex:769
+msgid "Nostria"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:693 lib/dsa/data/skill.ex:770
+msgid "Orclands"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:694 lib/dsa/data/skill.ex:771
+msgid "Rommilysian Marches"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:695 lib/dsa/data/skill.ex:772
+msgid "Salamander Stones & Elf Realms"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:696 lib/dsa/data/skill.ex:773
+msgid "Shadowlands"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:697 lib/dsa/data/skill.ex:774
+msgid "South Sea & Forest Islands"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:698 lib/dsa/data/skill.ex:775
+msgid "Svellt Valley"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:713
+msgid "The hero knows many details of the region, such as rulers, population count, customs, river courses, and bridges."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:699 lib/dsa/data/skill.ex:776
+msgid "Thorwal"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:701 lib/dsa/data/skill.ex:778
+msgid "Tobrien"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:711
+msgid "Uncover more details about population, places, and river crossings"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:703 lib/dsa/data/skill.ex:780
+msgid "Weiden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:704 lib/dsa/data/skill.ex:781
+msgid "Windhag"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:700 lib/dsa/data/skill.ex:777
+msgid "Deep South"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:791
+msgid "Everything you remember about the subject is incorrect; you are wrong about dates and events."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:750
+msgid "History"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:790
+msgid "The hero knows many details about a certain event or historical person."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:788
+msgid "Uncover more details about historical personalities and epochs."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:831
+msgid "A specific deity oder philosophy"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:840
+msgid "Confuse special rites and philosophies of one Church for those of another."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:843
+msgid "If the description for a church or cult states that knowledge of the religion is a trade secret, that Church or cult cannot normally be taken as an Application of this skill. The GM has the final say."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:837
+msgid "More details about Churches, cults, gods, and clergy."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:827
+msgid "Religions"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:839
+msgid "The hero knows detailed information about the topic, including special rituals, prayer texts, and philosophical basics."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:881
+msgid "Accounting"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:877
+msgid "Commerce"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:882
+msgid "Haggling"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:886
+msgid "Horse Faker"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:883
+msgid "Money Exchange"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:892
+msgid "The hero buys goods extremely cheaply or sells them for a fortune, and avoids leaving partners feeling left out or resentful. Any resulting price hike or discount should be at least 50%."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:890
+msgid "The hero can identify the price more precisely."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:891
+msgid "The hero gets less than expected."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:893
+msgid "The other person takes advantage of you, or a business partner refuses the deal. Any disadvantageous price variation should be at least 50%."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:884
+msgid "Fencing Stolen Goods"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1014
+msgid "Bandages, surgical instruments, herbs, needle and thread"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1007
+msgid "Enhance Healing"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1018
+msgid "Injure the subject during treatment (1D6 DP, ignoring PRO)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1008
+msgid "Relieve Pain"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1009
+msgid "Stabilize"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1016
+msgid "The hero can’t help the wounded person."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1015
+msgid "The hero requires fewer healing herbs for the skill check, or treats the wound faster."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1003
+msgid "Treat Wounds"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:945
+msgid "Antidote"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:946
+msgid "Identify the poison (and therefore the treatment) faster."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:938
+msgid "Mineral-based Poisons"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:939
+msgid "Plant-based Toxins"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:949
+msgid "The healer performs an injurious bloodletting or otherwise injures the patient, possibly worsening the poisoning (1D6 DP, ignoring PRO)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:947
+msgid "The hero can’t identify the poison and knows of no treatment."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:948
+msgid "The patient recovers without the need for a special antidote."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1017
+msgid "The subject receives (SP) LP during the next Regeneration Phase."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:933
+msgid "Treat Poison"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:940
+msgid "Venoms"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:971
+msgid "Identify the disease faster."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:970
+msgid "Remedy"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:972
+msgid "The hero can’t identify the disease and knows of no remedy or treatment."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:973
+msgid "The patient heals without the need for a special remedy. In addition, the hero doesn’t catch the disease."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:974
+msgid "The treatment injures the patient (1D6 DP,ignoring PRO) or the symptoms get worse. In addition, for contagious diseases, raise the chance of the hero becoming infected by 25%."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:957
+msgid "Treat Disease"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:962
+msgid "individual diseases (such as swamp fever)"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:986
+msgid "Suppress Fear"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:985
+msgid "Suppress Negative Trait"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:987
+msgid "Suppress Personality Flaw"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:994
+msgid "The healer has no idea how to help the patient."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:996
+msgid "The healer unsettles or otherwise damages the patient’s psyche. The patient suffers a level of either the condition Fear or Confusion for one day."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:995
+msgid "The patient suppresses a disadvantage (Afraid of…, Personality Flaw, or Negative Trait)for an entire day."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:993
+msgid "The patient suppresses the disadvantage for a longer time."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:981
+msgid "Treat Soul"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1040
+msgid "Accumulated QL drop to 0 and you may make no further checks on this project."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1029
+msgid "Carpenter"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1036
+msgid "Depends on the material being worked (for example, ax, plane, knife, saw, and so on)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1030
+msgid "Felling & Cutting"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1037
+msgid "Finish the item faster or with a better quality."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1031
+msgid "Joiner"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1038
+msgid "The hero makes no progress."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1039
+msgid "The hero receives double the number of SP for the check (minimum of 5 SP). Remove all penalties accrued due to failed cumulative checks."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1025
+msgid "Woodworking"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1078
+msgid "Climbing"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1090
+msgid "Climbing gear, depending on the circumstances."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1082
+msgid "Ice"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1083
+msgid "Mountains"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1092
+msgid "The climb takes longer than expected, or the hero suffers an injury (1D3 DP, ignoring PRO), doesn’t dare to climb, or gets stuck somewhere along the way."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1093
+msgid "The hero climbs much faster and safer than usual. Witnesses think the hero might be one of the best climbers on Dere. For QL, competitive checks, and cumulative checks, SP = 2xSR."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1091
+msgid "The hero reaches the destination faster."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/dsa/data/skill.ex:1094
+msgid "The hero slips and falls."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1084
+msgid "Trees"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1085
+msgid "Walls"
 msgstr ""
