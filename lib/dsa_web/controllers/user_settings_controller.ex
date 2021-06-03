@@ -1,6 +1,8 @@
 defmodule DsaWeb.UserSettingsController do
   use DsaWeb, :controller
 
+  import DsaWeb.AccountTranslations
+
   alias Dsa.Accounts
   alias DsaWeb.UserAuth
 
@@ -23,7 +25,7 @@ defmodule DsaWeb.UserSettingsController do
         )
 
         conn
-        |> put_flash(:info, dgettext("account", "A link to confirm your email change has been sent to the new address."))
+        |> put_flash(:info, t(:email_change_sent))
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       {:error, changeset} ->
@@ -38,7 +40,7 @@ defmodule DsaWeb.UserSettingsController do
     case Accounts.update_user_password(user, password, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, dgettext("account", "Password updated successfully."))
+        |> put_flash(:info, t(:update_password_success))
         |> put_session(:user_return_to, Routes.user_settings_path(conn, :edit))
         |> UserAuth.log_in_user(user)
 
@@ -51,12 +53,12 @@ defmodule DsaWeb.UserSettingsController do
     case Accounts.update_user_email(conn.assigns.current_user, token) do
       :ok ->
         conn
-        |> put_flash(:info, dgettext("account", "Email changed successfully."))
+        |> put_flash(:info, t(:update_email_success))
         |> redirect(to: Routes.user_settings_path(conn, :edit))
 
       :error ->
         conn
-        |> put_flash(:error, dgettext("account", "Email change link is invalid or it has expired."))
+        |> put_flash(:error, t(:invalid_email_link))
         |> redirect(to: Routes.user_settings_path(conn, :edit))
     end
   end

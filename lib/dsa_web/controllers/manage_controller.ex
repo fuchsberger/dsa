@@ -8,7 +8,7 @@ defmodule DsaWeb.ManageController do
     sync_pages(conn)
 
     conn
-    |> put_flash(:info, gettext("Search has been syncronized."))
+    |> put_flash(:info, gettext("Sucheinträge wurden aktualisiert."))
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
@@ -18,8 +18,8 @@ defmodule DsaWeb.ManageController do
     entries = [%{
       objectID: Routes.user_session_path(conn, :new),
       type: :page,
-      title: "Login",
-      desc: "Sign into your account.",
+      title: gettext("account", "Login"),
+      desc: gettext("account", "Melde dich mit deinem Account an"),
       path: Routes.user_session_path(conn, :new)
     }]
 

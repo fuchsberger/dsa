@@ -41,9 +41,7 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Web Application is in German by Default
-config :gettext,
-  default_locale: "de",
-  locales: ~w(en de)
+config :gettext, default_locale: "de"
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

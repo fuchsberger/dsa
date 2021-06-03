@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no"/>
     <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
+    <meta name="description" content="<%= gettext("Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge") %>">
     <meta name="environment" content="<%= Application.get_env(:dsa, :environment) %>">
     <%= csrf_meta_tag() %>
     <title><%= gettext("DSA Tool") %></title>

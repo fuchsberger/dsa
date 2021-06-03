@@ -1,7 +1,8 @@
 defmodule Dsa.Accounts.User do
   use Ecto.Schema
+
   import Ecto.Changeset
-  import DsaWeb.Gettext
+  import DsaWeb.AccountTranslations
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -40,7 +41,7 @@ defmodule Dsa.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :username])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_confirmation(:password, message: t(:confirmation_error))
     |> validate_email()
     |> validate_password(opts)
     |> validate_username()
@@ -49,8 +50,7 @@ defmodule Dsa.Accounts.User do
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
-        message: dgettext("errors", "must have the @ sign and no spaces"))
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: t(:email_error))
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, Dsa.Repo)
     |> unique_constraint(:email)
@@ -96,7 +96,7 @@ defmodule Dsa.Accounts.User do
     |> validate_email()
     |> case do
       %{changes: %{email: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :email, "did not change")
+      %{} = changeset -> add_error(changeset, :email, t(:unchanged_error))
     end
   end
 
@@ -115,7 +115,7 @@ defmodule Dsa.Accounts.User do
   def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_confirmation(:password, message: t(:confirmation_error))
     |> validate_password(opts)
   end
 
@@ -176,7 +176,7 @@ defmodule Dsa.Accounts.User do
     if valid_password?(changeset.data, password) do
       changeset
     else
-      add_error(changeset, :current_password, "is not valid")
+      add_error(changeset, :current_password, t(:invalid_error))
     end
   end
 end

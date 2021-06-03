@@ -220,51 +220,6 @@ msgid "yes"
 msgstr "ja"
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:23
-msgid "Alchemy"
-msgstr "Alchimie"
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:27 lib/dsa/data/skill.ex:937
-msgid "Alchemical Poisons"
-msgstr "Alchimistische Gifte"
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:28
-msgid "Elixirs"
-msgstr "Elixiere"
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:29
-msgid "Mundane Alchemy"
-msgstr "Profane Alchimie"
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:34
-msgid "alchemical laboratory"
-msgstr "Alchemistisches Labor"
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:37
-msgid "Identify an elixir precisely, including its Level and how long it will remain stable."
-msgstr "Der Held weiß exakt, welches Elixier er vor sich hat, welche Stufe es besitzt und wie lange haltbar es ist."
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:38
-msgid "The elixir has an unpleasant side effect."
-msgstr "Das Elixier sorgt für einen unangenehmen Nebeneffekt."
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:36
-msgid "The elixir is ruined, or an analysis fails to yield a useful result."
-msgstr "Das Elixier ist misslungen oder eine Analyse hat kein Ergebnis gebracht."
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:35
-msgid "The potion is of better quality."
-msgstr "Der Trank weist eine bessere Qualität auf."
-
-#, elixir-format
 #: lib/dsa/data/skill.ex:54
 msgid "Conversation"
 msgstr "Einzelgespräch"

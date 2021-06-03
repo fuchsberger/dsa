@@ -4,6 +4,16 @@ defmodule DsaWeb.AccountTranslations do
   # Set domain for translations
   @d "account"
 
+  # Flash messages
+  def t(:requires_login), do: dgettext(@d, "Du musst dich anmelden um auf diese Seite zugreifen zu können.")
+  def t(:requires_admin), do: dgettext(@d, "Du musst ein Administrator sein, um auf diese Seite zugreifen zu können.")
+
+  # Form errors
+  def t(:confirmation_error), do: dgettext(@d, "stimmt nicht mit Passwort überein")
+  def t(:email_error), do: dgettext(@d, "muss ein @ symbol und darf keine Leerzeichen enthalten")
+  def t(:unchanged_error), do: dgettext(@d, "ist unverändert")
+  def t(:invalid_error), do: dgettext(@d, "ist ungültig")
+
   # General
   def t(:forgot_password?), do: dgettext(@d, "Forgot your password?")
   def t(:form_error), do: dgettext(@d, "Oops, something went wrong! Please check the errors below.")
@@ -60,6 +70,10 @@ defmodule DsaWeb.AccountTranslations do
   def t(:change_email), do: dgettext(@d, "Change Email")
   def t(:change_password), do: dgettext(@d, "Change Password")
   def t(:current_password), do: dgettext(@d, "Current Password")
+  def t(:email_change_sent), do: dgettext(@d, "A link to confirm your email change has been sent to the new address.")
+  def t(:update_password_success), do: dgettext(@d, "Password updated successfully.")
+  def t(:update_email_success), do: dgettext(@d, "Email changed successfully.")
+  def t(:invalid_email_link), do: dgettext(@d, "Email change link is invalid or it has expired.")
 
   # Emails
   def t(:email_subject), do: dgettext(@d, "DSA Tool - Please Confirm Account")

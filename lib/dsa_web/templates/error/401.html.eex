@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
+    <meta name="description" content="<%= gettext("Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge") %>">
     <title><%= gettext("DSA Tool") %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
@@ -17,7 +17,7 @@
     <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
       <h1 class='font-sans font-bold text-3xl'>Error 401</h1>
       <hr>
-      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Unauthorized" %></h2>
+      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext("Nicht berechtigt") %></h2>
       <%= link gettext("back to Home"), to: Routes.user_session_path(@conn, :index) %>
     </div>
   </body>

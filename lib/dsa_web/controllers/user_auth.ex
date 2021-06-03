@@ -1,7 +1,7 @@
 defmodule DsaWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
-  import DsaWeb.Gettext
+  import DsaWeb.AccountTranslations
 
   alias Dsa.Accounts
   alias DsaWeb.Router.Helpers, as: Routes
@@ -133,7 +133,7 @@ defmodule DsaWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, dgettext("account", "You must log in to access this page."))
+      |> put_flash(:error, t(:requires_login))
       |> maybe_store_return_to()
       |> redirect(to: Routes.user_session_path(conn, :new))
       |> halt()
@@ -157,7 +157,7 @@ defmodule DsaWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, dgettext("account", "You must be an adminstrator to access this page."))
+      |> put_flash(:error, t(:requires_admin))
       |> render(DsaWeb.ErrorView, "403.html")
       |> halt()
     end
