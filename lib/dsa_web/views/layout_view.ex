@@ -4,6 +4,9 @@ defmodule DsaWeb.LayoutView do
   import Phoenix.Controller, only: [get_flash: 1]
   import DsaWeb.AccountTranslations
 
+  def title, do: gettext("DSA Tool")
+  def description, do: gettext("Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge")
+
   # defp active_character_name(%User{} = current_user) do
   #   if is_nil(current_user.active_character_id) do
   #     gettext("No active character")
@@ -14,7 +17,7 @@ defmodule DsaWeb.LayoutView do
 
   def alert_colors(type) do
     case type do
-      "error" ->
+      :error ->
         {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
 
       "info" ->

@@ -262,16 +262,6 @@ msgid "Welcome to DSA Tool! Please confirm your email before signing in. An emai
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/controllers/user_auth.ex:160
-msgid "You must be an adminstrator to access this page."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa_web/controllers/user_auth.ex:136
-msgid "You must log in to access this page."
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:16
 msgid "Your account has been locked, please contact an administrator."
 msgstr ""

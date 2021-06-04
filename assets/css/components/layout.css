@@ -55,6 +55,12 @@
 
   a.link { @apply font-medium text-indigo-600 hover:text-indigo-500; }
 
+  /* Error Pages */
+  .error-wrapper { @apply container mx-auto px-3 py-8 md:max-w-screen-sm text-center space-y-3; }
+
+  .error-wrapper > h1 { @apply font-sans font-bold text-3xl; }
+  .error-wrapper > h2 { @apply font-sans font-medium text-xl; }
+
   /* Submit button in account pages (with lock) */
   .auth-button { @apply primary relative w-full flex justify-center; }
   .auth-button span { @apply absolute left-0 inset-y-0 flex items-center pl-3; }

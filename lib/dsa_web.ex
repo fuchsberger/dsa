@@ -31,6 +31,22 @@ defmodule DsaWeb do
     end
   end
 
+  def auth_controller do
+    quote do
+      use Phoenix.Controller, namespace: DsaWeb
+
+      import Plug.Conn
+      import DsaWeb.AccountTranslations
+
+      alias Dsa.Accounts
+      alias Dsa.Accounts.User
+      alias DsaWeb.UserAuth
+      alias DsaWeb.Router.Helpers, as: Routes
+
+      require Logger
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View, root: "lib/dsa_web/templates", namespace: DsaWeb

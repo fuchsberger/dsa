@@ -1,7 +1,5 @@
 defmodule DsaWeb.UserConfirmationController do
-  use DsaWeb, :controller
-  import DsaWeb.AccountTranslations
-  alias Dsa.Accounts
+  use DsaWeb, :auth_controller
 
   def new(conn, _params) do
     render(conn, "new.html")

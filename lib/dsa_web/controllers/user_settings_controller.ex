@@ -1,10 +1,5 @@
 defmodule DsaWeb.UserSettingsController do
-  use DsaWeb, :controller
-
-  import DsaWeb.AccountTranslations
-
-  alias Dsa.Accounts
-  alias DsaWeb.UserAuth
+  use DsaWeb, :auth_controller
 
   plug :assign_email_and_password_changesets
 

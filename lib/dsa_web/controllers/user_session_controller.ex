@@ -1,10 +1,5 @@
 defmodule DsaWeb.UserSessionController do
-  use DsaWeb, :controller
-
-  import DsaWeb.AccountTranslations
-
-  alias Dsa.Accounts
-  alias DsaWeb.UserAuth
+  use DsaWeb, :auth_controller
 
   def new(conn, _params) do
     render(conn, "new.html", error_message: nil)

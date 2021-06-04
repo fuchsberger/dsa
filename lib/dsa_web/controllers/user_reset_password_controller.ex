@@ -1,7 +1,5 @@
 defmodule DsaWeb.UserResetPasswordController do
-  use DsaWeb, :controller
-  import DsaWeb.AccountTranslations
-  alias Dsa.Accounts
+  use DsaWeb, :auth_controller
 
   plug :get_user_by_reset_password_token when action in [:edit, :update]
 

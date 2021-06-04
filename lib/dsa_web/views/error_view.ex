@@ -1,7 +1,7 @@
 defmodule DsaWeb.ErrorView do
   use DsaWeb, :view
 
-  import Phoenix.Controller, only: [get_flash: 2]
+  import DsaWeb.LayoutView, only: [title: 0, description: 0]
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
@@ -14,5 +14,10 @@ defmodule DsaWeb.ErrorView do
   # "Not Found".
   def template_not_found(template, _assigns) do
     Phoenix.Controller.status_message_from_template(template)
+  end
+
+  defp back_link(conn)  do
+    link gettext("zurück zum DSA Tool"),
+      class: "block link", to: Routes.page_path(conn, :index)
   end
 end

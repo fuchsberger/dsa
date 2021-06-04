@@ -1,10 +1,5 @@
 defmodule DsaWeb.UserRegistrationController do
-  use DsaWeb, :controller
-
-  import DsaWeb.AccountTranslations
-
-  alias Dsa.Accounts
-  alias Dsa.Accounts.User
+  use DsaWeb, :auth_controller
 
   def new(conn, _params) do
     changeset = Accounts.change_user_registration(%User{})
