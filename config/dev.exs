@@ -19,7 +19,7 @@ config :dsa, Dsa.Mailer,
 # with webpack to recompile .js and .css sources.
 config :dsa, DsaWeb.Endpoint,
   http: [port: 4000],
-  debug_errors: true, # switch to false to test error pages
+  debug_errors: false, # switch to false to test error pages
   code_reloader: true,
   check_origin: false,
   watchers: [

@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no"/>
-    <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="<%= description() %>">
-    <title><%= title() %></title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
-  </head>
-  <body class='bg-gray-100'>
-    <div class='error-wrapper'>
-      <%= icon(@conn, "eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
-      <h1>Error 403</h1>
-      <hr>
-      <h2><%= dgettext("account", "Kein Zugriff") %></h2>
-      <%= if @reason.message do %>
-        <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: @reason.message %>
-      <% end %>
-      <%= back_link(@conn) %>
-    </div>
-  </body>
-</html>
+<%= render "header.html", conn: @conn %>
+<h2><%= dgettext("account", "Kein Zugriff") %></h2>
+<%= if @reason.message do %>
+  <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: @reason.message %>
+<% end %>
+<%= render "footer.html", conn: @conn %>
