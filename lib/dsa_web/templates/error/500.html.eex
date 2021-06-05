@@ -1,6 +1,6 @@
 <%= render "header.html", conn: @conn %>
-<h2><%= @reason.message || dgettext("account", "Ein Fehler ist aufgetreten.") %></h2>
+<h2><%= dgettext("account", "Ein Fehler ist aufgetreten") %></h2>
 <%= if @reason.message do %>
-  <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: @reason.message %>
+  <%= render DsaWeb.LayoutView, "alert.html", type: :error, message: @reason.message %>
 <% end %>
 <%= render "footer.html", conn: @conn %>

@@ -1,11 +1,11 @@
 <div class="max-w-sm mx-auto my-3 space-y-3 text-center">
-  <%= icon @conn, "tailwind", "text-indigo-700 mx-auto h-12 w-auto" %>
+  <%= icon("eye-solid", "text-indigo-700 mx-auto h-12 w-auto") %>
 
   <h1 class="text-3xl font-extrabold"><%= t(:reset_password) %></h1>
 
   <div class="flex justify-between text-sm">
-    <%= link t(:sign_in), to: Routes.user_session_path(@conn, :new) %>
-    <%= link t(:sign_up), to: Routes.user_registration_path(@conn, :new) %>
+    <%= link t(:sign_in), class: "link", to: Routes.user_session_path(@conn, :new) %>
+    <%= link t(:sign_up), class: "link", to: Routes.user_registration_path(@conn, :new) %>
   </div>
 
   <%= form_for @changeset, Routes.user_reset_password_path(@conn, :update, @token), fn f -> %>
@@ -14,9 +14,9 @@
         <div class="inline-block alert error"><%= t(:form_error) %></div>
       <% end %>
 
-      <div class='icon rounded-md'>
+      <div class='icon-input'>
         <%= label f, :password, t(:new_password), class: "sr-only" %>
-        <%= icon @conn, "lock-closed-solid" %>
+        <%= icon "lock-closed-solid" %>
         <%= password_input f, :password,
           autocomplete: "new-password",
           class: "input",
@@ -24,10 +24,10 @@
       </div>
       <%= error_tag f, :password %>
 
-      <div class='icon rounded-md'>
+      <div class='icon-input'>
         <%= label f, :password_confirmation, t(:password_confirmation),
           class: "sr-only" %>
-        <%= icon @conn, "lock-closed-solid" %>
+        <%= icon("lock-closed-solid") %>
         <%= password_input f, :password_confirmation,
           autocomplete: "new-password",
           class: "input",

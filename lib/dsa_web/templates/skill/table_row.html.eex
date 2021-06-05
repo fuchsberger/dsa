@@ -3,9 +3,9 @@
   <td class='small'><%= check_to_string(@skill.check) %></td>
   <td class="small">
     <%= cond do
-      not is_nil(@skill.encumbrance_condition) -> gettext("maybe")
-      @skill.encumbrance -> gettext("yes")
-      true -> gettext("no")
+      not is_nil(@skill.encumbrance_condition) -> gettext("evtl")
+      @skill.encumbrance -> gettext("ja")
+      true -> gettext("nein")
     end %>
   </td>
   <td class="small"><%= @skill.improvement_cost %></td>

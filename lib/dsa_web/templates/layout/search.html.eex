@@ -20,19 +20,19 @@
   <button class='w-full flex items-center group text-gray-400 focus:outline-none'
     @click='search=true;$nextTick(() => { document.getElementById("search_query").focus() });' >
     <!-- Heroicon name: solid/search -->
-    <%= icon(@conn, "search-solid", "m-2 h-8 w-8 group-hover:text-gray-600") %>
+    <%= icon("search-solid", "m-2 h-8 w-8 group-hover:text-gray-600") %>
     <span class='flex-grow truncate group-hover:text-gray-600'>
       <%= gettext("Search for anything...") %>
     </span>
     <span style="opacity: 1;" class="hidden sm:block key-combo">
-      <span class="sr-only"><%= gettext("Press") %> </span>
+      <span class="sr-only"><%= gettext("Drücke") %> </span>
       <kbd class="font-sans">
-        <abbr title="Control" class="no-underline" x-show='navigator.platform !== "MacIntel" && navigator.platform !== "MacPPC"'><%= gettext("Ctrl") %></abbr>
+        <abbr title="Control" class="no-underline" x-show='navigator.platform !== "MacIntel" && navigator.platform !== "MacPPC"'><%= gettext("Strg") %></abbr>
         <abbr title="Control" class="no-underline" x-show='navigator.platform === "MacIntel" || navigator.platform === "MacPPC"'><%= gettext("⌘") %></abbr>
       </kbd>
-      <span class="sr-only"> <%= gettext("and") %> </span>
+      <span class="sr-only"> <%= gettext("und") %> </span>
       <kbd class="font-sans">G</kbd>
-      <span class="sr-only"> <%= gettext("to search") %></span></span>
+      <span class="sr-only"> <%= gettext("um zu suchen") %></span>
   </button>
   <%# Search Modal %>
   <div id='search-modal' class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" x-show='search' style='display:none;'>
@@ -65,14 +65,14 @@
         <header class='px-4 py-2 sm:px-6 border-b'>
           <%= form_for :search, "#", [class: "flex items-center", novalidate: true, "x-on:submit.prevent": true], fn f -> %>
             <%= label f, :query do %>
-              <%= icon(@conn, "search-solid", "h-8 w-8 my-2 mr-2") %>
+              <%= icon("search-solid", "h-8 w-8 my-2 mr-2") %>
             <% end %>
-            <%= label f, :query, class: "sr-only", do: gettext("Search") %>
+            <%= label f, :query, class: "sr-only", do: gettext("Suche") %>
 
             <%= search_input f, :query, value: "", "x-model.debounce.300": "query", placeholder: gettext("search DSA Tool") %>
 
             <%# Close Button %>
-            <button type="button" class="key-combo" @click='search=false'><kbd class="font-sans">esc</kbd></button>
+            <button type="button" class="key-combo" @click='search=false'><kbd class="font-sans"><%= gettext("esc") %></kbd></button>
           <% end %>
         </header>
 
@@ -94,7 +94,7 @@
                     </template>
                   </small>
                 </div>
-                <%= icon(@conn, "select", "pl-3 w-8 h-8") %>
+                <%= icon("select", "pl-3 w-8 h-8") %>
               </a>
             </li>
           </template>

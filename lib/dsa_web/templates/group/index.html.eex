@@ -10,16 +10,16 @@
   <thead class="leading-8 text-gray-900 bg-gray-300 font-medium text-left">
     <tr>
       <%= if @current_user do %>
-        <th scope="col" class='w-6'><%= icon(@conn, "login") %></th>
+        <th scope="col" class='w-6'><%= icon("login") %></th>
       <% end %>
 
       <th scope="col"'><%= gettext "Group" %></th>
       <th scope="col" class='hidden md:table-cell'><%= gettext "Master" %></th>
-      <th scope="col" class='w-6'><%= icon(@conn, "user") %></th>
+      <th scope="col" class='w-6'><%= icon("user") %></th>
 
       <%= if @current_user do %>
-        <th scope="col" class='w-6'><%= icon(@conn, "pencil-solid") %></th>
-        <th scope="col" class="w-6"><%= icon @conn, "x" %></th>
+        <th scope="col" class='w-6'><%= icon("pencil-solid") %></th>
+        <th scope="col" class="w-6"><%= icon("x") %></th>
       <% end %>
     </tr>
   </thead>
@@ -29,13 +29,13 @@
         <%= if @current_user do %>
           <td>
             <%= if @current_user.group_id == group.id do %>
-              <%= link icon(@conn, "logout"),
+              <%= link icon("logout"),
                 to: Routes.group_path(@conn, :leave),
                 method: :delete,
                 title: gettext("Leave"),
                 class: "negative" %>
             <% else %>
-              <%= link icon(@conn, "login"),
+              <%= link icon("login"),
                 to: Routes.group_path(@conn, :join, group),
                 title: gettext("Join"),
                 method: :put %>
@@ -50,12 +50,12 @@
         <%= if @current_user do %>
           <%= if @current_user.id == group.master_id || @current_user.admin do %>
             <td class='text-center'>
-              <%= link icon(@conn, "pencil-solid"),
+              <%= link icon("pencil-solid"),
               to: Routes.group_path(@conn, :edit, group),
               title: gettext("Edit") %>
             </td>
             <td class='text-center'>
-              <%= link icon(@conn, "x"),
+              <%= link icon("x"),
                 to: Routes.group_path(@conn, :delete, group),
                 method: :delete,
                 class: "negative",

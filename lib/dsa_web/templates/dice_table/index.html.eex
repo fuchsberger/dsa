@@ -21,7 +21,7 @@
       <td>
 
         <%= form_for @conn, Routes.dice_table_event_path(@conn, :dice_table_roll, dice_table.id), [], fn f -> %>
-        <%= submit icon(@conn, "cube"),
+        <%= submit icon("cube"),
           class: "text-indigo-600 hover:text-indigo-400",
           name: input_name(:dice_table_roll, :table_id),
           value: dice_table.id %>

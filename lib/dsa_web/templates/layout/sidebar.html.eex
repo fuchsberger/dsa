@@ -1,6 +1,6 @@
 <div class="sidebar">
   <header class="flex-shrink-0 flex items-center justify-center h-12">
-    <%= icon(@conn, "eye-solid", "h-10 w-10 text-indigo-500") %>
+    <%= icon("eye-solid", "h-10 w-10 text-indigo-500") %>
     <div class='pl-1 text-gray-200 text-3xl font-bold tracking-tighter'><%= gettext("DSA Tool") %></div>
   </header>
   <%= if @current_user do %>
@@ -11,7 +11,7 @@
           <span class="">Elementarmagier</span>
         </div>
       </div>
-      <%= icon(@conn, "chevron-down-solid", "h-6 w-6 group-hover:text-gray-300") %>
+      <%= icon("chevron-down-solid", "h-6 w-6 group-hover:text-gray-300") %>
     </button>
   <% else %>
     <div class='relative h-20 px-4 flex flex-col justify-center bg-gray-700'>
@@ -20,11 +20,8 @@
     </div>
   <% end %>
   <nav>
-    <%= menu_item(@conn, gettext("Home"),
-      to: Routes.page_path(@conn, :index), icon: "home") %>
-
-    <%= menu_item(@conn, gettext("Skills"),
-      to: Routes.skill_path(@conn, :index), icon: "cog-solid") %>
+    <%= menu_item(@conn, gettext("Tool Info"), to: Routes.page_path(@conn, :index), icon: "home") %>
+    <%= menu_item(@conn, gettext("Talente"), to: Routes.skill_path(@conn, :index), icon: "cog-solid") %>
   </nav>
 
   <div class='flex-shrink-0 bg-gray-700'>

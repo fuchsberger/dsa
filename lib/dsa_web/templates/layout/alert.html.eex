@@ -8,13 +8,13 @@
   x-transition:leave-end="opacity-0">
   <div class="flex">
     <div class="flex-shrink-0">
-      <%= icon(@conn, icon_type, "h-5 w-5 #{icon_color}") %>
+      <%= icon(icon_type, "h-5 w-5 #{icon_color}") %>
     </div>
     <div class="flex-grow mx-3">
       <h3 class="text-sm font-medium <%= text_color %>"><%= @message %></h3>
     </div>
     <button type='button' @click='dismissed=!dismissed'>
-      <%= icon(@conn, "x", "h-5 w-5 #{text_color}") %>
+      <%= icon("x", "h-5 w-5 #{text_color}") %>
     </button>
   </div>
 </div>

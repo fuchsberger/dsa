@@ -15,36 +15,36 @@ defmodule DsaWeb.AccountTranslations do
   def t(:invalid_error), do: dgettext(@d, "ist ungültig")
 
   # General
-  def t(:forgot_password?), do: dgettext(@d, "Forgot your password?")
-  def t(:form_error), do: dgettext(@d, "Oops, something went wrong! Please check the errors below.")
+  def t(:forgot_password?), do: dgettext(@d, "Passwort vergessen?")
+  def t(:form_error), do: dgettext(@d, "Oops, etwas ist schief gelaufen! Bitte überprüfe die angeführten Fehler.")
   def t(:or), do: dgettext(@d, "Or")
 
   # Session controller
-  def t(:logged_out), do: dgettext(@d, "Logged out successfully.")
-  def t(:invalid_email_or_password), do: dgettext(@d, "Invalid email or password.")
-  def t(:confirm_before_signin), do: dgettext(@d, "Please confirm your email before signing in. An email confirmation link has been sent to you.")
-  def t(:blocked_message), do: dgettext(@d, "Your account has been locked, please contact an administrator.")
+  def t(:logged_out), do: dgettext(@d, "Erfolgreich ausgeloggt.")
+  def t(:invalid_email_or_password), do: dgettext(@d, "Ungültige Email Addresse oder Passwort.")
+  def t(:confirm_before_signin), do: dgettext(@d, "Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet.")
+  def t(:blocked_message), do: dgettext(@d, "Dein Account wurde gesperrt, bitte kontaktierte einen Administrator")
 
   # Session view / templates
-  def t(:heading_sign_in), do: dgettext(@d, "Sign in to your account")
-  def t(:register_link), do: dgettext(@d, "register a new account")
-  def t(:email_address), do: dgettext(@d, "Email address")
-  def t(:password), do: dgettext(@d, "Password")
-  def t(:remember_me), do: dgettext(@d, "Remember me for 60 days")
-  def t(:sign_in), do: dgettext(@d, "Sign in")
-  def t(:or_sign_in), do: dgettext(@d, "or sign in")
-  def t(:sign_out), do: dgettext(@d, "Sign out")
+  def t(:heading_sign_in), do: dgettext(@d, "Anmeldung")
+  def t(:register_link), do: dgettext(@d, "registriere dich hier")
+  def t(:email_address), do: dgettext(@d, "Email Addresse")
+  def t(:password), do: dgettext(@d, "Passwort")
+  def t(:remember_me), do: dgettext(@d, "Für 60 Tage eingeloggt bleiben")
+  def t(:sign_in), do: dgettext(@d, "Einloggen")
+  def t(:or_sign_in), do: dgettext(@d, "oder melde dich an")
+  def t(:sign_out), do: dgettext(@d, "Ausloggen")
 
 
   # Registration controller
-  def t(:registration_successful), do: dgettext(@d, "Welcome to DSA Tool! Please confirm your email before signing in. An email confirmation link has been sent to you.")
+  def t(:registration_successful), do: dgettext(@d, "Willkommen im DSA Tool! Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet.")
 
   # Registration view / templates
-  def t(:heading_registration), do: dgettext(@d, "Register Account")
-  def t(:signin_link), do: dgettext(@d, "sign into your account")
-  def t(:username), do: dgettext(@d, "Username")
-  def t(:password_confirmation), do: dgettext(@d, "Confirm Password")
-  def t(:sign_up), do: dgettext(@d, "Sign up")
+  def t(:heading_registration), do: dgettext(@d, "Registrierung")
+  def t(:signin_link), do: dgettext(@d, "melde dich an")
+  def t(:username), do: dgettext(@d, "Benutzername")
+  def t(:password_confirmation), do: dgettext(@d, "Bestätige Passwort")
+  def t(:sign_up), do: dgettext(@d, "Benutzer registrieren")
 
   # confirmation
   def t(:resend_confirmation), do: dgettext(@d, "Resend confirmation instructions")
@@ -54,14 +54,12 @@ defmodule DsaWeb.AccountTranslations do
   def t(:confirm_message), do: dgettext(@d, "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly.")
 
   # Reset password controller
-  def t(:reset_password_msg), do: dgettext(@d, "If your email is in our system, you will receive instructions to reset your password shortly.")
-  def t(:reset_password_invalid), do: dgettext(@d, "Reset password link is invalid or it has expired.")
-  def t(:reset_password_success), do: dgettext(@d, "Password reset successfully.")
-
-  # Registration view / templates
-  def t(:send_reset_instructions), do: dgettext(@d, "Send instructions to reset password")
-  def t(:reset_password), do: dgettext(@d, "Reset password")
-  def t(:new_password), do: dgettext(@d, "New Password")
+  def t(:reset_password), do: dgettext(@d, "Passwort zurücksetzen")
+  def t(:reset_password_msg), do: dgettext(@d, "Sollte sich deine Email Addresse in unserem System befinden wirst du in Kürze Anweisungen erhalten um dein Passwort zurückzusetzen.")
+  def t(:reset_password_invalid), do: dgettext(@d, "Der Link zum zurücksetzen deines Passworts ist abgelaufen oder ungültig.")
+  def t(:reset_password_success), do: dgettext(@d, "Passwort wurde erfolgreich zurückgesetzt.")
+  def t(:send_reset_instructions), do: dgettext(@d, "Sende Anweisungen")
+  def t(:new_password), do: dgettext(@d, "Neues Passwort")
 
   # Settings
   def t(:settings), do: dgettext(@d, "Settings")

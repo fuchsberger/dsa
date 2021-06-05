@@ -7,12 +7,12 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col" class="text-center w-6 "><%= icon @conn, "star-solid" %></th>
-      <th scope="col" class='text-center w-6'><%= icon @conn, "eye-solid" %></th>
+      <th scope="col" class="text-center w-6 "><%= icon "star-solid" %></th>
+      <th scope="col" class='text-center w-6'><%= icon "eye-solid" %></th>
       <th scope="col">Name</th>
       <th scope="col" class='hidden lg:table-cell'>Profession</th>
-      <th scope="col" class='text-center w-6'><%= icon @conn, "pencil-solid" %></th>
-      <th scope="col" class="text-center w-6"><%= icon @conn, "x" %></th>
+      <th scope="col" class='text-center w-6'><%= icon "pencil-solid" %></th>
+      <th scope="col" class="text-center w-6"><%= icon "x" %></th>
     </tr>
   </thead>
   <tbody>
@@ -20,21 +20,21 @@
       <tr>
         <td class='text-center'>
           <%= if @current_user.active_character_id == character.id do %>
-            <%= icon @conn, "star-solid" %>
+            <%= icon "star-solid" %>
           <% else %>
-            <%= link icon(@conn, "star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
+            <%= link icon("star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
           <% end %>
         </td>
         <td class='text-center'>
-          <%= link icon(@conn, (if character.visible, do: "eye", else: "eye-off")), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
+          <%= link icon(if character.visible, do: "eye", else: "eye-off"), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
         </td>
         <td><%= character.name %></td>
         <td class='hidden lg:table-cell'><%= character.profession %></td>
         <td class='text-center'>
-          <%= link icon(@conn, "pencil-solid"), to: Routes.character_path(@conn, :edit, character.id) %>
+          <%= link icon("pencil-solid"), to: Routes.character_path(@conn, :edit, character.id) %>
         </td>
         <td class='text-center'>
-          <%= link icon(@conn, "x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
+          <%= link icon("x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
         </td>
       </tr>
     <% end %>

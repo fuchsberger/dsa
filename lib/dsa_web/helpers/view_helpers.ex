@@ -15,9 +15,9 @@ defmodule DsaWeb.Helpers.ViewHelpers do
 
   def admin?(conn), do: conn.assigns.current_user && conn.assigns.current_user.admin
 
-  def icon(socket, name, class \\ "w-5 h-5") do
+  def icon(name, class \\ "w-5 h-5") do
     content_tag :svg, class: class do
-      tag(:use, href: Routes.static_path(socket, "/images/icons.svg#" <> name))
+      tag(:use, href: Routes.static_path(DsaWeb.Endpoint, "/images/icons.svg#" <> name))
     end
   end
 

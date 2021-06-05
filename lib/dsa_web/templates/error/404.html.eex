@@ -3,8 +3,7 @@
 <%= case @reason do
   %Phoenix.Router.NoRouteError{} -> nil
   %{message: nil} -> nil
-  %{message: message} ->
-    render DsaWeb.LayoutView, "alert.html", conn: @conn, type: :error, message: message
+  %{message: message} -> render(DsaWeb.LayoutView, "alert.html", type: :error, message: message)
   _ -> nil
 end %>
 <%= render "footer.html", conn: @conn %>

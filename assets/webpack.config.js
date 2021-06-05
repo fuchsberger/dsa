@@ -1,7 +1,6 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const { ESBuildMinifyPlugin } = require('esbuild-loader')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = (env, options) => {
@@ -10,8 +9,7 @@ module.exports = (env, options) => {
   return {
     optimization: {
       minimizer: [
-        new TerserPlugin(),
-        new CssMinimizerPlugin()
+        new ESBuildMinifyPlugin({ target: 'es2015', css: true })
       ]
     },
     entry: {
@@ -28,7 +26,13 @@ module.exports = (env, options) => {
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          use: { loader: 'babel-loader' }
+          use: {
+            loader: 'esbuild-loader',
+            options: {
+              // loader: 'jsx',  // Remove this if you're not using JSX
+              target: 'es2015'  // Syntax to compile to (see options below for possible values)
+            }
+          }
         },
         {
           test: /\.css$/,

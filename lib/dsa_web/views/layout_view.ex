@@ -31,7 +31,7 @@ defmodule DsaWeb.LayoutView do
   defp menu_item(conn, name, [to: path, icon: iname]) do
     active_class = if path == Path.join(["/" | conn.path_info]), do: " active"
 
-    link [content_tag(:div, icon(conn, iname)), content_tag(:span, name)],
+    link [content_tag(:div, icon(iname)), content_tag(:span, name)],
       to: path,
       class: "menu-item#{active_class}"
   end

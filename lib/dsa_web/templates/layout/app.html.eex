@@ -31,9 +31,9 @@
         x-transition:leave-start='opacity-100'
         x-transition:leave-end='opacity-0'>
         <button class="mobile-close-button" @click='open=false'>
-          <span class="sr-only"><%= gettext("Close sidebar") %></span>
+          <span class="sr-only"><%= gettext("Schließe seitliches Menü") %></span>
           <%# Heroicon name: outline/x %>
-          <%= icon(@conn, "x", "m-2 h-8 w-8 text-white") %>
+          <%= icon("x", "m-2 h-8 w-8 text-white") %>
         </button>
       </div>
       <%# Mobile Sidebar Content %>
@@ -58,8 +58,8 @@
     <div class="top-bar">
       <div>
         <button class="menu-button" @click='open=true'>
-          <span class="sr-only"><%= gettext("Open sidebar") %></span>
-          <%= icon(@conn, "menu", "m-2 h-8 w-8") %>
+          <span class="sr-only"><%= gettext("Öffne seitliches Menü") %></span>
+          <%= icon("menu", "m-2 h-8 w-8") %>
         </button>
         <%# Search Button and Modal %>
         <%= render DsaWeb.LayoutView, "search.html", conn: @conn %>
@@ -71,7 +71,7 @@
       <div>
         <%# Flash Messages %>
         <%= for {type, message} <- get_flash(@conn) do %>
-          <%= render DsaWeb.LayoutView, "alert.html", conn: @conn, type: type, message: message %>
+          <%= render DsaWeb.LayoutView, "alert.html", type: type, message: message %>
         <% end %>
         <%# Page Content %>
         <div><%= @inner_content %></div>

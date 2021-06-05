@@ -2,5 +2,4 @@
 <p><%= gettext("Dieses Tool erlaubt es dir und deiner Spielgruppe DSA (Das Schwarze Auge) online zu spielen (in Begleitung von Zoom). Momentan sind folgende Funktionen möglich:") %></p>
 <ul class='list-disc list-inside'>
   <li><%= gettext("Übersicht über Talente") %></li>
-  <li><%= gettext("Heldenerstellung und Verwaltung") %></li>
 </ul>

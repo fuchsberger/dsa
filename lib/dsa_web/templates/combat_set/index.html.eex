@@ -26,9 +26,9 @@
       <td><%= combat_set.tp_dice %>W<%= combat_set.tp_type %> + <%= combat_set.tp_bonus %></td>
 
       <td>
-        <%= link icon(@conn, "pencil-solid"),
+        <%= link icon("pencil-solid"),
           to: Routes.character_combat_set_path(@conn, :edit, @character, combat_set) %>
-        <%= link icon(@conn, "x"),
+        <%= link icon("x"),
           to: Routes.character_combat_set_path(@conn, :delete, @character, combat_set),
           method: :delete, class: "negative",
           data: [confirm: gettext("Are you sure?")] %>

@@ -4,7 +4,7 @@
   <td class="px-1 font-bold"><%= @entry.level %></td>
   <%= if @group_id do %>
     <td>
-      <%= submit icon(@conn, "cube"),
+      <%= submit icon("cube"),
         class: "text-indigo-600 hover:text-indigo-400",
         name: input_name(:blessing_roll, :blessing_id),
         value: @entry.blessing_id %>

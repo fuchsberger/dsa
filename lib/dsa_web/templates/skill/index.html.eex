@@ -4,7 +4,7 @@
   <div class='space-y-4'>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Physical Skills"), check: "MU/GE/KK" %>
+        <%= render "table_head.html", category: gettext("Körpertalente"), check: "MU/GE/KK" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
@@ -12,7 +12,7 @@
     </div>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Social Skills"), check: "IN/CH/CH" %>
+        <%= render "table_head.html", category: gettext("Gesellschaftstalente"), check: "IN/CH/CH" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @social_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
@@ -20,7 +20,7 @@
     </div>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Nature Skills"), check: "MU/GE/KO" %>
+        <%= render "table_head.html", category: gettext("Naturtalente"), check: "MU/GE/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @nature_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
@@ -30,7 +30,7 @@
   <div class='space-y-4'>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Knowledge Skills"), check: "KL/KL/IN" %>
+        <%= render "table_head.html", category: gettext("Wissenstalente"), check: "KL/KL/IN" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @knowledge_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
@@ -38,7 +38,7 @@
     </div>
     <div class="table-wrapper">
       <table>
-        <%= render "table_head.html", category: gettext("Crafting Skills"), check: "FF/FF/KO" %>
+        <%= render "table_head.html", category: gettext("Handwerkstalente"), check: "FF/FF/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
           <%= render_many @crafting_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
         </tbody>
