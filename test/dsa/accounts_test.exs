@@ -173,7 +173,7 @@ defmodule Dsa.AccountsTest do
       {:error, changeset} =
         Accounts.apply_user_email(user, valid_user_password(), %{email: "not valid"})
 
-      assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
+      assert %{email: ["muss ein @ symbol und darf keine Leerzeichen enthalten"]} = errors_on(changeset)
     end
 
     test "validates maximum value for email for security", %{user: user} do
@@ -512,7 +512,7 @@ defmodule Dsa.AccountsTest do
 
       assert %{
                password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
+               password_confirmation: ["stimmt nicht mit Passwort überein"]
              } = errors_on(changeset)
     end
 

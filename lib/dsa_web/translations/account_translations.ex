@@ -8,12 +8,6 @@ defmodule DsaWeb.AccountTranslations do
   def t(:requires_login), do: dgettext(@d, "Du musst dich anmelden um auf diese Seite zugreifen zu können.")
   def t(:requires_admin), do: dgettext(@d, "Du musst ein Administrator sein, um auf diese Seite zugreifen zu können.")
 
-  # Form errors
-  def t(:confirmation_error), do: dgettext(@d, "stimmt nicht mit Passwort überein")
-  def t(:email_error), do: dgettext(@d, "muss ein @ symbol und darf keine Leerzeichen enthalten")
-  def t(:unchanged_error), do: dgettext(@d, "ist unverändert")
-  def t(:invalid_error), do: dgettext(@d, "ist ungültig")
-
   # General
   def t(:forgot_password?), do: dgettext(@d, "Passwort vergessen?")
   def t(:form_error), do: dgettext(@d, "Oops, etwas ist schief gelaufen! Bitte überprüfe die angeführten Fehler.")
@@ -34,7 +28,6 @@ defmodule DsaWeb.AccountTranslations do
   def t(:sign_in), do: dgettext(@d, "Einloggen")
   def t(:or_sign_in), do: dgettext(@d, "oder melde dich an")
   def t(:sign_out), do: dgettext(@d, "Ausloggen")
-
 
   # Registration controller
   def t(:registration_successful), do: dgettext(@d, "Willkommen im DSA Tool! Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet.")
@@ -62,19 +55,19 @@ defmodule DsaWeb.AccountTranslations do
   def t(:new_password), do: dgettext(@d, "Neues Passwort")
 
   # Settings
-  def t(:settings), do: dgettext(@d, "Settings")
-  def t(:delete_account_link), do: dgettext(@d, "Delete Account")
-  def t(:delete_account_confirmation), do: dgettext(@d, "Are you sure you want to delete your account including all characters?")
-  def t(:change_email), do: dgettext(@d, "Change Email")
-  def t(:change_password), do: dgettext(@d, "Change Password")
-  def t(:current_password), do: dgettext(@d, "Current Password")
-  def t(:email_change_sent), do: dgettext(@d, "A link to confirm your email change has been sent to the new address.")
-  def t(:update_password_success), do: dgettext(@d, "Password updated successfully.")
-  def t(:update_email_success), do: dgettext(@d, "Email changed successfully.")
-  def t(:invalid_email_link), do: dgettext(@d, "Email change link is invalid or it has expired.")
+  def t(:settings), do: dgettext(@d, "Einstellungen")
+  def t(:delete_account_link), do: dgettext(@d, "Account löschen")
+  def t(:delete_account_confirmation), do: dgettext(@d, "Bist du sicher, dass du deinen Account löschen möchtest? Deine Daten werden sofort unwiederuflich gelöscht.")
+  def t(:change_email), do: dgettext(@d, "Email Addresse ändern")
+  def t(:change_password), do: dgettext(@d, "Password ändern")
+  def t(:current_password), do: dgettext(@d, "Aktuelles Passwort")
+  def t(:email_change_sent), do: dgettext(@d, "Ein link zum ändern deiner Email Addresse wurde gesendet.")
+  def t(:update_password_success), do: dgettext(@d, "Passwort erfolgreich geändert.")
+  def t(:update_email_success), do: dgettext(@d, "Email Addresse erfolgreich geändert.")
+  def t(:invalid_email_link), do: dgettext(@d, "Der Link zum ändern deiner Email Addresse ist abeglaufen oder ungültig!")
 
   # Emails
-  def t(:email_subject), do: dgettext(@d, "DSA Tool - Please Confirm Account")
+  def t(:email_subject), do: dgettext(@d, "DSA Tool - Bitte bestätige deinen Account")
 
   def t(:confirmation_email_text, url, username), do: dgettext(@d, "Hi %{username},\n\nYou can confirm your account by visiting the URL below:\n%{url}\n\nIf you have not created an account with us, please ignore this.\n\nBest,\nThe DSA Team", url: url, username: username)
   def t(:confirmation_email_html, url, username), do: dgettext(@d, "Hi %{username},<br/><br/>You can confirm your account by visiting the URL below:<br/><a href=\"%{url}\" target=\"_blank\">%{url}</a><br/><br/>If you have not created an account with us, please ignore this.<br/><br/>Best,<br/>The DSA Team", url: url, username: username)

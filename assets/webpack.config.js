@@ -35,12 +35,21 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.css$/,
+          test: /(\.css)$/,
+          include: /node_modules/,
           use: [
-            MiniCssExtractPlugin.loader,  // extract CSS into separate file
-            'css-loader',                 // translates CSS into CommonJS
-            'postcss-loader'              // CSS postprocessing
-          ]
+            MiniCssExtractPlugin.loader,
+            { loader: 'css-loader', options: { url: false } }
+          ],
+        },
+        {
+          test: /(\.css)$/,
+          exclude: /node_modules/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            { loader: 'css-loader', options: { url: false } },
+            'postcss-loader',
+          ],
         },
         {
           test: /\.(gif|svg|woff2)$/,

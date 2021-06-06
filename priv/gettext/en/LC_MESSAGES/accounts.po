@@ -13,5 +13,5 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa_web/templates/layout/user_menu.html.eex:4
-msgid "Open user menu"
+msgid "Öffne Benutzermenu"
 msgstr ""
