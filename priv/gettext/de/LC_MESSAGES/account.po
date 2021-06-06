@@ -192,7 +192,7 @@ msgstr ""
 msgid "Einstellungen"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:25
 msgid "Email Addresse"
 msgstr "Email Adresse"
@@ -202,7 +202,7 @@ msgstr "Email Adresse"
 msgid "Email Addresse erfolgreich geändert."
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:61
 msgid "Email Addresse ändern"
 msgstr "Email Adresse"
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Login erforderlich"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:55
 msgid "Neues Passwort"
 msgstr "Neues Passwort"
@@ -237,12 +237,12 @@ msgstr "Neues Passwort"
 msgid "Oops, etwas ist schief gelaufen! Bitte überprüfe die angeführten Fehler."
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:62
 msgid "Password ändern"
 msgstr "Passwort"
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:26
 msgid "Passwort"
 msgstr "Passwort"
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Passwort zurücksetzen"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:36
 msgid "Registrierung"
 msgstr "Anmelden"

@@ -1753,9 +1753,166 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-
-
-
+    id: 38,
+    name: gettext("Rechnen"),
+    category: :knowledge,
+    check: {:kl, :kl, :in},
+    applications: [
+      %{name: gettext("Bruchrechnung")},
+      %{name: gettext("Punktrechnung")},
+      %{name: gettext("Strichrechnung")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("schnelleres Ergebnis"),
+    failed: gettext("Das Ergebnis ist falsch."),
+    success: gettext("Schnelle und exakte Bestimmung der Lösung"),
+    botch: gettext("Das Ergebnis ist komplett falsch, der Held aber von der Richtigkeit absolut überzeugt."),
+    improvement_cost: :a,
+    description: "Um die Zinsen eines Darlehens richtig zu berechnen, den Schusswinkel eines Katapults richtig einzuschätzen oder die Fläche einer Tempelkuppel korrekt zu ermitteln, ist das Talent Rechnen vonnöten.",
+    reference: {gettext("Basis Regelwerk"), 204},
+    examples: [
+      %{
+        action: "Mit Händen und Füßen bis zwanzig zählen",
+        modifier: "+5"
+      },
+      %{
+        action: "Einfaches Addieren",
+        modifier: "+3"
+      },
+      %{
+        action: "Größere Mengen dividieren",
+        modifier: "+1"
+      },
+      %{
+        action: "Berechnung der Fläche einer Dukatenmünze",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Berechnung der Zinsen eines Guthabens der letzten fünfzehn Jahre",
+        modifier: "-1"
+      },
+      %{
+        action: "Schwierige Al’Gebra- und Arithmethik-Aufgaben",
+        modifier: "–3"
+      },
+      %{
+        action: "Volumenberechnung eines Schiffsrumpfes",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 39,
+    name: gettext("Rechtskunde"),
+    category: :knowledge,
+    check: {:kl, :kl, :in},
+    applications: [
+      %{
+        name: gettext("Einzelne Region"),
+        selection: regions(),
+        limit: 0
+      },
+      %{
+        name: gettext("Gildenrecht"),
+        requirement: true # TODO
+      }
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("mehr Optionen zur Lösung eines Falls"),
+    failed: gettext("Der Held hat keine Ahnung."),
+    success: gettext("Der Held kennt sich mit Besonderheiten des Gesetzes aus und kann einen Plan entwickeln, es zu seinem Vorteil auszulegen."),
+    botch: gettext("Die Auslegung des Gesetzes ist falsch oder der Held übersieht einen wichtigen Passus."),
+    improvement_cost: :a,
+    description: "Jede Region und jedes Volk hat ihr eigenes Rechtssystem. Um Recht und Gesetz von Städten, Reichen, Gilden und Kirchen zu kennen und gegebenenfalls für sich in Anspruch nehmen zu können, bedarf es dieses Talents.",
+    reference: {gettext("Basis Regelwerk"), 205},
+    examples: [
+      %{
+        action: "Für Mord erwartet mich der Henker",
+        modifier: "+5"
+      },
+      %{
+        action: "In den Tulamidenlanden wird einem Dieb die Hand abgehackt",
+        modifier: "+3"
+      },
+      %{
+        action: "Wie wird eine öffentliche Schlägerei bestraft?",
+        modifier: "+1"
+      },
+      %{
+        action: "Wer ist für den straffälligen Magier zuständig?",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Mit welcher Strafe muss ein Rosstäuscher rechnen?",
+        modifier: "-1"
+      },
+      %{
+        action: "Kann ein Mittelreicher einen horasischen Adelstitel erben?",
+        modifier: "–3"
+      },
+      %{
+        action: "Unbekannte Rechtssysteme (Strafen der Molochen für das sinnlose Zerquetschen von Krustentieren)",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 40,
+    name: gettext("Reiten"),
+    category: :physical,
+    check: {:ch, :ge, :kk},
+    applications: [
+      %{name: gettext("Kampfmanöver")},
+      %{name: gettext("Langstreckenreiten")},
+      %{name: gettext("Springreiten")},
+      %{name: gettext("Verfolgungsjagden")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("Reittier"),
+    quality: gettext("Der Held ist schneller an seinem Ziel."),
+    failed: gettext("Das Tier bewegt sich nicht oder nicht so, wie es soll."),
+    success: gettext("Das Tier macht seine Sache ausgezeichnet und wie gewünscht, der Reiter hat eine weitere Aktion zur Verfügung."),
+    botch: gettext("Das Tier wirft den Reiter ab und er stürzt zu Boden (siehe Seite 340, Sturzschaden)."),
+    improvement_cost: :b,
+    description: "Wenn man sich nicht nur auf einem Reittier festklammern will, sondern es dazu bringen möchte, das zu tun, was man möchte, ist das Talent [Reiten] erforderlich. Langsames Reiten ohne Angabe einer Richtung erfordert keine Proben. Wenn das Tier jedoch galoppiert, Pirouetten drehen oder gezielt treten oder beißen soll, werden Proben nötig.\nKomplexe Anwendungen beziehen sich bei Reiten vor allem auf extrem ungewöhnliche Reittiere wie Kampfwildschweine oder Hornechsen.",
+    reference: {gettext("Basis Regelwerk"), 190},
+    examples: [
+      %{
+        action: "Vorwärtsmanöver, Schritttempo",
+        modifier: "+5"
+      },
+      %{
+        action: "Einfacher Trab oder schnelle Fortbewegung",
+        modifier: "+3"
+      },
+      %{
+        action: "Über eine niedrige Mauer springen, gewöhnliche Befehle befolgen (Gangartwechsel, Anhalten, Rückwärtsgehen)",
+        modifier: "+1"
+      },
+      %{
+        action: "Überraschende Wendemanöver",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Ohne Zügel im Galopp reiten",
+        modifier: "-1"
+      },
+      %{
+        action: "Das Tier dazu bringen, einen ungewöhnlichen Befehl zu befolgen",
+        modifier: "–3"
+      },
+      %{
+        action: "Sprung über eine breite Schlucht",
+        modifier: "-5"
+      }
+    ]
+  }, %{
 
 
 
