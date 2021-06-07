@@ -2,6 +2,6 @@
   <th scope="col" class='text-left'><%= @category %></th>
   <th scope="col" class='text-center'><%= @check %></th>
   <th scope="col" class="text-center"><%= gettext("BE") %></th>
-  <th scope="col" class="text-center"><%= gettext("Stg") %></th>
+  <th scope="col" class="text-center"><%= gettext("SF") %></th>
   <th scope="col" class="text-center"><%= gettext("FW") %></th>
 </head>

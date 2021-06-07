@@ -1,5 +1,7 @@
-<tr>
-  <th scope='row'><%= @skill.name %></th>
+<tr><%= Logger.warn inspect @skill %>
+  <th scope='row'>
+    <%= link(@skill.name, to: Routes.skill_path(@conn, :show, @skill.slug)) %>
+  </th>
   <td class='small'><%= check_to_string(@skill.check) %></td>
   <td class="small">
     <%= cond do

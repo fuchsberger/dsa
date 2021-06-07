@@ -43,7 +43,7 @@ defmodule DsaWeb.Router do
 
     get "/", PageController, :index
     get "/talente", SkillController, :index
-    get "/talente/:slug", PageController, :index
+    get "/talente/:slug", SkillController, :show
   end
 
   ## Authentication routes

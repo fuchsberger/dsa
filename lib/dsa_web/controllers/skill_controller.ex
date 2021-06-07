@@ -16,11 +16,11 @@ defmodule DsaWeb.SkillController do
   end
 
   def show(conn, %{"slug" => slug}) do
-    case Data.slug_to_id(:skills, slug) do
+    case Data.get_by_slug(:skills, slug) do
       nil ->
         render(conn, DsaWeb.ErrorView, "404.html")
-      id ->
-        render(conn, "show.html", skill: Data.get_skill(id))
+      skill ->
+        render(conn, "show.html", skill: skill)
     end
   end
 end

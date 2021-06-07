@@ -72,51 +72,6 @@ msgid "Cheating"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1921
-msgid "Animal Lore"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1925
-msgid "Domesticated Animals"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1929
-msgid "Mimicry"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1926
-msgid "Monsters"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1933
-msgid "The hero gains more information about an animal."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1935
-msgid "The hero has extensive knowledge of that type of animal."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1934
-msgid "The hero has no idea."
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1927
-msgid "Wild Animals"
-msgstr ""
-
-#, elixir-format
-#: lib/dsa/data/skill.ex:1936
-msgid "You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."
-msgstr ""
-
-#, elixir-format
 #: lib/dsa/data/skill.ex:21
 msgid "Albernia"
 msgstr ""
@@ -274,7 +229,13 @@ msgstr ""
 #: lib/dsa/data/skill.ex:1502 lib/dsa/data/skill.ex:1549 lib/dsa/data/skill.ex:1585
 #: lib/dsa/data/skill.ex:1638 lib/dsa/data/skill.ex:1689 lib/dsa/data/skill.ex:1740
 #: lib/dsa/data/skill.ex:1775 lib/dsa/data/skill.ex:1832 lib/dsa/data/skill.ex:1884
-#: lib/dsa/data/skill.ex:1939
+#: lib/dsa/data/skill.ex:1941 lib/dsa/data/skill.ex:1991 lib/dsa/data/skill.ex:2041
+#: lib/dsa/data/skill.ex:2092 lib/dsa/data/skill.ex:2144 lib/dsa/data/skill.ex:2195
+#: lib/dsa/data/skill.ex:2247 lib/dsa/data/skill.ex:2298 lib/dsa/data/skill.ex:2347
+#: lib/dsa/data/skill.ex:2400 lib/dsa/data/skill.ex:2454 lib/dsa/data/skill.ex:2506
+#: lib/dsa/data/skill.ex:2558 lib/dsa/data/skill.ex:2591 lib/dsa/data/skill.ex:2642
+#: lib/dsa/data/skill.ex:2669 lib/dsa/data/skill.ex:2725 lib/dsa/data/skill.ex:2778
+#: lib/dsa/data/skill.ex:2813
 msgid "Basis Regelwerk"
 msgstr ""
 
@@ -435,7 +396,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:1025 lib/dsa/data/skill.ex:1347
-#: lib/dsa/data/skill.ex:1579
+#: lib/dsa/data/skill.ex:1579 lib/dsa/data/skill.ex:2292 lib/dsa/data/skill.ex:2394
 msgid "Das Werkstück ist schneller fertig oder es wird eine bessere Qualität erzielt."
 msgstr ""
 
@@ -617,6 +578,7 @@ msgstr ""
 #, elixir-format
 #: lib/dsa/data/skill.ex:719 lib/dsa/data/skill.ex:772 lib/dsa/data/skill.ex:825
 #: lib/dsa/data/skill.ex:1402 lib/dsa/data/skill.ex:1735 lib/dsa/data/skill.ex:1827
+#: lib/dsa/data/skill.ex:2341 lib/dsa/data/skill.ex:2552
 msgid "Der Held hat keine Ahnung."
 msgstr ""
 
@@ -677,7 +639,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:1026 lib/dsa/data/skill.ex:1348
-#: lib/dsa/data/skill.ex:1580
+#: lib/dsa/data/skill.ex:1580 lib/dsa/data/skill.ex:2293 lib/dsa/data/skill.ex:2395
 msgid "Der Held kommt mit der Arbeit an dem Werkstück nicht voran."
 msgstr ""
 
@@ -843,7 +805,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:1027 lib/dsa/data/skill.ex:1349
-#: lib/dsa/data/skill.ex:1581
+#: lib/dsa/data/skill.ex:1581 lib/dsa/data/skill.ex:2294 lib/dsa/data/skill.ex:2396
 msgid "Die Zahl der FP bei dieser Probe verdoppelt sich, der Held erhält aber mindestens 5 FP. Erschwernisse, die durch misslungene Sammelproben aufgebaut wurden, werden komplett abgebaut."
 msgstr ""
 
@@ -905,7 +867,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:1028 lib/dsa/data/skill.ex:1350
-#: lib/dsa/data/skill.ex:1582
+#: lib/dsa/data/skill.ex:1582 lib/dsa/data/skill.ex:2295 lib/dsa/data/skill.ex:2397
 msgid "Ein Patzer sorgt dafür, dass die angesammelten QS auf 0 sinken und keine weitere Probe für dieses Vorhaben angewandt werden kann."
 msgstr ""
 
@@ -951,7 +913,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:709 lib/dsa/data/skill.ex:762
-#: lib/dsa/data/skill.ex:1813
+#: lib/dsa/data/skill.ex:1813 lib/dsa/data/skill.ex:1922
 msgid "Einzelne Region"
 msgstr ""
 
@@ -1192,7 +1154,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:189 lib/dsa/data/skill.ex:437 lib/dsa/data/skill.ex:551
-#: lib/dsa/data/skill.ex:1125 lib/dsa/data/skill.ex:1869
+#: lib/dsa/data/skill.ex:1125 lib/dsa/data/skill.ex:1869 lib/dsa/data/skill.ex:2025
 msgid "Kampfmanöver"
 msgstr ""
 
@@ -1573,7 +1535,7 @@ msgstr ""
 
 #, elixir-format
 #: lib/dsa/data/skill.ex:191 lib/dsa/data/skill.ex:439 lib/dsa/data/skill.ex:553
-#: lib/dsa/data/skill.ex:1872
+#: lib/dsa/data/skill.ex:1872 lib/dsa/data/skill.ex:2028
 msgid "Verfolgungsjagden"
 msgstr ""
 
@@ -1954,7 +1916,7 @@ msgid "Der Held ist einer kompletten Fehleinschätzung aufgesessen. So könnte e
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1878
+#: lib/dsa/data/skill.ex:1878 lib/dsa/data/skill.ex:2035
 msgid "Der Held ist schneller an seinem Ziel."
 msgstr ""
 
@@ -2009,7 +1971,7 @@ msgid "Giftpflanzen"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa/data/skill.ex:1818
+#: lib/dsa/data/skill.ex:1818 lib/dsa/data/skill.ex:1927
 msgid "Gildenrecht"
 msgstr ""
 
@@ -2176,4 +2138,789 @@ msgstr ""
 #, elixir-format
 #: lib/dsa/data/skill.ex:1677
 msgid "unter Tage"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2491
+msgid "Ablenkungen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2332
+msgid "Astrologie"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2129
+msgid "Bardenballade"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1978
+msgid "Bartschlösser"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2130
+msgid "Choral"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2131
+msgid "Chorgesang"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2346
+msgid "Da nicht alle Aventurier sich mit dem Sternenhimmel auskennen, sollte der Einsatz des Talents bei den meisten Helden zunächst erschwert sein (siehe auch Ungewohnter Einsatz von Talenten auf Seite 184)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2502
+msgid "Das Opfer hat den Diebstahlversuch nicht bemerkt und der Held hat besonders wertvolle Beute gemacht oder gleich mehrere Ziele bestohlen. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1986
+msgid "Das Schloss geht nicht auf."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1985
+msgid "Das Schloss lässt sich schneller öffnen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1987
+msgid "Das Schloss springt in Rekordzeit auf. Der Held benötigt nur die Hälfte des üblichen Zeitaufwandes."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2087
+msgid "Dem Helden gelingt es nicht, den Schmerz zu unterdrücken oder die Ablenkung zu ignorieren."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1988
+msgid "Der Dietrich bricht ab, die Falle wird ausgelöst oder das Schloss verklemmt sich."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2140
+msgid "Der Gesang des Helden ist noch in vielen Wochen Thema seiner Zuhörer. Hat der Held sich um Geld bemüht, dann nimmt er mindestens das Doppelte ein als üblich. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2138
+msgid "Der Gesang ist so gut, dass der Held mehr Applaus durch die Zuhörer erhält."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2190
+msgid "Der Held bemerkt nichts."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2189
+msgid "Der Held bemerkt weitere Details."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2449
+msgid "Der Held bringt die Tanzschritte durcheinander."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2089
+msgid "Der Held erhält für die nächste Stunde 2 Stufen des Zustands Schmerz oder ist durch die Ablenkung Überrascht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2243
+msgid "Der Held erinnert sich an bemerkenswerte Details über einen einzelnen Dämon oder den Weg in eine verborgene Globule."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2038
+msgid "Der Held geht unter (siehe Seite 340ff., Erstickungsschaden). Grund dafür könnte ein Wadenkrampf sein."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2554
+msgid "Der Held glaubt, etwas über das Tier zu wissen, liegt aber gefährlich falsch (schätzt es ungiftig ein, obwohl es sehr giftig ist, oder als Pflanzenfresser, obwohl es Fleischfresser ist)."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2342
+msgid "Der Held kann sehr genau die Bewegungen der Himmelskörper berechnen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1937
+msgid "Der Held kann sich an viele Details der Geschichte erinnern und kennt mehrere Varianten."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1936
+msgid "Der Held kennt die Legende nicht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2141
+msgid "Der Held liegt mehrere Halbtöne daneben oder vergeigt den Rhythmus. Das Lied ist eine Qual für jeden Zuhörer, der Held wird ausgebuht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2192
+msgid "Der Held nimmt etwas anderes wahr, als das, was wirklich wichtig wäre. Er könnte zum Beispiel die in der Nähe befindlichen Blumen riechen, dafür aber nicht den auffällig stinkenden Oger, der an ihn heranschleicht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2191
+msgid "Der Held nimmt sogar kaum bemerkbare Details wahr. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2037
+msgid "Der Held schwimmt die Strecke in Bestzeit. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2036
+msgid "Der Held traut sich nicht zu schwimmen oder kommt nicht sonderlich weit – auf jeden Fall nicht bis dahin, wohin er wollte."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2451
+msgid "Der Held tritt seiner Tanzpartnerin auf die Füße und verletzt sie dabei oder er stürzt und blamiert sich."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2244
+msgid "Der Held unterliegt einer gefährlichen Fehleinschätzung."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2139
+msgid "Der Held vergisst den Text oder sein Auftritt gerät eher schlecht als recht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1938
+msgid "Der Held verwechselt die Geschichte mit einer anderen oder meint sich an völlig andere Details zu erinnern."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2553
+msgid "Der Held weiß alles über das Tier."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2242
+msgid "Der Held weiß nichts über das spezielle Thema."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2503
+msgid "Der Held wird von umstehenden Personen oder dem Opfer beobachtet, ohne es zu bemerken, und der Diebstahlversuch misslingt. Außerdem ist er Überrascht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2448
+msgid "Der Tanz ist so gut, dass der Held mehr Applaus erhält."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2500
+msgid "Der Taschendiebstahl wird später bemerkt."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2501
+msgid "Der Versuch misslingt oder das Opfer bemerkt den Diebstahl."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2450
+msgid "Die Aufmerksamkeit der Zuschauer fällt wegen des perfekten Tanzes auf den Helden. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2086
+msgid "Die Selbstbeherrschung hält für einen längeren Zeitraum."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1984
+msgid "Dietrich, Haarnadel, Haken"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2439
+msgid "Dorftanz"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2343
+msgid "Eine Fehleinschätzung bei einem Horoskop, einer Mondfinsternis etc."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2088
+msgid "Es gelingt dem Helden, Schmerzen (bis Stufe III) und Ablenkungen einen ganzen Tag lang zu ignorieren."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2385
+msgid "Filzen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2078
+msgid "Folter widerstehen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2384
+msgid "Färben"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2493
+msgid "Gegenstand entwenden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2079
+msgid "Handlungsfähigkeit bewahren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2333
+msgid "Himmelskartographie"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2181
+msgid "Hinterhalt entdecken"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2441
+msgid "Hoftanz"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2334
+msgid "Kalendarium"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1979
+msgid "Kombinationsschlösser"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2442
+msgid "Kulttanz"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2026
+msgid "Langstreckenschwimmen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2233
+msgid "Limbus"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2284
+msgid "Maurerarbeiten"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2393
+msgid "Messer, Nähzeug, Schere, Webstuhl"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2557
+msgid "Mittels Tierkunde können nur domestizierte Tiere abgerichtet werden."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2492
+msgid "Person bestehlen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1917
+msgid "Sagen & Legenden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1974
+msgid "Schlösserknacken"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2386
+msgid "Schneidern"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2021
+msgid "Schwimmen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2074
+msgid "Selbstbeherrschung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2125
+msgid "Singen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2177
+msgid "Sinnesschärfe"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2229
+msgid "Sphärenkunde"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2235
+msgid "Sphärenwesen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2387
+msgid "Spinnen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2132
+msgid "Sprechgesang"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2280
+msgid "Steinbearbeitung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2285
+msgid "Steine brechen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2286
+msgid "Steinmetzarbeiten"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2328
+msgid "Sternkunde"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2380
+msgid "Stoffbearbeitung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2080
+msgid "Störungen ignorieren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2182
+msgid "Suchen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2435
+msgid "Tanzen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2487
+msgid "Taschendiebstahl"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2027
+msgid "Tauchen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2539
+msgid "Tierkunde"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2547
+msgid "Tierstimmen imitieren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2544
+msgid "Ungeheuer"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2183
+msgid "Wahrnehmen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2029
+msgid "Wassertreten"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2388
+msgid "Weben"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2545
+msgid "Wildtiere"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2494
+msgid "Zustecken"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2543
+msgid "domestizierte Tiere"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2291
+msgid "entsprechendes Rohmaterial (Stein, Ton), Hammer, Meißel"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2499
+msgid "eventuell Messer oder Dolch"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2440
+msgid "exotischer Tanz"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2551
+msgid "genauere Informationen zu einem Tier"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:1935
+msgid "mehr Details oder verschiedene Versioneneiner Geschichte"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2241
+msgid "mehr Details zu Sphären oder dem Limbus"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2234
+msgid "nach Sphäre"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2136
+msgid "nein, eventuell ja bei Helmen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2187
+msgid "nein, eventuell ja bei Helmen, Panzerhandschuhen o.Ä."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2340
+msgid "schnellere Horoskoperstellung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2575
+msgid "Aufschwatzen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2763
+msgid "Bedrohungen standhalten"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2762
+msgid "Bekehren & Überzeugen widerstehen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2576
+msgid "Betteln"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2764
+msgid "Betören widerstehen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2655
+msgid "Bühnenschauspiel"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2585
+msgid "Das Gegenüber ist bereit, mehr für den Helden zu tun."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2722
+msgid "Das Lager wird überschwemmt oder von Ungeziefer heimgesucht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2586
+msgid "Dem Held gelingt es nicht, sein Gegenüber zu überreden."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2809
+msgid "Dem Helden gelingt es, bis zum bitteren Ende durchzuhalten, und trotzdem geht es ihm am nächsten Morgen blendend."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2810
+msgid "Der Held begeht in seinem Zustand jedwede Peinlichkeit. Er zerlegt die halbe Taverne, wacht morgens nackt auf dem Markt oder in einem fremden Bett auf, plaudert Geheimnisse an den Feind aus und kann sich danach an nichts mehr erinnern."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2719
+msgid "Der Held benötigt nicht so lange, um ein Lager zu finden oder aufzubauen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2808
+msgid "Der Held erhält eine Stufe des Zustands Betäubung und erwacht am nächsten Tag mit Kopfschmerzen oder anderen unliebsamen Auswirkungen seines Gelages."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2638
+msgid "Der Held hat ein perfektes Versteck gefunden oder ist lautlos wie eine Katze. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2637
+msgid "Der Held hat sich nur dürftig versteckt oder Geräusche beim Schleichen verursacht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2775
+msgid "Der Held ist der Person, die ihn beeinflussen will, vollkommen verfallen oder fällt bei Anblick eines scheußlichen Dämons in Ohnmacht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2773
+msgid "Der Held kann nicht widerstehen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2636
+msgid "Der Held kann schwieriger entdeckt werden oder findet schneller ein Versteck."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2807
+msgid "Der Held verträgt viel mehr als üblich."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2774
+msgid "Der Held widersteht und kann von dieser Person oder Sache in nächster Zeit nicht mehr beeinflusst werden."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2720
+msgid "Der Lagerplatz ist schlecht gewählt. Die Regeneration ist um 1 gesenkt."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2772
+msgid "Die Auswirkungen von Verführungs- oder Überredungsversuchen sind deutlich abgeschwächt oder es wird ihnen ganz widerstanden."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2666
+msgid "Die Kleidung wird sofort durchschaut und der Held handelt sich in der Regel Ärger ein."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2588
+msgid "Die Person, die der Held überreden wollte, ist wütend auf den Helden und lässt sich in nächster Zeit nicht mehr überreden."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2587
+msgid "Die Person, die der Held überreden wollte, tut weit mehr als sie muss."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2665
+msgid "Die Verkleidung funktioniert tadellos."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2664
+msgid "Die Verkleidung ist nicht gut gewählt und hält einem prüfenden Blick nicht stand."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2663
+msgid "Die Verkleidung ist schwerer zu durchschauen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2721
+msgid "Ein phantastischer Schlafplatz! Die Regeneration ist um 1 Punkt erhöht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2765
+msgid "Einschüchtern widerstehen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2710
+msgid "Feuermachen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2628
+msgid "Gegenstände verbergen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2577
+msgid "Herausreden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2639
+msgid "Irgendetwas (Teller, ein Möbelstück) ist umgefallen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2656
+msgid "Kostümierung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2711
+msgid "Lageraufbau"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2712
+msgid "Lagersuche"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2578
+msgid "Manipulieren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2657
+msgid "Personen imitieren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2629
+msgid "Schleichen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2579
+msgid "Schmeicheln"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2624
+msgid "Verbergen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2651
+msgid "Verkleiden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2799
+msgid "Vermeidung von Betäubung durch Rauschmittel"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2800
+msgid "Vermeidung von Schmerz durch Rauschmittel"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2801
+msgid "Vermeidung von Verwirrung durch Rauschmittel"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2713
+msgid "Wettervorhersage"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2706
+msgid "Wildnisleben"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2758
+msgid "Willenskraft"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2795
+msgid "Zechen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2718
+msgid "eventuell Zelt, Wildnisausrüstung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2630
+msgid "sich Verstecken"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2571
+msgid "Überreden"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa/data/skill.ex:2766
+msgid "Überreden widerstehen"
 msgstr ""

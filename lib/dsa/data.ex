@@ -25,10 +25,14 @@ defmodule Dsa.Data do
     |> Enum.map(fn {id, %{name: name}} -> {Dsa.slugify(name), id} end)
   end
 
-  def slug_to_id(collection, slug)  do
+  @doc """
+  Gets an entry by collection and slug.
+  """
+  def get_by_slug(collection, slug)  do
     collection
-    |> slugs()
-    |> Keyword.get(slug)
+    |> :ets.tab2list()
+    |> Enum.map(fn {_id, entry} -> entry end)
+    |> Enum.find(&(&1.slug == slug))
   end
 
   @doc """

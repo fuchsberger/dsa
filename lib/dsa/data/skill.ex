@@ -133,7 +133,7 @@ defmodule Dsa.Data.Skill do
         id: 3,
         name: gettext("Betören"),
         category: :social,
-        check: {:mu, :kl, :ch},
+        check: {:mu, :ch, :ch},
         applications: [
           %{name: gettext("Anbändeln")},
           %{name: gettext("Aufhübschen")},
@@ -272,7 +272,7 @@ defmodule Dsa.Data.Skill do
         id: 6,
         name: gettext("Einschüchtern"),
         category: :social,
-        check: {:mu, :ch, :ch},
+        check: {:mu, :in, :ch},
         applications: [
           %{name: gettext("Drohung")},
           %{name: gettext("Folter")},
@@ -1190,7 +1190,7 @@ defmodule Dsa.Data.Skill do
     failed: gettext("Die Handlung des Helden misslingt."),
     success: gettext("Der Held beeindruckt durch seine Muskelkraft alle Zuschauer und gilt fortan als einer der stärksten Aventurier. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
     botch: gettext("Die Handlung des Helden misslingt völlig. Er stürzt, verhebt sich o.Ä. und verletzt sich dabei (1W6 SP)."),
-    improvement_cost: :d,
+    improvement_cost: :b,
     description: "Gelegentlich muss ein Held Türen auftreten, sich im Armdrücken gegen einen Thorwaler beweisen oder große Gewichte bewegen. Für alle diese Tätigkeiten ist das Talent [Kraftakt] die richtige Wahl.",
     reference: {gettext("Basis Regelwerk"), 189},
     examples: [
@@ -1913,43 +1913,937 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-
-
-
-
-        id: 200,
-        name: gettext("Animal Lore"),
-        category: :nature,
-        check: {:mu, :in, :ge},
-        applications: [
-          %{name: gettext("Domesticated Animals")},
-          %{name: gettext("Monsters")},
-          %{name: gettext("Wild Animals")}
-        ],
-        uses: [gettext("Mimicry")],
-        encumbrance: true,
-        encumbrance_condition: nil,
-        tools: nil,
-        quality: gettext("The hero gains more information about an animal."),
-        failed: gettext("The hero has no idea."),
-        success: gettext("The hero has extensive knowledge of that type of animal."),
-        botch: gettext("You feel confident, but everything you think you know about the animal is wrong (you think an animal isn’t dangerous even though it is highly poisonous, or you believe it is herbivorous when it is actually carnivorous)."),
-        improvement_cost: :c,
-        description: "Im Umgang mit Tieren, bei ihrer Aufzucht und Abrichtung, aber auch bei der Jagd sind Kenntnisse über Verbreitung, Verhalten, Anatomie und Ernährung von Tierarten sehr nützlich. Durch den Vergleich mit vertrauten Arten lassen sich unbekannte Tiere einschätzen. Für Wassertiere muss das Talent [Fischen & Angeln] benutzt werden.\n\nMittels Tierkunde können nur domestizierte Tiere abgerichtet werden.",
-        reference: {gettext("Basis Regelwerk"), 198},
-        examples: [
-          %{
-            action: "Tierverhalten bestimmen",
-            modifier: "je nach Tier"
-          },
-          %{
-            action: "Einen Tag lang Frösche, Schnecken und Regenwürmer für die Heldengruppe zum Essen sammeln",
-            modifier: "1 QS = 1 Ration"
-          }
-        ]
+    id: 41,
+    name: gettext("Sagen & Legenden"),
+    category: :knowledge,
+    check: {:kl, :kl, :in},
+    applications: [
+      %{
+        name: gettext("Einzelne Region"),
+        selection: regions(),
+        limit: 0
+      },
+      %{
+        name: gettext("Gildenrecht"),
+        requirement: true # TODO
       }
-
-    ] |> Enum.map(& {&1.id, &1})
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("mehr Details oder verschiedene Versioneneiner Geschichte"),
+    failed: gettext("Der Held kennt die Legende nicht."),
+    success: gettext("Der Held kann sich an viele Details der Geschichte erinnern und kennt mehrere Varianten."),
+    botch: gettext("Der Held verwechselt die Geschichte mit einer anderen oder meint sich an völlig andere Details zu erinnern."),
+    improvement_cost: :b,
+    description: "Die verschiedenen Völker Aventuriens kennen eine Unzahl von Geschichten, Märchen und Legenden über die Vergangenheit, und in vielen steckt ein Körnchen Wahrheit. Dieses Talent ist daher vonnöten, um die Helden und Wesenheiten dieser Geschichten zu kennen und die Sagen richtig wiederzugeben. Mit diesem Talent kann auch die Darbietung einer Geschichte abgehandelt werden, beispielsweise, um herauszufinden, ob ein Geschichtenerzähler sein Publikum mit dem Erzählen eines Märchens fesselt.",
+    reference: {gettext("Basis Regelwerk"), 205},
+    examples: [
+      %{
+        action: "Ein Kindermärchen kennen",
+        modifier: "+5"
+      },
+      %{
+        action: "Legenden aus Rohals Herrschaftszeit",
+        modifier: "+3"
+      },
+      %{
+        action: "Geron den Einhändigen kennen",
+        modifier: "+1"
+      },
+      %{
+        action: "Wissen, was Geron der Einhändige in Simyala tat",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Herkunft der Thorwaler kennen",
+        modifier: "-1"
+      },
+      %{
+        action: "Legende von Aldarin kennen",
+        modifier: "–3"
+      },
+      %{
+        action: "Geschichte von Marek dem Schlitzer kennen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 42,
+    name: gettext("Schlösserknacken"),
+    category: :crafting,
+    check: {:in, :ff, :ff},
+    applications: [
+      %{name: gettext("Bartschlösser")},
+      %{name: gettext("Kombinationsschlösser")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("Dietrich, Haarnadel, Haken"),
+    quality: gettext("Das Schloss lässt sich schneller öffnen."),
+    failed: gettext("Das Schloss geht nicht auf."),
+    success: gettext("Das Schloss springt in Rekordzeit auf. Der Held benötigt nur die Hälfte des üblichen Zeitaufwandes."),
+    botch: gettext("Der Dietrich bricht ab, die Falle wird ausgelöst oder das Schloss verklemmt sich."),
+    improvement_cost: :c,
+    description: "Wenn man nicht gerade mit Gewalt Türen aufstemmen oder Wände durchbrechen will, ist dieses Talent eine gute Wahl zum Bahnen eines Weges. Besonders komplexe oder verrostete Schlösser können die Probe merklich erschweren, während geeignete Dietriche statt einfacher Haarnadeln die Probe erleichtern sollten.\nAuch mechanische Fallen lassen sich mit diesem Talent entschärfen. Wenn die Probe aber in einem solchen Fall misslingt, wird die Falle ausgelöst. Das Anwendungsgebiet [Bartschloss] umfasst alle Schlösser mit einem klassischen Schlüssel mit Bart, [Kombinationsschlösser] hingegen sind z.B. Tresore.",
+    reference: {gettext("Basis Regelwerk"), 212},
+    examples: [
+      %{
+        action: "Ein einfaches Schloss knacken",
+        time: "1 Sekunde",
+        checks: "10 Proben"
+      },
+      %{
+        action: "Ein kompliziertes Schloss knacken",
+        time: "5 Sekunden",
+        checks: "5 Proben"
+      },
+      %{
+        action: "Eine mehrfach gesicherte Tür öffnen",
+        time: "15 Sekunden",
+        checks: "4 Proben"
+      },
+      %{
+        action: "Eine komplexe Trittfalle in einem echsischen Grabmal entschärfen",
+        time: "5 Minuten",
+        checks: "3 Proben"
+      },
+      %{
+        action: "Einen zwergischen Tresor mit Kombinationsschloss knacken",
+        time: "10 Minuten",
+        checks: "2 Proben"
+      }
+    ]
+  }, %{
+    id: 43,
+    name: gettext("Schwimmen"),
+    category: :physical,
+    check: {:ge, :ko, :kk},
+    applications: [
+      %{name: gettext("Kampfmanöver")},
+      %{name: gettext("Langstreckenschwimmen")},
+      %{name: gettext("Tauchen")},
+      %{name: gettext("Verfolgungsjagden")},
+      %{name: gettext("Wassertreten")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Der Held ist schneller an seinem Ziel."),
+    failed: gettext("Der Held traut sich nicht zu schwimmen oder kommt nicht sonderlich weit – auf jeden Fall nicht bis dahin, wohin er wollte."),
+    success: gettext("Der Held schwimmt die Strecke in Bestzeit. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Der Held geht unter (siehe Seite 340ff., Erstickungsschaden). Grund dafür könnte ein Wadenkrampf sein."),
+    improvement_cost: :b,
+    description: "Will der Held tauchen, einen anderen aus dem Wasser ziehen, unter Wasser kämpfen oder möglichst schnell zu einem Ort hin- oder von einem Kraken wegschwimmen, ist eine Probe auf [Schwimmen] nötig. Starke Strömung und andere widrige Umstände können die Probe erschweren.",
+    reference: {gettext("Basis Regelwerk"), 190},
+    examples: [
+      %{
+        action: "In flachem Wasser zurück zum Strand gelangen",
+        modifier: "+5"
+      },
+      %{
+        action: "Wassertreten",
+        modifier: "+3"
+      },
+      %{
+        action: "Kurze Strecke zurücklegen",
+        modifier: "+1"
+      },
+      %{
+        action: "Nach einer Münze in vier Schritt Tiefe tauchen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Unter Wasser kämpfen und gleichzeitig schwimmen",
+        modifier: "-1"
+      },
+      %{
+        action: "Einen Bewusstlosen aus dem Wasser holen",
+        modifier: "–3"
+      },
+      %{
+        action: "Gegen eine starke Brandung zum Strand schwimmen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 44,
+    name: gettext("Selbstbeherrschung"),
+    category: :physical,
+    check: {:mu, :mu, :ko},
+    applications: [
+      %{name: gettext("Folter widerstehen")},
+      %{name: gettext("Handlungsfähigkeit bewahren")},
+      %{name: gettext("Störungen ignorieren")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Die Selbstbeherrschung hält für einen längeren Zeitraum."),
+    failed: gettext("Dem Helden gelingt es nicht, den Schmerz zu unterdrücken oder die Ablenkung zu ignorieren."),
+    success: gettext("Es gelingt dem Helden, Schmerzen (bis Stufe III) und Ablenkungen einen ganzen Tag lang zu ignorieren."),
+    botch: gettext("Der Held erhält für die nächste Stunde 2 Stufen des Zustands Schmerz oder ist durch die Ablenkung Überrascht."),
+    improvement_cost: :d,
+    description: "Das Talent [Selbstbeherrschung] umfasst u.a. die Befähigung, großen Schmerzen zu widerstehen, ob durch Verletzungen im Kampf oder bei einem Gewaltmarsch. Auch Ablenkungen können damit ignoriert werden, sodass sich ein Zauberer beispielsweise trotz Steine werfender Goblins weiterhin auf seinen Kampfzauber konzentrieren kann.\nMehr zu Schmerzen und anderen Zuständen siehe Kapitel Grundregeln auf Seite 31.",
+    reference: {gettext("Basis Regelwerk"), 190},
+    examples: [
+      %{
+        action: "Barfuß auf einen spitzen Stein treten, ohne zu schreien",
+        modifier: "+5"
+      },
+      %{
+        action: "Ablenkung durch kleine, geworfene Kieselsteine ignorieren",
+        modifier: "+3"
+      },
+      %{
+        action: "Sich pochenden Zahnschmerz nicht anmerken lassen",
+        modifier: "+1"
+      },
+      %{
+        action: "Zaubern auf schwankendem Schiff",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Ertragen des Bohrens in einer Wunde",
+        modifier: "-1"
+      },
+      %{
+        action: "Liturgie wirken im freien Fall",
+        modifier: "–3"
+      },
+      %{
+        action: "Bewusstsein behalten, wenn Zahnwurzel gezogen wird",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 45,
+    name: gettext("Singen"),
+    category: :physical,
+    check: {:kl, :ch, :ko},
+    applications: [
+      %{name: gettext("Bardenballade")},
+      %{name: gettext("Choral")},
+      %{name: gettext("Chorgesang")},
+      %{name: gettext("Sprechgesang")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: gettext("nein, eventuell ja bei Helmen"),
+    tools: nil,
+    quality: gettext("Der Gesang ist so gut, dass der Held mehr Applaus durch die Zuhörer erhält."),
+    failed: gettext("Der Held vergisst den Text oder sein Auftritt gerät eher schlecht als recht."),
+    success: gettext("Der Gesang des Helden ist noch in vielen Wochen Thema seiner Zuhörer. Hat der Held sich um Geld bemüht, dann nimmt er mindestens das Doppelte ein als üblich. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Der Held liegt mehrere Halbtöne daneben oder vergeigt den Rhythmus. Das Lied ist eine Qual für jeden Zuhörer, der Held wird ausgebuht."),
+    improvement_cost: :a,
+    description: "Zwar mag eine schöne Singstimme beim [Singen] helfen, aber mit dem richtigen Maß an Übung kann fast jeder ein Lied anstimmen, ob als Heldenepos, im Tempel oder als Schlaflied an der Wiege.",
+    reference: {gettext("Basis Regelwerk"), 191},
+    examples: [
+      %{
+        action: "Mit Zechkumpanen ein Lied trällern",
+        modifier: "+5"
+      },
+      %{
+        action: "Ein Gutenachtlied anstimmen",
+        modifier: "+3"
+      },
+      %{
+        action: "Einen müden Troll in den Schlaf singen",
+        modifier: "+1"
+      },
+      %{
+        action: "Mit einem schönen Lied (Anzahl der Fertigkeitspunkte) Heller in der Taverne verdienen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Im Tempelchor einen Choral mitsingen",
+        modifier: "-1"
+      },
+      %{
+        action: "Eine erinnerungswürdige Ballade vortragen",
+        modifier: "–3"
+      },
+      %{
+        action: "Eine Arie in einer Vinsalter Oper singen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 46,
+    name: gettext("Sinnesschärfe"),
+    category: :physical,
+    check: {:kl, :in, :in},
+    applications: [
+      %{name: gettext("Hinterhalt entdecken")},
+      %{name: gettext("Suchen")},
+      %{name: gettext("Wahrnehmen")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: gettext("nein, eventuell ja bei Helmen, Panzerhandschuhen o.Ä."),
+    tools: nil,
+    quality: gettext("Der Held bemerkt weitere Details."),
+    failed: gettext("Der Held bemerkt nichts."),
+    success: gettext("Der Held nimmt sogar kaum bemerkbare Details wahr. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Der Held nimmt etwas anderes wahr, als das, was wirklich wichtig wäre. Er könnte zum Beispiel die in der Nähe befindlichen Blumen riechen, dafür aber nicht den auffällig stinkenden Oger, der an ihn heranschleicht."),
+    improvement_cost: :d,
+    description: "Das Talent [Sinnesschärfe] umfasst alle Fälle, in denen die genaue Wahrnehmung der Helden vonnöten ist. Misslungene Proben bedeuten entweder, dass der Held nichts bemerkt hat, oder dass er den Sinneseindruck falsch interpretiert. Proben auf Sinnesschärfe können vom Meister für die Spieler gewürfelt werden, um herauszufinden, ob die Helden eine versteckte Person oder ein verborgenes Detail bemerken, ohne dass den Spielern im Falle einer misslungenen Probe der Verdacht kommt, dass sie etwas übersehen haben. Das [Durchsuchen] von Räumen ist ein gezielter Vorgang, während [Wahrnehmen] intuitiv erfolgt. Proben auf dieses Talent sollten verdeckt gewürfelt werden. Beim Ertasten wird die Probe in der Regel auf KL/IN/FF abgelegt.",
+    reference: {gettext("Basis Regelwerk"), 191},
+    examples: [
+      %{
+        action: "Lautes Schreien im Nebenzimmer hören",
+        modifier: "+5"
+      },
+      %{
+        action: "Den Duft eines starken Parfüms bemerken",
+        modifier: "+3"
+      },
+      %{
+        action: "Zutaten in einer Suppe bestimmen",
+        modifier: "+1"
+      },
+      %{
+        action: "Den Duft eines leichten Parfüms bemerken",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Ein verborgenes Schriftstück in einem Zimmer finden",
+        modifier: "-1"
+      },
+      %{
+        action: "Eine Goldmünze am Grund eines Baches sehen",
+        modifier: "–3"
+      },
+      %{
+        action: "Hinterhalt bemerken",
+        modifier: "Vergleichsprobe (Sinnesschärfe [Hinterhalt
+        entdecken] gegen Verbergen)"
+      }
+    ]
+  }, %{
+    id: 47,
+    name: gettext("Sphärenkunde"),
+    category: :knowledge,
+    check: {:kl, :kl, :in},
+    applications: [
+      %{name: gettext("Limbus")},
+      %{name: gettext("nach Sphäre", limit: 0, modify: true)},
+      %{name: gettext("Sphärenwesen")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("mehr Details zu Sphären oder dem Limbus"),
+    failed: gettext("Der Held weiß nichts über das spezielle Thema."),
+    success: gettext("Der Held erinnert sich an bemerkenswerte Details über einen einzelnen Dämon oder den Weg in eine verborgene Globule."),
+    botch: gettext("Der Held unterliegt einer gefährlichen Fehleinschätzung."),
+    improvement_cost: :b,
+    description: "Dieses Talent beschäftigt sich mit den Geheimnissen jenseits Deres, also den sieben Sphären. Dies betrifft sowohl den Limbus, das graue Wabern zwischen den Sphären, als auch Details zu Globulen, die dämonischen Kreaturen der siebten Sphäre, die Wege ins Totenreich und die Elementarherren der zweiten Sphäre.",
+    reference: {gettext("Basis Regelwerk"), 206},
+    examples: [
+      %{
+        action: "Es gibt Dämonen",
+        modifier: "+5"
+      },
+      %{
+        action: "Es gibt Dschinne",
+        modifier: "+3"
+      },
+      %{
+        action: "Tote kommen in das Totenreich",
+        modifier: "+1"
+      },
+      %{
+        action: "Das Totenreich liegt in der vierten Sphäre",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Die Inseln im Nebel sind eine Globule",
+        modifier: "-1"
+      },
+      %{
+        action: "Man erreicht die Inseln im Nebel per Schiff",
+        modifier: "–3"
+      },
+      %{
+        action: "Die Menacoriten existieren im Limbus",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 49,
+    name: gettext("Steinbearbeitung"),
+    category: :crafting,
+    check: {:ff, :ff, :kk},
+    applications: [
+      %{name: gettext("Maurerarbeiten")},
+      %{name: gettext("Steine brechen")},
+      %{name: gettext("Steinmetzarbeiten")},
+      %{name: gettext("Töpferei"), requirement: true}, # TODO
+      %{name: gettext("Glasbläserei"), requirement: true} # TODO
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("entsprechendes Rohmaterial (Stein, Ton), Hammer, Meißel"),
+    quality: gettext("Das Werkstück ist schneller fertig oder es wird eine bessere Qualität erzielt."),
+    failed: gettext("Der Held kommt mit der Arbeit an dem Werkstück nicht voran."),
+    success: gettext("Die Zahl der FP bei dieser Probe verdoppelt sich, der Held erhält aber mindestens 5 FP. Erschwernisse, die durch misslungene Sammelproben aufgebaut wurden, werden komplett abgebaut."),
+    botch: gettext("Ein Patzer sorgt dafür, dass die angesammelten QS auf 0 sinken und keine weitere Probe für dieses Vorhaben angewandt werden kann."),
+    improvement_cost: :a,
+    description: "Um Stein in die gewünschte Form zu bringen, muss man ihn spalten, behauen und zu einer Mauer verfugen. Oder man verwendet sogar die geheime zwergische Kunst des Steingusses. Ob die Steinklinge eines Fjarningers, der Wasserspeier auf einem Tempeldach oder die Mauer einer Burg, all dies ist mit dem Talent [Steinbearbeitung] geformt worden.",
+    reference: {gettext("Basis Regelwerk"), 212},
+    examples: [
+      %{
+        action: "Einen Steinkeil bearbeiten",
+        time: "10 Minuten",
+        checks: "beliebig viele Proben"
+      },
+      %{
+        action: "Aus einer Feuersteinknolle eine Speerspitze herausarbeiten",
+        time: "20 Minuten",
+        checks: "10 Proben"
+      },
+      %{
+        action: "Eine Amphore aus Ton formen",
+        time: "30 Minuten",
+        checks: "5 Proben"
+      },
+      %{
+        action: "Eine stabile Bruchsteinmauer hochziehen",
+        time: "4 Stunden",
+        checks: "4 Proben"
+      },
+      %{
+        action: "Aus Marmor eine Statue hauen",
+        time: "8 Stunden",
+        checks: "3 Proben"
+      }
+    ]
+  }, %{
+    id: 50,
+    name: gettext("Sternkunde"),
+    category: :knowledge,
+    check: {:kl, :kl, :in},
+    applications: [
+      %{name: gettext("Astrologie")},
+      %{name: gettext("Himmelskartographie")},
+      %{name: gettext("Kalendarium")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("schnellere Horoskoperstellung"),
+    failed: gettext("Der Held hat keine Ahnung."),
+    success: gettext("Der Held kann sehr genau die Bewegungen der Himmelskörper berechnen."),
+    botch: gettext("Eine Fehleinschätzung bei einem Horoskop, einer Mondfinsternis etc."),
+    improvement_cost: :a,
+    description: "Sowohl die alte Kunst der Astrologie als auch die Navigation und die Kalender- und Zeitbestimmung nach den Gestirnen und die Beobachtung und Katalogisierung von Himmelsphänomenen fallen unter dieses Talent.",
+    note: gettext("Da nicht alle Aventurier sich mit dem Sternenhimmel auskennen, sollte der Einsatz des Talents bei den meisten Helden zunächst erschwert sein (siehe auch Ungewohnter Einsatz von Talenten auf Seite 184)."),
+    reference: {gettext("Basis Regelwerk"), 206},
+    examples: [
+      %{
+        action: "Wofür steht ein Sternzeichen?",
+        modifier: "+5"
+      },
+      %{
+        action: "Das eigene Sternbild erkennen",
+        modifier: "+3"
+      },
+      %{
+        action: "Die Wandelsterne aufzählen können",
+        modifier: "+1"
+      },
+      %{
+        action: "Horoskop erstellen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Am Nachthimmel die Himmelsrichtungen ablesen",
+        modifier: "-1"
+      },
+      %{
+        action: "Wann ist die nächste Mondfinsternis?",
+        modifier: "–3"
+      },
+      %{
+        action: "Komplexe Karte des Sternenhimmels erstellen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 51,
+    name: gettext("Stoffbearbeitung"),
+    category: :crafting,
+    check: {:kl, :ff, :ff},
+    applications: [
+      %{name: gettext("Färben")},
+      %{name: gettext("Filzen")},
+      %{name: gettext("Schneidern")},
+      %{name: gettext("Spinnen")},
+      %{name: gettext("Weben")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("Messer, Nähzeug, Schere, Webstuhl"),
+    quality: gettext("Das Werkstück ist schneller fertig oder es wird eine bessere Qualität erzielt."),
+    failed: gettext("Der Held kommt mit der Arbeit an dem Werkstück nicht voran."),
+    success: gettext("Die Zahl der FP bei dieser Probe verdoppelt sich, der Held erhält aber mindestens 5 FP. Erschwernisse, die durch misslungene Sammelproben aufgebaut wurden, werden komplett abgebaut."),
+    botch: gettext("Ein Patzer sorgt dafür, dass die angesammelten QS auf 0 sinken und keine weitere Probe für dieses Vorhaben angewandt werden kann."),
+    improvement_cost: :a,
+    description: "Ob Spinnen und Weben, Filzen oder sogar Häkeln und Stricken, mit diesem Talent kann man nicht nur Textilien herstellen, sondern auch Kleidung vernähen. Während das Flicken eines Hemdes oder das Schneidern eines Umhangs allerhöchstens eine einfache Probe erfordern, kann das Schneidern eines Ballkleides oder das Spinnen von Seide deutlich schwieriger werden.\nDas Talent kann man außerdem zum Färben von Stoffen anwenden (die Farbe selbst wird aber mittels [Alchimie] hergestellt).",
+    reference: {gettext("Basis Regelwerk"), 212},
+    examples: [
+      %{
+        action: "Einen Riss am Hemdärmel zunähen",
+        time: "10 Minuten",
+        checks: "beliebig viele Proben"
+      },
+      %{
+        action: "Wolle spinnen",
+        time: "30 Minuten",
+        checks: "5 Proben"
+      },
+      %{
+        action: "Eine Hose aus Leinen schneidern",
+        time: "1 Stunde",
+        checks: "4 Proben"
+      },
+      %{
+        action: "Einen hübschen Filzhut herstellen",
+        time: "2 Stunden",
+        checks: "4 Proben"
+      },
+      %{
+        action: "Ein zerrissenes Brokatkleid flicken",
+        time: "4 Stunden",
+        checks: "3 Proben"
+      },
+      %{
+        action: "Ein horasisches Ballkleid nähen",
+        time: "1 Tag",
+        checks: "2 Proben"
+      }
+    ]
+  }, %{
+    id: 52,
+    name: gettext("Tanzen"),
+    category: :physical,
+    check: {:kl, :ch, :ge},
+    applications: [
+      %{name: gettext("Dorftanz")},
+      %{name: gettext("exotischer Tanz")},
+      %{name: gettext("Hoftanz")},
+      %{name: gettext("Kulttanz")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Der Tanz ist so gut, dass der Held mehr Applaus erhält."),
+    failed: gettext("Der Held bringt die Tanzschritte durcheinander."),
+    success: gettext("Die Aufmerksamkeit der Zuschauer fällt wegen des perfekten Tanzes auf den Helden. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Der Held tritt seiner Tanzpartnerin auf die Füße und verletzt sie dabei oder er stürzt und blamiert sich."),
+    improvement_cost: :a,
+    description: "Auf höfischen Bällen, Hexennächten und bäuerlichen Feiern kann es sehr hilfreich sein, zu wissen, wie man richtig tanzt. Besonders bei komplizierteren Gruppen- und Paartänzen ist eine Probe auf dieses Talent nötig, während eine Puniner Polonaise auch noch im volltrunkenen Zustand absolviert werden kann.",
+    reference: {gettext("Basis Regelwerk"), 192},
+    examples: [
+      %{
+        action: "Ein einfacher Bauerntanz",
+        modifier: "+5"
+      },
+      %{
+        action: "Ein tsagefälliger Ausdruckstanz im Tempel",
+        modifier: "+3"
+      },
+      %{
+        action: "Ein ritueller Tanz zu Ehren Efferds",
+        modifier: "+1"
+      },
+      %{
+        action: "Ein ekstatischer Hexentanz",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Ein höfischer Tanz auf einem Maskenball",
+        modifier: "-1"
+      },
+      %{
+        action: "Ein beeindruckender Bühnentanz",
+        modifier: "–3"
+      },
+      %{
+        action: "Ein meisterlicher erotischer Schleiertanz",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 53,
+    name: gettext("Taschendiebstahl"),
+    category: :physical,
+    check: {:mu, :ff, :ge},
+    applications: [
+      %{name: gettext("Ablenkungen")},
+      %{name: gettext("Person bestehlen")},
+      %{name: gettext("Gegenstand entwenden")},
+      %{name: gettext("Zustecken")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("eventuell Messer oder Dolch"),
+    quality: gettext("Der Taschendiebstahl wird später bemerkt."),
+    failed: gettext("Der Versuch misslingt oder das Opfer bemerkt den Diebstahl."),
+    success: gettext("Das Opfer hat den Diebstahlversuch nicht bemerkt und der Held hat besonders wertvolle Beute gemacht oder gleich mehrere Ziele bestohlen. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Der Held wird von umstehenden Personen oder dem Opfer beobachtet, ohne es zu bemerken, und der Diebstahlversuch misslingt. Außerdem ist er Überrascht."),
+    improvement_cost: :b,
+    description: "Mittels [Taschendiebstahl] kann ein Held die Börse seines Opfers ungesehen entwenden oder ein Loch in dessen Beutel schneiden, sodass er an eine hübsche Anzahl Münzen gelangt. Auch kleine Gegenstände, wie am Körper getragene Schlüssel oder Amulette, können so entwendet werden. Dabei gibt es einige Unterschiede in der Art und Weise des Diebstahls: Während der gemeine Taschendieb vor allem [Personen bestiehlt] und von ihrer Geldkatze erleichtert, kann der Einbrecher auch [Gegenstände entwenden], die in Schubladen, Kommoden oder anderen Aufbewahrungsorten lagern. [Ablenkungen] sind ebenfalls wichtig für das Diebeshandwerk, und ab und an muss auch ein Gegenstand jemand anderem zugesteckt werden.\nDichtes Gedränge und offen am Gürtel hängende Geldbeutel können die Probe erleichtern, während aufmerksame Wachen und mehrere Schichten Kleidung einen Diebstahl erschweren können. Die Probe wird stets als Vergleichsprobe [Taschendiebstahl (Anwendungsgebiet je nach Handlung)] gegen die [Sinnesschärfe (Wahrnehmen)] des Opfers gewürfelt. Die Probe auf Sinnesschärfe (Wahrnehmen) kann durch Ablenkung, Gedränge und Lärm erschwert oder durch erhöhte Wachsamkeit oder ruhige Umgebung erleichtert werden.",
+    reference: {gettext("Basis Regelwerk"), 192},
+    examples: [
+      %{
+        action: "offen herumliegender Geldbeutel",
+        modifier: "+5"
+      },
+      %{
+        action: "offen am Gürtel hängende Geldkatze",
+        modifier: "+3"
+      },
+      %{
+        action: "Geldsäckchen in weiter, leichter Kleidung",
+        modifier: "+1"
+      },
+      %{
+        action: "Einem Opfer auf der Straße etwas stehlen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Schwierige Umgebung mit wenigen Versteckmöglichkeiten",
+        modifier: "-1"
+      },
+      %{
+        action: "Ring vom Finger stehlen",
+        modifier: "–3"
+      },
+      %{
+        action: "verschlossene Tasche unter dichter Kleidung öffnen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 54,
+    name: gettext("Tierkunde"),
+    category: :nature,
+    check: {:mu, :mu, :ch},
+    applications: [
+      %{name: gettext("domestizierte Tiere")},
+      %{name: gettext("Ungeheuer")},
+      %{name: gettext("Wildtiere")}
+    ],
+    uses: [gettext("Tierstimmen imitieren")],
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("genauere Informationen zu einem Tier"),
+    failed: gettext("Der Held hat keine Ahnung."),
+    success: gettext("Der Held weiß alles über das Tier."),
+    botch: gettext("Der Held glaubt, etwas über das Tier zu wissen, liegt aber gefährlich falsch (schätzt es ungiftig ein, obwohl es sehr giftig ist, oder als Pflanzenfresser, obwohl es Fleischfresser ist)."),
+    improvement_cost: :c,
+    description: "Im Umgang mit Tieren, bei ihrer Aufzucht und Abrichtung, aber auch bei der Jagd sind Kenntnisse über Verbreitung, Verhalten, Anatomie und Ernährung von Tierarten sehr nützlich. Durch den Vergleich mit vertrauten Arten lassen sich unbekannte Tiere einschätzen. Für Wassertiere muss das Talent [Fischen & Angeln] benutzt werden.\n\nMittels Tierkunde können nur domestizierte Tiere abgerichtet werden.",
+    note: gettext("Mittels Tierkunde können nur domestizierte Tiere abgerichtet werden."),
+    reference: {gettext("Basis Regelwerk"), 200},
+    examples: [
+      %{
+        action: "Tierverhalten bestimmen",
+        modifier: "je nach Tier"
+      },
+      %{
+        action: "Einen Tag lang Frösche, Schnecken und Regenwürmer für die Heldengruppe zum Essen sammeln",
+        modifier: "1 QS = 1 Ration"
+      }
+    ]
+  }, %{
+    id: 55,
+    name: gettext("Überreden"),
+    category: :social,
+    check: {:mu, :in, :ch},
+    applications: [
+      %{name: gettext("Aufschwatzen")},
+      %{name: gettext("Betteln")},
+      %{name: gettext("Herausreden")},
+      %{name: gettext("Manipulieren")},
+      %{name: gettext("Schmeicheln")}
+    ],
+    uses: [gettext("Anführer")],
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Das Gegenüber ist bereit, mehr für den Helden zu tun."),
+    failed: gettext("Dem Held gelingt es nicht, sein Gegenüber zu überreden."),
+    success: gettext("Die Person, die der Held überreden wollte, tut weit mehr als sie muss."),
+    botch: gettext("Die Person, die der Held überreden wollte, ist wütend auf den Helden und lässt sich in nächster Zeit nicht mehr überreden."),
+    improvement_cost: :c,
+    description: "Eine güldene Zunge, Wortwitz, gute Argumente – all dies zeichnet Überredungskünstler aus. Oft wird das Talent zum Lügen oder Schmeicheln verwendet.\nZwar gehen Helden nur selten der Bettelei nach, doch um eine Patrizierin zu überzeugen, ein paar Kreuzer in den Almosenbeutel des Habenichts zu werfen, werden ebenfalls Proben auf [Überreden (Betteln)] eingesetzt.",
+    reference: {gettext("Basis Regelwerk"), 197},
+    examples: [
+      %{
+        action: "Einer eitlen Person schmeicheln",
+        modifier: "+5"
+      },
+      %{
+        action: "(Fertigkeitspunkte) Kreuzer erbetteln",
+        modifier: "+3"
+      },
+      %{
+        action: "Eine schwer zu beweisende Lüge auftischen",
+        modifier: "+1"
+      },
+      %{
+        action: "Eine Schmeichelei oder Lüge vortragen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Die Stadtwache von der eigenen Unschuld überzeugen (nachts trotz Verbots auf der Straße unterwegs)",
+        modifier: "-1"
+      },
+      %{
+        action: "Erfolgreich leugnen, die Person auf dem Steckbrief zu sein",
+        modifier: "–3"
+      },
+      %{
+        action: "Die Stadtwache von seiner Unschuld überzeugen (mit Einbruchswerkzeug in einem fremden Haus erwischt worden)",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 56,
+    name: gettext("Verbergen"),
+    category: :physical,
+    check: {:mu, :in, :ge},
+    applications: [
+      %{name: gettext("Gegenstände verbergen")},
+      %{name: gettext("Schleichen")},
+      %{name: gettext("sich Verstecken")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Der Held kann schwieriger entdeckt werden oder findet schneller ein Versteck."),
+    failed: gettext("Der Held hat sich nur dürftig versteckt oder Geräusche beim Schleichen verursacht."),
+    success: gettext("Der Held hat ein perfektes Versteck gefunden oder ist lautlos wie eine Katze. Für Qualitätsstufen, Vergleichs- und Sammelproben gilt: FP = doppelter FW."),
+    botch: gettext("Irgendetwas (Teller, ein Möbelstück) ist umgefallen."),
+    improvement_cost: :c,
+    description: "Wenn es gilt, sich anzuschleichen oder zu verstecken, wird auf Verbergen gewürfelt. Dunkelheit, schwarze Kleidung und gute Deckung, aber auch Lärm oder Ablenkungen potenzieller Beobachter können die Probe erleichtern, während gewarnte Wachen oder dürres Reisig auf dem Boden Verstecken und Schleichen erschweren können. In einem völlig leeren und gut ausgeleuchteten Raum kann sich jedoch selbst ein Meister des Verbergens nicht verstecken.",
+    reference: {gettext("Basis Regelwerk"), 193},
+    examples: [
+      %{
+        action: "Unentdeckt bleiben",
+        modifier: "Vergleichsprobe (Verbergen [Schleichen oder sich Verstecken] gegen Sinnesschärfe [Suchen oder Wahrnehmen])"
+      }
+    ]
+  }, %{
+    id: 57,
+    name: gettext("Verkleiden"),
+    category: :social,
+    check: {:in, :ch, :ge},
+    applications: [
+      %{name: gettext("Bühnenschauspiel")},
+      %{name: gettext("Kostümierung")},
+      %{name: gettext("Personen imitieren")}
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Die Verkleidung ist schwerer zu durchschauen."),
+    failed: gettext("Die Verkleidung ist nicht gut gewählt und hält einem prüfenden Blick nicht stand."),
+    success: gettext("Die Verkleidung funktioniert tadellos."),
+    botch: gettext("Die Kleidung wird sofort durchschaut und der Held handelt sich in der Regel Ärger ein."),
+    improvement_cost: :b,
+    description: "In einigen Situationen kann es ratsam sein, als jemand anderes zu erscheinen. Vielleicht will ein von der Garde gesuchter Abenteurer als Bettler das Stadttor passieren oder ein Hochstapler als Grafensohn getarnt auf einem Bankett auftreten, um unbemerkt ein Diadem stehlen zu können. Um die Täuschung aufrechtzuerhalten, muss dem Helden eine Probe auf [Verkleiden (Kostümierung)] gelingen.\n[Verkleiden] umfasst aber nicht nur die Verkleidung an sich, sondern auch notwendige Gesten und Mimik. Jede erfolgreiche Theaterschauspielerin verfügt über einen hohen Wert in diesem Talent, um die verschiedenen Rollen auf der Bühne gekonnt spielen zu können. Und wer bewusst jemand anderen imitieren will, der greift ebenfalls auf [Verkleiden] zurück.\nEs ist möglich, sich als Angehöriger eines anderen Standes zu verkleiden, oder als Angehöriger eines fernen Reiches – ja, sogar eine andere Spezies und/ oder ein anderes Geschlecht lassen sich vortäuschen. Dem Talent sind jedoch gewisse Grenzen gesetzt: Ein Zwerg kann sich nicht glaubhaft als riesiger Thorwaler verkleiden, ebenso wird es für einen dicken Tulamiden schier ein Ding der Unmöglichkeit sein, sich als zierliche Elfe auszugeben.",
+    reference: {gettext("Basis Regelwerk"), 198},
+    examples: [
+      %{
+        action: "Bettler gibt sich als anderer Bettler aus",
+        modifier: "+5"
+      },
+      %{
+        action: "Almadanerin spielt eine Horasierin",
+        modifier: "+3"
+      },
+      %{
+        action: "Männlicher Hofkünstler mit femininen Zügen stellt eine Hofkünstlerin dar",
+        modifier: "+1"
+      },
+      %{
+        action: "Thorwaler imitiert einen Tulamiden",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Mann verkleidet sich als Frau oder andersherum",
+        modifier: "-1"
+      },
+      %{
+        action: "Zwerg verkörpert einen kleinen Menschen",
+        modifier: "–3"
+      },
+      %{
+        action: "Mensch tarnt sich als Ork",
+        modifier: "-5"
+      },
+      %{
+        action: "Verkleiden",
+        modifier: "Vergleichsprobe (Verkleiden [Kostümierung] gegen Sinnesschärfe [Suchen oder Wahrnehmen]"
+      }
+    ]
+  }, %{
+    id: 58,
+    name: gettext("Wildnisleben"),
+    category: :nature,
+    check: {:mu, :ge, :ko},
+    applications: [
+      %{name: gettext("Feuermachen")},
+      %{name: gettext("Lageraufbau")},
+      %{name: gettext("Lagersuche")},
+      %{name: gettext("Wettervorhersage", requirement: true)} # TODO
+    ],
+    uses: nil,
+    encumbrance: true,
+    encumbrance_condition: nil,
+    tools: gettext("eventuell Zelt, Wildnisausrüstung"),
+    quality: gettext("Der Held benötigt nicht so lange, um ein Lager zu finden oder aufzubauen."),
+    failed: gettext("Der Lagerplatz ist schlecht gewählt. Die Regeneration ist um 1 gesenkt."),
+    success: gettext("Ein phantastischer Schlafplatz! Die Regeneration ist um 1 Punkt erhöht."),
+    botch: gettext("Das Lager wird überschwemmt oder von Ungeziefer heimgesucht."),
+    improvement_cost: :c,
+    description: "Unter [Wildnisleben] sind alle wichtigen Tätigkeiten gefasst, die zum Überleben unter freiem Himmel wichtig sind und nicht explizit durch die übrigen Naturtalente abgedeckt sind: das Suchen eines geeigneten Lagers, das Herrichten und Befestigen der Schlafstätte, Brennmaterial sammeln und ein Feuer entfachen.\nEine Probe kann dazu dienen, das Wetter der nächsten Stunden oder Tage zu bestimmen, um somit Dauerregen oder Sandstürmen aus dem Weg zu gehen.",
+    reference: {gettext("Basis Regelwerk"), 201},
+    examples: [
+      %{
+        action: "Auf einer Wiese neben dem Dorf im Zelt nächtigen",
+        modifier: "+5"
+      },
+      %{
+        action: "Feuerholz im Wald sammeln",
+        modifier: "+3"
+      },
+      %{
+        action: "Feuermachen",
+        modifier: "+1"
+      },
+      %{
+        action: "Einen guten Lagerplatz im Wald finden",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Wird es am nächsten Tag regnen?",
+        modifier: "-1"
+      },
+      %{
+        action: "Gutes Lager in einer unwirtlichen Gegend errichten",
+        modifier: "–3"
+      },
+      %{
+        action: "Brennmaterial im Yeti-Land besorgen",
+        modifier: "-5"
+      }
+    ]
+  }, %{
+    id: 59,
+    name: gettext("Willenskraft"),
+    category: :social,
+    check: {:mu, :in, :ch},
+    applications: [
+      %{name: gettext("Bekehren & Überzeugen widerstehen")},
+      %{name: gettext("Bedrohungen standhalten")},
+      %{name: gettext("Betören widerstehen")},
+      %{name: gettext("Einschüchtern widerstehen")},
+      %{name: gettext("Überreden widerstehen")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Die Auswirkungen von Verführungs- oder Überredungsversuchen sind deutlich abgeschwächt oder es wird ihnen ganz widerstanden."),
+    failed: gettext("Der Held kann nicht widerstehen."),
+    success: gettext("Der Held widersteht und kann von dieser Person oder Sache in nächster Zeit nicht mehr beeinflusst werden."),
+    botch: gettext("Der Held ist der Person, die ihn beeinflussen will, vollkommen verfallen oder fällt bei Anblick eines scheußlichen Dämons in Ohnmacht."),
+    improvement_cost: :d,
+    description: "Wenn es darum geht, Versuchungen zu widerstehen, spöttische Bemerkungen zu unterdrücken oder sich im Angesicht großer Gefahr zusammenzureißen, wird das Talent [Willenskraft] benötigt. Im Unterschied zur [Selbstbeherrschung] wird sie nicht bei körperlichen Proben zum Widerstehen eingesetzt, sondern ausschließlich bei geistiger Beeinflussung. Meist wird [Willenskraft] bei vergleichenden Proben gegen Talente wie [Betören], [Überreden], [Bekehren & Überzeugen] oder [Einschüchtern] verwendet.",
+    reference: {gettext("Basis Regelwerk"), 198},
+    examples: [
+      %{
+        action: "Held ist nicht abgelenkt und kann sich konzentrieren",
+        modifier: "+1"
+      },
+      %{
+        action: "Held ist leicht abgelenkt",
+        modifier: "-1"
+      },
+      %{
+        action: "Kontrolle bewahren",
+        modifier: "Vergleichsprobe (Willenskraft [je nach Anwendungsgebiet] gegen Betören, Überreden, Bekehren & Überzeugen oder Einschüchtern)"
+      }
+    ]
+  }, %{
+    id: 60,
+    name: gettext("Zechen"),
+    category: :physical,
+    check: {:kl, :ko, :kk},
+    applications: [
+      %{name: gettext("Vermeidung von Betäubung durch Rauschmittel")},
+      %{name: gettext("Vermeidung von Schmerz durch Rauschmittel")},
+      %{name: gettext("Vermeidung von Verwirrung durch Rauschmittel")}
+    ],
+    uses: nil,
+    encumbrance: false,
+    encumbrance_condition: nil,
+    tools: nil,
+    quality: gettext("Der Held verträgt viel mehr als üblich."),
+    failed: gettext("Der Held erhält eine Stufe des Zustands Betäubung und erwacht am nächsten Tag mit Kopfschmerzen oder anderen unliebsamen Auswirkungen seines Gelages."),
+    success: gettext("Dem Helden gelingt es, bis zum bitteren Ende durchzuhalten, und trotzdem geht es ihm am nächsten Morgen blendend."),
+    botch: gettext("Der Held begeht in seinem Zustand jedwede Peinlichkeit. Er zerlegt die halbe Taverne, wacht morgens nackt auf dem Markt oder in einem fremden Bett auf, plaudert Geheimnisse an den Feind aus und kann sich danach an nichts mehr erinnern."),
+    improvement_cost: :a,
+    description: "Bei Feiern, Vertragsabschlüssen, als Trinkspiel oder einfach, weil es geht, wird in fast ganz Aventurien Alkohol konsumiert, ob als Wein, vergorene Milch, Bier oder Branntwein. Ebenso fallen alle Arten von Rauschmitteln in den Anwendungsbereich dieses Talents. Um nicht völlig die Kontrolle über sich zu verlieren und die Kopfschmerzen, in Aventurien Wolf oder in schlimmen Fällen Werwolf genannt, zu verhindern, sind erfolgreiche Proben auf [Zechen (Vermeidung von Betäubung durch Rauschmittel)] nötig.",
+    reference: {gettext("Basis Regelwerk"), 193},
+    examples: [
+      %{
+        action: "Ein Abendbier trinken ohne Kopfschmerzen zu bekommen",
+        modifier: "+5"
+      },
+      %{
+        action: "Kleines Saufgelage überstehen",
+        modifier: "+3"
+      },
+      %{
+        action: "Nach Rauschkrautgenuss klare Wahrnehmung behalten",
+        modifier: "+1"
+      },
+      %{
+        action: "Nach sieben Korn aufrecht gehen",
+        modifier: "+/- 0"
+      },
+      %{
+        action: "Nach einem heftigen Saufgelage Kopfschmerzen am Tag danach vermeiden",
+        modifier: "-1"
+      },
+      %{
+        action: "Bei einer wüsten Orgie bei klarem Verstand bleiben",
+        modifier: "–3"
+      },
+      %{
+        action: "Sehr viel starken Schnaps (z.B. Premer Feuer) trinken, ohne sich zu übergeben",
+        modifier: "-5"
+      }
+    ]
+  }] |> Enum.map(& {&1.id, Map.put(&1, :slug, Dsa.slugify(&1.name))})
 
     :ets.insert(:skills, skills)
   end
