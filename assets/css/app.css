@@ -14,7 +14,7 @@
   font-display: swap;
   font-style: normal;
   font-named-instance: 'Regular';
-  src: url("../static/fonts/Inter-roman.var.woff2?v=3.18") format("woff2");
+  src: url("../fonts/Inter-roman.var.woff2?v=3.18") format("woff2");
 }
 
 /* @tailwind screens; */

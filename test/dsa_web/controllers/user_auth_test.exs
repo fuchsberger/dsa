@@ -3,7 +3,9 @@ defmodule DsaWeb.UserAuthTest do
 
   alias Dsa.Accounts
   alias DsaWeb.UserAuth
+
   import Dsa.AccountsFixtures
+  import DsaWeb.AccountTranslations
 
   @remember_me_cookie "_dsa_web_user_remember_me"
 
@@ -135,7 +137,7 @@ defmodule DsaWeb.UserAuthTest do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
-      assert get_flash(conn, :error) == "You must log in to access this page."
+      assert get_flash(conn, :error) == t(:requires_login)
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

@@ -35,7 +35,7 @@ defmodule DsaWeb.UserSettingsControllerTest do
 
       assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :edit)
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
-      assert get_flash(new_password_conn, :info) =~ dgettext("account", "Password updated successfully.")
+      assert get_flash(new_password_conn, :info) =~ t(:update_password_success)
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
     end
 
@@ -53,8 +53,8 @@ defmodule DsaWeb.UserSettingsControllerTest do
       response = html_response(old_password_conn, 200)
       assert response =~ t(:settings) <> "</h1>"
       assert response =~ dgettext("errors", "should be at least %{count} character(s)", count: 12)
-      assert response =~ dgettext("errors", "does not match password")
-      assert response =~ dgettext("errors", "is not valid")
+      assert response =~ dgettext("errors", "does not match confirmation")
+      assert response =~ dgettext("errors", "is invalid")
 
       assert get_session(old_password_conn, :user_token) == get_session(conn, :user_token)
     end
@@ -71,7 +71,7 @@ defmodule DsaWeb.UserSettingsControllerTest do
         })
 
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert get_flash(conn, :info) =~ dgettext("account", "A link to confirm your email change has been sent to the new address.")
+      assert get_flash(conn, :info) =~ t(:email_change_sent)
       assert Accounts.get_user_by_email(user.email)
     end
 
@@ -85,8 +85,8 @@ defmodule DsaWeb.UserSettingsControllerTest do
 
       response = html_response(conn, 200)
       assert response =~ t(:settings) <> "</h1>"
-      assert response =~ dgettext("errors", "must have the @ sign and no spaces")
-      assert response =~ dgettext("errors", "is not valid")
+      assert response =~ dgettext("errors", "has invalid format")
+      assert response =~ dgettext("errors", "is invalid")
     end
   end
 
@@ -105,19 +105,19 @@ defmodule DsaWeb.UserSettingsControllerTest do
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert get_flash(conn, :info) =~ dgettext("account", "Email changed successfully.")
+      assert get_flash(conn, :info) =~ t(:update_email_success)
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert get_flash(conn, :error) =~ dgettext("account", "Email change link is invalid or it has expired.")
+      assert get_flash(conn, :error) =~ t(:invalid_email_link)
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert get_flash(conn, :error) =~ dgettext("account", "Email change link is invalid or it has expired.")
+      assert get_flash(conn, :error) =~ t(:invalid_email_link)
       assert Accounts.get_user_by_email(user.email)
     end
 

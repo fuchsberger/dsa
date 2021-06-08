@@ -61,10 +61,10 @@ defmodule DsaWeb.AccountTranslations do
   def t(:change_email), do: dgettext(@d, "Email Addresse ändern")
   def t(:change_password), do: dgettext(@d, "Password ändern")
   def t(:current_password), do: dgettext(@d, "Aktuelles Passwort")
-  def t(:email_change_sent), do: dgettext(@d, "Ein link zum ändern deiner Email Addresse wurde gesendet.")
+  def t(:email_change_sent), do: dgettext(@d, "Ein Link zum ändern deiner Email Addresse wurde gesendet.")
   def t(:update_password_success), do: dgettext(@d, "Passwort erfolgreich geändert.")
   def t(:update_email_success), do: dgettext(@d, "Email Addresse erfolgreich geändert.")
-  def t(:invalid_email_link), do: dgettext(@d, "Der Link zum ändern deiner Email Addresse ist abeglaufen oder ungültig!")
+  def t(:invalid_email_link), do: dgettext(@d, "Der Link zum ändern deiner Email Addresse ist abgelaufen oder ungültig!")
 
   # Emails
   def t(:email_subject), do: dgettext(@d, "DSA Tool - Bitte bestätige deinen Account")

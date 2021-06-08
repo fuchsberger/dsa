@@ -18,14 +18,6 @@ defmodule Dsa.Data do
   end
 
   @doc """
-  Provides a slug: id keyword list for url friendly accessing of data.
-  """
-  def slugs(collection) do
-    :ets.tab2list(collection)
-    |> Enum.map(fn {id, %{name: name}} -> {Dsa.slugify(name), id} end)
-  end
-
-  @doc """
   Gets an entry by collection and slug.
   """
   def get_by_slug(collection, slug)  do

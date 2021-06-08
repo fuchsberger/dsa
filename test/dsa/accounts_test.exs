@@ -85,13 +85,12 @@ defmodule Dsa.AccountsTest do
           password_confirmation: "not matching"
         })
 
-      e1 = dgettext("errors", "can\'t be blank")
-      e2 = dgettext("errors", "must have the @ sign and no spaces")
-      e3 = dgettext("errors", "should be at least %{count} character(s)", count: 12)
-      e4 = dgettext("errors", "does not match password")
-
-      assert %{ username: [^e1], email: [^e2], password: [^e3], password_confirmation: [^e4]} =
-        errors_on(changeset)
+      assert %{
+        username: ["can\'t be blank"],
+        email: ["has invalid format"],
+        password: ["should be at least 12 character(s)"],
+        password_confirmation: ["does not match confirmation"]
+      } = errors_on(changeset)
     end
 
     test "validates maximum values for email and password for security" do
@@ -166,14 +165,15 @@ defmodule Dsa.AccountsTest do
 
     test "requires email to change", %{user: user} do
       {:error, changeset} = Accounts.apply_user_email(user, valid_user_password(), %{})
-      assert %{email: ["did not change"]} = errors_on(changeset)
+      assert %{email: [error]} = errors_on(changeset)
+      assert dgettext("errors", "is unchanged") == error
     end
 
     test "validates email", %{user: user} do
       {:error, changeset} =
         Accounts.apply_user_email(user, valid_user_password(), %{email: "not valid"})
 
-      assert %{email: ["muss ein @ symbol und darf keine Leerzeichen enthalten"]} = errors_on(changeset)
+      assert %{email: ["has invalid format"]} = errors_on(changeset)
     end
 
     test "validates maximum value for email for security", %{user: user} do
@@ -198,7 +198,8 @@ defmodule Dsa.AccountsTest do
       {:error, changeset} =
         Accounts.apply_user_email(user, "invalid", %{email: unique_user_email()})
 
-      assert %{current_password: ["is not valid"]} = errors_on(changeset)
+      assert %{current_password: [error]} = errors_on(changeset)
+      assert dgettext("errors", "is invalid") == error
     end
 
     test "applies the email without persisting it", %{user: user} do
@@ -302,9 +303,9 @@ defmodule Dsa.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
+        password: ["should be at least 12 character(s)"],
+        password_confirmation: ["does not match confirmation"]
+      } = errors_on(changeset)
     end
 
     test "validates maximum values for password for security", %{user: user} do
@@ -320,7 +321,8 @@ defmodule Dsa.AccountsTest do
       {:error, changeset} =
         Accounts.update_user_password(user, "invalid", %{password: valid_user_password()})
 
-      assert %{current_password: ["is not valid"]} = errors_on(changeset)
+      assert %{current_password: [error]} = errors_on(changeset)
+      assert dgettext("errors", "is invalid") == error
     end
 
     test "updates the password", %{user: user} do
@@ -511,9 +513,9 @@ defmodule Dsa.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["stimmt nicht mit Passwort überein"]
-             } = errors_on(changeset)
+        password: ["should be at least 12 character(s)"],
+        password_confirmation: ["does not match confirmation"]
+      } = errors_on(changeset)
     end
 
     test "validates maximum values for password for security", %{user: user} do

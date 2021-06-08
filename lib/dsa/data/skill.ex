@@ -8,10 +8,9 @@ defmodule Dsa.Data.Skill do
       objectID: "skill_#{skill.id}",
       name: skill.name,
       type: gettext("Talent"),
-      path: Routes.page_path(DsaWeb.Endpoint, :index),
-      # path: Routes.skill_path(Dsa.Endpoint, :show, skill.slug),
+      path: Routes.page_path(DsaWeb.Endpoint, :show, skill.slug),
       description: skill.description,
-      list_entries: skill.applications
+      list_entries: Enum.map(skill.applications, &(&1.name))
     }
   end
 

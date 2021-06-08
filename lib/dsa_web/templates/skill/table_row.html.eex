@@ -1,4 +1,4 @@
-<tr><%= Logger.warn inspect @skill %>
+<tr>
   <th scope='row'>
     <%= link(@skill.name, to: Routes.skill_path(@conn, :show, @skill.slug)) %>
   </th>

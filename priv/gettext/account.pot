@@ -177,11 +177,6 @@ msgid "Ein Fehler ist aufgetreten"
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/translations/account_translations.ex:64
-msgid "Ein link zum ändern deiner Email Addresse wurde gesendet."
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:28
 msgid "Einloggen"
 msgstr ""
@@ -304,4 +299,9 @@ msgstr ""
 #, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:24
 msgid "registriere dich hier"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:64
+msgid "Ein Link zum ändern deiner Email Addresse wurde gesendet."
 msgstr ""
