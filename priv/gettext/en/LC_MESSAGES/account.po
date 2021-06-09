@@ -158,11 +158,6 @@ msgid "Der Link zum zurücksetzen deines Passworts ist abgelaufen oder ungültig
 msgstr ""
 
 #, elixir-format
-#: lib/dsa_web/translations/account_translations.ex:67
-msgid "Der Link zum ändern deiner Email Addresse ist abeglaufen oder ungültig!"
-msgstr ""
-
-#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:8
 msgid "Du musst dich anmelden um auf diese Seite zugreifen zu können."
 msgstr ""
@@ -302,7 +297,17 @@ msgstr ""
 msgid "registriere dich hier"
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/dsa_web/translations/account_translations.ex:64
 msgid "Ein Link zum ändern deiner Email Addresse wurde gesendet."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:67
+msgid "Der Link zum ändern deiner Email Addresse ist abgelaufen oder ungültig!"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/user_menu.html.eex:4
+msgid "Öffne Benutzermenu"
 msgstr ""

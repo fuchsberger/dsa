@@ -1,7 +1,7 @@
 defmodule Dsa.DataTest do
   use Dsa.DataCase
 
-  alias Dsa.Data
+  # alias Dsa.Data
 
   # describe "list_skills/0" do
   #   test "returns a list of 59 skills in correct order" do

@@ -1,7 +1,7 @@
 <%= if @user do %>
   <div class="ml-2 relative" x-data='{ open: false }'>
     <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500 p-1" id="user-menu-button" aria-expanded="false" aria-haspopup="true" @click='open=true'>
-      <span class="sr-only"><%= dgettext("accounts", "Öffne Benutzermenu") %></span>
+      <span class="sr-only"><%= dgettext("account", "Öffne Benutzermenu") %></span>
       <img class="h-10 w-10 rounded-full" src="<%= gravatar_url(@user.email) %>" alt="">
     </button>
     <div class="origin-top-right absolute right-0 mt-2 mr-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
