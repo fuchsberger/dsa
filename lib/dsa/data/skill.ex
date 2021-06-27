@@ -8,7 +8,7 @@ defmodule Dsa.Data.Skill do
       objectID: "skill_#{skill.id}",
       name: skill.name,
       type: gettext("Talent"),
-      path: Routes.page_path(DsaWeb.Endpoint, :show, skill.slug),
+      path: Routes.skill_path(DsaWeb.Endpoint, :show, skill.slug),
       description: skill.description,
       list_entries: Enum.map(skill.applications, &(&1.name))
     }
@@ -763,7 +763,7 @@ defmodule Dsa.Data.Skill do
             limit: 0
           }
         ],
-        uses: nil,
+        uses: [],
         encumbrance: false,
         encumbrance_condition: nil,
         tools: nil,
@@ -816,7 +816,7 @@ defmodule Dsa.Data.Skill do
             modify: true)
           }
         ],
-        uses: nil,
+        uses: [],
         encumbrance: false,
         encumbrance_condition: nil,
         tools: nil,
@@ -925,7 +925,7 @@ defmodule Dsa.Data.Skill do
           %{name: gettext("pflanzliches Gift")},
           %{name: gettext("tierisches Gift")}
         ],
-        uses: nil,
+        uses: [],
         encumbrance: true,
         encumbrance_condition: nil,
         tools: gettext("Gegenmittel"),
@@ -950,7 +950,7 @@ defmodule Dsa.Data.Skill do
             limit: 0
           }
         ],
-        uses: nil,
+        uses: [],
         encumbrance: true,
         encumbrance_condition: nil,
         tools: gettext("Heilmittel"),
@@ -973,7 +973,7 @@ defmodule Dsa.Data.Skill do
             %{name: gettext("Unterdrückung von Persönlichkeitsschwächen")},
             %{name: gettext("Unterdrückung von Schlechten Eigenschaften")}
           ],
-          uses: nil,
+          uses: [],
           encumbrance: false,
           encumbrance_condition: nil,
           tools: nil,
@@ -995,7 +995,7 @@ defmodule Dsa.Data.Skill do
           %{name: gettext("Schmerzen nehmen")},
           %{name: gettext("Stabilisieren")}
         ],
-        uses: nil,
+        uses: [],
         encumbrance: true,
         encumbrance_condition: nil,
         tools: gettext("eventuell Bandagen, chirurgisches Gerät, Kräuter, Nadel und Faden"),
@@ -1017,7 +1017,7 @@ defmodule Dsa.Data.Skill do
         %{name: gettext("Tischlerarbeiten")},
         %{name: gettext("Zimmermannsarbeiten")}
       ],
-      uses: nil,
+      uses: [],
       encumbrance: true,
       encumbrance_condition: nil,
       tools: gettext("je nach zu bearbeitendem Material z. B. Axt, Hobel, Messer, Säge"),
@@ -1071,7 +1071,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Eisklettern")},
       %{name: gettext("Fassadenklettern")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("eventuell Kletterausrüstung"),
@@ -1125,7 +1125,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Laufen")},
       %{name: gettext("Springen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: nil,
@@ -1181,7 +1181,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Stemmen & Heben")},
       %{name: gettext("Ziehen & Zerren")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("eventuell Brecheisen oder Seil"),
@@ -1234,7 +1234,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Seegefechte")},
       %{name: gettext("Tunnelkampf")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1288,7 +1288,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Haltbarmachung")},
       %{name: gettext("Schnapsbrennen"), requirement: true}  # TODO
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("entsprechende Zutaten, Feldküche, Kochutensilien"),
@@ -1339,7 +1339,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Kürschnern")},
       %{name: gettext("Lederwaren herstellen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Ahle, Falzbein, Lochzange, Messer, Punziereisen, Zange"),
@@ -1393,7 +1393,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Rituale")},
       %{name: gettext("Zaubersprüche")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1445,7 +1445,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Zeichnen")},
       %{name: gettext("Zauberzeichen malen"), requirement: true} # TODO
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Farbe, Kreide, Stifte"),
@@ -1488,7 +1488,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Hydraulik")},
       %{name: gettext("komplexe Systeme")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1535,7 +1535,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Lügen durchschauen")},
       %{name: gettext("Motivation erkennen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1571,7 +1571,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Metallguss")},
       %{name: gettext("Verhütten")},
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Hammer, Amboss, Schmiedefeuer"),
@@ -1624,7 +1624,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Saiteninstrumente")},
       %{name: gettext("Trommeln")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Musikinstrument"),
@@ -1675,7 +1675,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Sternenhimmel")},
       %{name: gettext("unter Tage")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1726,7 +1726,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Heilpflanzen")},
       %{name: gettext("Nutzpflanzen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: gettext("ja, (beim Ackerbau und Nahrung sammeln) oder nein (bei der Bestimmung von Pflanzen)"),
     tools: nil,
@@ -1761,7 +1761,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Punktrechnung")},
       %{name: gettext("Strichrechnung")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1818,7 +1818,7 @@ defmodule Dsa.Data.Skill do
         requirement: true # TODO
       }
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1870,7 +1870,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Springreiten")},
       %{name: gettext("Verfolgungsjagden")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Reittier"),
@@ -1927,7 +1927,7 @@ defmodule Dsa.Data.Skill do
         requirement: true # TODO
       }
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -1977,7 +1977,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Bartschlösser")},
       %{name: gettext("Kombinationsschlösser")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Dietrich, Haarnadel, Haken"),
@@ -2027,7 +2027,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Verfolgungsjagden")},
       %{name: gettext("Wassertreten")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: nil,
@@ -2078,7 +2078,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Handlungsfähigkeit bewahren")},
       %{name: gettext("Störungen ignorieren")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -2130,7 +2130,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Chorgesang")},
       %{name: gettext("Sprechgesang")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: gettext("nein, eventuell ja bei Helmen"),
     tools: nil,
@@ -2181,7 +2181,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Suchen")},
       %{name: gettext("Wahrnehmen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: gettext("nein, eventuell ja bei Helmen, Panzerhandschuhen o.Ä."),
     tools: nil,
@@ -2233,7 +2233,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("nach Sphäre", limit: 0, modify: true)},
       %{name: gettext("Sphärenwesen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -2286,7 +2286,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Töpferei"), requirement: true}, # TODO
       %{name: gettext("Glasbläserei"), requirement: true} # TODO
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("entsprechendes Rohmaterial (Stein, Ton), Hammer, Meißel"),
@@ -2334,7 +2334,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Himmelskartographie")},
       %{name: gettext("Kalendarium")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -2388,7 +2388,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Spinnen")},
       %{name: gettext("Weben")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("Messer, Nähzeug, Schere, Webstuhl"),
@@ -2442,7 +2442,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Hoftanz")},
       %{name: gettext("Kulttanz")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: nil,
@@ -2494,7 +2494,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Gegenstand entwenden")},
       %{name: gettext("Zustecken")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("eventuell Messer oder Dolch"),
@@ -2630,7 +2630,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Schleichen")},
       %{name: gettext("sich Verstecken")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: nil,
@@ -2657,7 +2657,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Kostümierung")},
       %{name: gettext("Personen imitieren")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: nil,
@@ -2713,7 +2713,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Lagersuche")},
       %{name: gettext("Wettervorhersage", requirement: true)} # TODO
     ],
-    uses: nil,
+    uses: [],
     encumbrance: true,
     encumbrance_condition: nil,
     tools: gettext("eventuell Zelt, Wildnisausrüstung"),
@@ -2766,7 +2766,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Einschüchtern widerstehen")},
       %{name: gettext("Überreden widerstehen")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,
@@ -2801,7 +2801,7 @@ defmodule Dsa.Data.Skill do
       %{name: gettext("Vermeidung von Schmerz durch Rauschmittel")},
       %{name: gettext("Vermeidung von Verwirrung durch Rauschmittel")}
     ],
-    uses: nil,
+    uses: [],
     encumbrance: false,
     encumbrance_condition: nil,
     tools: nil,

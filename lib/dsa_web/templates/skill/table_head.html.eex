@@ -4,4 +4,4 @@
   <th scope="col" class="text-center"><%= gettext("BE") %></th>
   <th scope="col" class="text-center"><%= gettext("SF") %></th>
   <th scope="col" class="text-center"><%= gettext("FW") %></th>
-</head>
+</thead>

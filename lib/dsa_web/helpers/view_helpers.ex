@@ -15,6 +15,30 @@ defmodule DsaWeb.Helpers.ViewHelpers do
 
   def admin?(conn), do: conn.assigns.current_user && conn.assigns.current_user.admin
 
+  def format(text, opts \\ [])
+
+  @doc """
+  Removes instances of \n, [ ] for algolia search.
+  """
+  def format(text, [search: true]) when is_binary(text) do
+    text
+    |> String.replace("\n", "")
+    |> String.replace("[", "")
+    |> String.replace("]", "")
+  end
+
+  @doc """
+  Formats a text by replacing \n with <br> tags and [ ] with <em> </em>.
+  Returns HTML.
+  """
+  def format(text, _opts) when is_binary(text) do
+    text
+    |> String.replace("\n", "<br>")
+    |> String.replace("[", "<em>")
+    |> String.replace("]", "</em>")
+    |> raw()
+  end
+
   def icon(name, class \\ "w-5 h-5") do
     content_tag :svg, class: class do
       tag(:use, href: Routes.static_path(DsaWeb.Endpoint, "/images/icons.svg#" <> name))

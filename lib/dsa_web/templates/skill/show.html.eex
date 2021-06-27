@@ -1,1 +1,72 @@
 <h1 class='heading'><%= @skill.name %></h1>
+<div class='lg:grid lg:grid-cols-2 lg:gap-4'>
+  <div class='space-y-4'>
+    <p class='text-justify'><%= format(@skill.description) %></p>
+    <div class="table-wrapper">
+      <table class='table-auto w-full'>
+      <%= if Map.has_key?(List.first(@skill.examples), :time) do %>
+        <thead>
+          <th scope="col" class='text-left'><%= gettext("Handlung") %></th>
+          <th scope="col" class='text-center'><%= gettext("Zeitintervall pro Probe") %></th>
+          <th scope="col" class="text-center"><%= gettext("Anzahl der erlaubten Proben") %></th>
+        </thead>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= for example <- @skill.examples do %>
+            <tr>
+              <td><%= example.action %></td>
+              <td class="text-center"><%= example.time %></td>
+              <td class='text-right'><%= example.checks %></td>
+            </tr>
+          <% end %>
+        </body>
+      <% else %>
+        <thead>
+          <th scope="col" class='text-left'><%= gettext("Handlung") %></th>
+          <th scope="col" class='text-center'><%= gettext("Modifikator") %></th>
+        </thead>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <%= for example <- @skill.examples do %>
+            <tr>
+              <td><%= example.action %></td>
+              <td class='text-right'><%= example.modifier %></td>
+            </tr>
+          <% end %>
+        </body>
+      <% end %>
+      </table>
+    </div>
+  </div>
+  <div class='space-y-4'>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <th scope="col" class='text-left'><%= gettext("Anwendungsgebiet") %></th>
+          <th scope="col" class='text-center'><%= gettext("FW") %></th>
+          <th scope="col" class="text-center"><%= gettext("Probe") %></th>
+        </thead>
+        <tbody class='bg-white divide-y divide-gray-200'>
+          <tr>
+            <th scope='row'><%= gettext("Allgemein") %></th>
+            <td class="small">25</td>
+            <td class="small">-</td>
+          </tr>
+          <%= for application <- @skill.applications do %>
+          <tr>
+            <th scope='row'><%= application.name %></th>
+            <td class="small">25</td>
+            <td class="small">-</td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= if Enum.count(@skill.uses) > 0 do %>
+      <p>
+        <strong><%= gettext("Einsatzmöglichkeiten:") %></strong>
+        <%= for usecase <- @skill.uses do %>
+          <%= usecase.name %>,
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+</div>

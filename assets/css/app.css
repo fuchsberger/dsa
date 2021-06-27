@@ -8,15 +8,6 @@
 @import "components/menu.css";
 @import "components/scrollbar.css";
 
-@font-face {
-  font-family: 'Inter var';
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  font-named-instance: 'Regular';
-  src: url("../fonts/Inter-roman.var.woff2?v=3.18") format("woff2");
-}
-
 /* @tailwind screens; */
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-12 overflow-hidden; }
