@@ -37,6 +37,12 @@ defmodule Dsa.Data do
   end
 
   @doc """
+  Returns the number of skills.
+  This wont ever change so it can be hardcoded.
+  """
+  def get_skill_count, do: 59
+
+  @doc """
   Returns a skill with a given id.
   """
   def get_skill(id) do

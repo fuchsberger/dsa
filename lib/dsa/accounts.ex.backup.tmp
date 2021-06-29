@@ -8,7 +8,7 @@ defmodule Dsa.Accounts do
 
   alias Dsa.Repo
   alias Dsa.Accounts.{Credential, Group, User}
-  alias Dsa.Characters.Character
+  alias Dsa.Game.Character
 
   ##########################################################
   # User related APIs

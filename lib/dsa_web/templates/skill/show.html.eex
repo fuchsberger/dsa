@@ -1,4 +1,9 @@
-<h1 class='heading'><%= @skill.name %></h1>
+<div class='flex items-center pb-3'>
+  <%= link gettext("Talente"), to: Routes.skill_path(@conn, :index), class: "h-7 leading-7 button gray" %>
+  <span class='px-2'>»</span>
+  <h1 class='heading pb-0'><%= @skill.name %></h1>
+</div>
+
 <div class='lg:grid lg:grid-cols-2 lg:gap-4'>
   <div class='space-y-4'>
     <p class='text-justify'><%= format(@skill.description) %></p>

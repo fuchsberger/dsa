@@ -12,7 +12,7 @@ defmodule Dsa.Data.KarmalTrait do
     field :karmal_trait_id, :integer
     field :details, :string
     field :ap, :integer
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
   end
 
   @fields ~w(karmal_trait_id character_id ap)a

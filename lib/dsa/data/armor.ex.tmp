@@ -11,7 +11,7 @@ defmodule Dsa.Data.Armor do
   schema "armors" do
     field :dmg, :integer, default: 0
     field :armor_id, :integer
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
   end
 
   @fields ~w(armor_id character_id dmg)a

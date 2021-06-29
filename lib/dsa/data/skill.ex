@@ -2275,7 +2275,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 49,
+    id: 48,
     name: gettext("Steinbearbeitung"),
     category: :crafting,
     check: {:ff, :ff, :kk},
@@ -2325,7 +2325,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 50,
+    id: 49,
     name: gettext("Sternkunde"),
     category: :knowledge,
     check: {:kl, :kl, :in},
@@ -2377,7 +2377,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 51,
+    id: 50,
     name: gettext("Stoffbearbeitung"),
     category: :crafting,
     check: {:kl, :ff, :ff},
@@ -2432,7 +2432,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 52,
+    id: 51,
     name: gettext("Tanzen"),
     category: :physical,
     check: {:kl, :ch, :ge},
@@ -2484,7 +2484,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 53,
+    id: 52,
     name: gettext("Taschendiebstahl"),
     category: :physical,
     check: {:mu, :ff, :ge},
@@ -2536,7 +2536,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 54,
+    id: 53,
     name: gettext("Tierkunde"),
     category: :nature,
     check: {:mu, :mu, :ch},
@@ -2568,7 +2568,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 55,
+    id: 54,
     name: gettext("Überreden"),
     category: :social,
     check: {:mu, :in, :ch},
@@ -2621,7 +2621,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 56,
+    id: 55,
     name: gettext("Verbergen"),
     category: :physical,
     check: {:mu, :in, :ge},
@@ -2648,7 +2648,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 57,
+    id: 56,
     name: gettext("Verkleiden"),
     category: :social,
     check: {:in, :ch, :ge},
@@ -2703,7 +2703,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 58,
+    id: 57,
     name: gettext("Wildnisleben"),
     category: :nature,
     check: {:mu, :ge, :ko},
@@ -2755,7 +2755,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 59,
+    id: 58,
     name: gettext("Willenskraft"),
     category: :social,
     check: {:mu, :in, :ch},
@@ -2792,7 +2792,7 @@ defmodule Dsa.Data.Skill do
       }
     ]
   }, %{
-    id: 60,
+    id: 59,
     name: gettext("Zechen"),
     category: :physical,
     check: {:kl, :ko, :kk},

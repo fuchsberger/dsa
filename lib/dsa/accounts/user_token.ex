@@ -2,6 +2,8 @@ defmodule Dsa.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
 
+  alias Dsa.Game.Character
+
   @hash_algorithm :sha256
   @rand_size 32
 
@@ -33,15 +35,25 @@ defmodule Dsa.Accounts.UserToken do
 
   @doc """
   Checks if the token is valid and returns its underlying lookup query.
-
   The query returns the user found by the token.
   """
   def verify_session_token_query(token) do
-    query =
+    token_query =
       from token in token_and_context_query(token, "session"),
-        join: user in assoc(token, :user),
-        where: token.inserted_at > ago(@session_validity_in_days, "day"),
-        select: user
+        select: token.user_id,
+        where: token.inserted_at > ago(@session_validity_in_days, "day")
+
+    query =
+      from user in Dsa.Accounts.User, as: :user,
+        left_join: token in subquery(token_query), on: user.id == token.user_id,
+        left_join: characters in assoc(user, :characters),
+        left_lateral_join: c in subquery(
+          from Character,
+          where: [user_id: parent_as(:user).id],
+          order_by: [:active, :name],
+          select: [:id]
+        ), on: c.id == characters.id,
+        preload: [characters: characters]
 
     {:ok, query}
   end

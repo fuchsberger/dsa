@@ -13,14 +13,16 @@ import "../css/app.css"
 //     import socket from "./socket"
 //
 
-import algoliasearch from 'algoliasearch/lite'
-import 'alpinejs'
-import SimpleScrollbar from 'simple-scrollbar'
+import Alpine from 'alpinejs'
 import 'phoenix_html'
 import {Socket} from "phoenix"
-import topbar from "topbar"
 import LiveSocket from "phoenix_live_view"
-// import "phoenix_html"
+import algoliasearch from 'algoliasearch/lite'
+import SimpleScrollbar from 'simple-scrollbar'
+import topbar from "topbar"
+
+// Start Alpine.js
+Alpine.start()
 
 // Configure Live Sockets
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
@@ -28,7 +30,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
       if (from.__x) {
-        window.Alpine.clone(from.__x, to);
+        Alpine.clone(from.__x, to);
       }
     }
   },

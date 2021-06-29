@@ -15,8 +15,8 @@ defmodule Dsa.Accounts.User do
     field :is_blocked, :boolean, default: false
 
     # belongs_to :group, Dsa.Accounts.Group, on_replace: :nilify
-    # belongs_to :active_character, Dsa.Characters.Character, on_replace: :nilify
-    # has_many :characters, Dsa.Characters.Character
+    belongs_to :active_character, Dsa.Game.Character, on_replace: :nilify
+    has_many :characters, Dsa.Game.Character
 
     timestamps()
   end

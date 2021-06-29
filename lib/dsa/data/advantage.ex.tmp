@@ -12,7 +12,7 @@ defmodule Dsa.Data.Advantage do
   schema "advantages" do
     field :advantage_id, :integer
     field :details, :string
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
   end
 
   def changeset(advantage, params \\ %{}) do

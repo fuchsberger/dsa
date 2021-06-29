@@ -9,7 +9,7 @@ defmodule Dsa.Logs.SkillRoll do
     field :quality, :integer
     field :critical, :boolean
 
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
     belongs_to :skill, Dsa.Data.Skill
     belongs_to :group, Dsa.Accounts.Group
 

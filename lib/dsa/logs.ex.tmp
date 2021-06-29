@@ -6,7 +6,7 @@ defmodule Dsa.Logs do
   import Ecto.Query, warn: false
 
   alias Dsa.{Repo, Trial}
-  alias Dsa.Characters.Character
+  alias Dsa.Game.Character
   alias Dsa.Logs.{Setting, SkillRoll, SpellRoll, BlessingRoll, Event}
 
   alias Dsa.DiceTables

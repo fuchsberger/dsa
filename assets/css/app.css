@@ -24,46 +24,14 @@
   .button:hover { @apply bg-indigo-700 text-white; }
   .button:focus { @apply outline-none ring-2 ring-offset-2 ring-indigo-500; }
 
-  .button.gray { @apply border-gray-300 bg-white text-gray-700; }
-  .button.gray:hover { @apply border-gray-400 bg-gray-100 text-gray-900; }
-  .button.gray:focus { @apply  ring-gray-500; }
+
 
   /* Alerts */
   .alert { @apply py-2 px-10 mb-3 rounded-md; }
   .alert.error { @apply bg-red-200 text-red-800; }
   .alert.info { @apply bg-blue-200 text-blue-800; }
 
-  button.large {
-    @apply h-10 leading-10 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600;
-  }
-
-  button.large:hover {
-    @apply bg-indigo-700;
-  }
-
-  button.large:focus {
-    @apply outline-none ring-2 ring-offset-2 ring-indigo-500;
-  }
-
-
   h2.main { @apply mt-6 text-center text-3xl font-extrabold text-gray-900; }
-
-  input.small {
-    @apply appearance-none h-6 leading-6 rounded-md border-gray-300 placeholder-gray-500 text-gray-800 w-full;
-  }
-
-  input.normal {
-    @apply appearance-none h-8 leading-8 rounded-md border-gray-300 placeholder-gray-500 text-gray-800 w-full;
-  }
-
-  input.normal:focus {
-    @apply outline-none ring-indigo-500 border-indigo-500;
-  }
-
-  input.error { @apply border-red-800 !important; }
-
-
-
 
   /* Modifier Component */
   label..neutral, label..negative, label..positive {

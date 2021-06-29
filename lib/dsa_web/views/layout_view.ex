@@ -20,6 +20,9 @@ defmodule DsaWeb.LayoutView do
       :error ->
         {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
 
+      "error" ->
+        {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
+
       "info" ->
         {"bg-blue-50", "border-blue-300", "text-blue-400", "text-blue-800", "information-circle-solid"}
 

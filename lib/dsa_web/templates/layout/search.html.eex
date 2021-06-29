@@ -17,7 +17,7 @@
       if(query.length < 3) results = [];
       else searchIndex.search(query, { attributesToSnippet: ["name", "description", "list_entries" ], hitsPerPage: 5 }).then(search_results => {results = search_results.hits})
     })'>
-  <button class='w-full flex items-center group text-gray-400 focus:outline-none'
+  <button class='w-full flex items-center group text-gray-400 focus:outline-none border-none hover:bg-white focus:ring-0'
     @click='search=true;$nextTick(() => { document.getElementById("search_query").focus() });' >
     <!-- Heroicon name: solid/search -->
     <%= icon("search-solid", "m-2 h-8 w-8 group-hover:text-gray-600") %>

@@ -1,11 +1,11 @@
-defmodule Dsa.Characters.CharacterBlessing do
+defmodule Dsa.Game.CharacterBlessing do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
   schema "character_blessings" do
     field :level, :integer
-    belongs_to :character, Dsa.Characters.Character, primary_key: true
+    belongs_to :character, Dsa.Game.Character, primary_key: true
     belongs_to :blessing, Dsa.Data.Blessing, primary_key: true
   end
 

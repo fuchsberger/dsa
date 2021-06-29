@@ -1,22 +1,36 @@
 @layer base {
+
+  button { @apply bg-white shadow-sm border border-gray-500 text-gray-600 font-medium rounded-md px-3 leading-8; }
+  button:hover { @apply bg-gray-200 border-gray-600 text-gray-800; }
+  button:focus { @apply outline-none ring-2 border-indigo-500; }
+
+  button > svg { @apply inline-block -mt-1 mr-1; }
+
   input[type='text'],
   input[type='password'],
   input[type='email'],
   input[type='number'],
-  input[type='url'],
-  input[type='date'],
-  input[type='datetime-local'],
-  input[type='month'],
-  input[type='week'],
-  input[type='time'],
   input[type='search'],
-  input[type='tel'],
   select,
   select[multiple],
-  textarea { @apply appearance-none block w-full px-3 py-2 border text-gray-900 border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm; }
+  textarea { @apply block w-full px-3 border font-medium text-gray-800 border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 py-0 leading-8; }
 }
 
 @layer components {
+
+  button.small,
+  input[type='text'].small,
+  input[type='password'].small,
+  input[type='email'].small,
+  input[type='number'].small,
+  input[type='search'].small,
+  select.small,
+  select[multiple].small,
+  textarea.small { @apply px-2 text-sm leading-7; }
+
+  input.error { @apply focus:ring-red-700 border-red-700 !important; }
+
+
 
   button.primary { @apply py-2 px-3 border border-transparent font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 leading-tight sm:text-sm; }
 

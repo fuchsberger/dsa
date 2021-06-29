@@ -19,6 +19,9 @@ defmodule DsaWeb.Helpers.ViewHelpers do
 
   @doc """
   Removes instances of \n, [ ] for algolia search.
+
+  or Formats a text by replacing \n with <br> tags and [ ] with <em> </em>.
+  Returns HTML.
   """
   def format(text, [search: true]) when is_binary(text) do
     text
@@ -27,10 +30,6 @@ defmodule DsaWeb.Helpers.ViewHelpers do
     |> String.replace("]", "")
   end
 
-  @doc """
-  Formats a text by replacing \n with <br> tags and [ ] with <em> </em>.
-  Returns HTML.
-  """
   def format(text, _opts) when is_binary(text) do
     text
     |> String.replace("\n", "<br>")
@@ -39,7 +38,7 @@ defmodule DsaWeb.Helpers.ViewHelpers do
     |> raw()
   end
 
-  def icon(name, class \\ "w-5 h-5") do
+  def icon(name, class \\ "") do
     content_tag :svg, class: class do
       tag(:use, href: Routes.static_path(DsaWeb.Endpoint, "/images/icons.svg#" <> name))
     end

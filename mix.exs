@@ -37,6 +37,7 @@ defmodule Dsa.MixProject do
       {:algolia, "~> 0.8.0"},
       {:bamboo, "~> 2.2.0"},
       {:bcrypt_elixir, "~> 2.3"},
+      {:ecto_json, "~> 0.1.0"},
       {:ecto_psql_extras, "~> 0.6.5"},
       {:ecto_sql, "~> 3.6.1"},
       {:enum_type, "~> 1.1.0"},

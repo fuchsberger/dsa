@@ -6,6 +6,7 @@ defmodule Dsa.Accounts do
   import Ecto.Query, warn: false
   alias Dsa.Repo
   alias Dsa.Accounts.{User, UserToken, UserNotifier}
+  alias Dsa.Game.Character
 
   ## Database getters
 

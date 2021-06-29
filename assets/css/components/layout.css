@@ -1,4 +1,7 @@
 @layer components {
+  svg { @apply w-5 h-5; }
+
+
   .page-wrapper { @apply h-screen flex overflow-hidden bg-gray-100; }
 
   /* Mobile Sidebar Menu */
@@ -37,8 +40,8 @@
   main > div { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4; }
 
   /* Content */
-  .heading { @apply text-2xl font-semibold text-gray-900 pb-3; }
-  .subheading { @apply text-xl font-semibold text-gray-800  pb-2; }
+  .heading { @apply text-2xl font-semibold text-gray-900 leading-8; }
+  .subheading { @apply text-xl font-semibold text-gray-800 leading-7; }
   p > em { @apply italic text-gray-600 font-semibold; }
 
   .key-combo {

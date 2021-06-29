@@ -67,6 +67,10 @@ defmodule DsaWeb.Router do
     get "/einstellungen", UserSettingsController, :edit
     put "/einstellungen", UserSettingsController, :update
     get "/einstellungen/confirm_email/:token", UserSettingsController, :confirm_email
+
+    # heldenverwaltung
+    get "/helden", CharacterController, :index
+    post "/held_erstellen", CharacterController, :create
   end
 
   scope "/", DsaWeb do

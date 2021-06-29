@@ -10,7 +10,7 @@ defmodule Dsa.Data.FateTrait do
   @primary_key false
   schema "fate_traits" do
     field :fate_trait_id, :integer, primary_key: true
-    belongs_to :character, Dsa.Characters.Character, primary_key: true
+    belongs_to :character, Dsa.Game.Character, primary_key: true
   end
 
   @fields ~w(fate_trait_id character_id)a

@@ -1,8 +1,32 @@
-<div class="flex justify-between mt-3 mb-2">
-  <h1 class='page-heading'><%= gettext "Characters" %></h1>
-  <%= link gettext("New Character"), to: Routes.character_path(@conn, :new),
+<div class="md:flex justify-between">
+  <h1 class='heading'><%= gettext "Heldenübersicht" %></h1>
+
+  <%= form_for @changeset, Routes.character_path(@conn, :create), [class: "md:flex md:items-center md:gap-2 space-y-2 md:space-y-0"], fn f -> %>
+    <div>
+      <%= label f, :name, gettext("Name"), class: "sr-only" %>
+      <%= text_input f, :name,
+        autocomplete: "email",
+        placeholder: gettext("Name"),
+        required: true %>
+      <%= error_tag f, :name %>
+    </div>
+    <div>
+      <%= label f, :profession, gettext("Profession"), class: "sr-only" %>
+      <%= email_input f, :profession,
+        autocomplete: "email",
+        placeholder: gettext("Profession"),
+        required: true %>
+      <%= error_tag f, :profession %>
+    </div>
+    <%= submit [icon("plus"), gettext("Held erstellen")] %>
+  <% end %>
+
+
+  <%# link gettext("New Character"), to: Routes.character_path(@conn, :new),
    class: "button gray leading-8 h-8" %>
 </div>
+
+<hr class='my-2 border-gray-300'>
 
 <table class="table">
   <thead>
@@ -16,7 +40,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= for character <- @characters do %>
+    <%= for character <- @current_user.characters do %>
       <tr>
         <td class='text-center'>
           <%= if @current_user.active_character_id == character.id do %>

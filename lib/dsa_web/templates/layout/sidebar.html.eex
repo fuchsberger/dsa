@@ -3,16 +3,9 @@
     <%= icon("eye-solid", "h-10 w-10 text-indigo-500") %>
     <div class='pl-3 text-gray-200 text-3xl font-bold tracking-tighter'><%= gettext("DSA Tool") %></div>
   </header>
+
   <%= if @current_user do %>
-    <button class="relative h-20 px-6 flex items-center justify-between cursor-pointer text-inherit text-left focus:outline-none bg-gray-700 group w-full">
-      <div class="flex-grow overflow-hidden">
-        <div class="text-white truncate text-lg">Ethric</div>
-        <div class="truncate">
-          <span class="">Elementarmagier</span>
-        </div>
-      </div>
-      <%= icon("chevron-down-solid", "h-6 w-6 group-hover:text-gray-300") %>
-    </button>
+    <%= render "character_selection.html", conn: @conn, current_user: @current_user %>
   <% else %>
     <div class='relative h-20 px-4 flex flex-col justify-center bg-gray-700'>
       <%= link t(:heading_registration), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>

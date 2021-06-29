@@ -10,7 +10,7 @@ defmodule Dsa.Logs.TraitRoll do
     field :modifier, :integer, default: 0
     field :success, :boolean, default: false
     field :critical, :boolean, default: false
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
     belongs_to :group, Dsa.Accounts.Group
     timestamps()
   end

@@ -10,7 +10,7 @@ defmodule Dsa.Characters.CombatSet do
     field :tp_dice, :integer, default: 1
     field :tp_type, :integer, default: 6
 
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
 
     timestamps()
   end

@@ -8,7 +8,7 @@ defmodule Dsa.Data.Language do
   schema "languages" do
     field :level, :integer, default: 1
     field :language_id, :integer, primary_key: true
-    belongs_to :character, Dsa.Characters.Character, primary_key: true
+    belongs_to :character, Dsa.Game.Character, primary_key: true
   end
 
   @fields ~w(character_id language_id level)a

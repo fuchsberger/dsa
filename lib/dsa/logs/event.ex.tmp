@@ -39,7 +39,7 @@ defmodule Dsa.Logs.Event do
     field :result, :string
     field :roll, :integer
 
-    belongs_to :character, Dsa.Characters.Character
+    belongs_to :character, Dsa.Game.Character
     belongs_to :group, Dsa.Accounts.Group
 
     timestamps()

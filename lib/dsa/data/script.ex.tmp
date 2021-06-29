@@ -7,7 +7,7 @@ defmodule Dsa.Data.Script do
   @primary_key false
   schema "scripts" do
     field :script_id, :integer, primary_key: true
-    belongs_to :character, Dsa.Characters.Character, primary_key: true
+    belongs_to :character, Dsa.Game.Character, primary_key: true
   end
 
   @fields ~w(character_id script_id)a
