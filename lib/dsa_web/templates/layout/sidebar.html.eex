@@ -8,8 +8,8 @@
     <%= render "character_selection.html", conn: @conn, current_user: @current_user %>
   <% else %>
     <div class='relative h-20 px-4 flex flex-col justify-center bg-gray-700'>
-      <%= link t(:heading_registration), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>
-      <%= link t(:or_sign_in), to: Routes.user_session_path(@conn, :new), class: "px-2 rounded-lg hover:bg-gray-800" %>
+      <%= link dgettext("account", "Account erstellen"), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>
+      <%= link dgettext("account", "oder melde dich an"), to: Routes.user_session_path(@conn, :new), class: "px-2 rounded-lg hover:bg-gray-800" %>
     </div>
   <% end %>
   <nav>

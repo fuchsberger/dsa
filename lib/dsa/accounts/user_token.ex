@@ -45,7 +45,7 @@ defmodule Dsa.Accounts.UserToken do
 
     query =
       from user in Dsa.Accounts.User, as: :user,
-        left_join: token in subquery(token_query), on: user.id == token.user_id,
+        join: token in subquery(token_query), on: user.id == token.user_id,
         left_join: characters in assoc(user, :characters),
         left_lateral_join: c in subquery(
           from Character,

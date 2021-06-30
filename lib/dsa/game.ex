@@ -59,12 +59,12 @@ defmodule Dsa.Game do
   #   |> Repo.all()
   # end
 
-  # def create(%User{} = user, attrs) do
-  #   %Character{}
-  #   |> Character.changeset(attrs)
-  #   |> Ecto.Changeset.put_assoc(:user, user)
-  #   |> Repo.insert()
-  # end
+  def create_character(%User{} = user, attrs) do
+    %Character{}
+    |> Character.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
 
   # def update(%Character{} = character, attrs) do
   #   character

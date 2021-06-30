@@ -2,15 +2,16 @@ defmodule Dsa.Game.Character do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import DsaWeb.Gettext
 
   alias Dsa.Data
 
   @default_data %{
-    skills: Enum.into(1..Data.get_skill_count(), %{}, fn id -> {id, 0} end)
+    skills: Enum.into(1..Data.get_skill_count(), %{}, fn id -> {"#{id}", 0} end)
   }
 
   schema "characters" do
-    field :active, :boolean, default: false
+    field :active, :boolean, default: true
     field :name, :string
     field :profession, :string
     field :data, Ecto.JSON, default: @default_data
@@ -58,6 +59,7 @@ defmodule Dsa.Game.Character do
     |> validate_required(@required)
     |> validate_length(:name, min: 2, max: 25)
     |> validate_length(:profession, min: 3, max: 30)
+    |> deep_merge_data(attrs)
     # |> validate_number(:mu, greater_than_or_equal_to: 0)
     # |> validate_number(:kl, greater_than_or_equal_to: 0)
     # |> validate_number(:in, greater_than_or_equal_to: 0)
@@ -77,5 +79,14 @@ defmodule Dsa.Game.Character do
     # |> validate_number(:sp, greater_than_or_equal_to: 0, less_than_or_equal_to: 6)
     # |> validate_number(:ini_basis, greater_than_or_equal_to: 0, less_than_or_equal_to: 30)
     # |> foreign_key_constraint(:active_combat_set_id)
+  end
+
+  defp deep_merge_data(changeset, _attrs) do
+    data = %{}
+
+    case Jason.encode(MapUtilities.deep_merge(@default_data, data)) do
+      {:ok, merged_data} -> put_change(changeset, :data, merged_data)
+      {:error, _reason} -> add_error(changeset, :data, gettext("Heldendaten sind korrupt."))
+    end
   end
 end

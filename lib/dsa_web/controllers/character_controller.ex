@@ -55,17 +55,17 @@ defmodule DsaWeb.CharacterController do
   #   |> render("new.html")
   # end
 
-  # def create(conn, %{"character" => character_params}, current_user) do
-  #   case Characters.create(current_user, character_params) do
-  #     {:ok, character} ->
-  #       conn
-  #       |> put_flash(:info, gettext("Character created successfully."))
-  #       |> redirect(to: Routes.character_path(conn, :edit, character))
+  def create(conn, %{"character" => character_params}, current_user) do
+    case Game.create_character(current_user, character_params) do
+      {:ok, character} ->
+        conn
+        |> put_flash(:info, gettext("Character created successfully."))
+        |> redirect(to: Routes.character_path(conn, :index))
 
-  #     {:error, %Ecto.Changeset{} = changeset} ->
-  #       render(conn, "new.html", changeset: changeset)
-  #   end
-  # end
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "index.html", changeset: changeset)
+    end
+  end
 
   # def edit(conn, %{"id" => _id}, _current_user) do
   #   conn

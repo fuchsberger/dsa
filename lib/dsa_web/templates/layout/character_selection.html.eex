@@ -1,14 +1,23 @@
-<%= unless is_nil(@current_user.active_character_id) do %>
+<% active_characters = active_characters(@current_user) %>
+
+<%= if Enum.count(active_characters) == 0 do %>
+  <%= link to: Routes.character_path(@conn, :index), class: "relative h-20 px-4 flex flex-col justify-center bg-gray-700" do %>
+    <span class='text-white text-lg px-2'><%= gettext("Held erstellen") %></span>
+    <span class='px-2'><%= gettext("Heldenübersicht") %></span>
+  <% end %>
+<% else %>
+  <% {heading, subheading} = active_character_info(@current_user) %>
+
   <div x-data='{ open: false }'>
-    <button type='button' class="relative h-20 px-6 flex items-center justify-between cursor-pointer text-inherit text-left focus:outline-none bg-gray-700 group w-full" aria-expanded="false" aria-haspopup="true" @click='open=true'>
+    <button type='button' class="relative h-20 px-6 flex items-center justify-between rounded-none border-none font-normal text-inherit text-left focus:outline-none focus:ring-0 bg-gray-700 group w-full hover:bg-gray-600" aria-expanded="false" aria-haspopup="true" @click='open=true'>
       <span class="sr-only"><%= gettext("Öffne Heldenauswahl") %></span>
       <div class="flex-grow overflow-hidden">
-        <div class="text-white truncate text-lg">Ethric</div>
+        <div class="text-gray-100 group-hover:text-white truncate text-lg"><%= heading %></div>
         <div class="truncate">
-          <span class="">Elementarmagier</span>
+          <span class="text-gray-300 group-hover:text-gray-100"><%= subheading %></span>
         </div>
       </div>
-      <%= icon("chevron-down-solid", "h-6 w-6 group-hover:text-gray-300") %>
+      <%= icon("chevron-down-solid", "h-6 w-6 text-gray-300 group-hover:text-gray-100") %>
     </button>
 
     <div class="origin-top-right absolute right-0 mt-2 mr-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
@@ -21,14 +30,13 @@
       x-transition:leave-start='transform opacity-100 scale-100'
       x-transition:leave-end='transform opacity-0 scale-95'>
       <!-- Active: "bg-gray-100", Not Active: "" -->
-      <%= link t(:settings), to: Routes.user_settings_path(@conn, :edit), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
+      <%= link gettext("Heldenübersicht"), to: Routes.character_path(@conn, :index), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
 
-      <%= link t(:sign_out), to: Routes.user_session_path(@conn, :delete), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, role: "menuitem", tabindex: -1 %>
+      <%= for {id, name} <- active_characters do %>
+
+        <%# link name, to: Routes.character_path(@conn, :activate, id), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
+
+      <% end %>
     </div>
   </div>
-<% else %>
-  <%= link to: Routes.character_path(@conn, :index), class: "relative h-20 px-4 flex flex-col justify-center bg-gray-700" do %>
-    <span class='text-white text-lg px-2'><%= gettext("Held erstellen") %></span>
-    <span class='px-2'><%= gettext("Heldenübersicht") %></span>
-  <% end %>
 <% end %>

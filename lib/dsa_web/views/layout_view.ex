@@ -7,6 +7,38 @@ defmodule DsaWeb.LayoutView do
   def title, do: gettext("DSA Tool")
   def description, do: gettext("Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge")
 
+  @doc """
+  Provides a list of tuples containing id and name of all active characters.
+
+  ## Examples
+      iex> active_characters(current_user)
+      [{1, "Ethric"}]
+  """
+  def active_characters(current_user) do
+    current_user.characters
+    |> Enum.filter(&(&1.active))
+    |> Enum.map(&({&1.id, &1.name}))
+  end
+
+  @doc """
+  Returns name and profession of active character or default entries, if non is selected.
+
+  ## Examples
+      iex> active_character_info(current_user)
+      {"Ethric", "Elementarmagier"}
+
+      iex> active_character_info(user_without_active_character)
+      {"Kein Held ausgewählt", "Held erstellen"}
+  """
+  def active_character_info(current_user) do
+    if is_nil(current_user.active_character_id) do
+      {gettext("Held erstellen"), gettext("Kein Held ausgewählt")}
+    else
+      character = Enum.find(current_user.characters, &(&1.id == current_user.active_character_id))
+      {character.name, character.profession}
+    end
+  end
+
   # defp active_character_name(%User{} = current_user) do
   #   if is_nil(current_user.active_character_id) do
   #     gettext("No active character")

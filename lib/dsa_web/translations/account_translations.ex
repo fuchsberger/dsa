@@ -26,15 +26,12 @@ defmodule DsaWeb.AccountTranslations do
   def t(:password), do: dgettext(@d, "Passwort")
   def t(:remember_me), do: dgettext(@d, "Für 60 Tage eingeloggt bleiben")
   def t(:sign_in), do: dgettext(@d, "Einloggen")
-  def t(:or_sign_in), do: dgettext(@d, "oder melde dich an")
   def t(:sign_out), do: dgettext(@d, "Ausloggen")
 
   # Registration controller
   def t(:registration_successful), do: dgettext(@d, "Willkommen im DSA Tool! Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet.")
 
   # Registration view / templates
-  def t(:heading_registration), do: dgettext(@d, "Registrierung")
-  def t(:signin_link), do: dgettext(@d, "melde dich an")
   def t(:username), do: dgettext(@d, "Benutzername")
   def t(:password_confirmation), do: dgettext(@d, "Bestätige Passwort")
   def t(:sign_up), do: dgettext(@d, "Benutzer registrieren")

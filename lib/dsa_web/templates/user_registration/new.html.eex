@@ -1,10 +1,10 @@
 <div class="max-w-sm mx-auto space-y-6">
   <div>
     <%= icon("eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
-    <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= t(:heading_registration) %></h2>
+    <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= dgettext("account", "Account erstellen") %></h2>
     <p class="mt-2 text-center text-sm text-gray-600">
-      <%= t(:or) %>
-      <%= link t(:signin_link), to: Routes.user_session_path(@conn, :new), class: "link" %>
+      <%= gettext("oder") %>
+      <%= link dgettext("account", "melde dich an"), to: Routes.user_session_path(@conn, :new), class: "link" %>
     </p>
   </div>
 

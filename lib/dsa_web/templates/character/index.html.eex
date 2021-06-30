@@ -12,7 +12,7 @@
     </div>
     <div>
       <%= label f, :profession, gettext("Profession"), class: "sr-only" %>
-      <%= email_input f, :profession,
+      <%= text_input f, :profession,
         autocomplete: "email",
         placeholder: gettext("Profession"),
         required: true %>
@@ -28,7 +28,7 @@
 
 <hr class='my-2 border-gray-300'>
 
-<table class="table">
+<table>
   <thead>
     <tr>
       <th scope="col" class="text-center w-6 "><%= icon "star-solid" %></th>
@@ -46,19 +46,20 @@
           <%= if @current_user.active_character_id == character.id do %>
             <%= icon "star-solid" %>
           <% else %>
-            <%= link icon("star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
+            <%# link icon("star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
+            <%= icon "star-solid" %>
           <% end %>
         </td>
         <td class='text-center'>
-          <%= link icon(if character.visible, do: "eye", else: "eye-off"), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
+          <%# link icon(if character.active, do: "eye", else: "eye-off"), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
         </td>
         <td><%= character.name %></td>
         <td class='hidden lg:table-cell'><%= character.profession %></td>
         <td class='text-center'>
-          <%= link icon("pencil-solid"), to: Routes.character_path(@conn, :edit, character.id) %>
+          <%# link icon("pencil-solid"), to: Routes.character_path(@conn, :edit, character.id) %>
         </td>
         <td class='text-center'>
-          <%= link icon("x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
+          <%# link icon("x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
         </td>
       </tr>
     <% end %>

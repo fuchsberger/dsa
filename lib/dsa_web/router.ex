@@ -70,7 +70,7 @@ defmodule DsaWeb.Router do
 
     # heldenverwaltung
     get "/helden", CharacterController, :index
-    post "/held_erstellen", CharacterController, :create
+    post "/helden", CharacterController, :create
   end
 
   scope "/", DsaWeb do

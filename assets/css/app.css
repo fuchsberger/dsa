@@ -3,6 +3,7 @@
 @import "tailwindcss/utilities";
 
 @import "components/layout.css";
+@import "components/tables.css";
 @import "components/forms.css";
 @import "components/labels.css";
 @import "components/menu.css";

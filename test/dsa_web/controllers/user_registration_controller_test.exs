@@ -8,8 +8,8 @@ defmodule DsaWeb.UserRegistrationControllerTest do
     test "renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ t(:heading_registration) <> "</h2>"
-      assert response =~ t(:signin_link) <> "</a>"
+      assert response =~ dgettext("account", "Account erstellen") <> "</h2>"
+      assert response =~ dgettext("account", "melde dich an") <> "</a>"
       assert response =~ t(:sign_up) <> "</button>"
     end
 
@@ -51,7 +51,7 @@ defmodule DsaWeb.UserRegistrationControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ t(:heading_registration) <> "</h2>"
+      assert response =~ dgettext("account", "Account erstellen") <> "</h2>"
       assert response =~ dgettext("errors", "has invalid format")
       # TODO (doesnt translate for unknown reason)
       # assert response =~ dgettext("errors", "should be at least %{count} character", count: 12)

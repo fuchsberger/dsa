@@ -1,5 +1,6 @@
 <%# Page Wrapper %>
-<div class='page-wrapper' x-data='{open:false}' x-init='elms = document.querySelector(".desktop-wrapper nav"); SimpleScrollbar.initEl(elms);'>
+<div class='page-wrapper' x-data='{open:false}' x-init='elms = document.querySelector(".desktop-wrapper nav"); '>
+  <%# SimpleScrollbar.initEl(elms); %>
   <%# Mobile Sidebar Wrapper %>
   <div class="mobile-wrapper" role="dialog" aria-modal="true" x-show='open===true'>
     <%# Mobile Backdrop %>

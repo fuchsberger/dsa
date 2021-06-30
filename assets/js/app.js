@@ -18,7 +18,7 @@ import 'phoenix_html'
 import {Socket} from "phoenix"
 import LiveSocket from "phoenix_live_view"
 import algoliasearch from 'algoliasearch/lite'
-import SimpleScrollbar from 'simple-scrollbar'
+// import SimpleScrollbar from 'simple-scrollbar'
 import topbar from "topbar"
 
 // Start Alpine.js
@@ -52,8 +52,7 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-global.SimpleScrollbar = SimpleScrollbar
-
+// window.SimpleScrollbar = SimpleScrollbar
 /**
  * Configure Algoria search
  *
