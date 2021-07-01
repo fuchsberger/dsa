@@ -9,7 +9,6 @@
 @import "components/menu.css";
 @import "components/scrollbar.css";
 
-/* @tailwind screens; */
 @layer components {
   #main-wrapper { @apply fixed inset-0 top-12 overflow-hidden; }
 
@@ -24,8 +23,6 @@
   .button { @apply shadow-sm leading-8 py-0 px-3 border border-transparent text-sm font-medium rounded-md text-gray-100 bg-indigo-600; }
   .button:hover { @apply bg-indigo-700 text-white; }
   .button:focus { @apply outline-none ring-2 ring-offset-2 ring-indigo-500; }
-
-
 
   /* Alerts */
   .alert { @apply py-2 px-10 mb-3 rounded-md; }

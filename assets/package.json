@@ -6,7 +6,7 @@
   "license": "Creative Commons Attribution Non Commercial No Derivatives 4.0 International",
   "scripts": {
     "deploy": "NODE_ENV=production webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "watch": "webpack --mode development --watch --verbose"
   },
   "dependencies": {
     "algoliasearch": "^4.10.2",

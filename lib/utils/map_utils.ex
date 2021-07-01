@@ -1,4 +1,9 @@
 defmodule MapUtilities do
+  @doc """
+  Deep merges two maps.
+  Careful with using lists as values. If a key containing a list is overwritten,
+  the left list is lost in it's entirety.
+  """
   def deep_merge(left, right) do
     Map.merge(left, right, &deep_resolve/3)
   end

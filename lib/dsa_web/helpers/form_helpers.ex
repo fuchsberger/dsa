@@ -87,4 +87,8 @@ defmodule DsaWeb.Helpers.FormHelpers do
       end
     end)
   end
+
+  def validated_class(changeset) do
+    if changeset.action, do: " validated", else: ""
+  end
 end

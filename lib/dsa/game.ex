@@ -11,12 +11,16 @@ defmodule Dsa.Game do
   alias Dsa.Game.{Character}
   # alias Dsa.Game.{Character, CharacterSkill, CharacterSpell, CharacterBlessing}
 
-  def list_user_characters(%User{} = user) do
-    user
-    |> Repo.preload(:characters)
-    |> Map.get(:characters)
-  end
 
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing a character.
+
+  ## Examples
+
+      iex> change_character(character, attrs)
+      %Ecto.Changeset{data: %Character{}}
+
+  """
   def change_character(%Character{} = character, attrs \\ %{}) do
     Character.changeset(character, attrs)
   end
