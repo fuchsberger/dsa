@@ -4,16 +4,13 @@
   <%= form_for @changeset, Routes.character_path(@conn, :create), [class: "md:flex  md:gap-2 space-y-2 md:space-y-0#{validated_class(@changeset)}", novalidate: true], fn f -> %>
     <div>
       <%= label f, :name, gettext("Name"), class: "sr-only" %>
-      <%= text_input f, :name,
-        autocomplete: "email",
-        placeholder: gettext("Name"),
-        required: true %>
+      <%= text_input f, :name, Keyword.merge(input_validations(f, :profession), [
+            placeholder: gettext("Name")]) %>
       <%= error_tag f, :name %>
     </div>
     <div>
       <%= label f, :profession, gettext("Profession"), class: "sr-only" %>
       <%= text_input f, :profession, Keyword.merge(input_validations(f, :profession), [
-            autocomplete: "email",
             placeholder: gettext("Profession")]) %>
       <%= error_tag f, :profession %>
     </div>

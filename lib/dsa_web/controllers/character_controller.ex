@@ -55,6 +55,10 @@ defmodule DsaWeb.CharacterController do
   #   |> render("new.html")
   # end
 
+  @doc """
+  Creates a new, activated character.
+  If no character is currently activated, it will also activate it.
+  """
   def create(conn, %{"character" => character_params}, current_user) do
     case Game.create_character(current_user, character_params) do
       {:ok, character} ->

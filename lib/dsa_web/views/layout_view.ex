@@ -47,19 +47,12 @@ defmodule DsaWeb.LayoutView do
   #   end
   # end
 
-  def alert_colors(type) do
+  def alert_icon(type) do
     case type do
-      :error ->
-        {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
-
-      "error" ->
-        {"bg-red-50", "border-red-300", "text-red-400", "text-red-800", "x-circle-solid"}
-
-      "info" ->
-        {"bg-blue-50", "border-blue-300", "text-blue-400", "text-blue-800", "information-circle-solid"}
-
-      "success" ->
-        {"bg-green-50", "border-green-300", "text-green-400", "text-green-800", "check-circle-solid"}
+      :error -> "x-circle-solid"
+      "error" -> "x-circle-solid"
+      "info" -> "information-circle-solid"
+      "success" -> "check-circle-solid"
     end
   end
 
