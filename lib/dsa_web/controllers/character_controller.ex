@@ -49,12 +49,6 @@ defmodule DsaWeb.CharacterController do
   #   end
   # end
 
-  # def new(conn, _params, _current_user) do
-  #   conn
-  #   |> assign(:changeset, Characters.change())
-  #   |> render("new.html")
-  # end
-
   @doc """
   Creates a new, activated character.
   If no character is currently activated, it will also activate it.
@@ -62,9 +56,18 @@ defmodule DsaWeb.CharacterController do
   def create(conn, %{"character" => character_params}, current_user) do
     case Game.create_character(current_user, character_params) do
       {:ok, character} ->
-        conn
-        |> put_flash(:info, gettext("Character created successfully."))
-        |> redirect(to: Routes.character_path(conn, :index))
+        if is_nil(current_user.active_character_id) do
+          Game.activate_character(current_user, character)
+
+          conn
+          |> put_flash(:info, gettext("Held erfolgreich erstellt und aktiviert."))
+          |> redirect(to: Routes.character_path(conn, :index))
+        else
+          conn
+          |> put_flash(:info, gettext("Held erfolgreich erstellt."))
+          |> redirect(to: Routes.character_path(conn, :index))
+        end
+
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "index.html", changeset: changeset)

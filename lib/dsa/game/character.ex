@@ -7,7 +7,7 @@ defmodule Dsa.Game.Character do
   alias Dsa.Data
 
   @default_data %{
-    skills: Enum.into(1..Data.get_skill_count(), %{}, fn id -> {"#{id}", 0} end)
+    skills: Enum.into(1..Data.get_skill_count(), %{}, fn id -> {"skill_#{id}", 0} end)
   }
 
   schema "characters" do

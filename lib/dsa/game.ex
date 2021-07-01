@@ -63,6 +63,22 @@ defmodule Dsa.Game do
   #   |> Repo.all()
   # end
 
+  @doc """
+  Activates a character for a given user.
+  Returns an error if the character does not belong to user.
+  """
+  def activate_character(%User{} = user, %Character{} = character) do
+    if user.id != character.user_id do
+      {:error, :permission_denied}
+    else
+      user
+      |> Repo.preload(:active_character)
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:active_character, character)
+      |> Repo.update()
+    end
+  end
+
   def create_character(%User{} = user, attrs) do
     %Character{}
     |> Character.changeset(attrs)
@@ -89,13 +105,7 @@ defmodule Dsa.Game do
 
   # def delete(%Character{} = character), do: Repo.delete(character)
 
-  # def activate(%User{} = user, character) do
-  #   user
-  #   |> Repo.preload(:active_character)
-  #   |> Ecto.Changeset.change()
-  #   |> Ecto.Changeset.put_assoc(:active_character, character)
-  #   |> Repo.update()
-  # end
+
 
   # def add_skills(%Character{} = character) do
   #   character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)
