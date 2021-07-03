@@ -1,11 +1,4 @@
 @layer base {
-
-  button { @apply bg-white shadow-sm border border-gray-500 text-gray-600 font-medium rounded-md px-3 leading-8 h-8; }
-  button:hover { @apply bg-gray-200 border-gray-600 text-gray-800; }
-  button:focus { @apply outline-none ring-2 border-indigo-500; }
-
-  button > svg { @apply inline-block -mt-1 mr-1; }
-
   input[type='text'],
   input[type='password'],
   input[type='email'],
@@ -19,10 +12,6 @@
 @layer components {
 
   /* small variation */
-
-  button.small { @apply h-8; }
-
-  button.small,
   input[type='text'].small,
   input[type='password'].small,
   input[type='email'].small,

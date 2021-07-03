@@ -10,6 +10,7 @@ defmodule Dsa.Game.Character do
     skills: Enum.into(1..Data.get_skill_count(), %{}, fn id -> {"skill_#{id}", 0} end)
   }
 
+  @derive {Inspect, except: [:data]}
   schema "characters" do
     field :active, :boolean, default: true
     field :name, :string

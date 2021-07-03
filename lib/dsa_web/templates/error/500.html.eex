@@ -1,6 +1,6 @@
 <%= render "header.html", conn: @conn %>
 <h2><%= dgettext("account", "Ein Fehler ist aufgetreten") %></h2>
-<%= if @reason.message do %>
+<%= if @reason && Map.has_key?(@reason, :message) do %>
   <%= render DsaWeb.LayoutView, "alert.html", type: :error, message: @reason.message %>
 <% end %>
 <%= render "footer.html", conn: @conn %>

@@ -7,6 +7,8 @@ defmodule DsaWeb.CharacterController do
   alias Dsa.Game
   alias Dsa.Game.Character
 
+  action_fallback DsaWeb.ErrorController
+
   # plug :assign_character when action in [:edit, :update, :delete, :activate, :toggle_visible]
 
   def action(conn, _) do
@@ -17,7 +19,7 @@ defmodule DsaWeb.CharacterController do
   @doc """
   Lists all characters that belong to current user (dashboard).
   """
-  def index(conn, _params, current_user) do
+  def index(conn, _params, _current_user) do
     changeset = Game.change_character(%Character{})
     render(conn, "index.html", changeset: changeset)
   end
@@ -57,7 +59,7 @@ defmodule DsaWeb.CharacterController do
     case Game.create_character(current_user, character_params) do
       {:ok, character} ->
         if is_nil(current_user.active_character_id) do
-          Game.activate_character(current_user, character)
+          Game.select_character(current_user, character)
 
           conn
           |> put_flash(:info, gettext("Held erfolgreich erstellt und aktiviert."))
@@ -94,27 +96,54 @@ defmodule DsaWeb.CharacterController do
   #   end
   # end
 
-  # def delete(conn, %{"id" => _id}, _current_user) do
-  #   {:ok, _character} = Characters.delete(conn.assigns.character)
+  @doc """
+  Deletes a character from the Game.
+  Should it be active character will automatically select another active character
+  to be the active one.
+  """
+  def delete(conn, %{"id" => id}, current_user) do
+    with {:ok, character} <- Game.fetch_character(id),
+          :ok <- owned_character?(current_user, character),
+         {:ok, _character} = Game.delete_character(character)
+    do
+      next_character =
+        current_user.characters
+        |> Enum.filter(&(&1.active))
+        |> Enum.reject(&(&1.id == character.id))
+        |> List.first()
 
-  #   conn
-  #   |> put_flash(:info, gettext("Character deleted successfully."))
-  #   |> redirect(to: Routes.character_path(conn, :index))
-  # end
+      unless is_nil(next_character) do
+        character = next_character |> Map.get(:id) |> Game.get_character!()
+        Game.select_character(current_user, character)
+      end
 
-  # def activate(conn, %{"id" => _id}, current_user) do
-  #   case Characters.activate(current_user, conn.assigns.character) do
-  #     {:ok, _user} ->
-  #       redirect(conn, to: Routes.character_path(conn, :index))
+      conn
+      |> put_flash(:info, gettext("Held erfolgreich gelöscht."))
+      |> redirect(to: Routes.character_path(conn, :index))
+    end
+  end
 
-  #     {:error, %Ecto.Changeset{} = changeset} ->
-  #       Logger.error("Error updating user: \n#{inspect(changeset.errors)}")
+  defp owned_character?(user, character) do
+    if user.id == character.user_id, do: :ok, else: {:error, :forbidden}
+  end
 
-  #       conn
-  #       |> put_flash(:info, gettext("An error occured when updating user."))
-  #       |> redirect(to: Routes.character_path(conn, :index))
-  #   end
-  # end
+  def activate(conn, %{"id" => id}, current_user) do
+    with {:ok, character} <- Game.fetch_character(id),
+          :ok <- owned_character?(current_user, character),
+         {:ok, _character} = Game.toggle_character(character, true)
+    do
+      redirect(conn, to: Routes.character_path(conn, :index))
+    end
+  end
+
+  def deactivate(conn, %{"id" => id}, current_user) do
+    with {:ok, character} <- Game.fetch_character(id),
+          :ok <- owned_character?(current_user, character),
+         {:ok, _character} = Game.toggle_character(character, false)
+    do
+      redirect(conn, to: Routes.character_path(conn, :index))
+    end
+  end
 
   # def toggle_visible(conn, %{"id" => _id}, _current_user) do
   #   params = %{visible: !conn.assigns.character.visible}

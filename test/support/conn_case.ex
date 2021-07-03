@@ -43,6 +43,15 @@ defmodule DsaWeb.ConnCase do
   end
 
   @doc """
+  Assertation helper that checks whether a flash message contains text.
+  """
+  def flash_messages_contain(conn, text) do
+    conn
+    |> Phoenix.Controller.get_flash()
+    |> Enum.any?(fn item -> String.contains?(elem(item, 1), text) end)
+  end
+
+  @doc """
   Setup helper that registers and logs in users.
 
       setup :register_and_log_in_user

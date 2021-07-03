@@ -1,42 +1,52 @@
-<% active_characters = active_characters(@current_user) %>
+<%= if @current_user do %>
+  <% active_characters = Enum.filter(@current_user.characters, &(&1.active)) %>
 
-<%= if Enum.count(active_characters) == 0 do %>
-  <%= link to: Routes.character_path(@conn, :index), class: "relative h-20 px-4 flex flex-col justify-center bg-gray-700" do %>
-    <span class='text-white text-lg px-2'><%= gettext("Held erstellen") %></span>
-    <span class='px-2'><%= gettext("Heldenübersicht") %></span>
+  <%= if Enum.count(active_characters) >= 2 do %>
+    <div x-data='{ open: false }'>
+      <button type='button' class="relative h-20 px-6 flex items-center justify-between rounded-none border-0 font-normal text-inherit text-left focus:outline-none focus:ring-0 bg-gray-700 group w-full hover:bg-gray-600" aria-expanded="false" aria-haspopup="true" @click='open=true'>
+        <span class="sr-only"><%= gettext("Öffne Heldenauswahl") %></span>
+        <div class="flex-grow overflow-hidden">
+          <div class="text-gray-100 group-hover:text-white truncate text-lg"><%= @current_user.active_character.name %></div>
+          <div class="truncate">
+            <span class="text-gray-300 group-hover:text-gray-100"><%= @current_user.active_character.profession %></span>
+          </div>
+        </div>
+        <%= icon("chevron-down-solid", "h-6 w-6 text-gray-300 group-hover:text-gray-100") %>
+      </button>
+
+      <div class="origin-top-right absolute right-0 mt-2 mr-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
+        @click.away="open=false"
+        x-show='open===true'
+        x-transition:enter='transition ease-out duration-100'
+        x-transition:enter-start='transform opacity-0 scale-95'
+        x-transition:enter-end='transform opacity-100 scale-100'
+        x-transition:leave='transition ease-in duration-75'
+        x-transition:leave-start='transform opacity-100 scale-100'
+        x-transition:leave-end='transform opacity-0 scale-95'>
+        <!-- Active: "bg-gray-100", Not Active: "" -->
+        <%= link gettext("Heldenübersicht"), to: Routes.character_path(@conn, :index), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
+
+        <%= for character <- active_characters do %>
+
+          <%= link character.name, to: Routes.character_path(@conn, :activate, character.id), class: "block px-4 py-2 text-sm text-gray-700", method: :put, role: "menuitem", tabindex: -1 %>
+
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <%= link to: Routes.character_path(@conn, :index), class: "character-selection" do %>
+      <%= if @current_user.active_character do %>
+        <span class='text-white text-lg px-2'><%= @current_user.active_character.name %></span>
+        <span class='px-2'><%= @current_user.active_character.profession %></span>
+      <% else %>
+        <span class='text-white text-lg px-2'><%= gettext("Held erstellen") %></span>
+        <span class='px-2'><%= gettext("Heldenübersicht") %></span>
+      <% end %>
+    <% end %>
   <% end %>
 <% else %>
-  <% {heading, subheading} = active_character_info(@current_user) %>
-
-  <div x-data='{ open: false }'>
-    <button type='button' class="relative h-20 px-6 flex items-center justify-between rounded-none border-0 font-normal text-inherit text-left focus:outline-none focus:ring-0 bg-gray-700 group w-full hover:bg-gray-600" aria-expanded="false" aria-haspopup="true" @click='open=true'>
-      <span class="sr-only"><%= gettext("Öffne Heldenauswahl") %></span>
-      <div class="flex-grow overflow-hidden">
-        <div class="text-gray-100 group-hover:text-white truncate text-lg"><%= heading %></div>
-        <div class="truncate">
-          <span class="text-gray-300 group-hover:text-gray-100"><%= subheading %></span>
-        </div>
-      </div>
-      <%= icon("chevron-down-solid", "h-6 w-6 text-gray-300 group-hover:text-gray-100") %>
-    </button>
-
-    <div class="origin-top-right absolute right-0 mt-2 mr-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
-      @click.away="open=false"
-      x-show='open===true'
-      x-transition:enter='transition ease-out duration-100'
-      x-transition:enter-start='transform opacity-0 scale-95'
-      x-transition:enter-end='transform opacity-100 scale-100'
-      x-transition:leave='transition ease-in duration-75'
-      x-transition:leave-start='transform opacity-100 scale-100'
-      x-transition:leave-end='transform opacity-0 scale-95'>
-      <!-- Active: "bg-gray-100", Not Active: "" -->
-      <%= link gettext("Heldenübersicht"), to: Routes.character_path(@conn, :index), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
-
-      <%= for {id, name} <- active_characters do %>
-
-        <%# link name, to: Routes.character_path(@conn, :activate, id), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
-
-      <% end %>
-    </div>
+  <div class='character-selection'>
+    <%= link dgettext("account", "Account erstellen"), to: Routes.user_registration_path(@conn, :new), class: "text-white text-lg px-2 rounded-lg hover:bg-gray-800" %>
+    <%= link dgettext("account", "oder melde dich an"), to: Routes.user_session_path(@conn, :new), class: "px-2 rounded-lg hover:bg-gray-800" %>
   </div>
 <% end %>

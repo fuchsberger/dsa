@@ -16,6 +16,10 @@ defmodule DsaWeb.ErrorView do
     Phoenix.Controller.status_message_from_template(template)
   end
 
+  defp detailed_path(conn) do
+    "#{conn.method} /#{Enum.join(conn.path_info, "/")}"
+  end
+
   defp back_link(conn)  do
     link gettext("zurück zum DSA Tool"),
       class: "block link", to: Routes.page_path(conn, :index)

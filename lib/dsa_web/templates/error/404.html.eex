@@ -1,9 +1,9 @@
 <%= render "header.html", conn: @conn %>
-<h2><%= gettext("Keine Route gefunden für") <> " #{@conn.method} /#{Enum.join(@conn.path_info, "/")}" %></h2>
-<%= case @reason do
-  %Phoenix.Router.NoRouteError{} -> nil
-  %{message: nil} -> nil
-  %{message: message} -> render(DsaWeb.LayoutView, "alert.html", type: :error, message: message)
-  _ -> nil
-end %>
+
+<h2><%= gettext("Keine Route gefunden für") %> <%= detailed_path(@conn) %></h2>
+
+<%= if get_flash(@conn, :error) do %>
+  <%= render(DsaWeb.LayoutView, "alert.html", type: :error, message: get_flash(@conn, :error)) %>
+<% end %>
+
 <%= render "footer.html", conn: @conn %>

@@ -7,10 +7,39 @@ defmodule Dsa.GameTest do
   alias Dsa.Game
   alias Dsa.Game.Character
 
+  describe "" do
+    setup do
+      user = user_fixture()
+      %{character: character_fixture(user)}
+    end
+
+    test "get_character!/1 returns character with given id", %{character: %Character{id: id}} do
+      assert %Character{id: ^id} = Game.get_character!(id)
+    end
+
+    test "delete_character/1 deletes the character", %{character: character} do
+      assert {:ok, %Character{id: id}} = Game.delete_character(character)
+      assert catch_error Game.get_character!(id)
+    end
+  end
+
   describe "change_character/2" do
     test "returns a character changeset" do
       assert %Ecto.Changeset{} = changeset = Game.change_character(%Character{})
       assert changeset.required == [:name, :profession]
+    end
+  end
+
+  describe "fetch_character/1" do
+    test "returns a {:ok, character} tuple if the character exists" do
+      user = user_fixture()
+      %Character{id: id} = character = character_fixture(user)
+      assert {:ok, returned_character} = Game.fetch_character(id)
+      assert character.id == returned_character.id
+    end
+
+    test "returns a {:error, :character_not_found} tuple if the character does not exist" do
+      assert {:error, :character_not_found} = Game.fetch_character(666)
     end
   end
 
@@ -38,7 +67,7 @@ defmodule Dsa.GameTest do
     end
   end
 
-  describe "activate_character/2" do
+  describe "select_character/2" do
     setup do
       user = user_fixture()
       %{
@@ -50,13 +79,13 @@ defmodule Dsa.GameTest do
     test "activates a character if it belongs to the user", %{user: user, character: character} do
       assert is_nil(user.active_character_id)
 
-      {:ok, user} = Game.activate_character(user, character)
+      {:ok, user} = Game.select_character(user, character)
       assert user.active_character_id == character.id
     end
 
     test "does not activate characters that do not belong to user", %{character: character} do
       invalid_user = user_fixture()
-      assert {:error, :permission_denied} = Game.activate_character(invalid_user, character)
+      assert {:error, :permission_denied} = Game.select_character(invalid_user, character)
     end
   end
 end

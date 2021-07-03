@@ -31,6 +31,8 @@
   .menu-item div { @apply bg-transparent rounded-sm mr-2; }
   .menu-item.active div { @apply bg-gray-700 rounded-sm mr-2; }
 
+  .character-selection { @apply relative h-20 px-4 flex flex-col justify-center bg-gray-700; }
+
   /* Main Area */
   .content-area { @apply flex flex-col w-0 flex-1 overflow-hidden; }
   .top-bar { @apply shadow-2xl text-gray-500 bg-white; }
@@ -79,16 +81,6 @@
   /* .search-hit > a > div { @apply flex items-center h-16; }
   .search-hit > a > div > strong { @apply text-gray-900 leading-none px-2; }
   .search-hit > a > div > p { @apply flex-grow text-sm text-gray-600 leading-none truncate; } */
-
-  /* TABLES */
-  .table-wrapper { @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg; }
-  .table-wrapper table { @apply min-w-full divide-y divide-gray-200; }
-  .table-wrapper thead { @apply bg-gray-50; }
-  .table-wrapper thead th { @apply px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider; }
-  .table-wrapper tbody { @apply bg-white divide-y divide-gray-200; }
-  .table-wrapper tbody th { @apply px-3 py-2 text-left text-sm font-medium text-gray-900; }
-  .table-wrapper tbody td { @apply px-3 py-2 text-sm text-gray-500; }
-  td.small { @apply text-center uppercase text-xs !important; }
 }
 
 @layer utilities {

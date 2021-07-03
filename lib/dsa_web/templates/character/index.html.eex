@@ -1,4 +1,4 @@
-<div class="md:flex justify-between">
+<div class="md:flex justify-between mb-3">
   <h1 class='heading'><%= gettext "Heldenübersicht" %></h1>
 
   <%= form_for @changeset, Routes.character_path(@conn, :create), [class: "md:flex  md:gap-2 space-y-2 md:space-y-0#{validated_class(@changeset)}", novalidate: true], fn f -> %>
@@ -16,48 +16,79 @@
     </div>
     <%= submit [icon("plus"), gettext("Held erstellen")] %>
   <% end %>
-
-
-  <%# link gettext("New Character"), to: Routes.character_path(@conn, :new),
-   class: "button gray leading-8 h-8" %>
 </div>
 
-<hr class='my-2 border-gray-300'>
+<% active_characters = Enum.filter(@current_user.characters, &(&1.active)) %>
 
-<table>
-  <thead>
-    <tr>
-      <th scope="col" class="text-center w-6 "><%= icon "star-solid" %></th>
-      <th scope="col" class='text-center w-6'><%= icon "eye-solid" %></th>
-      <th scope="col">Name</th>
-      <th scope="col" class='hidden lg:table-cell'>Profession</th>
-      <th scope="col" class='text-center w-6'><%= icon "pencil-solid" %></th>
-      <th scope="col" class="text-center w-6"><%= icon "x" %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for character <- @current_user.characters do %>
-      <tr>
-        <td class='text-center'>
-          <%= if @current_user.active_character_id == character.id do %>
-            <%= icon "star-solid" %>
-          <% else %>
-            <%# link icon("star"), to: Routes.character_path(@conn, :activate, character.id), method: :put %>
-            <%= icon "star-solid" %>
-          <% end %>
-        </td>
-        <td class='text-center'>
-          <%# link icon(if character.active, do: "eye", else: "eye-off"), to: Routes.character_path(@conn, :toggle_visible, character.id), method: :put %>
-        </td>
-        <td><%= character.name %></td>
-        <td class='hidden lg:table-cell'><%= character.profession %></td>
-        <td class='text-center'>
-          <%# link icon("pencil-solid"), to: Routes.character_path(@conn, :edit, character.id) %>
-        </td>
-        <td class='text-center'>
-          <%# link icon("x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "text-red-700 hover:text-red-500", data_confirm: gettext("Are you sure you want to delete this character?") %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="flex flex-col pb-3">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Profession</th>
+              <th scope="col" class="w-6"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for character <- active_characters do %>
+              <tr>
+                <td><%= character.name %></td>
+                <td><%= character.profession %></td>
+                <td class='text-center'>
+                  <%= button icon("archive"), to: Routes.character_path(@conn, :deactivate, character.id), method: :put, class: "link", title: gettext("Held archivieren") %>
+                </td>
+              </tr>
+            <% end %>
+            <%= unless Enum.count(active_characters) > 0 do %>
+              <tr>
+                <td colspan='3' class='text-center italic'><%= gettext("noch keine Helden erstellt...") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% inactive_characters = Enum.reject(@current_user.characters, &(&1.active)) %>
+
+<%= if Enum.count(inactive_characters) > 0 do %>
+  <h2 class='subheading pb-2'><%= gettext("Archivierte Helden") %></h2>
+
+  <div class="flex flex-col pb-3">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Profession</th>
+                <th scope="col" class="w-6"></th>
+                <th scope="col" class="w-6"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for character <- inactive_characters do %>
+                <tr>
+                  <td><%= character.name %></td>
+                  <td><%= character.profession %></td>
+                  <td class='text-center'>
+                    <%= button icon("upload"), to: Routes.character_path(@conn, :activate, character.id), method: :put, class: "link", title: gettext("Held aktivieren") %>
+                  </td>
+                  <td class='text-center'>
+                    <%= button icon("x"), to: Routes.character_path(@conn, :delete, character.id), method: :delete, class: "link red", data_confirm: gettext("Are you sure you want to delete this character?"), title: gettext("Held löschen") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

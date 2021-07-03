@@ -43,17 +43,16 @@ defmodule Dsa.Accounts.UserToken do
         select: token.user_id,
         where: token.inserted_at > ago(@session_validity_in_days, "day")
 
+    characters_query =
+      from c in Character,
+        order_by: [:active, :name],
+        select: map(c, [:id, :active, :name, :profession])
+
     query =
       from user in Dsa.Accounts.User, as: :user,
         join: token in subquery(token_query), on: user.id == token.user_id,
-        left_join: characters in assoc(user, :characters),
-        left_lateral_join: c in subquery(
-          from Character,
-          where: [user_id: parent_as(:user).id],
-          order_by: [:active, :name],
-          select: [:id]
-        ), on: c.id == characters.id,
-        preload: [characters: characters]
+        left_join: active_character in assoc(user, :active_character),
+        preload: [active_character: active_character, characters: ^characters_query]
 
     {:ok, query}
   end

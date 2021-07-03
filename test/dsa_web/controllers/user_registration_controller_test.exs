@@ -59,10 +59,4 @@ defmodule DsaWeb.UserRegistrationControllerTest do
       assert response =~ dgettext("errors", "can\'t be blank")
     end
   end
-
-  defp flash_messages_contain(conn, text) do
-    conn
-    |> Phoenix.Controller.get_flash()
-    |> Enum.any?(fn item -> String.contains?(elem(item, 1), text) end)
-  end
 end

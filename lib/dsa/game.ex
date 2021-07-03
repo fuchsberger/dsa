@@ -40,11 +40,14 @@ defmodule Dsa.Game do
   #   end
   # end
 
-  # def get!(id) do
-  #   Character
-  #   |> preload_assocs()
-  #   |> Repo.get!(id)
-  # end
+  def get_character!(id), do: Repo.get!(Character, id)
+
+  def fetch_character(id) do
+    case Repo.get(Character, id) do
+      nil -> {:error, :character_not_found}
+      character -> {:ok, character}
+    end
+  end
 
   # def get!(%User{} = user, id) do
   #   Character
@@ -64,10 +67,10 @@ defmodule Dsa.Game do
   # end
 
   @doc """
-  Activates a character for a given user.
+  Selects a character for a given user.
   Returns an error if the character does not belong to user.
   """
-  def activate_character(%User{} = user, %Character{} = character) do
+  def select_character(%User{} = user, %Character{} = character) do
     if user.id != character.user_id do
       {:error, :permission_denied}
     else
@@ -79,12 +82,27 @@ defmodule Dsa.Game do
     end
   end
 
+  @doc """
+  Activates / Deactivates a character.
+  """
+  def toggle_character(%Character{} = character, status) when is_boolean(status) do
+    character
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_change(:active, status)
+    |> Repo.update()
+  end
+
   def create_character(%User{} = user, attrs) do
     %Character{}
     |> Character.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
+
+  @doc """
+  Deletes a character from the game.
+  """
+  def delete_character(%Character{} = character), do: Repo.delete(character)
 
   # def update(%Character{} = character, attrs) do
   #   character
@@ -102,10 +120,6 @@ defmodule Dsa.Game do
   # def preload(%Character{} = character) do
   #   Repo.preload(character, [:active_combat_set, :combat_sets])
   # end
-
-  # def delete(%Character{} = character), do: Repo.delete(character)
-
-
 
   # def add_skills(%Character{} = character) do
   #   character_skill_ids = Enum.map(character.character_skills, & &1.skill_id)

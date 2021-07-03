@@ -71,6 +71,9 @@ defmodule DsaWeb.Router do
     # heldenverwaltung
     get "/helden", CharacterController, :index
     post "/helden", CharacterController, :create
+    put "/helden/:id/activate", CharacterController, :activate
+    put "/helden/:id/deactivate", CharacterController, :deactivate
+    delete "/helden/:id", CharacterController, :delete
   end
 
   scope "/", DsaWeb do
@@ -105,7 +108,6 @@ defmodule DsaWeb.Router do
   #      resources "/entries", DiceTableEntryController
   #      post "/dice_table_roll", EventController, :dice_table_roll
   #   end
-
 
   #   # user registration
   #   # get "/user/confirm/:token", UserController, :confirm
