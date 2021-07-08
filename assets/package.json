@@ -9,8 +9,8 @@
     "watch": "webpack --mode development --watch --verbose"
   },
   "dependencies": {
-    "algoliasearch": "^4.10.2",
-    "alpinejs": "^3.1.1",
+    "algoliasearch": "^4.10.3",
+    "alpinejs": "^3.2.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
@@ -26,13 +26,13 @@
     "css-loader": "^5.2.6",
     "esbuild-loader": "^2.13.1",
     "file-loader": "^6.2.0",
-    "mini-css-extract-plugin": "^1.6.1",
+    "mini-css-extract-plugin": "^2.1.0",
     "postcss": "^8.3.5",
     "postcss-import": "^14.0.2",
-    "postcss-loader": "^6.1.0",
+    "postcss-loader": "^6.1.1",
     "tailwindcss": "^2.2.4",
     "url-loader": "^4.1.1",
-    "webpack": "^5.40.0",
+    "webpack": "^5.43.0",
     "webpack-cli": "^4.7.2"
   }
 }

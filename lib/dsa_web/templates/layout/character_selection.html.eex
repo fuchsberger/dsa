@@ -28,7 +28,7 @@
 
         <%= for character <- active_characters do %>
 
-          <%= link character.name, to: Routes.character_path(@conn, :activate, character.id), class: "block px-4 py-2 text-sm text-gray-700", method: :put, role: "menuitem", tabindex: -1 %>
+          <%= link character.name, to: Routes.character_path(@conn, :select, character.id), class: "block px-4 py-2 text-sm text-gray-700", method: :put, role: "menuitem", tabindex: -1 %>
 
         <% end %>
       </div>

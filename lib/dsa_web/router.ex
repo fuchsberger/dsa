@@ -73,6 +73,7 @@ defmodule DsaWeb.Router do
     post "/helden", CharacterController, :create
     put "/helden/:id/activate", CharacterController, :activate
     put "/helden/:id/deactivate", CharacterController, :deactivate
+    put "/helden/:id/select", CharacterController, :select
     delete "/helden/:id", CharacterController, :delete
   end
 

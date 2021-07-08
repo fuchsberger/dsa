@@ -83,6 +83,22 @@ defmodule Dsa.Game do
   end
 
   @doc """
+  Deselects a character for a given user.
+  Returns an error if the character does not belong to user.
+  """
+  def deselect_character(%User{} = user, %Character{user_id: user_id}) do
+    if user.id != user_id do
+      {:error, :permission_denied}
+    else
+      user
+      |> Repo.preload(:active_character)
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:active_character, nil)
+      |> Repo.update()
+    end
+  end
+
+  @doc """
   Activates / Deactivates a character.
   """
   def toggle_character(%Character{} = character, status) when is_boolean(status) do

@@ -127,23 +127,69 @@ defmodule DsaWeb.CharacterController do
     if user.id == character.user_id, do: :ok, else: {:error, :forbidden}
   end
 
+  @doc """
+  Activates / enables a character.
+  If the no character is currently selected, the activated character will be selected.
+  """
   def activate(conn, %{"id" => id}, current_user) do
     with {:ok, character} <- Game.fetch_character(id),
           :ok <- owned_character?(current_user, character),
-         {:ok, _character} = Game.toggle_character(character, true)
+         {:ok, character} = Game.toggle_character(character, true)
     do
+      if is_nil(current_user.active_character_id) do
+        Game.select_character(current_user, character)
+      end
       redirect(conn, to: Routes.character_path(conn, :index))
     end
   end
 
+  @doc """
+  Deactivates / archives a character.
+  If the deactivated character is the selected character, another active character will be
+  selected. If no other active character is available, simply unselects currenct character.
+  """
   def deactivate(conn, %{"id" => id}, current_user) do
     with {:ok, character} <- Game.fetch_character(id),
           :ok <- owned_character?(current_user, character),
-         {:ok, _character} = Game.toggle_character(character, false)
+         {:ok, character} = Game.toggle_character(character, false)
     do
+
+      if current_user.active_character_id == character.id do
+        Logger.warn(inspect(List.first(current_user.characters)))
+
+        next_character =
+          current_user.characters
+          |> Enum.reject(&(&1.id == character.id))
+          |> Enum.filter(&(&1.active))
+          |> List.first()
+
+        case next_character do
+          nil ->
+            Game.deselect_character(current_user, character)
+
+          %{id: id} ->
+            {:ok, next_character} = Game.fetch_character(id)
+            Game.select_character(current_user, next_character)
+        end
+      end
+
       redirect(conn, to: Routes.character_path(conn, :index))
     end
   end
+
+  @doc """
+  Selects a character, if it belongs to the user.
+  """
+  def select(conn, %{"id" => id}, current_user) do
+    with {:ok, character} <- Game.fetch_character(id),
+          :ok <- owned_character?(current_user, character),
+         {:ok, character} = Game.toggle_character(character, true)
+    do
+      Game.select_character(current_user, character)
+      redirect(conn, to: Routes.character_path(conn, :index))
+    end
+  end
+
 
   # def toggle_visible(conn, %{"id" => _id}, _current_user) do
   #   params = %{visible: !conn.assigns.character.visible}
