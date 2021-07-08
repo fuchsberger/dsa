@@ -71,9 +71,9 @@ defmodule DsaWeb.Router do
     # heldenverwaltung
     get "/helden", CharacterController, :index
     post "/helden", CharacterController, :create
-    put "/helden/:id/activate", CharacterController, :activate
-    put "/helden/:id/deactivate", CharacterController, :deactivate
-    put "/helden/:id/select", CharacterController, :select
+    put "/helden/:id/aktivieren", CharacterController, :activate
+    put "/helden/:id/deaktivieren", CharacterController, :deactivate
+    put "/helden/:id/auswaehlen", CharacterController, :select
     delete "/helden/:id", CharacterController, :delete
   end
 

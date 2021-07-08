@@ -1,7 +1,5 @@
 <%= if @current_user do %>
-  <% active_characters = Enum.filter(@current_user.characters, &(&1.active)) %>
-
-  <%= if Enum.count(active_characters) >= 2 do %>
+  <%= if Enum.count(@current_user.characters) >= 2 do %>
     <div x-data='{ open: false }'>
       <button type='button' class="relative h-20 px-6 flex items-center justify-between rounded-none border-0 font-normal text-inherit text-left focus:outline-none focus:ring-0 bg-gray-700 group w-full hover:bg-gray-600" aria-expanded="false" aria-haspopup="true" @click='open=true'>
         <span class="sr-only"><%= gettext("Öffne Heldenauswahl") %></span>
@@ -26,7 +24,7 @@
         <!-- Active: "bg-gray-100", Not Active: "" -->
         <%= link gettext("Heldenübersicht"), to: Routes.character_path(@conn, :index), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: -1 %>
 
-        <%= for character <- active_characters do %>
+        <%= for character <- @current_user.characters do %>
 
           <%= link character.name, to: Routes.character_path(@conn, :select, character.id), class: "block px-4 py-2 text-sm text-gray-700", method: :put, role: "menuitem", tabindex: -1 %>
 

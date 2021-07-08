@@ -87,6 +87,116 @@ defmodule DsaWeb.CharacterControllerTest do
     end
   end
 
+  describe "PUT /helden/:id/auswaehlen" do
+    setup [:register_and_log_in_user]
+
+    test "selects a character", %{conn: conn, user: user} do
+      assert is_nil(user.active_character_id)
+
+      character = character_fixture(user)
+      conn = put(conn, Routes.character_path(conn, :select, character))
+
+      assert Accounts.get_user!(user.id).active_character_id == character.id
+      assert redirected_to(conn) == Routes.character_path(conn, :index)
+    end
+
+    test "does show an error page if character does not exist", %{conn: conn} do
+      conn = put(conn, Routes.character_path(conn, :select, 70))
+      assert html_response(conn, 404)
+    end
+
+    test "does show an error page if character is not owned", %{conn: conn} do
+      other_user = user_fixture()
+      character = character_fixture(other_user)
+
+      conn = put(conn, Routes.character_path(conn, :select, character))
+      assert html_response(conn, 403)
+    end
+  end
+
+  describe "PUT /helden/:id/aktivieren" do
+    setup [:register_and_log_in_user]
+
+    test "activates a character and selects it, if none selected", %{conn: conn, user: user} do
+      assert is_nil(user.active_character_id)
+
+      character = character_fixture(user, %{active: false})
+      refute character.active
+
+      conn = put(conn, Routes.character_path(conn, :activate, character))
+
+      character = Game.get_character!(character.id)
+      assert character.active
+      assert Accounts.get_user!(user.id).active_character_id == character.id
+      assert redirected_to(conn) == Routes.character_path(conn, :index)
+    end
+
+    test "activates a character and does not select it, if another one is already selected", %{conn: conn, user: user} do
+      activated_character = character_fixture(user)
+
+      conn = put(conn, Routes.character_path(conn, :activate, activated_character))
+
+      new_character = character_fixture(user, %{active: false})
+
+      conn = put(conn, Routes.character_path(conn, :activate, new_character))
+
+      new_character = Game.get_character!(new_character.id)
+      assert new_character.active
+      assert Accounts.get_user!(user.id).active_character_id == activated_character.id
+      assert redirected_to(conn) == Routes.character_path(conn, :index)
+    end
+
+    test "does show an error page if character does not exist", %{conn: conn} do
+      conn = put(conn, Routes.character_path(conn, :activate, 70))
+      assert html_response(conn, 404)
+    end
+
+    test "does show an error page if character is not owned", %{conn: conn} do
+      other_user = user_fixture()
+      character = character_fixture(other_user)
+
+      conn = put(conn, Routes.character_path(conn, :activate, character))
+      assert html_response(conn, 403)
+    end
+  end
+
+  describe "PUT /helden/:id/deaktivieren" do
+    setup [:register_and_log_in_user, :with_active_character]
+
+    test "deactivates a character and selects another, if active characters are available", %{conn: conn, user: user, character: active_character} do
+
+      other_character = character_fixture(user)
+
+      conn = put(conn, Routes.character_path(conn, :deactivate, active_character))
+
+      active_character = Game.get_character!(active_character.id)
+      refute active_character.active
+      assert Accounts.get_user!(user.id).active_character_id == other_character.id
+      assert redirected_to(conn) == Routes.character_path(conn, :index)
+    end
+
+    test "deactivates a character and unselect it, if no other active characters are available", %{conn: conn, user: user, character: character} do
+      conn = put(conn, Routes.character_path(conn, :deactivate, character))
+
+      refute Game.get_character!(character.id).active
+      assert is_nil(Accounts.get_user!(user.id).active_character_id)
+      assert redirected_to(conn) == Routes.character_path(conn, :index)
+    end
+
+    test "does show an error page if character does not exist", %{conn: conn} do
+      conn = put(conn, Routes.character_path(conn, :deactivate, 70))
+      assert html_response(conn, 404)
+    end
+
+    test "does show an error page if character is not owned", %{conn: conn} do
+      other_user = user_fixture()
+      character = character_fixture(other_user)
+
+      conn = put(conn, Routes.character_path(conn, :deactivate, character))
+      assert html_response(conn, 403)
+    end
+  end
+
   describe "requires user authentication" do
     setup [:create_character]
 
@@ -94,7 +204,10 @@ defmodule DsaWeb.CharacterControllerTest do
       Enum.each([
         get(conn, Routes.character_path(conn, :index)),
         post(conn, Routes.character_path(conn, :create, %{})),
-        delete(conn, Routes.character_path(conn, :delete, character))
+        delete(conn, Routes.character_path(conn, :delete, character)),
+        put(conn, Routes.character_path(conn, :activate, 2)),
+        put(conn, Routes.character_path(conn, :deactivate, 2)),
+        put(conn, Routes.character_path(conn, :select, 2)),
       ], fn conn ->
         assert html_response(conn, 302)
         assert conn.halted

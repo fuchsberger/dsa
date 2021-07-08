@@ -65,6 +65,19 @@ defmodule DsaWeb.ConnCase do
   end
 
   @doc """
+  Setup helper that creates an activated character. Requires :register_and_log_in_user
+
+      setup [:register_and_log_in_user, :with_active_character]
+
+  It creates and selects a character.
+  """
+  def with_active_character(%{conn: conn, user: user}) do
+    character  = Dsa.GameFixtures.character_fixture(user)
+    {:ok, user} = Dsa.Game.select_character(user, character)
+    %{conn: conn, user: user, character: user.active_character}
+  end
+
+  @doc """
   Logs the given `user` into the `conn`.
 
   It returns an updated `conn`.

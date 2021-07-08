@@ -33,6 +33,14 @@ defmodule Dsa.Game do
   #   |> Repo.all()
   # end
 
+  def list_inactive_characters(%User{} = user) do
+    from(c in Character,
+      order_by: :name,
+      select: map(c, [:id, :name, :profession]),
+      where: not c.active and c.user_id == ^user.id)
+    |> Repo.all()
+  end
+
   # def fetch(id) do
   #   case Character |> preload_assocs() |> Repo.get(id) do
   #     nil -> {:error, :character_not_found}

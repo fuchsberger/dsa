@@ -45,8 +45,9 @@ defmodule Dsa.Accounts.UserToken do
 
     characters_query =
       from c in Character,
-        order_by: [:active, :name],
-        select: map(c, [:id, :active, :name, :profession])
+        order_by: :name,
+        select: map(c, [:id, :name, :profession]),
+        where: c.active
 
     query =
       from user in Dsa.Accounts.User, as: :user,

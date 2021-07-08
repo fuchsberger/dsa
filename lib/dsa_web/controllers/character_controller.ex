@@ -19,9 +19,10 @@ defmodule DsaWeb.CharacterController do
   @doc """
   Lists all characters that belong to current user (dashboard).
   """
-  def index(conn, _params, _current_user) do
+  def index(conn, _params, current_user) do
+    inactive_characters = Game.list_inactive_characters(current_user)
     changeset = Game.change_character(%Character{})
-    render(conn, "index.html", changeset: changeset)
+    render(conn, "index.html", changeset: changeset, inactive_characters: inactive_characters)
   end
 
   # @doc """
@@ -72,7 +73,8 @@ defmodule DsaWeb.CharacterController do
 
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "index.html", changeset: changeset)
+        inactive_characters = Game.list_inactive_characters(current_user)
+        render(conn, "index.html", changeset: changeset, inactive_characters: inactive_characters)
     end
   end
 
@@ -108,7 +110,6 @@ defmodule DsaWeb.CharacterController do
     do
       next_character =
         current_user.characters
-        |> Enum.filter(&(&1.active))
         |> Enum.reject(&(&1.id == character.id))
         |> List.first()
 
@@ -155,12 +156,9 @@ defmodule DsaWeb.CharacterController do
     do
 
       if current_user.active_character_id == character.id do
-        Logger.warn(inspect(List.first(current_user.characters)))
-
         next_character =
           current_user.characters
           |> Enum.reject(&(&1.id == character.id))
-          |> Enum.filter(&(&1.active))
           |> List.first()
 
         case next_character do
