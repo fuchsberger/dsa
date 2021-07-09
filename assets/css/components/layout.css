@@ -70,7 +70,7 @@
   .error-wrapper > h2 { @apply font-sans font-medium text-xl; }
 
   /* Submit button in account pages (with lock) */
-  .auth-button { @apply primary relative w-full flex justify-center; }
+  .auth-button { @apply relative w-full flex justify-center; }
   .auth-button span { @apply absolute left-0 inset-y-0 flex items-center pl-3; }
   .auth-button svg { @apply h-5 w-5 text-indigo-500 group-hover:text-indigo-400; }
 

@@ -1,4 +1,13 @@
-<h1 class='heading'><%= gettext("Skills") %></h1>
+<% f = if @changeset, do: form_for(@changeset, "#"), else: nil %>
+
+<%= if @changeset do %>
+  <div class='flex justify-between mb-3'>
+    <h1 class='heading'><%= gettext("Skills") %></h1>
+    <%= submit gettext("Speichern"), class: "primary" %>
+  </div>
+<% else %>
+  <h1 class='heading mb-3'><%= gettext("Skills") %></h1>
+<% end %>
 
 <div class='lg:grid lg:grid-cols-2 lg:gap-4'>
   <div class='space-y-4'>
@@ -6,7 +15,7 @@
       <table>
         <%= render "table_head.html", category: gettext("Körpertalente"), check: "MU/GE/KK" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
         </tbody>
       </table>
     </div>
@@ -14,7 +23,7 @@
       <table>
         <%= render "table_head.html", category: gettext("Gesellschaftstalente"), check: "IN/CH/CH" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @social_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @social_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
         </tbody>
       </table>
     </div>
@@ -22,7 +31,7 @@
       <table>
         <%= render "table_head.html", category: gettext("Naturtalente"), check: "MU/GE/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @nature_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @nature_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
         </tbody>
       </table>
     </div>
@@ -32,7 +41,7 @@
       <table>
         <%= render "table_head.html", category: gettext("Wissenstalente"), check: "KL/KL/IN" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @knowledge_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @knowledge_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
         </tbody>
       </table>
     </div>
@@ -40,9 +49,13 @@
       <table>
         <%= render "table_head.html", category: gettext("Handwerkstalente"), check: "FF/FF/KO" %>
         <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @crafting_skills, DsaWeb.SkillView, "table_row.html", conn: @conn %>
+          <%= render_many @crafting_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<%= if @changeset do %>
+</form>
+<% end %>

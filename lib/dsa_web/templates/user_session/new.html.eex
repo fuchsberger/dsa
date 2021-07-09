@@ -51,7 +51,7 @@
     </div>
 
     <div>
-      <button type="submit" class="auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:sign_in) %></button>
+      <button type="submit" class="primary auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:sign_in) %></button>
     </div>
   <% end %>
 </div>

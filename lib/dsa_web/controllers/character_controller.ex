@@ -11,7 +11,7 @@ defmodule DsaWeb.CharacterController do
 
   # plug :assign_character when action in [:edit, :update, :delete, :activate, :toggle_visible]
 
-  def action(conn, _) do
+  defp action(conn, _) do
     args = [conn, conn.params, conn.assigns.current_user]
     apply(__MODULE__, action_name(conn), args)
   end

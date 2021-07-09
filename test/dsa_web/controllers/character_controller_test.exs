@@ -205,9 +205,9 @@ defmodule DsaWeb.CharacterControllerTest do
         get(conn, Routes.character_path(conn, :index)),
         post(conn, Routes.character_path(conn, :create, %{})),
         delete(conn, Routes.character_path(conn, :delete, character)),
-        put(conn, Routes.character_path(conn, :activate, 2)),
-        put(conn, Routes.character_path(conn, :deactivate, 2)),
-        put(conn, Routes.character_path(conn, :select, 2)),
+        put(conn, Routes.character_path(conn, :activate, character)),
+        put(conn, Routes.character_path(conn, :deactivate, character)),
+        put(conn, Routes.character_path(conn, :select, character)),
       ], fn conn ->
         assert html_response(conn, 302)
         assert conn.halted

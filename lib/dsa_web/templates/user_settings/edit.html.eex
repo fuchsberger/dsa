@@ -34,7 +34,7 @@
     <%= error_tag f, :current_password %>
 
     <div>
-      <button type="submit" class="auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:change_email) %></button>
+      <button type="submit" class="primary auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:change_email) %></button>
     </div>
   <% end %>
 
@@ -75,7 +75,7 @@
     <%= error_tag f, :current_password %>
 
     <div>
-      <button type="submit" class="auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:change_password) %></button>
+      <button type="submit" class="primary auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:change_password) %></button>
     </div>
   <% end %>
 </div>
