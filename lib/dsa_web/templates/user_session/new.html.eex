@@ -1,0 +1,57 @@
+<div class="max-w-sm mx-auto space-y-6">
+  <div>
+    <%= icon("eye-solid", "mx-auto h-12 w-12 text-indigo-600") %>
+    <h1 class="mt-4 text-center text-3xl font-extrabold text-gray-900"><%= t(:heading_sign_in) %></h1>
+    <p class="mt-2 text-center text-sm text-gray-600">
+      <%= t(:or) %>
+      <%= link t(:register_link),
+        to: Routes.user_registration_path(@conn, :new),
+        class: "link" %>
+    </p>
+  </div>
+
+  <%= if @error_message, do:
+    render DsaWeb.LayoutView, "alert.html", type: :error, message: @error_message %>
+
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "mt-8 space-y-6"], fn f -> %>
+
+    <input type="hidden" name="remember" value="true">
+    <div class="rounded-md shadow-sm -space-y-px">
+      <div class='icon-input'>
+        <%= label f, :email, t(:email_address), class: "sr-only" %>
+        <%= icon("mail-solid") %>
+        <%= email_input f, :email,
+          autocomplete: "email",
+          class: " relative rounded-top focus:z-10",
+          placeholder: t(:email_address),
+          required: true %>
+      </div>
+      <div class='icon-input'>
+        <%= label f, :password, t(:password), class: "sr-only" %>
+        <%= icon("lock-closed-solid") %>
+        <%= password_input f, :password,
+          autocomplete: "current-password",
+          class: "relative rounded-bot focus:z-10",
+          placeholder: t(:password),
+          required: true %>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <%= checkbox f, :remember_me, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" %>
+        <%= label f, :remember_me, t(:remember_me), class: "ml-2 block text-sm text-gray-900" %>
+      </div>
+
+      <div class="text-sm">
+        <%= link t(:forgot_password?),
+          to: Routes.user_reset_password_path(@conn, :new),
+          class: "link" %>
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" class="primary auth-button group"><span><%= icon("lock-closed-solid") %></span><%= t(:sign_in) %></button>
+    </div>
+  <% end %>
+</div>

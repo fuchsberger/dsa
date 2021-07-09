@@ -1,0 +1,38 @@
+{
+  "spells": [
+    {
+      "id": 1,
+      "roll": "MU/KL/CH",
+      "name": "Ablativum",
+      "effect": "Der Spruch erschafft eine unsichtbare Kuppel um den Magier herum, die sich mit ihm bewegt und darin Befindliches vor Zaubern schützt. Die Kuppel ist eigentlich eine Kugel, da jedoch der Magier meistens auf dem Boden steht, ist die Kugelform nur selten relevant. Die Kuppel verfügt über einen Radius von 3 Schritt und eine Schildstärke in Höhe von QS x 3. Wird ein freundlicher oder feindlicher Zauber gegen ein unter der Kuppel befindliches Ziel gerichtet, vermindert die Schildstärke dessen QS. Sinkt diese dadurch auf 0, tritt kein Effekt ein. Die Schildstärke wird jedoch im Rahmen dieses Prozesses verbraucht (–1 Schildstärke je aufgehaltener QS), und der Ablativum endet vorzeitig, sobald seine QS unter 1 fällt.\n\nSollte ein Flächenzauber, beispielsweise der Ignisphaero, teilweise den Schild des Ablativum berühren, wird die Schildstärke um die QS des Flächenzaubers vermindert. Wirkt ein Zauber über mehrere KR, so wird die Schildstärke jede KR um die QS vermindert. Sollte ein Zauber mehr QS aufweisen als der Ablativum, dringt der Zauber mit den überzähligen QS durch den Schild. Die gesamten QS des Zaubers werden aber wie üblich von der Schildstärke abgezogen.",
+      "cast_duration": "1 Aktion(en)",
+      "cost": "8 AsP (Kosten sind nicht modifizierbar)",
+      "range": "selbst",
+      "effect_duration": "5 Minuten",
+      "target_category": "Objekte",
+      "attribute": "Antimagie",
+      "spread": ["Gildenmagier"],
+      "sf": "D",
+      "expansions": [
+        {
+          "fw": 8,
+          "name": "Stärkerer Schild",
+          "ap": 4,
+          "desc": "Die Schildstärke beträgt QS x 4."
+        },
+        {
+          "fw": 12,
+          "name": "Großer Radius",
+          "ap": 8,
+          "desc": "Der Radius beträgt 5 Schritt. Es entstehen zusätzliche Kosten in Höhe von 4 AsP, die jedoch nicht die Schildstärke erhöhen."
+        },
+        {
+          "fw": 16,
+          "name": "Reichweite Berührung",
+          "ap": 4,
+          "desc": "Als Reichweite gilt Berührung. Die Schildstärke beträgt nur QS x 2. Der Zauberspruch kann nur auf Kulturschaffende übertragen werden."
+        }
+      ]
+    }
+  ]
+}

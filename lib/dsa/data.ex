@@ -1,118 +1,54 @@
 defmodule Dsa.Data do
-  import Ecto.Query, warn: false
+  @moduledoc """
+  The Data context, which contains all static DSA data.
+  """
 
-  alias Dsa.Repo
   alias Dsa.Data.Skill
-  alias Dsa.Data.Spell
-  alias Dsa.Data.Blessing
 
+  require Logger
+
+  def init do
+    # create data tables
+    :ets.new(:skills, [:set, :named_table])
+
+    # populate data tables
+    Skill.seed()
+
+    Logger.debug("DSA data tables created.")
+  end
+
+  @doc """
+  Gets an entry by collection and slug.
+  """
+  def get_by_slug(collection, slug)  do
+    collection
+    |> :ets.tab2list()
+    |> Enum.map(fn {_id, entry} -> entry end)
+    |> Enum.find(&(&1.slug == slug))
+  end
+
+  @doc """
+  Returns a list of all skills sorted by name.
+  """
   def list_skills do
-    from(s in Skill, order_by: [s.category, s.name])
-    |> Repo.all()
+    :ets.tab2list(:skills)
+    |> Enum.map(fn {_id, skill} -> skill end)
+    |> Enum.sort_by(&(&1.id))
   end
 
-  def get_skill!(id), do: Repo.get!(Skill, id)
+  @doc """
+  Returns the number of skills.
+  This wont ever change so it can be hardcoded.
+  """
+  def get_skill_count, do: 59
 
-  def create_skill(attrs) do
-    %Skill{}
-    |> Skill.changeset(attrs)
-    |> Repo.insert()
+  @doc """
+  Returns a skill with a given id.
+  """
+  def get_skill(id) do
+    case :ets.lookup(:skills, id) do
+      [{_id, skill}] -> skill
+      [] -> nil
+    end
   end
-
-  def create_skill!(attrs) do
-    %Skill{}
-    |> Skill.changeset(attrs)
-    |> Repo.insert!()
-  end
-
-  def update_skill(%Skill{} = skill, attrs) do
-    skill
-    |> Skill.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def update_skill!(%Skill{} = skill, attrs) do
-    skill
-    |> Skill.changeset(attrs)
-    |> Repo.update!()
-  end
-
-  def delete_skill(%Skill{} = skill), do: Repo.delete(skill)
-
-  def change_skill(%Skill{} = skill, attrs \\ %{}), do: Skill.changeset(skill, attrs)
-
-  # SPELLS
-
-  def list_spells do
-    from(s in Spell, order_by: [desc: s.ritual, asc: s.name])
-    |> Repo.all()
-  end
-
-  def get_spell!(id), do: Repo.get!(Spell, id)
-
-  def create_spell(attrs) do
-    %Spell{}
-    |> Spell.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def create_spell!(attrs) do
-    %Spell{}
-    |> Spell.changeset(attrs)
-    |> Repo.insert!()
-  end
-
-  def update_spell(%Spell{} = spell, attrs) do
-    spell
-    |> Spell.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def update_spell!(%Spell{} = spell, attrs) do
-    spell
-    |> Spell.changeset(attrs)
-    |> Repo.update!()
-  end
-
-  def delete_spell(%Spell{} = spell), do: Repo.delete(spell)
-
-  def change_spell(%Spell{} = spell, attrs \\ %{}), do: Spell.changeset(spell, attrs)
-
-
-  # Blessings
-  #
-  def list_blessings do
-    from(s in Blessing, order_by: [desc: s.ceremony, asc: s.name])
-    |> Repo.all()
-  end
-
-  def get_blessing!(id), do: Repo.get!(Blessing, id)
-
-  def create_blessing(attrs) do
-    %Blessing{}
-    |> Blessing.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def create_blessing!(attrs) do
-    %Blessing{}
-    |> Blessing.changeset(attrs)
-    |> Repo.insert!()
-  end
-
-  def update_blessing(%Blessing{} = blessing, attrs) do
-    blessing
-    |> Blessing.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def update_blessing!(%Blessing{} = blessing, attrs) do
-    blessing
-    |> Blessing.changeset(attrs)
-    |> Repo.update!()
-  end
-
-  def delete_blessing(%Blessing{} = blessing), do: Repo.delete(blessing)
-
-  def change_blessing(%Blessing{} = blessing, attrs \\ %{}), do: Blessing.changeset(blessing, attrs)
 end

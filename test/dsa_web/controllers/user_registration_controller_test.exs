@@ -1,0 +1,62 @@
+defmodule DsaWeb.UserRegistrationControllerTest do
+  use DsaWeb.ConnCase, async: true
+
+  import Dsa.AccountsFixtures
+  import DsaWeb.AccountTranslations
+
+  describe "GET /users/register" do
+    test "renders registration page", %{conn: conn} do
+      conn = get(conn, Routes.user_registration_path(conn, :new))
+      response = html_response(conn, 200)
+      assert response =~ dgettext("account", "Account erstellen") <> "</h2>"
+      assert response =~ dgettext("account", "melde dich an") <> "</a>"
+      assert response =~ t(:sign_up) <> "</button>"
+    end
+
+    test "redirects if already logged in", %{conn: conn} do
+      conn = conn |> log_in_user(user_fixture()) |> get(Routes.user_registration_path(conn, :new))
+      assert redirected_to(conn) == "/"
+    end
+  end
+
+  describe "POST /users/register" do
+    @tag :capture_log
+    test "creates account and DOES NOT log the user in", %{conn: conn} do
+      email = unique_user_email()
+
+      conn =
+        post(conn, Routes.user_registration_path(conn, :create), %{
+          "user" => %{
+            "email" => email,
+            "password" => valid_user_password(),
+            "password_confirmation" => valid_user_password(),
+            "username" => valid_user_username()
+          }
+        })
+
+      refute get_session(conn, :user_token)
+      assert redirected_to(conn) =~ "/login"
+      assert flash_messages_contain(conn, t(:registration_successful))
+    end
+
+    test "render errors for invalid data", %{conn: conn} do
+      conn =
+        post(conn, Routes.user_registration_path(conn, :create), %{
+          "user" => %{
+            "email" => "with spaces",
+            "password" => "too short",
+            "password_confirmation" => "does not match",
+            "username" => ""
+          }
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ dgettext("account", "Account erstellen") <> "</h2>"
+      assert response =~ dgettext("errors", "has invalid format")
+      # TODO (doesnt translate for unknown reason)
+      # assert response =~ dgettext("errors", "should be at least %{count} character", count: 12)
+      assert response =~ dgettext("errors", "does not match confirmation")
+      assert response =~ dgettext("errors", "can\'t be blank")
+    end
+  end
+end

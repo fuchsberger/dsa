@@ -1,0 +1,313 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:12
+#: lib/dsa_web/templates/user_confirmation/new.html.eex:17
+msgid "Email"
+msgstr "Email"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:44
+msgid "Confirm Account"
+msgstr "Account bestätigen"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:47
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Sollte deine Email Addresse bei uns registriert und noch nicht aktiviert sein, wirst du in Kürze einen Bestätigungslink erhalten."
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:10
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr "Oops, etwas ist falsch gelaufen! Bitte überprüfe deine Eingaben."
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:43
+msgid "Resend confirmation instructions"
+msgstr "Aktivierungsemail erneut senden"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:46
+msgid "User confirmation link is invalid or it has expired."
+msgstr "Aktivierungslink ist ungültig oder abgelaufen."
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:45
+msgid "User confirmed successfully."
+msgstr "Account erfolgreich aktiviert."
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:19
+msgid "Are you sure you want to delete your account including all characters?"
+msgstr "Bist du sicher dass du deinen Account inklusive deiner Helden löschen möchtest?"
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:16
+msgid "Delete Account"
+msgstr "Account löschen"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:14
+msgid "Or"
+msgstr "Oder"
+
+#, elixir-format
+#: lib/dsa_web/views/accounts/account_helpers.ex:23
+msgid "Settings"
+msgstr "Einstellungen"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:78
+msgid "Hi %{username},\n\nYou can change your e-mail by visiting the url below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team"
+msgstr "Die Zwölfe zum Gruß,\n\nDu kannst deine Email Addresse ändern indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du diese Anfrage nicht gestellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:72
+msgid "Hi %{username},\n\nYou can confirm your account by visiting the URL below:\n%{url}\n\nIf you have not created an account with us, please ignore this.\n\nBest,\nThe DSA Team"
+msgstr "Die Zwölfe zum Gruß,\n\nDu kannst deinen Account aktivieren indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du keinen Account bei uns erstellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:75
+msgid "Hi %{username},\n\nYou can reset your password by visiting the url below:\n%{url}\n\nIf you didn't request this change, please ignore this.\n\nBest,\nThe DSA Team"
+msgstr "Die Zwölfe zum Gruß,\n\nDu kannst dein Passwort zurücksetzen indem du den folgenden Link besuchst:\n%{url}\n\nSolltest du diese Anfrage nicht gestellt haben dann bitte ignoriere dieses Email.\n\nLiebe Grüße,\nDas Dsa Tool Team"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:79
+msgid "Hi %{username},<br/><br/>You can change your e-mail by visiting the url below:<br/><a href=\"%{url}\" target=\"_blank\">%{url}</a><br/><br/>If you didn't request this change, please ignore this.<br/><br/>Best,<br/>The DSA Team"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:73
+msgid "Hi %{username},<br/><br/>You can confirm your account by visiting the URL below:<br/><a href=\"%{url}\" target=\"_blank\">%{url}</a><br/><br/>If you have not created an account with us, please ignore this.<br/><br/>Best,<br/>The DSA Team"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:76
+msgid "Hi %{username},<br/><br/>You can reset your password by visiting the url below:<br/><a href=\"%{url}\" target=\"_blank\">%{url}</a><br/><br/>If you didn't request this change, please ignore this.<br/><br/>Best,<br/>The DSA Team"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:59
+msgid "Account löschen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:63
+msgid "Aktuelles Passwort"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:23
+msgid "Anmeldung"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:30
+msgid "Ausloggen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:40
+msgid "Benutzer registrieren"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:38
+msgid "Benutzername"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:39
+msgid "Bestätige Passwort"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:60
+msgid "Bist du sicher, dass du deinen Account löschen möchtest? Deine Daten werden sofort unwiederuflich gelöscht."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:19
+msgid "Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:70
+msgid "DSA Tool - Bitte bestätige deinen Account"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:20
+msgid "Dein Account wurde gesperrt, bitte kontaktierte einen Administrator"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:52
+msgid "Der Link zum zurücksetzen deines Passworts ist abgelaufen oder ungültig."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:8
+msgid "Du musst dich anmelden um auf diese Seite zugreifen zu können."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:9
+msgid "Du musst ein Administrator sein, um auf diese Seite zugreifen zu können."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/error/500.html.eex:2
+msgid "Ein Fehler ist aufgetreten"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:28
+msgid "Einloggen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:58
+msgid "Einstellungen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:25
+msgid "Email Addresse"
+msgstr "Email Adresse"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:66
+msgid "Email Addresse erfolgreich geändert."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:61
+msgid "Email Addresse ändern"
+msgstr "Email Adresse"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:17
+msgid "Erfolgreich ausgeloggt."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:27
+msgid "Für 60 Tage eingeloggt bleiben"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/error/403.html.eex:2
+msgid "Kein Zugriff"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/error/401.html.eex:2
+msgid "Login erforderlich"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:55
+msgid "Neues Passwort"
+msgstr "Neues Passwort"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:13
+msgid "Oops, etwas ist schief gelaufen! Bitte überprüfe die angeführten Fehler."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:62
+msgid "Password ändern"
+msgstr "Passwort"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:26
+msgid "Passwort"
+msgstr "Passwort"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:65
+msgid "Passwort erfolgreich geändert."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:12
+msgid "Passwort vergessen?"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:53
+msgid "Passwort wurde erfolgreich zurückgesetzt."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:50
+msgid "Passwort zurücksetzen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:36
+msgid "Registrierung"
+msgstr "Anmelden"
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:54
+msgid "Sende Anweisungen"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:51
+msgid "Sollte sich deine Email Addresse in unserem System befinden wirst du in Kürze Anweisungen erhalten um dein Passwort zurückzusetzen."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:18
+msgid "Ungültige Email Addresse oder Passwort."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:33
+msgid "Willkommen im DSA Tool! Bitte bestätige noch deine Email Addresse. Ein Aktivierungslink wurde an dich gesendet."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:37
+msgid "melde dich an"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:29
+msgid "oder melde dich an"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:24
+msgid "registriere dich hier"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:64
+msgid "Ein Link zum ändern deiner Email Addresse wurde gesendet."
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/translations/account_translations.ex:67
+msgid "Der Link zum ändern deiner Email Addresse ist abgelaufen oder ungültig!"
+msgstr ""
+
+#, elixir-format
+#: lib/dsa_web/templates/layout/user_menu.html.eex:4
+msgid "Öffne Benutzermenu"
+msgstr ""

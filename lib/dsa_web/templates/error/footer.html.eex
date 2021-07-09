@@ -1,0 +1,4 @@
+      <%= back_link(@conn) %>
+    </div>
+  </body>
+</html>

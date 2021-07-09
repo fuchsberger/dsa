@@ -9,6 +9,8 @@ defmodule Dsa.Application do
     children = [
       # Start the Ecto repository
       Dsa.Repo,
+      # Start the Telemetry supervisor
+      DsaWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Dsa.PubSub},
       # Start the Endpoint (http/https)
@@ -16,6 +18,9 @@ defmodule Dsa.Application do
       # Start a worker by calling: Dsa.Worker.start_link(arg)
       # {Dsa.Worker, arg}
     ]
+
+    # Populate ETS storage with DSA data
+    Dsa.Data.init()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

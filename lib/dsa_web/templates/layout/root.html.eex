@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%= csrf_meta_tag() %>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no"/>
     <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
+    <meta name="description" content="<%= gettext("Ein Heldenbogen-, Würfel- und Gruppentool für DSA, Das Schwarze Auge") %>">
+    <meta name="environment" content="<%= Application.get_env(:dsa, :environment) %>">
+    <%= csrf_meta_tag() %>
     <title><%= gettext("DSA Tool") %></title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class='bg-gray-100'>
-    <%= render DsaWeb.LayoutView, "menu.html", conn: @conn, current_user: @current_user %>
+  <body>
     <%= @inner_content %>
   </body>
 </html>

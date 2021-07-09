@@ -1,30 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="author" content="Alexander Fuchsberger">
-    <meta name="description" content="<%= gettext("A character, dice, and group management tool for DSA, Das Schwarze Auge") %>">
-    <title><%= gettext("DSA Tool") %></title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
-  </head>
-  <body class='bg-gray-100'>
-    <nav class="w-full bg-gray-800">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div class="relative flex items-center justify-between h-16">
-          <%# Profilbild / Logo %>
-          <%= link class: "flex-shrink-0 flex items-center text-gray-200 hover:text-white", to: Routes.session_path(@conn, :index) do %>
-            <%= icon @conn, "eye", "block w-8 h-8" %>
-            <span class='hidden lg:block w-auto ml-2 font-sans font-bold text-2xl'><%= gettext("DSA Tool") %></span>
-          <% end %>
-        </div>
-      </div>
-    </nav>
-    <div class='container mx-auto p-3 pt-6 md:max-w-screen-sm text-center'>
-      <h1 class='font-sans font-bold text-3xl'>Error 403</h1>
-      <hr>
-      <h2 class='font-sans font-medium text-xl mb-3'><%= get_flash(@conn, :error) || gettext "Forbidden" %></h2>
-      <%= link gettext("back to Home"), to: Routes.session_path(@conn, :index) %>
-    </div>
-  </body>
-</html>
+<%= render "header.html", conn: @conn %>
+<h2><%= dgettext("account", "Kein Zugriff") %></h2>
+<%# if @reason && Map.has_key?(@reason, :message) do %>
+  <%# render DsaWeb.LayoutView, "alert.html", type: :error, message: @reason.message %>
+<%# end %>
+<%= render "footer.html", conn: @conn %>

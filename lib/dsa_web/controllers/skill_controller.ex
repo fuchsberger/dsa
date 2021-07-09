@@ -1,62 +1,49 @@
 defmodule DsaWeb.SkillController do
   use DsaWeb, :controller
 
-  alias Dsa.Data
+  alias Dsa.{Data, Game}
 
-  def index(conn, _params) do
+  action_fallback DsaWeb.ErrorController
+
+  defp action(conn, _) do
+    character =
+      case conn.assigns.current_user && Map.get(conn.assigns.current_user, :active_character) do
+        nil ->
+          nil
+
+        character ->
+          Map.put(character, :data, Jason.decode!(character.data, keys: :atoms))
+      end
+
+    args = [conn, conn.params, character]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
+  def index(conn, _params, character) do
+    skills = Data.list_skills()
+
+    changeset =
+      case character do
+        nil -> nil
+        character -> Game.change_character(character, %{})
+      end
+
     conn
-    |> assign(:skills, Data.list_skills())
+    |> assign(:changeset, changeset)
+    |> assign(:physical_skills, Enum.filter(skills, & &1.category == :physical))
+    |> assign(:social_skills, Enum.filter(skills, & &1.category == :social))
+    |> assign(:nature_skills, Enum.filter(skills, & &1.category == :nature))
+    |> assign(:knowledge_skills, Enum.filter(skills, & &1.category == :knowledge))
+    |> assign(:crafting_skills, Enum.filter(skills, & &1.category == :crafting))
     |> render("index.html")
   end
 
-  def new(conn, _params) do
-    conn
-    |> assign(:changeset, Data.change_skill(%Data.Skill{}))
-    |> render("new.html")
-  end
-
-  def create(conn, %{"skill" => skill_params}) do
-    case Data.create_skill(skill_params) do
-      {:ok, _skill} ->
-        conn
-        |> put_flash(:info, gettext("Skills updated successfully."))
-        |> redirect(to: Routes.skill_path(conn, :index))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        Logger.warn inspect changeset
-        render(conn, "new.html", changeset: changeset)
+  def show(conn, %{"slug" => slug}, _character) do
+    case Data.get_by_slug(:skills, slug) do
+      nil ->
+        render(conn, DsaWeb.ErrorView, "404.html")
+      skill ->
+        render(conn, "show.html", skill: skill)
     end
-  end
-
-  def edit(conn, %{"id" => id}) do
-    skill = Data.get_skill!(id)
-
-    conn
-    |> assign(:changeset, Data.change_skill(skill))
-    |> assign(:skill, skill)
-    |> render("edit.html")
-  end
-
-  def update(conn, %{"id" => id, "skill" => skill_params}) do
-    skill = Data.get_skill!(id)
-
-    case Data.update_skill(skill, skill_params) do
-      {:ok, _skill} ->
-        conn
-        |> put_flash(:info, gettext("Skills updated successfully."))
-        |> redirect(to: Routes.skill_path(conn, :index))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", skill: skill, changeset: changeset)
-    end
-  end
-
-  def delete(conn, %{"id" => id}) do
-    skill = Data.get_skill!(id)
-    {:ok, _skill} = Data.delete_skill(skill)
-
-    conn
-    |> put_flash(:info, gettext("Skills deleted successfully."))
-    |> redirect(to: Routes.skill_path(conn, :index))
   end
 end

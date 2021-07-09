@@ -13,6 +13,10 @@ mix gettext.extract
 mix gettext.merge priv/gettext --locale de
 ```
 
+## Additional mix tasks
+One additional mix task is available:
+- `mix algolia` Syncronizes algolia search index with app data
+
 ## Deployment Instructions
 After ssh into the production server this sequence will update the web application:
 

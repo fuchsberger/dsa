@@ -1,0 +1,17 @@
+<tr>
+  <td>
+    <%= link(@skill.name, to: Routes.skill_path(@conn, :show, @skill.slug)) %>
+  </td>
+  <td class='text-xs uppercase text-center'><%= check_to_string(@skill.check) %></td>
+  <td class='text-xs uppercase text-center'>
+    <%= cond do
+      not is_nil(@skill.encumbrance_condition) -> gettext("evtl")
+      @skill.encumbrance -> gettext("ja")
+      true -> gettext("nein")
+    end %>
+  </td>
+  <td class='text-xs uppercase text-center'><%= @skill.improvement_cost %></td>
+  <%= if @f do %>
+    <td class='text-center'><%= skill_level(@f, @skill.id) %></td>
+  <% end %>
+</tr>

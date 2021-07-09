@@ -1,1 +1,44 @@
-button:disabled, input:disabled, select:disabled { @apply cursor-not-allowed; }
+@layer base {
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  input[type='number'],
+  input[type='search'],
+  select,
+  select[multiple],
+  textarea { @apply block w-full px-3 border font-medium text-gray-800 border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 py-0 leading-8; }
+}
+
+@layer components {
+
+  /* small variation */
+  input[type='text'].small,
+  input[type='password'].small,
+  input[type='email'].small,
+  input[type='number'].small,
+  input[type='search'].small,
+  select.small,
+  select[multiple].small,
+  textarea.small { @apply px-2 text-sm leading-7; }
+
+  /* Feedback Classes */
+  form.validated input:invalid,
+  form.validated select:invalid,
+  form.validated textarea:invalid { @apply focus:ring-red-700 border-red-700 !important; }
+
+
+  .invalid-feedback { @apply text-red-800 text-sm; }
+
+  /* unorganized */
+
+  #search-field { @apply h-full pl-8 pr-3 border-0 border-transparent   focus:placeholder-gray-400 focus:ring-0 focus:border-transparent !important; }
+
+  .icon-input { @apply relative bg-white; }
+  .icon-input svg { @apply absolute w-6 h-6 m-2 text-gray-300 pointer-events-none; }
+  .icon-input input { @apply pl-10 bg-transparent; }
+}
+
+@layer utilities {
+  .rounded-top { @apply rounded-none rounded-t-md !important; }
+  .rounded-bot { @apply rounded-none rounded-b-md !important; }
+}

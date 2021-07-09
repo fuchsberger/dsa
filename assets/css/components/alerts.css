@@ -1,0 +1,15 @@
+@layer components {
+  .alert { @apply p-4 mb-3 border rounded-md; }
+
+  .alert p { @apply text-sm font-medium; }
+  .alert button { @apply inline-flex p-1.5 border-0 bg-transparent shadow-none leading-normal h-auto; }
+  .alert button svg { @apply block m-0; }
+
+  .alert.info { @apply bg-blue-200 text-blue-800; }
+  .alert.info .flex-shrink-0 svg { @apply text-blue-500; }
+  .alert.info button { @apply text-blue-800 hover:bg-blue-300 focus:ring-offset-blue-300 focus:ring-blue-600; }
+
+  .alert.error { @apply bg-red-200 text-red-800; }
+  .alert.error .flex-shrink-0 svg { @apply text-red-500; }
+  .alert.error button { @apply text-red-800 hover:bg-red-300 focus:ring-offset-red-300 focus:ring-red-600; }
+}

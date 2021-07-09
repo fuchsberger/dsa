@@ -1,32 +1,82 @@
-<div id='main-wrapper' class='container mx-auto grid grid-cols-1 lg:grid-cols-2 lg:max-w-screen-xl'>
-  <%# In left column show variable page content %>
-  <div class='sticky max-h-full overflow-y-scroll block px-2 lg:pr-1'>
-    <%= unless %{} == get_flash(@conn) do %>
-      <%= render "flash.html", conn: @conn %>
-    <% end %>
-    <%= @inner_content %>
+<%# Page Wrapper %>
+<div class='page-wrapper' x-data='{open:false}' x-init='elms = document.querySelector(".desktop-wrapper nav"); '>
+  <%# SimpleScrollbar.initEl(elms); %>
+  <%# Mobile Sidebar Wrapper %>
+  <div class="mobile-wrapper" role="dialog" aria-modal="true" x-show='open===true'>
+    <%# Mobile Backdrop %>
+    <div class="mobile-backdrop" aria-hidden="true"
+      @click='open=false'
+      x-show='open===true'
+      x-transition:enter='transition-opacity ease-linear duration-300'
+      x-transition:enter-start='opacity-0'
+      x-transition:enter-end='opacity-100'
+      x-transition:leave='transition-opacity ease-linear duration-300'
+      x-transition:leave-start='opacity-100'
+      x-transition:leave-end='opacity-0'></div>
+    <%# Mobile Sidebar %>
+    <div class="mobile-sidebar-wrapper"
+      x-show='open===true'
+      x-transition:enter='transition ease-in-out duration-300 transform'
+      x-transition:enter-start='-translate-x-full'
+      x-transition:enter-end='translate-x-0'
+      x-transition:leave='transition ease-in-out duration-300 transform'
+      x-transition:leave-start='translate-x-0'
+      x-transition:leave-end='-translate-x-full'>
+      <%# Mobile Close Button %>
+      <div class="mobile-close-button-wrapper"
+        x-show='open===true'
+        x-transition:enter='ease-in-out duration-300'
+        x-transition:enter-start='opacity-0'
+        x-transition:enter-end='opacity-100'
+        x-transition:leave='ease-in-out duration-300'
+        x-transition:leave-start='opacity-100'
+        x-transition:leave-end='opacity-0'>
+        <button class="mobile-close-button" @click='open=false'>
+          <span class="sr-only"><%= gettext("Schließe seitliches Menü") %></span>
+          <%# Heroicon name: outline/x %>
+          <%= icon("x", "m-2 h-8 w-8 text-white") %>
+        </button>
+      </div>
+      <%# Mobile Sidebar Content %>
+      <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
+
+      <div class="mobile-shrink"></div>
+    </div>
   </div>
-  <%# In right column always show register / login / join group / log %>
-  <div class='hidden lg:block px-2 lg:pl-1 sticky max-h-full overflow-y-scroll'>
-    <%= if @current_user do %>
-      <%= if @current_user.group_id do %>
-        <%= live_render(@conn, DsaWeb.LogLive, session: %{"group_id" => @current_user.group_id} ) %>
-      <% else %>
-        <div class='flex justify-center'>
-          <div class='alert info my-3'>
-            <%= icon @conn, "exclamation-circle", "absolute left-3 top-3 w-5 h-5" %>
-            <%= gettext "You must join a DSA group before the log can be displayed." %>
-          </div>
-        </div>
-
-        <div class='flex justify-center'>
-          <%= link gettext("Create Group"), to: Routes.group_path(@conn, :new), class: "button gray h-7 leading-7 mr-2" %>
-
-          <%= link gettext("List existing Groups"), to: Routes.group_path(@conn, :index), class: "button gray h-7 leading-7 ml-2" %>
-        </div>
-      <% end %>
-    <% else %>
-      <%= render DsaWeb.SessionView, "new.html", conn: @conn %>
-    <% end %>
+  <%# Static Sidebar for Desktop %>
+  <div class="desktop-wrapper">
+    <div class="flex flex-col w-64">
+      <%# Sidebar Component %>
+      <div class="desktop-sidebar-wrapper">
+        <%# Desktop Sidebar Content %>
+        <%= render DsaWeb.LayoutView, "sidebar.html", conn: @conn, current_user: @current_user %>
+      </div>
+    </div>
+  </div>
+  <%# Content Area %>
+  <div class="content-area">
+    <%# Top Bar %>
+    <div class="top-bar">
+      <div>
+        <button class="menu-button" @click='open=true'>
+          <span class="sr-only"><%= gettext("Öffne seitliches Menü") %></span>
+          <%= icon("menu", "m-2 h-8 w-8") %>
+        </button>
+        <%# Search Button and Modal %>
+        <%= render DsaWeb.LayoutView, "search.html", conn: @conn %>
+        <%# User Menu / Login %>
+        <%= render DsaWeb.LayoutView, "user_menu.html", conn: @conn, user: @current_user %>
+      </div>
+    </div>
+    <main>
+      <div>
+        <%# Flash Messages %>
+        <%= for {type, message} <- get_flash(@conn) do %>
+          <%= render DsaWeb.LayoutView, "alert.html", type: type, message: message %>
+        <% end %>
+        <%# Page Content %>
+        <div><%= @inner_content %></div>
+      </div>
+    </main>
   </div>
 </div>

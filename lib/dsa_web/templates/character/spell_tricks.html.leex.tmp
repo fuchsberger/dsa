@@ -1,0 +1,73 @@
+.tmp<div class='d-flex justify-content-between'>
+  <h6 class='mb-0'>
+    <button
+      class='btn btn-sm btn-link p-0'
+      phx-click='toggle'
+      phx-value-edit='spell_tricks'
+      type='button'
+    ><i class='icon-<%= if @edit?, do: "cancel", else: "edit" %>'></i></button>
+    Zaubertricks
+  </h6>
+  <i><%= @ap %> AP</i>
+</div>
+<hr class='my-1'>
+
+<p class='small<%= if @edit?, do: " is-hidden" %>'>
+  <%= for %{id: id} <- @f.source.data.spell_tricks do %>
+    <span
+      data-html='true'
+      data-toggle='popover'
+      data-trigger='hover'
+      data-placement="left"
+      data-content='<%= SpellTrick.tooltip(id) %>'
+    ><%= SpellTrick.name(id) %></span>,
+  <% end %>
+</p>
+
+<table class='table table-xs<%= unless @edit?, do: " is-hidden" %>'>
+  <thead>
+    <tr>
+      <th scope='col'>Name</th>
+      <th class='has-text-centered' scope='col'>Reichweite</th>
+      <th class='has-text-centered' scope='col'>Merkmal</th>
+      <th class='has-text-centered p-0' scope='col'><i class='icon-remove'></i></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= for fs <- inputs_for(@f, :spell_tricks) do %>
+    <% id = input_value(fs, :id) %>
+    <tr >
+      <td>
+        <span
+          data-html='true'
+          data-toggle='popover'
+          data-trigger='hover'
+          data-placement="left"
+          data-content='<%= SpellTrick.tooltip(id) %>'
+        ><%= SpellTrick.name(id) %></span>
+      </td>
+      <td class='has-text-centered' style="width: 55px;">
+        <%= SpellTrick.range(id) %>
+      </td>
+      <td class='has-text-centered' style="width: 55px;">
+        <%= hidden_inputs_for(fs) %>
+        <%= SpellTrick.type(id) %>
+      </td>
+      <td class='has-text-centered p-0'>
+        <button
+          type='button'
+          class='btn btn-link btn-sm p-0'
+          phx-click='remove'
+          phx-value-id='<%= id %>'
+          phx-value-type='spell_trick'
+        ><i class='icon-cancel text-danger'></i></button>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan='4'>
+      <%= select @f, :spell_trick_id, SpellTrick.options(@f.source.data), class: "form-select-sm", prompt: "hinzufügen..." %>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,82 +1,53 @@
 defmodule Dsa.Type.SkillCategory do
+  @moduledoc """
+  Compresses a category string (example: "Handwerkstalente") for efficient database storage.
+  On retrival converts to atom. (example: :crafting)
+  """
   use Ecto.Type
 
-  import DsaWeb.Gettext
-
-  @categories [
-    %{
-      id: :body,
-      order: 0,
-      title: gettext("Körpertalente"),
-      short: gettext("Körper"),
-      pages: "188-194",
-      probe: "MU/GE/KK"
-    }, %{
-      id: :social,
-      order: 1,
-      title: gettext("Gesellschaftstalente"),
-      short: gettext("Gesellschaft"),
-      pages: "194-198",
-      probe: "IN/CH/CH"
-    }, %{
-      id: :nature,
-      order: 2,
-      title: gettext("Naturtalente"),
-      short: gettext("Natur"),
-      pages: "198-201",
-      probe: "MU/GE/KO"
-    }, %{
-      id: :knowledge,
-      order: 3,
-      title: gettext("Wissenstalente"),
-      short: gettext("Wissen"),
-      pages: "201-206",
-      probe: "KL/KL/IN"
-    }, %{
-      id: :crafting,
-      order: 4,
-      title: gettext("Handwerkstalente"),
-      short: gettext("Handwerk"),
-      pages: "206-213",
-      probe: "FF/FF/KO"
-    }
-  ]
+  @categories ~w(physical social nature knowledge crafting)a
 
   def type, do: :integer
 
-  def list, do: @categories
-
-  def list_types, do: Enum.map(@categories, & &1.id)
-
-  def get(id, invalid_return \\ nil), do: Enum.find(@categories, invalid_return, & &1.id == id)
-
-  def options, do: Enum.map(@categories, & {&1.short, &1.id})
-
   @doc """
-  Converts a category atom into an index for efficient database storage
+  Converts a german category name into an integer for efficient data storage.
   """
-  def cast(id) when is_binary(id), do: cast(String.to_atom(id))
-
-  def cast(id) when is_atom(id) do
-    with %{} = category <- get(id, :error), do: {:ok, category.order}
+  def cast(category) when is_binary(category) do
+    case category do
+      "Körpertalente" -> {:ok, :physical}
+      "Gesellschaftstalente" -> {:ok, :social}
+      "Naturtalente" -> {:ok, :nature}
+      "Wissenstalente" -> {:ok, :knowledge}
+      "Handwerkstalente" -> {:ok, :crafting}
+      _ -> :error
+    end
   end
 
   def cast(_), do: :error
 
   @doc """
-  Converts a category index from database back into an atom (reverse of cast)
+  Converts a category index from database back into an atom.
   """
-  def load(index) do
-    id =
-      @categories
-      |> Enum.find(& &1.order == index)
-      |> Map.get(:id)
+  def load(index), do: {:ok, Enum.at(@categories, index)}
 
-    {:ok, id}
+  @doc """
+  Allows dumping data to database if the value produced by cast is an integer.
+  """
+  def dump(category) when is_atom(category) do
+    {:ok, Enum.find_index(@categories, & &1 == category)}
   end
 
-  # at this point input category was converted to index so just check datatyp
-  def dump(category) when is_integer(category), do: {:ok, category}
+  def dump(_), do: :error
 
-  def count, do: Enum.count(@categories)
+  def values, do: @categories
+
+  # TODO: Recycle
+
+  # def list_types, do: Enum.map(@categories, & &1.id)
+
+  # def get(id, invalid_return \\ nil), do: Enum.find(@categories, invalid_return, & &1.id == id)
+
+  # def options, do: Enum.map(@categories, & {&1.short, &1.id})
+
+  # def count, do: Enum.count(@categories)
 end

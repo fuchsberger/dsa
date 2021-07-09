@@ -1,3 +1,0 @@
-<h1 class='text-center text-3xl font-extrabold text-gray-900 py-3'><%= gettext "Welcome in Aventuria!" %></h1>
-
-<p><%= gettext "TODO: This is a placeholder page for some general information about the tool and its capabilities." %></p>

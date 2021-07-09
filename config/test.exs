@@ -1,5 +1,8 @@
 use Mix.Config
 
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
+
 config :dsa, :environment, :test
 
 # Configure your database
@@ -20,10 +23,8 @@ config :dsa, DsaWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :dsa, Dsa.Mailer,
-  adapter: Bamboo.TestAdapter
+# Bamboo test configuration
+config :dsa, Dsa.Mailer, adapter: Bamboo.TestAdapter
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
-config :pbkdf2_elixir, :rounds, 1

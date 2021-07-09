@@ -1,0 +1,23 @@
+@layer base {
+  button { @apply bg-white shadow-sm border border-gray-500 text-gray-600 font-medium rounded-md px-3 leading-8 h-8; }
+  button:hover { @apply bg-gray-200 border-gray-600 text-gray-800; }
+  button:focus { @apply outline-none ring-2 ring-offset-2 border-indigo-500; }
+
+  button > svg { @apply inline-block -mt-1 mr-1; }
+}
+
+@layer components {
+  /* small variation */
+  button.small { @apply h-8; }
+  button.small { @apply px-2 text-sm leading-7; }
+
+  /* Color variations */
+  button.link { @apply border-0 shadow-none bg-transparent px-0 text-indigo-600 hover:text-indigo-900; }
+  button.red { @apply text-red-700 hover:text-red-500; }
+  button.primary { @apply border-transparent text-white bg-indigo-600 hover:bg-indigo-700; }
+
+  /* Fixes */
+  button.link > svg { @apply m-0; }
+
+
+}
