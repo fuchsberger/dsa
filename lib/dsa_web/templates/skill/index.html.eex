@@ -9,15 +9,21 @@
   <h1 class='heading mb-3'><%= gettext("Skills") %></h1>
 <% end %>
 
+<%# inputs_for(form, field, options \\ [], fun) %>
+
 <div class='lg:grid lg:grid-cols-2 lg:gap-4'>
   <div class='space-y-4'>
-    <div class="table-wrapper">
-      <table>
-        <%= render "table_head.html", category: gettext("Körpertalente"), check: "MU/GE/KK" %>
-        <tbody class='bg-white divide-y divide-gray-200'>
-          <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
-        </tbody>
-      </table>
+    <div class="table-outer">
+      <div class="table-center">
+        <div class="table-inner">
+        <table>
+          <%= render "table_head.html", category: gettext("Körpertalente"), check: "MU/GE/KK" %>
+          <tbody>
+            <%= render_many @physical_skills, DsaWeb.SkillView, "table_row.html", conn: @conn, f: f %>
+          </tbody>
+        </table>
+      </div>
+      </div>
     </div>
     <div class="table-wrapper">
       <table>

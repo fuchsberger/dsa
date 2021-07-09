@@ -3,6 +3,10 @@ defmodule DsaWeb.SkillView do
 
   # alias Dsa.Type.SkillCategory
 
+  defp skill_level(form, skill_id) do
+    Map.get(form.data.data.skills, String.to_atom("skill_#{skill_id}"))
+  end
+
   # def be_options do
   #   [
   #     {gettext("Event."), nil},

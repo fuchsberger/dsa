@@ -8,5 +8,7 @@
 }
 
 @layer components {
-  .table-wrapper { @apply shadow overflow-hidden border border-gray-300 sm:rounded-lg; }
+  .table-outer { @apply -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8; }
+  .table-center { @apply py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8; }
+  .table-inner { @apply shadow overflow-hidden border border-gray-300 sm:rounded-lg; }
 }

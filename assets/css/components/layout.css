@@ -3,6 +3,7 @@
 }
 
 @layer components {
+
   .page-wrapper { @apply h-screen flex overflow-hidden bg-gray-100; }
 
   /* Mobile Sidebar Menu */

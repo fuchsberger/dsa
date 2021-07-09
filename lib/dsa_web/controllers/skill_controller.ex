@@ -6,7 +6,14 @@ defmodule DsaWeb.SkillController do
   action_fallback DsaWeb.ErrorController
 
   defp action(conn, _) do
-    character = conn.assigns.current_user && Map.get(conn.assigns.current_user, :active_character)
+    character =
+      case conn.assigns.current_user && Map.get(conn.assigns.current_user, :active_character) do
+        nil ->
+          nil
+
+        character ->
+          Map.put(character, :data, Jason.decode!(character.data, keys: :atoms))
+      end
 
     args = [conn, conn.params, character]
     apply(__MODULE__, action_name(conn), args)
